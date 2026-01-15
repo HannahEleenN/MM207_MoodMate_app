@@ -48,4 +48,4 @@ To meet the requirements for a modern PWA, the following will be implemented:
 
 ## 📅 Project Management
 I am using **GitHub Projects** to break down features into work items. 
-- [Link to my Project Board](https://github.com/users/HannahEleenN/projects/moodmate)
+- [Link to my Project Board](https://github.com/users/HannahEleenN/projects/3)
