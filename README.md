@@ -36,7 +36,7 @@ Following Agile principles, the features are organized by the user's flow, to en
 - **Frontend:** HTML5, CSS3, JavaScript (PWA)
 - **Backend:** Node.js & Express (REST API)
 - **Database:** PostgreSQL (Cloud-ready persistent storage)
-- **Project Management:** [Insert Link to GitHub Project Board here]
+- **Project Management:** https://github.com/users/HannahEleenN/projects/3
 
 ### Folder Structure (Scaffolding)
 - `/client`: Frontend assets, Service Worker, and Manifest.
