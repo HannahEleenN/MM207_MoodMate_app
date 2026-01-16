@@ -2,6 +2,46 @@
 
 MoodMate is a full-stack Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions. Based on a multimedia research prototype, this app bridges the gap between emotional learning and digital journaling. Note on Language: While the technical documentation and code are in English, the client interface will be in Norwegian to ensure accessibility for the target audience (children aged 6-7).
 
+/client
+├── index.html
+├── style.css
+├── manifest.json
+├── client_app.js
+├── service_worker.js
+├── assets
+│   ├── icons
+│   └── images
+└── modules
+    ├── child_app
+    │   ├── views
+    │   │   ├── mood_checkin_view.js
+    │   │   ├── context_view.js
+    │   │   └── solution_view.js
+    │   ├── child_main.js
+    │   └── child_styles.css
+    └── parent_app
+        ├── views
+        │   ├── dashboard_view.js
+        │   └── insights_view.js
+        ├── parent_main.js
+        └── parent_styles.css
+
+/server
+├── server_app.js
+├── routes
+│   ├── mood_routes.js
+│   └── user_routes.js
+├── controllers
+│   ├── mood_controller.js
+│   └── user_controller.js
+├── models
+│   ├── mood_model.js
+│   └── user_model.js
+└── db
+    └── init.sql
+
+README.md
+
 
 ## User Journey, Feature Map & Requirements
 Following Agile principles, the features are organized by the user's flow, to ensure the pedagogical goals from the prototype are met with modern technical requirements:
