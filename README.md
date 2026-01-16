@@ -58,12 +58,14 @@ cd MM207_MoodMate_app
 ### Server setup
 cd server
 npm install
-npm run dev
+npm start
+
+*The server runs on http://localhost:3000 and exposes a basic REST API endpoint at `/api/logs` to verify that the scaffold works.*
 
 ### Client setup
 cd client
 npm install
-npm run dev
+npm start
 
 ### Environment variables
 Create a `.env` file in the server folder with:
