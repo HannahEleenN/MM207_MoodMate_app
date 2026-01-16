@@ -2,6 +2,7 @@
 
 MoodMate is a full-stack Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions. Based on a multimedia research prototype, this app bridges the gap between emotional learning and digital journaling. Note on Language: While the technical documentation and code are in English, the client interface will be in Norwegian to ensure accessibility for the target audience (children aged 6-7).
 
+
 ## User Journey, Feature Map & Requirements
 Following Agile principles, the features are organized by the user's flow, to ensure the pedagogical goals from the prototype are met with modern technical requirements:
 
@@ -32,7 +33,6 @@ Following Agile principles, the features are organized by the user's flow, to en
 
 
 ## Tech Stack & Architecture
-
 - **Frontend:** HTML5, CSS3, JavaScript (PWA)
 - **Backend:** Node.js & Express (REST API)
 - **Database:** PostgreSQL (Cloud-ready persistent storage)
@@ -44,19 +44,43 @@ Following Agile principles, the features are organized by the user's flow, to en
 - `db.sql`: Database schema and table definitions.
 
 
-## Technical Roadmap (PWA & Offline)
+## How to run the project locally
 
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm
+- PostgreSQL
+
+### Clone repository
+git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git
+cd MM207_MoodMate_app
+
+### Server setup
+cd server
+npm install
+npm run dev
+
+### Client setup
+cd client
+npm install
+npm run dev
+
+### Environment variables
+Create a `.env` file in the server folder with:
+DATABASE_URL=...
+*.env is excluded from GitHub for security reasons.*
+
+
+## Technical Roadmap (PWA & Offline)
 To meet the requirements for a modern PWA, the following will be implemented:
 
 ### 1. Service Worker (Caching Strategy)
 - **Technical:** Implements a proxy to intercept network requests and cache core assets. This ensures the "App Shell" loads instantly without a network.
 - *Husk: "Assistenten" som lagrer utseendet på mobilen så appen åpner i flymodus.*
 
-
 ### 2. IndexedDB (Local Persistence)
 - **Technical:** A browser-based database used to store mood entries locally when offline. These entries will automatically sync with the PostgreSQL server once the connection is restored.
 - *Husk: "Minneboka" som lagrer følelser midlertidig hvis nettet er borte.*
-
 
 ### 3. Web App Manifest
 - **Technical:** A `manifest.json` file defining icons, theme colors, and display modes (standalone).
