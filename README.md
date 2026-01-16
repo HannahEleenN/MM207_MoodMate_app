@@ -49,6 +49,9 @@ Note on Language: While the technical documentation and code are in English, the
     └── moodmate_db.sql
 ```
 
+### Visual Feature Map
+![MoodMate Feature Map](feature_map_Moodmate.jpg)
+
 ## User Journey, Feature Map & Requirements
 Following Agile principles, the features are organized by the user's flow, to ensure the pedagogical goals from the prototype are met with modern technical requirements:
 
