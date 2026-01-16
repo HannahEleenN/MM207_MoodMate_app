@@ -50,7 +50,7 @@ Note on Language: While the technical documentation and code are in English, the
 ```
 
 ### Visual Feature Map
-![MoodMate Feature Map](feature_map_Moodmate.jpg)
+![MoodMate Feature Map](feature_map_Moodmate.png)
 
 ## User Journey, Feature Map & Requirements
 Following Agile principles, the features are organized by the user's flow, to ensure the pedagogical goals from the prototype are met with modern technical requirements:
@@ -170,7 +170,6 @@ To meet the requirements for a modern PWA, the following will be implemented:
 - **Technical:** A `manifest.json` file defining icons, theme colors, and display modes (standalone).
 - *Husk: "ID-kortet" som gjør at appen kan installeres på hjemskjermen uten adressefelt.*
 
-
-## Project Management
-I am using **GitHub Projects** to break down features into work items. 
-- [Link to my Project Board](https://github.com/users/HannahEleenN/projects/3)
+### Project Management
+I am using **GitHub Projects** to manage the development process. You can follow the progress and see detailed work items here:
+[MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3)
