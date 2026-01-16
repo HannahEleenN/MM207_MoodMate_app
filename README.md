@@ -2,6 +2,7 @@
 
 MoodMate is a full-stack Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions. Based on a multimedia research prototype, this app bridges the gap between emotional learning and digital journaling. Note on Language: While the technical documentation and code are in English, the client interface will be in Norwegian to ensure accessibility for the target audience (children aged 6-7).
 
+```plaintext
 /client
 ├── index.html
 ├── style.css
@@ -41,7 +42,7 @@ MoodMate is a full-stack Progressive Web App (PWA) designed for children (ages 6
     └── init.sql
 
 README.md
-
+```
 
 ## User Journey, Feature Map & Requirements
 Following Agile principles, the features are organized by the user's flow, to ensure the pedagogical goals from the prototype are met with modern technical requirements:
