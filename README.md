@@ -44,6 +44,38 @@ Following Agile principles, the features are organized by the user's flow, to en
 - `db.sql`: Database schema and table definitions.
 
 
+## User Accounts Architecture
+
+### Overview
+The MoodMate app will support two types of users:
+- **Child:** Can log emotions, identify causes, and select resolutions.
+- **Parent:** Can view child's logs and get insights.
+
+### Authentication & Authorization
+- **Login/Signup:** Users will create accounts with email/password.
+- **Password Security:** Passwords will be hashed using bcrypt before storing in PostgreSQL.
+- **Sessions:** Server will use JWT (JSON Web Tokens) for session management.
+- **Access Control:** API endpoints are protected based on user role (child/parent).
+
+### Database Schema
+- **Users table:** Stores user_id, name, role (child/parent), email, hashed_password.
+- **Logs table:** Each mood entry is linked to a user_id.
+- **Sync & Privacy:** Child logs are private; parents can only access their linked child’s logs.
+
+### Planned API Endpoints (REST-ish)
+- `POST /api/signup` → create new account
+- `POST /api/login` → authenticate user and return JWT
+- `GET /api/user/:id` → retrieve user info (auth required)
+- `GET /api/logs` → retrieve logs for the logged-in user
+- `POST /api/logs` → create a new log entry
+- `PATCH /api/logs/:id` → update log entry
+- `DELETE /api/logs/:id` → remove log entry
+
+### Notes
+- Offline entries from child will be stored locally (IndexedDB) and synced once online.
+- Role-based access ensures parents cannot edit child entries, only view them.
+
+
 ## How to run the project locally
 
 ### Prerequisites
@@ -63,17 +95,19 @@ npm start
 *The server runs on http://localhost:3000 and exposes a basic REST API endpoint at `/api/logs` to verify that the scaffold works.*
 
 ### Client setup
-cd client
-npm install
-npm start
+Currently, a minimal scaffold exists. Open the client by visiting:
+http://localhost:3000/index.html
+*The client scaffold shows a simple page with console log to verify environment setup.*
+*Open two terminals: one for the server and one for the client to run both concurrently.*
 
 ### Environment variables
 Create a `.env` file in the server folder with:
-DATABASE_URL=...
+DATABASE_URL=postgresql://username:password@localhost:5432/moodmate
 *.env is excluded from GitHub for security reasons.*
 
 
 ## Technical Roadmap (PWA & Offline)
+*The following roadmap outlines planned features for PWA, offline support, and IndexedDB integration.*
 To meet the requirements for a modern PWA, the following will be implemented:
 
 ### 1. Service Worker (Caching Strategy)
