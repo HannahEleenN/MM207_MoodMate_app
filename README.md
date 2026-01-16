@@ -38,8 +38,8 @@ MoodMate is a full-stack Progressive Web App (PWA) designed for children (ages 6
 ├── models
 │   ├── mood_model.js
 │   └── user_model.js
-└── db
-    └── init.sql
+└── database
+    └── moodmate_db.sql
 
 README.md
 ```
