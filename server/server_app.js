@@ -2,16 +2,30 @@
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
+// Middleware for reading JSON from Insomnia
 app.use(express.json());
-app.use(express.static('../client'));
 
-// Eksempel på et API-endepunkt for å hente logger
-app.get('/api/logs', (req, res) => {
-    res.json({ message: "Her vil loggene fra databasen dukke opp!" });
+// SCAFFOLD: Mood Logging Endpoint
+app.post('/api/moods', (req, res) => 
+{
+    const { mood, context, solution } = req.body;
+    
+    // Her vil vi senere lagre til PostgreSQL
+    console.log(`Received mood: ${mood}, Context: ${context}`);
+
+    res.status(201).json({
+        message: "Mood log received (Scaffold)",
+        data: { mood, context, solution }
+    });
+});
+
+// SCAFFOLD: Get all moods
+app.get('/api/moods', (req, res) => {
+    res.json({ message: "This will return all mood logs from database." });
 });
 
 app.listen(PORT, () => {
-    console.log(`Serveren kjører på http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
