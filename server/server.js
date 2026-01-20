@@ -7,11 +7,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('../client'));
 
-// Eksempel på et API-endepunkt for å hente logger
+// Example of an API endpoint for retrieving logs
 app.get('/api/logs', (req, res) => {
-    res.json({ message: "Her vil loggene fra databasen dukke opp!" });
+    res.json({ message: "The logs from the database will appear here!" });
 });
 
 app.listen(PORT, () => {
-    console.log(`Serveren kjører på http://localhost:${PORT}`);
+    console.log(`The server runs at http://localhost:${PORT}`);
 });
