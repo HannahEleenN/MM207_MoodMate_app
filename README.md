@@ -11,7 +11,7 @@ The following table outlines the core features for the Minimum Viable Product (M
 | *Main Feature* | **Interactive Logging** | **Contextualizing** | **Persistence & PWA** | **Access Control** |
 | *Sub-features* | Visual icon selection (Glad, Sad, etc.) | Linking emotion to activity (Why?) | Offline storage (IndexedDB) | Separate Child/Parent login |
 | *Requirement* | REST API & PostgreSQL storage | Suggesting coping strategies | Service Worker (Caching) | Persistent Auth (JWT) |
-| *Status* | *Critical MVP* | *Status: Value Add* | *Status: Requirement* | *Status: Infrastructure* |
+| *Status* | *Critical MVP* | *Value Add* | *Requirement* | *Infrastructure* |
 
 
 ## Project Management
