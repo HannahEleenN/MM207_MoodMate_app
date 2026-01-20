@@ -12,7 +12,7 @@ app.post('/api/moods', (req, res) =>
 {
     const { mood, context, solution } = req.body;
     
-    // Her vil vi senere lagre til PostgreSQL
+    // Later: saving to PostgreSQL will be handled here
     console.log(`Received mood: ${mood}, Context: ${context}`);
 
     res.status(201).json({
