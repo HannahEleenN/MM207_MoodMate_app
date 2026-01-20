@@ -93,8 +93,8 @@ Endpoints for tracking and managing emotional entries.
 
 │ Method │ Endpoint │ Description │ Request Body (JSON) │
 |:-----------------|:-----------------|:-----------------|:-----------------|
-│ **POST** │ /api/moods │ Create a new mood entry │ {"mood": "happy", "context": "playing", "solution": "none"}
-│ **GET** │ /api/moods │ Get all mood entries for the user │ *None*
-│ **GET** │ /api/moods/:id │ Get details for a specific entry │ *None*
-│ **PATCH** │ /api/moods/:id │ Update a log (e.g., adding a solution later) │ {"solution": "Talked to a friend"}
-│ **DELETE** │ /api/moods/:id │ Delete an entry │ *None*
+│ **POST** │ /api/moods │ Create a new mood entry │ {"mood": "happy", "context": "playing", "solution": "none"} │
+│ **GET** │ /api/moods │ Get all mood entries for the user │ *None* │
+│ **GET** │ /api/moods/:id │ Get details for a specific entry │ *None* │
+│ **PATCH** │ /api/moods/:id │ Update a log (e.g., adding a solution later) │ {"solution": "Talked to a friend"} │
+│ **DELETE** │ /api/moods/:id │ Delete an entry │ *None* │
