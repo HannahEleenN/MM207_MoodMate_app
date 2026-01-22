@@ -91,10 +91,10 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 
 Endpoints for tracking and managing emotional entries.
 
-| Method | Endpoint | Description | Request Body (JSON) |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create a new mood entry | `{"mood": "happy", "context": "playing", "solution": "none"}` |
-| **GET** | `/api/moods` | Get all mood entries for the user | *None* |
-| **GET** | `/api/moods/:id` | Get details for a specific entry | *None* |
-| **PATCH** | `/api/moods/:id` | Update a log (e.g., adding a solution later) | `{"solution": "Talked to a friend"}` |
-| **DELETE** | `/api/moods/:id` | Delete an entry | *None* |
+| Method | Endpoint | Description | Request Body (JSON) | Success Code |
+| :--- | :--- | :--- | :--- | :--- |
+| **POST** | `/api/moods` | Create a new mood entry | `{"mood": "happy", "context": "playing", "solution": "none"}` | 201 Created |
+| **GET** | `/api/moods` | Get all mood entries for the user | *None* | 200 OK |
+| **GET** | `/api/moods/:id` | Get details for a specific entry | *None* | 200 OK |
+| **PATCH** | `/api/moods/:id` | Update a log (e.g. add solution) | `{"solution": "Talk to a friend"}` | 200 OK |
+| **DELETE** | `/api/moods/:id` | Remove an entry | *None* | 204 No Content |
