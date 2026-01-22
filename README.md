@@ -101,12 +101,25 @@ Endpoints for tracking and managing emotional entries.
 | **DELETE** | `/api/moods/:id` | Remove an entry | *None* | 204 No Content |
 
 
-## Creating a meaningful middleware
+## Creating a meaningful middleware: The Family & Sibling Privacy Guard
 
-**The Need:** Multi-User Privacy in a Family Context
+**The Need:** Sensitive Emotional Data Protection
 
-**Problem:** In MoodMate, children log sensitive emotional data. While parents need to access this data to provide support, they should only be able to see data belonging to their own children.
-Without middleware, a parent could potentially change a URL ID and see another family's private logs.
+**Problem:** MoodMate handles vulnerable data. We have three privacy risks:
 
-**Solution:** A familyGuard middleware. It intercepts requests to the /api/moods endpoints, checks the requester's familyId, and compares it to the data being requested.
-If it doesn't match, the middleware blocks the request with a 403 Forbidden status before the server even touches the database.
+- Cross-Family Leaks: Parent A seeing Child B's logs.
+
+- Sibling Peeking: Sibling A seeing Sibling B's logs, which could lead to teasing or conflict.
+
+- Unauthorized Edits: A child accidentally or intentionally deleting a parent’s insight report.
+
+**Solution:** A privacyGuard middleware. It acts as a gatekeeper that verifies Role and Ownership.
+
+- Children: Can only POST (log) their own data and GET their own history.
+  In that way, siblings are also blocked from accessing any data where the userId doesn't match their own.
+
+- Parents: Can GET data for any child within their familyId, but cannot modify the child's original logs.
+
+**How it works:** The privacyGuard checks the incoming request headers for x-user-id and x-family-id. It compares these against the requested resource.
+If a child attempts to access a userId that is not their own, the middleware terminates the request early with a 403 Forbidden status.
+Similarly, if a parent attempts to access data associated with a familyId other than their own, the request is blocked, preventing cross-family data leaks.
