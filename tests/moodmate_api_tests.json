@@ -23,7 +23,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"mood\": \"sad\",\n  \"context\": \"my toy got broken\",\n  \"solution\": \"talk to an adult\"\n}"
+        "text": "{\n  \"mood\": \"trist\",\n  \"context\": \"leken min ble ødelagt\",\n  \"solution\": \"snakk med en voksen\"\n}"
       },
       "headers": [
         {
