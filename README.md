@@ -89,12 +89,13 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 
 ### Mood Logs API
 
-Endpoints for tracking and managing emotional entries.
+Endpoints for tracking and managing emotional entries. 
+*It should be able to add more than one solution, like "deep breathing", "listen to music" and "ask for a hug".*
 
 | Method | Endpoint | Description | Request Body (JSON) | Success Code |
 | :--- | :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create a new mood entry | `{"mood": "happy", "context": "playing", "solution": "none"}` | 201 Created |
+| **POST** | `/api/moods` | Create new mood entry | `{"mood": "sad", "context": "my toy got broken", "solution": "none"}` | 201 Created |
 | **GET** | `/api/moods` | Get all mood entries for the user | *None* | 200 OK |
-| **GET** | `/api/moods/:id` | Get details for a specific entry | *None* | 200 OK |
-| **PATCH** | `/api/moods/:id` | Update a log (e.g. add solution) | `{"solution": "Talk to a friend"}` | 200 OK |
+| **GET** | `/api/moods/:id` | Get details for one entry | *None* | 200 OK |
+| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "talk to an adult"}` | 200 OK |
 | **DELETE** | `/api/moods/:id` | Remove an entry | *None* | 204 No Content |
