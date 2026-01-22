@@ -1,18 +1,30 @@
-"use strict";
-
 import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Middleware for reading JSON from Insomnia
-app.use(express.json());
+// To handle paths in ES Modules (replacement for __dirname)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// SCAFFOLD: Mood Logging Endpoint
-app.post('/api/moods', (req, res) => 
-{
+// Middleware
+app.use(express.json()); // For parsing application/json
+app.use(express.static(path.join(__dirname, '../client'))); // Serve static frontend files
+
+// --- API ENDPOINTS ---
+
+// GET: Basic log message
+app.get('/api/logs', (req, res) => {
+    res.json({ message: "The logs from the database will appear here!" });
+});
+
+// POST: Create a new mood log (Scaffold)
+app.post('/api/moods', (req, res) => {
     const { mood, context, solution } = req.body;
-    
-    // Later: saving to PostgreSQL will be handled here
+
+    // Logic for database saving will go here later
     console.log(`Received mood: ${mood}, Context: ${context}`);
 
     res.status(201).json({
@@ -21,11 +33,12 @@ app.post('/api/moods', (req, res) =>
     });
 });
 
-// SCAFFOLD: Get all moods
+// GET: All mood logs (Scaffold)
 app.get('/api/moods', (req, res) => {
     res.json({ message: "This will return all mood logs from database." });
 });
 
+// Start Server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
