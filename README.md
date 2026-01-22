@@ -62,6 +62,8 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ├── models
 │   ├── mood_model.mjs
 │   └── user_model.mjs
+├── middleware
+│   └── privacyGuard.mjs
 └── database
     └── moodmate_db.sql
 ```
