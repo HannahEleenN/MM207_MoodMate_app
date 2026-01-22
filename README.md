@@ -128,5 +128,5 @@ Similarly, if a parent attempts to access data associated with a familyId other 
 
 | Location | Extension | Reason |
 | :--- | :--- | :--- |
-| "**Server** (API, Middleware, Routes)" | `.mjs` | Tells Node.js to use ECMAScript Modules (ESM). |
-| "**Client** (App logic, Service Worker)" | `.js` | Standard for browsers and ensures PWA features work smoothly. |
+| **Server** (API, Middleware, Routes) | `.mjs` | Tells Node.js to use ECMAScript Modules (ESM). |
+| **Client** (App logic, Service Worker) | `.js` | Standard for browsers and ensures PWA features work smoothly. |
