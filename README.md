@@ -68,6 +68,12 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     └── moodmate_db.sql
 ```
 
+### /tests
+```
+/tests
+└── moodmate_api_tests.json
+```
+
 ## Technical Architecture
 - **Client:** HTML, CSS, JavaScript (PWA)
 - **Server:** Node.js & Express (REST API)
