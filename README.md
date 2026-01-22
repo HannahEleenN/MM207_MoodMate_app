@@ -105,7 +105,7 @@ Endpoints for tracking and managing emotional entries.
 
 | Method | Endpoint | Description | Request Body (JSON) | Success Code |
 | :--- | :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create new mood entry | `{"mood": "trist", "context": "leken min ble ødelagt", "solution": `null`}` | `201 Created` |
+| **POST** | `/api/moods` | Create new mood entry | `{"mood": "trist", "context": "leken min ble ødelagt", "solution": null}` | `201 Created` |
 | **GET** | `/api/moods` | Get all mood entries for the user | *None* | `200 OK` |
 | **GET** | `/api/moods/:id` | Get details for one entry | *None* | `200 OK` |
 | **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "snakk med en voksen"}` | `200 OK` |
