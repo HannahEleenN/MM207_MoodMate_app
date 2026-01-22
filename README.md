@@ -123,3 +123,10 @@ Endpoints for tracking and managing emotional entries.
 **How it works:** The privacyGuard checks the incoming request headers for x-user-id and x-family-id. It compares these against the requested resource.
 If a child attempts to access a userId that is not their own, the middleware terminates the request early with a `403 Forbidden status`.
 Similarly, if a parent attempts to access data associated with a familyId other than their own, the request is blocked, preventing cross-family data leaks.
+
+**Note to self about js and mjs:**
+
+| Location | Extension | Reason |
+| :--- | :--- | :--- |
+| "**Server** (API, Middleware, Routes)" | `.mjs` | Tells Node.js to use ECMAScript Modules (ESM). |
+| "**Client** (App logic, Service Worker)" | `.js` | Standard for browsers and ensures PWA features work smoothly. |
