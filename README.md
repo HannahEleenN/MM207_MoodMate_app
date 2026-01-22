@@ -91,6 +91,9 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 
 ### Mood Logs API
 
+(*Folders:* tests/moodmate_api_tests.json,
+*Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/tests/moodmate_api_tests.json)
+
 Endpoints for tracking and managing emotional entries. 
 *It should be able to add more than one solution, like "deep breathing", "listen to music" and "ask for a hug".*
 
@@ -105,7 +108,8 @@ Endpoints for tracking and managing emotional entries.
 
 ## Creating a meaningful middleware: The Family & Sibling Privacy Guard
 
-(server/middleware/privacyGuard.mjs, https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
+(*Folders:* server/middleware/privacyGuard.mjs, 
+*Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
 
 **The Need:** Sensitive Emotional Data Protection
 
