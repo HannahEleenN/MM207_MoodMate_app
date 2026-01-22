@@ -9,7 +9,7 @@ The following table outlines the core features for the Minimum Viable Product (M
 | Priority | Pri 1: Core Loop (Mood) | Pri 2: Context & Solution | Pri 3: Offline & PWA | Pri 4: User Accounts |
 |:-------------------|:-------------------|:-------------------|:-------------------|:-------------------|
 | *Main Feature* | **Interactive Logging** | **Contextualizing** | **Persistence & PWA** | **Access Control** |
-| *Sub-features* | Visual icon selection (Glad, Sad, etc.) | Linking emotion to activity (Why?) | Offline storage (IndexedDB) | Separate Child/Parent login |
+| *Sub-features* | Visual icon selection (e.g., "Glad", "Trist") | Linking emotion to activity (Hvorfor?) | Offline storage (IndexedDB) | Separate Child/Parent login |
 | *Requirement* | REST API & PostgreSQL storage | Suggesting coping strategies | Service Worker (Caching) | Persistent Auth (JWT) |
 | *Status* | *Critical MVP* | *Value Add* | *Requirement* | *Infrastructure* |
 
@@ -101,14 +101,14 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 *Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/tests/moodmate_api_tests.json)
 
 Endpoints for tracking and managing emotional entries. 
-*It should be able to add more than one solution, like "deep breathing", "listen to music" and "ask for a hug".*
+*It should be able to add more than one solution, such as "puste dypt" (deep breathing), "høre på musikk" (listen to music) and "spør om en klem" (ask for a hug).*
 
 | Method | Endpoint | Description | Request Body (JSON) | Success Code |
 | :--- | :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create new mood entry | `{"mood": "sad", "context": "my toy got broken", "solution": "none"}` | `201 Created` |
+| **POST** | `/api/moods` | Create new mood entry | `{"mood": "trist", "context": "leken min ble ødelagt", "solution": `null`}` | `201 Created` |
 | **GET** | `/api/moods` | Get all mood entries for the user | *None* | `200 OK` |
 | **GET** | `/api/moods/:id` | Get details for one entry | *None* | `200 OK` |
-| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "talk to an adult"}` | `200 OK` |
+| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "snakk med en voksen"}` | `200 OK` |
 | **DELETE** | `/api/moods/:id` | Remove an entry | *None* | `204 No Content` |
 
 
@@ -138,7 +138,7 @@ Endpoints for tracking and managing emotional entries.
 If a child attempts to access a userId that is not their own, the middleware terminates the request early with a `403 Forbidden status`.
 Similarly, if a parent attempts to access data associated with a familyId other than their own, the request is blocked, preventing cross-family data leaks.
 
-**Note to self about js and mjs:**
+**File Extensions:**
 
 | Location | Extension | Reason |
 | :--- | :--- | :--- |
