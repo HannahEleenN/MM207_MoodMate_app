@@ -94,11 +94,11 @@ Endpoints for tracking and managing emotional entries.
 
 | Method | Endpoint | Description | Request Body (JSON) | Success Code |
 | :--- | :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create new mood entry | `{"mood": "sad", "context": "my toy got broken", "solution": "none"}` | 201 Created |
-| **GET** | `/api/moods` | Get all mood entries for the user | *None* | 200 OK |
-| **GET** | `/api/moods/:id` | Get details for one entry | *None* | 200 OK |
-| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "talk to an adult"}` | 200 OK |
-| **DELETE** | `/api/moods/:id` | Remove an entry | *None* | 204 No Content |
+| **POST** | `/api/moods` | Create new mood entry | `{"mood": "sad", "context": "my toy got broken", "solution": "none"}` | `201 Created` |
+| **GET** | `/api/moods` | Get all mood entries for the user | *None* | `200 OK` |
+| **GET** | `/api/moods/:id` | Get details for one entry | *None* | `200 OK` |
+| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "talk to an adult"}` | `200 OK` |
+| **DELETE** | `/api/moods/:id` | Remove an entry | *None* | `204 No Content` |
 
 
 ## Creating a meaningful middleware: The Family & Sibling Privacy Guard
@@ -121,5 +121,5 @@ Endpoints for tracking and managing emotional entries.
 - Parents: Can GET data for any child within their familyId, but cannot modify the child's original logs.
 
 **How it works:** The privacyGuard checks the incoming request headers for x-user-id and x-family-id. It compares these against the requested resource.
-If a child attempts to access a userId that is not their own, the middleware terminates the request early with a 403 Forbidden status.
+If a child attempts to access a userId that is not their own, the middleware terminates the request early with a `403 Forbidden status`.
 Similarly, if a parent attempts to access data associated with a familyId other than their own, the request is blocked, preventing cross-family data leaks.
