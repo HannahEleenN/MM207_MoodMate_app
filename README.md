@@ -99,3 +99,14 @@ Endpoints for tracking and managing emotional entries.
 | **GET** | `/api/moods/:id` | Get details for one entry | *None* | 200 OK |
 | **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solution": "talk to an adult"}` | 200 OK |
 | **DELETE** | `/api/moods/:id` | Remove an entry | *None* | 204 No Content |
+
+
+## Creating a meaningful middleware
+
+**The Need:** Multi-User Privacy in a Family Context
+
+**Problem:** In MoodMate, children log sensitive emotional data. While parents need to access this data to provide support, they should only be able to see data belonging to their own children.
+Without middleware, a parent could potentially change a URL ID and see another family's private logs.
+
+**Solution:** A familyGuard middleware. It intercepts requests to the /api/moods endpoints, checks the requester's familyId, and compares it to the data being requested.
+If it doesn't match, the middleware blocks the request with a 403 Forbidden status before the server even touches the database.
