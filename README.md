@@ -105,7 +105,7 @@ Endpoints for tracking and managing emotional entries.
 
 ## Creating a meaningful middleware: The Family & Sibling Privacy Guard
 
-(server/middleware/privacyGuard.mjs)
+(server/middleware/privacyGuard.mjs, https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
 
 **The Need:** Sensitive Emotional Data Protection
 
