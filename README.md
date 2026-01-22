@@ -105,6 +105,8 @@ Endpoints for tracking and managing emotional entries.
 
 ## Creating a meaningful middleware: The Family & Sibling Privacy Guard
 
+(server/middleware/privacyGuard.mjs)
+
 **The Need:** Sensitive Emotional Data Protection
 
 **Problem:** MoodMate handles vulnerable data. We have three privacy risks:
