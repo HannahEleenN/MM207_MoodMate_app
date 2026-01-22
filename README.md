@@ -52,16 +52,16 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ### /server
 ```
 /server
-├── server_app.js
+├── server_app.mjs
 ├── routes
-│   ├── mood_routes.js
-│   └── user_routes.js
+│   ├── mood_routes.mjs
+│   └── user_routes.mjs
 ├── controllers
-│   ├── mood_controller.js
-│   └── user_controller.js
+│   ├── mood_controller.mjs
+│   └── user_controller.mjs
 ├── models
-│   ├── mood_model.js
-│   └── user_model.js
+│   ├── mood_model.mjs
+│   └── user_model.mjs
 └── database
     └── moodmate_db.sql
 ```
