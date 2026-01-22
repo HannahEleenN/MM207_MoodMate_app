@@ -1,5 +1,3 @@
-"use strict";
-
 export const privacyGuard = (req, res, next) =>
 {
     const userRole = req.headers['x-user-role'];

@@ -1,5 +1,3 @@
-"use strict";
-
 import express from 'express';
 import { privacyGuard } from '../middleware/privacyGuard.mjs';
 
