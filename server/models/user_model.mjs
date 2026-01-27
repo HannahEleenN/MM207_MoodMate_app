@@ -1,29 +1,37 @@
-// Internal state to track active users (Note: this resets if the server restarts)
 const users = new Map(); 
 
 // Creates a new user object template
-export function createUser(nick = "") 
-{
+// Added 'secret' for the "passwordless" requirement and 'consent' for GDPR
+export function createUser(nick = "", secret = "", consent = false) {
   return {
     id: generateID(),
-    nick: nick
+    nick: nick,
+    secretHash: mockHash(secret), // "Never use passwords" -> Store a scramble instead
+    consent: consent,             // Requirement: Must actively consent
+    created: new Date().toISOString()
   };
 }
 
-// Generates a unique hexadecimal ID and ensures no collisions
-function generateID() 
-{
+export function deleteUser(id) {
+  return users.delete(id);
+}
+
+function generateID() {
   let id;
   do {
-    // Generate a random hex string
     id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(16);
-  } while (users.has(id)); // Check if ID already exists in our map
+  } while (users.has(id)); 
   
   return id;
 }
 
-// Export the functions to be used in controllers or routes
+// Helper to scramble the "password"
+function mockHash(string) {
+  return btoa(string).split("").reverse().join(""); 
+}
+
 export default {
   createUser,
-  users
+  users,
+  deleteUser
 };
