@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
 import moodRoutes from './routes/mood_routes.mjs';
+import UserController from './controllers/user_controller.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +19,12 @@ app.use(express.static(path.join(__dirname, '../client'))); // Serve static fron
 app.use('/api/moods', moodRoutes);
 
 // --- API ENDPOINTS ---
+
+// Route to create a user
+app.post('/api/users', UserController.register);
+
+// Route to delete a user by their ID
+app.delete('/api/users/:id', UserController.deleteAccount);
 
 // GET: Basic log message
 app.get('/api/logs', (req, res) => {
