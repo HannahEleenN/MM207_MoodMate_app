@@ -1,5 +1,8 @@
 const users = new Map(); 
 
+// section GDPR & Data Minimization
+// We only store what is strictly necessary for a functioning emotion journal.
+
 function generateID() {
   let id;
   do {
@@ -45,3 +48,4 @@ export const User = {
 };
 
 export default User;
+
