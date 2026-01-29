@@ -14,6 +14,26 @@
         
         <main id="app-root"></main>
 
+        <div id="registration-form">
+            <input type="text" id="nick" placeholder="Kallenavn (Forelder)">
+            <input type="password" id="secret" placeholder="Hemmelig kode">
+
+            <div class="consent-container">
+                <input type="checkbox" id="consent-checkbox">
+                <label for="consent-checkbox">
+                    Jeg godtar <a href="#" id="view-tos">vilkårene</a> og
+                    <a href="#" id="view-privacy">personvernet</a>.
+                </label>
+            </div>
+
+            <button id="register-btn" disabled>Opprett konto</button>
+        </div>
+
+        <div id="legal-modal" style="display:none;" class="modal">
+            <div id="legal-text"></div>
+            <button onclick="document.getElementById('legal-modal').style.display='none'">Lukk</button>
+        </div>
+
         <script src="client_app.js"></script>
     </body>
 
