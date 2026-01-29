@@ -1,0 +1,16 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 2px solid #333;
+    z-index: 1000;
+    max-width: 80%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.consent-container {
+    margin: 15px 0;
+}
