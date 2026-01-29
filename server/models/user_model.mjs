@@ -1,37 +1,47 @@
 const users = new Map(); 
 
-// Creates a new user object template
-// Added 'secret' for the "passwordless" requirement and 'consent' for GDPR
-export function createUser(nick = "", secret = "", consent = false) {
-  return {
-    id: generateID(),
-    nick: nick,
-    secretHash: mockHash(secret), // "Never use passwords" -> Store a scramble instead
-    consent: consent,             // Requirement: Must actively consent
-    created: new Date().toISOString()
-  };
-}
-
-export function deleteUser(id) {
-  return users.delete(id);
-}
-
 function generateID() {
   let id;
   do {
     id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(16);
-  } while (users.has(id)); 
-  
+  } while (users.has(id));  
   return id;
 }
 
-// Helper to scramble the "password"
 function mockHash(string) {
   return btoa(string).split("").reverse().join(""); 
 }
 
-export default {
-  createUser,
-  users,
-  deleteUser
+export const User = {
+    create: (userData) => {
+        const id = generateID();
+        
+        const newUser = {
+            id,
+            nick: userData.nick,
+            secretHash: mockHash(userData.secret),
+            role: 'parent', 
+            hasConsented: userData.hasConsented, 
+            consentedAt: new Date().toISOString(),
+          
+            // Children-profiles underneath the parent
+            children: userData.children || [] 
+        };
+
+        users.set(id, newUser);
+        return newUser;
+    },
+
+    findById: (id) => users.get(id),
+    
+    // The right to be forgotten
+    delete: (id) => users.delete(id),
+    
+    findAll: () => Array.from(users.values()),
+
+    findByNick: (nick) => {
+        return Array.from(users.values()).find(u => u.nick === nick);
+    }
 };
+
+export default User;
