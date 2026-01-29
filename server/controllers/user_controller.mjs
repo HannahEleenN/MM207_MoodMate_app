@@ -1,7 +1,8 @@
-import { User } from '../models/user_model.mjs';
+import User from '../models/user_model.mjs';
 
-export const registerUser = (req, res) => {
-    const { email, password, hasConsented } = req.body;
+export const registerUser = (req, res) => 
+    {
+    const { nick, secret, hasConsented } = req.body;
 
     // 1. Validation of consent
     if (hasConsented !== true) {
@@ -10,19 +11,21 @@ export const registerUser = (req, res) => {
         });
     }
 
-    // 2. Check if the user exists?
+    // 2. Check if the nickname is taken
+    if (User.findByNick(nick)) {
+        return res.status(400).json({ error: "Dette kallenavnet er allerede i bruk." });
+    }
     
-    // 3. Create a new user
-    const newUser = User.create({ email, password, hasConsented });
+    // 3. Create the new user
+    const newUser = User.create({ nick, secret, hasConsented });
 
     res.status(201).json({
         message: "Bruker opprettet med foreldresamtykke.",
-        user: { id: newUser.id, email: newUser.email }
+        user: { id: newUser.id, nick: newUser.nick }
     });
 };
 
-export const deleteUserAccount = (req, res) => 
-  {
+export const deleteUserAccount = (req, res) => {
     const { userId } = req.params;
 
     const user = User.findById(userId);
@@ -30,7 +33,7 @@ export const deleteUserAccount = (req, res) =>
         return res.status(404).json({ error: "Bruker ikke funnet." });
     }
 
-    // The right to be forgotten
+    // "The right to be forgotten"
     User.delete(userId);
 
     res.status(200).json({ 
