@@ -17,8 +17,11 @@
         <main id="app-root">
             <section id="registration-view">
                 <div id="registration-form">
-                    <input type="text" id="nick" placeholder="Kallenavn (Forelder)">
-                    <input type="password" id="secret" placeholder="Hemmelig kode">
+                    <label for="nick">Kallenavn (Forelder)</label>
+                    <input type="text" id="nick" placeholder="Kallenavn (Forelder)" autocomplete="name">
+
+                    <label for="secret">Hemmelig kode</label>
+                    <input type="password" id="secret" placeholder="Hemmelig kode" autocomplete="current-password">
 
                     <div class="consent-container">
                         <input type="checkbox" id="consent-checkbox">
@@ -28,13 +31,14 @@
                         </label>
                     </div>
 
-                    <button id="register-btn" disabled>Opprett konto</button>
+                    <button id="register-btn" disabled aria-disabled="true">Opprett konto</button>
                 </div>
             </section>
         </main>
 
-        <div id="legal-modal" class="modal" style="display:none;">
+        <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="legal-modal-title">
             <div class="modal-content">
+                <h2 id="legal-modal-title" style="margin-top:0;">Vilkår og personvern</h2>
                 <div id="legal-text"></div>
                 <button id="close-modal-btn">Lukk</button>
             </div>
