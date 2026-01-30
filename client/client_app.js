@@ -21,3 +21,7 @@ document.getElementById('view-privacy').onclick = () => {
     modalText.innerHTML = privacyPolicy;
     modal.style.display = 'block';
 };
+
+function formatDate(isoString) {
+    return new Date(isoString).toLocaleDateString('no-NO');
+}
