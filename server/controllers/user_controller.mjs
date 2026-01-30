@@ -1,4 +1,5 @@
 import User from '../models/user_model.mjs';
+import Mood from '../models/mood_model.mjs';
 
 export const registerUser = (req, res) => 
     {
@@ -25,7 +26,8 @@ export const registerUser = (req, res) =>
     });
 };
 
-export const deleteUserAccount = (req, res) => {
+export const deleteUserAccount = (req, res) => 
+{
     const { userId } = req.params;
 
     const user = User.findById(userId);
@@ -33,10 +35,14 @@ export const deleteUserAccount = (req, res) => {
         return res.status(404).json({ error: "Bruker ikke funnet." });
     }
 
-    // "The right to be forgotten"
+    // 1. Delete all children mood logs first
+    Mood.deleteByParentId(userId);
+
+    // 2. Delete the parent account (including profiles and consent)
     User.delete(userId);
 
     res.status(200).json({ 
-        message: "Brukerkonto og alle tilknyttede data er slettet i tråd med GDPR." 
+        message: "Brukerkonto og alle tilknyttede humør-logger er slettet permanent." 
     });
 };
+
