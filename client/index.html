@@ -10,31 +10,36 @@
     </head>
 
     <body>
-        <h1>MoodMate</h1>
-        
-        <main id="app-root"></main>
+        <header>
+            <h1>MoodMate</h1>
+        </header>
 
-        <div id="registration-form">
-            <input type="text" id="nick" placeholder="Kallenavn (Forelder)">
-            <input type="password" id="secret" placeholder="Hemmelig kode">
+        <main id="app-root">
+            <section id="registration-view">
+                <div id="registration-form">
+                    <input type="text" id="nick" placeholder="Kallenavn (Forelder)">
+                    <input type="password" id="secret" placeholder="Hemmelig kode">
 
-            <div class="consent-container">
-                <input type="checkbox" id="consent-checkbox">
-                <label for="consent-checkbox">
-                    Jeg godtar <a href="#" id="view-tos">vilkårene</a> og
-                    <a href="#" id="view-privacy">personvernet</a>.
-                </label>
+                    <div class="consent-container">
+                        <input type="checkbox" id="consent-checkbox">
+                        <label for="consent-checkbox">
+                            Jeg godtar <a href="#" id="view-tos">vilkårene</a> og
+                            <a href="#" id="view-privacy">personvernet</a>.
+                        </label>
+                    </div>
+
+                    <button id="register-btn" disabled>Opprett konto</button>
+                </div>
+            </section>
+        </main>
+
+        <div id="legal-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <div id="legal-text"></div>
+                <button id="close-modal-btn">Lukk</button>
             </div>
-
-            <button id="register-btn" disabled>Opprett konto</button>
         </div>
 
-        <div id="legal-modal" style="display:none;" class="modal">
-            <div id="legal-text"></div>
-            <button onclick="document.getElementById('legal-modal').style.display='none'">Lukk</button>
-        </div>
-
-        <script src="client_app.js"></script>
+        <script type="module" src="client_app.js"></script>
     </body>
-
 </html>
