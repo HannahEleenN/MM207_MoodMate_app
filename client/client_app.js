@@ -1,4 +1,6 @@
 import { privacyPolicy, termsOfService } from './modules/legal_content.js';
+import { initParentApp } from './modules/parent_app/parent_main.js';
+import { initChildApp } from './modules/child_app/child_main.js';
 
 // Element references
 const consentBox = document.getElementById('consent-checkbox');
@@ -33,9 +35,11 @@ registerBtn.onclick = async () =>
         });
 
         if (response.ok) {
+            const userData = await response.json();
             alert("Konto opprettet! Velkommen til MoodMate.");
             // Here I might want to redirect the user or hide the registration form:
             // document.getElementById('registration-form').style.display = 'none';
+            loadView("parent");
         } else {
             const data = await response.json();
             alert("Feil: " + data.error);
@@ -64,6 +68,25 @@ document.getElementById('close-modal-btn').onclick = () => {
 };
 
 // Helper function
-function formatDate(isoString) {
+export function formatDate(isoString) {
     return new Date(isoString).toLocaleDateString('no-NO');
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function loadView(viewName)
+{
+    const root = document.getElementById('app-root');
+    root.innerHTML = '';
+
+    if (viewName === 'parent') {
+        initParentApp(root);
+    } else if (viewName === 'child') {
+        initChildApp(root);
+    }
+}
+
+if (response.ok) {
+    alert("Konto opprettet!");
+    loadView('parent'); // Directs the parent to their dashboard
 }
