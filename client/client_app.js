@@ -59,6 +59,10 @@ document.getElementById('view-privacy').onclick = (e) => {
     modal.style.display = 'block';
 };
 
+document.getElementById('close-modal-btn').onclick = () => {
+    modal.style.display = 'none';
+};
+
 // Helper function
 function formatDate(isoString) {
     return new Date(isoString).toLocaleDateString('no-NO');
