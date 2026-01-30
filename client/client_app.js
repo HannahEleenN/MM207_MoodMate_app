@@ -13,7 +13,9 @@ const secretInput = document.getElementById('secret');
 // Consent logic
 // Activate the button only when the box is checked
 consentBox.onchange = () => {
-    registerBtn.disabled = !consentBox.checked;
+    const disabled = !consentBox.checked;
+    registerBtn.disabled = disabled;
+    registerBtn.setAttribute('aria-disabled', String(disabled));
 };
 
 // Registration logic (API-call)
@@ -23,7 +25,7 @@ registerBtn.onclick = async () =>
     const secret = secretInput.value;
 
     try {
-        const response = await fetch('/api/users/register',
+        const response = await fetch('/api/users',
         {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -36,6 +38,10 @@ registerBtn.onclick = async () =>
 
         if (response.ok) {
             const userData = await response.json();
+            // Use the returned userData for a clearer UX and for debugging
+            console.log('Registered user:', userData);
+            // Persist to localStorage so other views can read the current user
+            try { localStorage.setItem('moodmateUser', JSON.stringify(userData)); } catch (e) { /* ignore storage errors */ }
             alert("Konto opprettet! Velkommen til MoodMate.");
             // Here I might want to redirect the user or hide the registration form:
             // document.getElementById('registration-form').style.display = 'none';
@@ -55,22 +61,25 @@ document.getElementById('view-tos').onclick = (e) => {
     e.preventDefault(); // Hindrer siden i å hoppe til toppen
     modalText.innerHTML = termsOfService;
     modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+    // Move focus into modal for accessibility
+    const closeBtn = document.getElementById('close-modal-btn');
+    if (closeBtn) closeBtn.focus();
 };
 
 document.getElementById('view-privacy').onclick = (e) => {
     e.preventDefault();
     modalText.innerHTML = privacyPolicy;
     modal.style.display = 'block';
+    modal.setAttribute('aria-hidden', 'false');
+    const closeBtn = document.getElementById('close-modal-btn');
+    if (closeBtn) closeBtn.focus();
 };
 
 document.getElementById('close-modal-btn').onclick = () => {
     modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
 };
-
-// Helper function
-export function formatDate(isoString) {
-    return new Date(isoString).toLocaleDateString('no-NO');
-}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -84,9 +93,4 @@ function loadView(viewName)
     } else if (viewName === 'child') {
         initChildApp(root);
     }
-}
-
-if (response.ok) {
-    alert("Konto opprettet!");
-    loadView('parent'); // Directs the parent to their dashboard
 }

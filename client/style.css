@@ -26,11 +26,17 @@
 }
 
 /* A simple style for the close button */
-#close-modal {
+#close-modal-btn {
     background: #333;
     color: white;
     border: none;
     padding: 8px 15px;
     cursor: pointer;
     border-radius: 4px;
+}
+
+/* Focus styles for accessibility */
+button:focus, input:focus, a:focus {
+    outline: 3px solid #2a8bf2;
+    outline-offset: 2px;
 }
