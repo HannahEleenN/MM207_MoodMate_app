@@ -14,7 +14,7 @@ export const createMoodEntry = (req, res) =>
   {
     const { parentId, childName, mood, context } = req.body;
 
-    const dateForStorage = formateDate(new Date()); 
+    const dateForStorage = formatDate(new Date()); 
 
     const newEntry = Mood.create({
         parentId,
@@ -26,3 +26,4 @@ export const createMoodEntry = (req, res) =>
 
     res.status(201).json(newEntry);
 };
+
