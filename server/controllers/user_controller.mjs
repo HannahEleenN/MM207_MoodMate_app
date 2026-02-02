@@ -28,7 +28,7 @@ export const registerUser = (req, res) =>
 
 export const deleteUserAccount = (req, res) => 
 {
-    const { userId } = req.params;
+    const userId = req.params.id;
 
     const user = User.findById(userId);
     if (!user) {
@@ -46,3 +46,10 @@ export const deleteUserAccount = (req, res) =>
     });
 };
 
+const userController =
+{
+    register: registerUser,
+    deleteAccount: deleteUserAccount
+};
+
+export default userController;
