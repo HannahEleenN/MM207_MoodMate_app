@@ -139,9 +139,19 @@ This token is used by the `privacyGuard` middleware to identify the user's `user
 
 - Parents: Can GET data for any child within their familyId, but cannot modify the child's original logs.
 
-**How it works:** The privacyGuard checks the incoming request headers for x-user-id and x-family-id. It compares these against the requested resource.
-If a child attempts to access a userId that is not their own, the middleware terminates the request early with a `403 Forbidden status`.
-Similarly, if a parent attempts to access data associated with a familyId other than their own, the request is blocked, preventing cross-family data leaks.
+**How it works:** The `privacyGuard` acts as a security interceptor. It extracts the JWT from the request headers, verifies the user's identity, and ensures they have the right to access the specific resource.
+
+**Request Lifecycle:**
+
+1. Client Request: User sends data (e.g., a new mood entry) + JWT.
+
+2. `privacyGuard` Middleware: Validates the token and checks permissions. If invalid, returns `401` or `403`.
+
+3. Mood Controller: Receives the validated request and processes business logic.
+
+4. Database: Data is securely stored in PostgreSQL.
+   
+`Client Request -> privacyGuard (Auth Check) -> Mood Controller -> Database`
 
 **File Extensions:**
 
