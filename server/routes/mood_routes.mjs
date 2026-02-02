@@ -1,18 +1,16 @@
 import express from 'express';
+import { createMood, getAllMoods, getMoodById, updateMood, deleteMood } from '../controllers/mood_controller.mjs';
 import { privacyGuard } from '../middleware/privacyGuard.mjs';
 
 const router = express.Router();
 
-// Apply the privacy guard to all mood routes
-// This ensures every request is checked for family/role permissions
+// All mood routes are protected by privacyGuard
 router.use(privacyGuard);
 
-router.get('/', (req, res) => {
-    res.json({ message: "Showing logs for your family group." });
-});
-
-router.post('/', (req, res) => {
-    res.status(201).json({ message: "Mood logged securely." });
-});
+router.post('/', createMood);
+router.get('/', getAllMoods);
+router.get('/:id', getMoodById);
+router.patch('/:id', updateMood);
+router.delete('/:id', deleteMood);
 
 export default router;
