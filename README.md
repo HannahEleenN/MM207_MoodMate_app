@@ -34,6 +34,8 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 │   ├── icons
 │   └── images
 └── modules
+    ├── api_client.js
+    ├── legal_content.js
     ├── child_app
     │   ├── views
     │   │   ├── mood_checkin_view.js
@@ -45,6 +47,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
         ├── views
         │   ├── dashboard_view.js
         │   └── insights_view.js
+        │   └── userManager.js
         ├── parent_main.js
         └── parent_styles.css
 ```
