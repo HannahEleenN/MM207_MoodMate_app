@@ -153,7 +153,7 @@ This token is used by the `privacyGuard` middleware to identify the user's `user
    
 `Client Request -> privacyGuard (Auth Check) -> Mood Controller -> Database`
 
-**File Extensions:**
+## File Extensions:
 
 | Location | Extension | Reason |
 | :--- | :--- | :--- |
