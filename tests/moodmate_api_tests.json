@@ -1,71 +1,175 @@
-{
-  "type": "collection.insomnia.rest/5.0",
-  "schema_version": "5.1",
-  "name": "MoodMate API",
-  "meta": {
-    "id": "wrk_c7965ae5f81b406182d5799492b07319",
-    "created": 1768920190687,
-    "modified": 1768920190687,
-    "description": ""
-  },
-  "collection": [
-    {
-      "url": "http://localhost:3000/api/moods",
-      "name": "Create Mood Entry",
-      "meta": {
-        "id": "req_e0b1f8b6e1334d0cb102a76012425092",
-        "created": 1768920229363,
-        "modified": 1768925888740,
-        "isPrivate": false,
-        "description": "",
-        "sortKey": -1768920229363
-      },
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"mood\": \"trist\",\n  \"context\": \"leken min ble ødelagt\",\n  \"solution\": \"snakk med en voksen\"\n}"
-      },
-      "headers": [
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: MoodMate API
+meta:
+  id: wrk_c7965ae5f81b406182d5799492b07319
+  created: 1768920190687
+  modified: 1768920190687
+  description: ""
+collection:
+  - url: http://localhost:3000/api/moods
+    name: Create Mood Entry
+    meta:
+      id: req_e0b1f8b6e1334d0cb102a76012425092
+      created: 1768920229363
+      modified: 1770037044580
+      isPrivate: false
+      description: ""
+      sortKey: -1768920229363
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
         {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "User-Agent",
-          "value": "insomnia/12.3.0",
-          "description": "",
-          "disabled": false
+          "mood": "sad",
+          "context": "my toy got broken",
+          "solution": "talk to an adult"
         }
-      ],
-      "settings": {
-        "renderRequestBody": true,
-        "encodeUrl": true,
-        "followRedirects": "global",
-        "cookies": {
-          "send": true,
-          "store": true
-        },
-        "rebuildPath": true
-      }
-    }
-  ],
-  "cookieJar": {
-    "name": "Default Jar",
-    "meta": {
-      "id": "jar_c8d4750953c69e51338ed5d5203ec7bd5dfc32af",
-      "created": 1768920190692,
-      "modified": 1768920190692
-    }
-  },
-  "environments": [
-    {
-      "name": "Base Environment",
-      "meta": {
-        "id": "env_c8d4750953c69e51338ed5d5203ec7bd5dfc32af",
-        "created": 1768920190690,
-        "modified": 1768920190690,
-        "isPrivate": false
-      }
-    }
-  ]
-}
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer YOUR_TEST_TOKEN_HERE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/moods
+    name: Get All Moods
+    meta:
+      id: req_8e368a587fe74bdab97cc1e882b2252d
+      created: 1770037198386
+      modified: 1770037328551
+      isPrivate: false
+      description: ""
+      sortKey: -1770037198386
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer YOUR_TEST_TOKEN_HERE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/moods/1
+    name: Update Mood Entry
+    meta:
+      id: req_f780cd73278140c0a5c4d6700b71fb68
+      created: 1770037364484
+      modified: 1770037529069
+      isPrivate: false
+      description: ""
+      sortKey: -1770037364484
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+          "solutions": ["snakk med en voksen", "puste dypt", "be om en klem"]
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer YOUR_TEST_TOKEN_HERE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/moods/1
+    name: Delete Mood Entry
+    meta:
+      id: req_cadbc7611d5d42e98cbbc1123006c070
+      created: 1770037546646
+      modified: 1770037630460
+      isPrivate: false
+      description: ""
+      sortKey: -1770037546646
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer YOUR_TEST_TOKEN_HERE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:3000/api/moods/1
+    name: Get Mood Details
+    meta:
+      id: req_2d23beb007c84e3fac279aed64763373
+      created: 1770037823423
+      modified: 1770037902399
+      isPrivate: false
+      description: ""
+      sortKey: -1770037823423
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer YOUR_TEST_TOKEN_HERE
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_c8d4750953c69e51338ed5d5203ec7bd5dfc32af
+    created: 1768920190692
+    modified: 1768920190692
+environments:
+  name: Base Environment
+  meta:
+    id: env_c8d4750953c69e51338ed5d5203ec7bd5dfc32af
+    created: 1768920190690
+    modified: 1768920190690
+    isPrivate: false
