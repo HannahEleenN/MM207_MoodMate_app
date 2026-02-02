@@ -10,12 +10,11 @@ async function apiRequest(endpoint, method = 'GET', data = null)
     if (data) options.body = JSON.stringify(data);
 
     try {
-        const response = await fetch(endpoint, options);
+        const response = await fetch(endpoint, options); // This is the only fetch call
 
-        // Checks if the status code is 200-299
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || `Server returnerte ${response.status}`);
+            throw new Error(errorData.error || `Feil: ${response.status}`);
         }
 
         return await response.json();
@@ -25,10 +24,8 @@ async function apiRequest(endpoint, method = 'GET', data = null)
     }
 }
 
-export const ApiService =
-{
+export const ApiService = {
     register: (userData) => apiRequest('/api/users', 'POST', userData),
     deleteUser: (id) => apiRequest(`/api/users/${id}`, 'DELETE'),
-    // Add more later as needed:
-    // getMoods: () => apiRequest('/api/moods', 'GET')
+    updateUser: (id, userData) => apiRequest(`/api/users/${id}`, 'PUT', userData)
 };
