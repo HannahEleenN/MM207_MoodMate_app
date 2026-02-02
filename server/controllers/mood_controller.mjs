@@ -17,7 +17,7 @@ export const createMood = async (req, res) =>
         const { mood, context, solutions } = req.body;
 
         // Data from privacyGuard middleware (JWT)
-        const userId = req.user.id;
+        const userId = req.user.userId;
 
         const dateForStorage = formatDate(new Date());
 
