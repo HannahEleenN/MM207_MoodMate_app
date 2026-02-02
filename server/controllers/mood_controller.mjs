@@ -1,4 +1,4 @@
-import Mood from '../models/mood_model.mjs';
+// import Mood from '../models/mood_model.mjs';
 
 // Norwegian date format
 const formatDate = (date) =>
@@ -35,11 +35,11 @@ export const createMood = async (req, res) =>
         // await Mood.save(newEntry);
 
         res.status(201).json({
-            message: "Mood log created successfully",
+            message: "Humørlogg lagret",
             data: newEntry
         });
     } catch (error) {
-        res.status(500).json({ error: "Failed to create mood log" });
+        res.status(500).json({ error: "Kunne ikke lagre humørloggen" });
     }
 };
 
@@ -48,21 +48,21 @@ export const getAllMoods = async (req, res) =>
     try {
         // Use req.user.id from middleware to fetch only this user's moods
         res.status(200).json({
-            message: `Fetched all moods for user ${req.user.id}`,
+            message: `Hentet alle humørlogger for bruker ${req.user.id}`,
             data: [] // Placeholder for database results
         });
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch moods" });
+        res.status(500).json({ error: "Kunne ikke hente humørlogg" });
     }
 };
 
 export const getMoodById = async (req, res) => {
-    res.status(200).json({ message: `Details for mood ${req.params.id}` });
+    res.status(200).json({ message: `Detaljer for humør ${req.params.id}` });
 };
 
 export const updateMood = async (req, res) => {
     // Logic for adding solutions or updating the mood
-    res.status(200).json({ message: "Mood updated" });
+    res.status(200).json({ message: "Humør oppdatert" });
 };
 
 export const deleteMood = async (req, res) => {

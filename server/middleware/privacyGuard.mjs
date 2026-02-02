@@ -7,7 +7,7 @@ export const privacyGuard = (req, res, next) =>
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Access Denied: No token provided." });
+        return res.status(401).json({ error: "Ingen tilgang: Du må logge inn på nytt." });
     }
 
     try {
@@ -26,7 +26,7 @@ export const privacyGuard = (req, res, next) =>
             // Check if they are trying to access another user's ID via URL parameters
             if (req.params.userId && req.params.userId !== userId) {
                 return res.status(403).json({
-                    error: "Privacy Shield: You can only view your own history."
+                    error: "Personvern: Du kan bare se din egen historikk."
                 });
             }
         }
@@ -35,6 +35,6 @@ export const privacyGuard = (req, res, next) =>
 
         next();
     } catch (err) {
-        return res.status(403).json({ error: "Invalid or expired token." });
+        return res.status(403).json({ error: "Sesjonen er utløpt. Vennligst logg inn igjen." });
     }
 };
