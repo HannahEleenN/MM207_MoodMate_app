@@ -1,35 +1,40 @@
+import jwt from 'jsonwebtoken';
+
 export const privacyGuard = (req, res, next) =>
 {
-    const userRole = req.headers['x-user-role'];
-    const userId = req.headers['x-user-id'];
-    const familyId = req.headers['x-family-id'];
+    // Retrieve token from Authorization header (Bearer <token>)
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-    // Block anyone not in a family
-    if (!familyId) {
-        return res.status(401).json({ error: "Access Denied: No family context." });
+    if (!token) {
+        return res.status(401).json({ error: "Access Denied: No token provided." });
     }
 
-    // Sibling Privacy Logic
-    if (userRole === 'child')
-    {
-        // If a child tries to access a specific log ID
-        const targetChildId = req.params.childId;
+    try {
+        // First look for the secret in the .env file. If missing, it uses the fallback string.
+        const secret = process.env.JWT_SECRET || 'fallback_development_key';
+        const decoded = jwt.verify(token, secret);
 
-        // If the URL specifies a child ID that isn't THEM, block it
-        if (targetChildId && targetChildId !== userId)
+        // Attach user data to the request object so the controller can access it
+        req.user = decoded;
+
+        const { userId, familyId, role } = decoded;
+
+        // Sibling Privacy Logic
+        if (role === 'child')
         {
-            return res.status(403).json({
-                error: "Privacy Shield: You can only view your own mood history, not your siblings'."
-            });
+            // Check if they are trying to access another user's ID via URL parameters
+            if (req.params.userId && req.params.userId !== userId) {
+                return res.status(403).json({
+                    error: "Privacy Shield: You can only view your own history."
+                });
+            }
         }
-    }
 
-    // Parent Logic
-    if (userRole === 'parent')
-    {
-        // Parents pass through to see any child in their familyId
-        console.log(`Parent access granted for family: ${familyId}`);
-    }
+        // Cross-Family Leak Prevention
 
-    next();
+        next();
+    } catch (err) {
+        return res.status(403).json({ error: "Invalid or expired token." });
+    }
 };
