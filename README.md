@@ -49,7 +49,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     └── views/
         ├── userManager.mjs
         ├── moodCheckin.mjs
-        ├── dashboard.mjs
+        ├── dashboard.html
         └── insights.mjs
 ```
 
