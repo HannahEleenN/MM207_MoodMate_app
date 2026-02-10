@@ -41,11 +41,11 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     ├── api.mjs
     ├── legal_content.js
     ├── models/
-    │   ├── userModel.mjs
-    │   └── moodModel.mjs
+    │   ├── mood_client_model.mjs
+    │   └── user_client_model.mjs
     ├── controllers/
-    │   ├── userController.mjs
-    │   └── moodController.mjs
+    │   ├── mood_ui_controller.mjs
+    │   └── user_ui_controller.mjs
     └── views/
         ├── user-manager.mjs
         ├── mood-checkin.mjs
