@@ -47,8 +47,8 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     │   ├── mood_ui_controller.mjs
     │   └── user_ui_controller.mjs
     └── views/
-        ├── user-manager.mjs
-        ├── mood-checkin.mjs
+        ├── userManager.mjs
+        ├── moodCheckin.mjs
         ├── dashboard.mjs
         └── insights.mjs
 ```
