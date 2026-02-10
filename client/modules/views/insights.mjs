@@ -1,5 +1,4 @@
-"use strict";
 
 // =====================================================================================================================
-// TASK 3: Show actionable insights and recommendations based on child logs.
+// Show actionable insights and recommendations based on child logs.
 // =====================================================================================================================

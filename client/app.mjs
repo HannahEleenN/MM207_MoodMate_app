@@ -1,78 +1,87 @@
 import { privacyPolicy, termsOfService } from './modules/legal_content.js';
-import { initParentApp } from './modules/parent_main.js';
-import { initChildApp } from './modules/child_main.js';
-import './modules/views/userManager.mjs';
+import { initParentApp } from './modules/controllers/parent_main.js';
+import { initChildApp } from './modules/controllers/child_controller.mjs';
+import { store } from "./modules/singleton.mjs";
 
-// ---------------------------------------------------------------------------------------------------------------------
+// --- Configuration ---
+const mainContainer = document.getElementById('app-root');
 
-// Element references
-const consentBox = document.getElementById('consent-checkbox');
-const registerBtn = document.getElementById('register-btn');
-const modal = document.getElementById('legal-modal');
-const modalText = document.getElementById('legal-text');
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-// Consent logic
-// Activate the button only when the box is checked
-if (consentBox && registerBtn)
+/**
+ * ROUTER
+ * Responsible for switching between views based on the application state.
+ * This implements the "Single Page Application" behavior.
+ */
+async function router()
 {
-    consentBox.onchange = () =>
-    {
-        const disabled = !consentBox.checked;
-        registerBtn.disabled = disabled;
-        registerBtn.setAttribute('aria-disabled', String(disabled));
-    };
-}
+    const view = store.currentView; // Get current view from Proxy state
 
-// Modal logic (Show TOS or Privacy Policy documents)
-const viewTos = document.getElementById('view-tos');
-if (viewTos) {
-    viewTos.onclick = (e) =>
-    {
-        e.preventDefault(); // Prevents the page from jumping to the top when the link is clicked
-        modalText.innerHTML = termsOfService;
-        modal.style.display = 'block';
-        modal.setAttribute('aria-hidden', 'false');
-        // Move focus into modal for accessibility
-        const closeBtn = document.getElementById('close-modal-btn');
-        if (closeBtn) closeBtn.focus();
-    };
-}
+    // Clear container before loading new content
+    mainContainer.innerHTML = '';
 
-const viewPrivacy = document.getElementById('view-privacy');
-if (viewPrivacy)
-{
-    viewPrivacy.onclick = (e) =>
-    {
-        e.preventDefault();
-        modalText.innerHTML = privacyPolicy;
-        modal.style.display = 'block';
-        modal.setAttribute('aria-hidden', 'false');
-        const closeBtn = document.getElementById('close-modal-btn');
-        if (closeBtn) closeBtn.focus();
-    };
-}
-
-const closeModalBtn = document.getElementById('close-modal-btn');
-if (closeModalBtn)
-{
-    closeModalBtn.onclick = () => {
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
-    };
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-function loadView(viewName)
-{
-    const root = document.getElementById('app-root');
-    root.innerHTML = '';
-
-    if (viewName === 'parent') {
-        initParentApp(root);
-    } else if (viewName === 'child') {
-        initChildApp(root);
+    switch (view) {
+        case 'parent':
+            await initParentApp(mainContainer, store);
+            break;
+        case 'child':
+            await initChildApp(mainContainer, store);
+            break;
+        case 'login':
+        default:
+            console.log("Showing login/landing page");
+            // You can call a login controller here if needed
+            break;
     }
 }
+
+// --- Event Listeners for State Changes ---
+// We listen for changes in our Singleton Proxy to trigger the router
+window.addEventListener('stateChanged', (e) => {
+    if (e.detail.property === 'currentView') {
+        router();
+    }
+});
+
+// --- Legal Modal Logic ---
+// Handles the Privacy Policy and Terms of Service popups
+const setupLegalListeners = () =>
+{
+    const modal = document.getElementById('legal-modal');
+    const modalText = document.getElementById('legal-text');
+    const consentBox = document.getElementById('consent-checkbox');
+    const registerBtn = document.getElementById('register-btn');
+
+    // Toggle register button based on consent checkbox
+    if (consentBox && registerBtn) {
+        consentBox.onchange = () => {
+            registerBtn.disabled = !consentBox.checked;
+        };
+    }
+
+    // Link triggers for showing legal text
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'view-tos') {
+            e.preventDefault();
+            modalText.innerHTML = termsOfService;
+            modal.style.display = 'block';
+        }
+        if (e.target.id === 'view-privacy') {
+            e.preventDefault();
+            modalText.innerHTML = privacyPolicy;
+            modal.style.display = 'block';
+        }
+        if (e.target.id === 'close-modal-btn') {
+            modal.style.display = 'none';
+        }
+    });
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// --- Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+    setupLegalListeners();
+
+    // Set initial view (e.g., if user is already logged in or starting fresh)
+    // Changing this property triggers the Proxy, which triggers the Router.
+    store.currentView = 'child';
+});
