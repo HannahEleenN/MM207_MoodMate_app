@@ -9,8 +9,8 @@ import { ApiService } from "../api.mjs";
 export async function initChildApp(container, model)
 {
     try {
-        // 1. Fetch the HTML view from the external file
-        const html = await ApiService.loadView('child_menu');
+        // 1. Fetch the HTML view from the external file (use the actual filename)
+        const html = await ApiService.loadView('childMenu');
 
         // 2. Inject the HTML into the index.html container
         container.innerHTML = html;

@@ -9,15 +9,14 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/icons/icon-192.png",
+      "src": "assets/images/feature_map_Moodmate.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "assets/icons/icon-512.png",
+      "src": "assets/images/feature_map_Moodmate.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ]
 }
-

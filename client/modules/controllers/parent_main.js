@@ -6,10 +6,15 @@
 
 export function initParentApp(container)
 {
-    // Logic for the buttons
-    document.getElementById('view-insights').onclick = () => alert("Åpner innsikt...");
+    // If the container contains the view HTML, query inside it rather than document
+    const viewRoot = container || document;
 
-    document.getElementById('delete-account-btn').onclick = () => {
+    // Logic for the buttons
+    const viewInsightsBtn = viewRoot.querySelector('#view-insights');
+    if (viewInsightsBtn) viewInsightsBtn.onclick = () => alert("Åpner innsikt...");
+
+    const deleteBtn = viewRoot.querySelector('#delete-account-btn');
+    if (deleteBtn) deleteBtn.onclick = () => {
         if(confirm("Er du sikker? Dette sletter alle dine data permanent.")) {
             console.log("Sletter bruker...");
         }
