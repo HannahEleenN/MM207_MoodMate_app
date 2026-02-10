@@ -1,4 +1,4 @@
-import { ApiService } from '../../api_client.js';
+import { ApiService } from '../api.mjs';
 
 export class UserManager extends HTMLElement
 {

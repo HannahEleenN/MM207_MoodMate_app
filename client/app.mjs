@@ -1,7 +1,7 @@
 import { privacyPolicy, termsOfService } from './modules/legal_content.js';
-import { initParentApp } from './modules/parent_app/parent_main.js';
-import { initChildApp } from './modules/child_app/child_main.js';
-import './modules/parent_app/views/userManager.js';
+import { initParentApp } from './modules/parent_main.js';
+import { initChildApp } from './modules/child_main.js';
+import './modules/views/userManager.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 

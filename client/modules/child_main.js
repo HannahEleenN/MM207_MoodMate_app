@@ -30,7 +30,7 @@ export function initChildApp(container)
         btn.onclick = () => {
             const mood = btn.getAttribute('data-mood');
             alert("Du valgte: " + mood);
-            // TODO: Call on mood_checkin_view.js here to start mood logging flow
+            // TODO: Call on moodCheckin.mjs here to start mood logging flow
         };
     });
 }

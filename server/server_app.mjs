@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import moodRoutes from './routes/mood_routes.mjs';
-import userController from './controllers/user_controller.mjs';
+import userController from './controllers/user_api_handler.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

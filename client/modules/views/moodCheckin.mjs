@@ -1,5 +1,3 @@
-"use strict";
-
 // =====================================================================================================================
-// TASK 4: Show solution options and allow child to select a coping strategy.
+// MOOD CHECKIN: Create the mood check-in view with icons for each core emotion.
 // =====================================================================================================================
