@@ -1,4 +1,7 @@
-# MoodMate - Interactive Emotion Journal (School Project)
+# MoodMate - Interactive Emotion Journal (School Project, UiA Grimstad, Norway)
+
+*This is an individual university assignment for the course MM207.*
+*Contributions or collaborations are not accepted as it is a graded individual project.*
 
 MoodMate is a Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions.
 **Note on Language:** Technical documentation and code are in English. The client interface is in Norwegian to accommodate the target audience.
@@ -28,28 +31,26 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ├── index.html
 ├── style.css
 ├── manifest.json
-├── client_app.js
+├── app.mjs
 ├── service_worker.js
-├── assets
-│   ├── icons
-│   └── images
-└── modules
-    ├── api_client.js
+├── assets/
+│   ├── icons/
+│   └── images/
+└── modules/
+    ├── singleton.mjs
+    ├── api.mjs
     ├── legal_content.js
-    ├── child_app
-    │   ├── views
-    │   │   ├── mood_checkin_view.js
-    │   │   ├── context_view.js
-    │   │   └── solution_view.js
-    │   ├── child_main.js
-    │   └── child_styles.css
-    └── parent_app
-        ├── views
-        │   ├── dashboard_view.js
-        │   └── insights_view.js
-        │   └── userManager.js
-        ├── parent_main.js
-        └── parent_styles.css
+    ├── models/
+    │   ├── userModel.mjs
+    │   └── moodModel.mjs
+    ├── controllers/
+    │   ├── userController.mjs
+    │   └── moodController.mjs
+    └── views/
+        ├── user-manager.mjs
+        ├── mood-checkin.mjs
+        ├── dashboard.mjs
+        └── insights.mjs
 ```
 
 ### /server
