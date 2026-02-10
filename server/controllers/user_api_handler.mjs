@@ -1,5 +1,5 @@
-import User from '../models/user_model.mjs';
-import Mood from '../models/mood_model.mjs';
+import User from '../models/user_server_model.mjs';
+import Mood from '../models/mood_server_model.mjs';
 
 export const registerUser = (req, res) => 
     {

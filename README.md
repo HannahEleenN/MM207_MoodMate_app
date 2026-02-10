@@ -61,11 +61,11 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 │   ├── mood_routes.mjs
 │   └── user_routes.mjs
 ├── controllers
-│   ├── mood_controller.mjs
+│   ├── mood_api_handler.mjs
 │   └── user_api_handler.mjs
 ├── models
-│   ├── mood_model.mjs
-│   └── user_model.mjs
+│   ├── mood_server_model.mjs
+│   └── user_server_model.mjs
 ├── middleware
 │   └── privacyGuard.mjs
 └── database

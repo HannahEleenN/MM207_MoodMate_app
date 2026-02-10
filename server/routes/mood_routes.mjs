@@ -1,5 +1,5 @@
 import express from 'express';
-import { createMood, getAllMoods, getMoodById, updateMood, deleteMood } from '../controllers/mood_controller.mjs';
+import { createMood, getAllMoods, getMoodById, updateMood, deleteMood } from '../controllers/mood_api_handler.mjs';
 import { privacyGuard } from '../middleware/privacyGuard.mjs';
 
 const router = express.Router();
