@@ -1,14 +1,15 @@
-import { privacyPolicy, termsOfService } from './modules/legal_content.js';
+import { store } from './modules/singleton.mjs';
+import { authController } from './modules/controllers/auth_controller.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
-import { store } from "./modules/singleton.mjs";
-import { initUserManager } from './modules/controllers/user_ui_controller.mjs';
+import { userUIController } from './modules/controllers/user_ui_controller.mjs';
+
 import { createUserModel } from './modules/models/user_client_model.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Configuration
-const mainContainer = document.getElementById('app-root');
+const root = document.getElementById('app-root');
 
 // Setup model (Dependency Injection)
 const userModel = createUserModel([{ id: 1, nick: "Mamma" }]);
@@ -24,24 +25,23 @@ async function router()
     const view = store.currentView; // Get current view from Proxy state
 
     // Clear container before loading new content
-    mainContainer.innerHTML = '';
+    root.innerHTML = '';
 
     switch (view) {
-        case 'parent':
-            await initParentApp(mainContainer, store);
+        case 'login':
+            await authController.init(root);
             break;
-        case 'child':
-            await initChildApp(mainContainer, store);
+        case 'parentMenu':
+            await initParentApp(root);
+            break;
+        case 'childMenu':
+            await initChildApp(root, store); // Dependency injection of store
             break;
         case 'userManager':
-            // When routing to user manager: initialize it with the root container and the user model
-            await initUserManager(mainContainer, userModel);
+            await userUIController.init(root);
             break;
-        case 'login':
         default:
-            console.log("Showing login/landing page");
-            // You can call a login controller here if needed
-            break;
+            await authController.init(root); // Fallback to login
     }
 }
 
@@ -98,7 +98,6 @@ const setupLegalListeners = () =>
 document.addEventListener('DOMContentLoaded', () => {
     setupLegalListeners();
 
-    // Set initial view (e.g., if user is already logged in or starting fresh)
-    // Changing this property triggers the Proxy, which triggers the Router.
-    store.currentView = 'child';
+    // If we have no user, show login. Else show menu.
+    store.currentView = store.currentUser ? 'parentMenu' : 'login';
 });
