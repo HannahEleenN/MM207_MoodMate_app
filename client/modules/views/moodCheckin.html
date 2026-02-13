@@ -6,5 +6,33 @@
 </head>
 <body>
 
+<section id="mood-checkin-flow">
+    <div id="step-reason">
+        <h2>Hva gjør deg <span id="selected-mood-display">...</span>?</h2>
+        <p>Se på bildene eller bruk ord:</p>
+
+        <div class="context-options">
+            <button class="context-btn" data-context="morket">🌑 Mørket</button>
+            <button class="context-btn" data-context="venner">👭 Venner</button>
+            <button class="context-btn" data-context="skole">🏫 Skole</button>
+            <button class="context-btn" data-context="familie">🏠 Familie</button>
+        </div>
+
+        <textarea id="mood-context-text" placeholder="Skriv eller fortell mer her..."></textarea>
+        <button id="next-to-solutions" class="nav-btn">Gå videre ➡️</button>
+    </div>
+
+    <div id="step-solutions" style="display: none;">
+        <h2>Hva vil du gjøre nå?</h2>
+        <div class="solution-options">
+            <button class="sol-btn" data-sol="klem">🤗 Få en klem</button>
+            <button class="sol-btn" data-sol="snakke">💬 Snakke med en voksen</button>
+            <button class="sol-btn" data-sol="alene">🤫 Være litt alene</button>
+            <button class="sol-btn" data-sol="leke">🧸 Leke</button>
+        </div>
+        <button id="finish-checkin" class="save-btn">Ferdig! ✨</button>
+    </div>
+</section>
+
 </body>
 </html>

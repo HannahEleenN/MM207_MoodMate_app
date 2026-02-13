@@ -6,5 +6,39 @@
 </head>
 <body>
 
+<section id="parent-insights">
+    <header>
+        <button id="back-to-parent-menu" class="back-link">⬅️ Tilbake</button>
+        <h2>Humørtrender og Innsikt</h2>
+    </header>
+
+    <div class="insight-cards">
+        <article class="stat-card">
+            <h3>Siste 7 dager</h3>
+            <div id="mood-chart-placeholder">
+                <p class="empty-msg">Henter data...</p>
+            </div>
+        </article>
+
+        <article class="history-card">
+            <h3>Logghistorikk</h3>
+            <table id="mood-history-table">
+                <thead>
+                <tr>
+                    <th>Dato</th>
+                    <th>Barn</th>
+                    <th>Følelse</th>
+                    <th>Kontekst</th>
+                </tr>
+                </thead>
+                <tbody id="history-list">
+                </tbody>
+            </table>
+        </article>
+    </div>
+
+    <button id="export-data-btn">Last ned rapport (PDF/CSV)</button>
+</section>
+
 </body>
 </html>
