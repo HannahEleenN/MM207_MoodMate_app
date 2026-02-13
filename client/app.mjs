@@ -1,4 +1,5 @@
 import { store } from './modules/singleton.mjs';
+import { ApiService } from './modules/api.mjs';
 import { authController } from './modules/controllers/auth_controller.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
@@ -59,6 +60,7 @@ window.addEventListener('stateChanged', (e) => {
 // Legal Modal Logic
 // Handles the Privacy Policy and Terms of Service popups
 
+/*
 const setupLegalListeners = () =>
 {
     const modal = document.getElementById('legal-modal');
@@ -92,12 +94,52 @@ const setupLegalListeners = () =>
     });
 };
 
+*/
+
+const setupLegalListeners = () =>
+{
+    const modal = document.getElementById('legal-modal');
+    const modalText = document.getElementById('legal-text');
+
+    // Uses event delegation to handle clicks on legal links and modal close button
+    document.addEventListener('click', async (e) =>
+    {
+
+        // Show Terms of Service
+        if (e.target.id === 'view-tos') {
+            e.preventDefault();
+            const html = await ApiService.loadView('termsOfService');
+            modalText.innerHTML = html;
+            modal.style.display = 'block';
+        }
+
+        // Show Privacy Policy
+        if (e.target.id === 'view-privacy') {
+            e.preventDefault();
+            const html = await ApiService.loadView('privacyPolicy');
+            modalText.innerHTML = html;
+            modal.style.display = 'block';
+        }
+
+        // Close modal if clicking on close button or outside the modal content
+        if (e.target.id === 'close-modal-btn' || e.target.classList.contains('modal')) {
+            modal.style.display = 'none';
+        }
+    });
+};
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Initialization
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () =>
+{
     setupLegalListeners();
 
-    // If we have no user, show login. Else show menu.
-    store.currentView = store.currentUser ? 'parentMenu' : 'login';
+    // Start logic: Check if someone is logged in and set initial view accordingly
+    if (!store.currentView) {
+        store.currentView = store.currentUser ? 'parentMenu' : 'login';
+    } else {
+        // If currentView is already set (e.g., from a previous session), just route to it
+        router();
+    }
 });
