@@ -44,18 +44,18 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     │   ├── mood_client_model.mjs
     │   └── user_client_model.mjs
     ├── controllers/
-    │   ├── mood_ui_controller.mjs
-    │   ├── user_ui_controller.mjs
+    │   ├── auth_controller.mjs
     │   ├── child_controller.mjs
-    │   └── parent_controller.mjs
+    │   ├── parent_controller.mjs
+    │   ├── user_ui_controller.mjs
+    │   └── mood_ui_controller.mjs
     └── views/
+        ├── login.html
         ├── childMenu.html
-        ├── parentMenu.html
-        ├── dashboard.html
-        ├── userManager.html
         ├── moodCheckin.html
-        ├── userManager.mjs
-        └── insights.mjs
+        ├── parentMenu.html
+        ├── userManager.html
+        └── insights.html
 ```
 
 ### /server
