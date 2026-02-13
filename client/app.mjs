@@ -1,5 +1,5 @@
 import { privacyPolicy, termsOfService } from './modules/legal_content.js';
-import { initParentApp } from './modules/controllers/parent_main.js';
+import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { store } from "./modules/singleton.mjs";
 
