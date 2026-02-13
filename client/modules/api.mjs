@@ -9,7 +9,7 @@ import { universalFetch } from './singleton.mjs';
 export const ApiService =
 {
 
-    // --- VIEW / HTML LOADING ---
+    // VIEW / HTML LOADING
 
     /**
      * Fetches an HTML template from the views folder.
@@ -19,11 +19,9 @@ export const ApiService =
         return await universalFetch(`./modules/views/${viewName}.html`);
     },
 
-    // --- USER MANAGEMENT (CRUD) ---
+    // USER MANAGEMENT (CRUD)
+    // Registers a new parent user account.
 
-    /**
-     * Registers a new parent user account.
-     */
     register: async (userData) => {
         return await universalFetch('/api/users/register', {
             method: 'POST',
@@ -31,18 +29,16 @@ export const ApiService =
         });
     },
 
-    /**
-     * Deletes a user account and all associated data (GDPR).
-     */
+    // Deletes a user account and all associated data (GDPR).
+
     deleteUser: async (id) => {
         return await universalFetch(`/api/users/${id}`, {
             method: 'DELETE'
         });
     },
 
-    /**
-     * Updates user information.
-     */
+    // Updates user information.
+
     updateUser: async (id, userData) => {
         return await universalFetch(`/api/users/${id}`, {
             method: 'PUT',
@@ -50,11 +46,9 @@ export const ApiService =
         });
     },
 
-    // --- MOOD LOGGING & INSIGHTS ---
+    // MOOD LOGGING & INSIGHTS
+    // Saves a new mood entry from the child or parent.
 
-    /**
-     * Saves a new mood entry from the child or parent.
-     */
     saveMood: async (moodData) => {
         return await universalFetch('/api/moods', {
             method: 'POST',
@@ -62,9 +56,8 @@ export const ApiService =
         });
     },
 
-    /**
-     * Fetches all mood logs for the current authenticated user.
-     */
+    // Fetches all mood logs for the current authenticated user.
+
     getAllMoods: async () => {
         return await universalFetch('/api/moods', {
             method: 'GET'
