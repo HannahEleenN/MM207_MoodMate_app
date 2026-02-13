@@ -6,5 +6,25 @@
 </head>
 <body>
 
+<section class="user-manager">
+    <h2>MoodMate Profiladministrasjon</h2>
+
+    <form id="regForm">
+        <h3>Opprett ny foreldrekonto</h3>
+        <input type="text" name="nick" placeholder="Kallenavn" required>
+        <input type="password" name="secret" placeholder="Hemmelig kode" required>
+        <label class="consent-label">
+            <input type="checkbox" id="consent-check" required> Jeg godtar vilkårene
+        </label>
+        <button type="submit" class="btn-reg">Registrer</button>
+    </form>
+
+    <hr>
+
+    <h3>Eksisterende profiler</h3>
+    <ul id="user-list">
+    </ul>
+</section>
+
 </body>
 </html>

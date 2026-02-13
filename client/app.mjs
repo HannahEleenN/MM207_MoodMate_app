@@ -2,15 +2,23 @@ import { privacyPolicy, termsOfService } from './modules/legal_content.js';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { store } from "./modules/singleton.mjs";
+import { initUserManager } from './modules/controllers/user_ui_controller.mjs';
+import { createUserModel } from './modules/models/user_client_model.mjs';
 
-// --- Configuration ---
+// ---------------------------------------------------------------------------------------------------------------------
+
+// Configuration
 const mainContainer = document.getElementById('app-root');
 
-/**
- * ROUTER
- * Responsible for switching between views based on the application state.
- * This implements the "Single Page Application" behavior.
- */
+// Setup model (Dependency Injection)
+const userModel = createUserModel([{ id: 1, nick: "Mamma" }]);
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// ROUTER
+// Responsible for switching between views based on the application state.
+// This implements the "Single Page Application" behavior.
+
 async function router()
 {
     const view = store.currentView; // Get current view from Proxy state
@@ -25,6 +33,10 @@ async function router()
         case 'child':
             await initChildApp(mainContainer, store);
             break;
+        case 'userManager':
+            // When routing to user manager: initialize it with the root container and the user model
+            await initUserManager(mainContainer, userModel);
+            break;
         case 'login':
         default:
             console.log("Showing login/landing page");
@@ -33,16 +45,20 @@ async function router()
     }
 }
 
-// --- Event Listeners for State Changes ---
+// ---------------------------------------------------------------------------------------------------------------------
+// Event Listeners for State Changes
 // We listen for changes in our Singleton Proxy to trigger the router
+
 window.addEventListener('stateChanged', (e) => {
     if (e.detail.property === 'currentView') {
         router();
     }
 });
 
-// --- Legal Modal Logic ---
+// ---------------------------------------------------------------------------------------------------------------------
+// Legal Modal Logic
 // Handles the Privacy Policy and Terms of Service popups
+
 const setupLegalListeners = () =>
 {
     const modal = document.getElementById('legal-modal');
@@ -58,7 +74,8 @@ const setupLegalListeners = () =>
     }
 
     // Link triggers for showing legal text
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) =>
+    {
         if (e.target.id === 'view-tos') {
             e.preventDefault();
             modalText.innerHTML = termsOfService;
@@ -76,8 +93,8 @@ const setupLegalListeners = () =>
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Initialization
 
-// --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
     setupLegalListeners();
 
