@@ -1,5 +1,3 @@
-"use strict";
-
 import { universalFetch, store } from '../singleton.mjs';
 import { ApiService } from '../api.mjs'; // Use loadView from here
 

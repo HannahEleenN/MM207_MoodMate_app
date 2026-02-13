@@ -1,34 +1,24 @@
 import { ApiService } from "../api.mjs";
 
 /**
- * Controller for the child mood selection view.
- * @param {HTMLElement} container - Where to render the view.
- * @param {Object} model - The application state (Proxy).
+ * Controller for the child's journey.
+ * Handles both the main menu and the follow-up questions.
  */
-
 export async function initChildApp(container, model)
 {
     try {
-        // 1. Fetch the HTML view from the external file (use the actual filename)
-        const html = await ApiService.loadView('childMenu');
+        // --- STEP 1: Main Mood Menu ---
+        const menuHtml = await ApiService.loadView('childMenu');
+        container.innerHTML = menuHtml;
 
-        // 2. Inject the HTML into the index.html container
-        container.innerHTML = html;
-
-        // 3. Attach logic to the newly injected elements
-        const buttons = container.querySelectorAll('.mood-btn');
-
-        buttons.forEach(btn => {
+        const moodButtons = container.querySelectorAll('.mood-btn');
+        moodButtons.forEach(btn => {
             btn.onclick = async () => {
-                const mood = btn.getAttribute('data-mood');
+                const selectedMood = btn.getAttribute('data-mood');
+                model.currentMood = selectedMood; // Update the Proxy state
 
-                // Update local state/model
-                model.currentMood = mood;
-
-                // Example: Send to server using the same ApiService
-                await ApiService.saveMood({ mood, timestamp: new Date() });
-
-                alert(`Du valgte: ${mood}. Dette er nå lagret!`);
+                // Move to the next part of the flow (Why & Solutions)
+                await initMoodCheckinFlow(container, model);
             };
         });
 
@@ -36,4 +26,57 @@ export async function initChildApp(container, model)
         console.error("Failed to initialize child view:", error);
         container.innerHTML = "<p>Beklager, kunne ikke laste menyen.</p>";
     }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Internal function to handle the "Why" and "Solutions" steps
+ */
+async function initMoodCheckinFlow(container, model)
+{
+    const checkinHtml = await ApiService.loadView('moodCheckin');
+    container.innerHTML = checkinHtml;
+
+    // UI Update: Show what mood was selected
+    const display = container.querySelector("#selected-mood-display");
+    if (display) display.innerText = model.currentMood.toUpperCase();
+
+    // Logic for Step 1: Reason (Context)
+    const contextButtons = container.querySelectorAll('.context-btn');
+    let selectedContext = "";
+
+    contextButtons.forEach(btn => {
+        btn.onclick = () => {
+            selectedContext = btn.getAttribute('data-context');
+            // Visual feedback: highlight selected
+            contextButtons.forEach(b => b.style.border = "none");
+            btn.style.border = "3px solid var(--primary-color, blue)";
+        };
+    });
+
+    // Navigation: Go to Solutions
+    container.querySelector("#next-to-solutions").onclick = () => {
+        container.querySelector("#step-reason").style.display = "none";
+        container.querySelector("#step-solutions").style.display = "block";
+    };
+
+    // Logic for Step 2: Finalize and Save
+    container.querySelector("#finish-checkin").onclick = async () => {
+        const finalData = {
+            mood: model.currentMood,
+            context: selectedContext || container.querySelector("#mood-context-text").value,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            await ApiService.saveMood(finalData);
+            alert("Så flink du er! Humøret ditt er lagret. ✨");
+
+            // Redirect back to start via the model/router
+            model.currentView = 'childMenu';
+        } catch (err) {
+            alert("Det skjedde en feil ved lagring.");
+        }
+    };
 }

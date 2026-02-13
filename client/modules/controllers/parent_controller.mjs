@@ -1,22 +1,45 @@
-"use strict";
+import { ApiService } from "../api.mjs";
+import { store } from "../singleton.mjs";
 
-// =====================================================================================================================
-// TASK 1: Initialize the parent dashboard app, fetch child logs, and show insights.
-// =====================================================================================================================
+// Controller for the Parent Dashboard.
 
-export function initParentApp(container)
+export async function initParentApp(container)
 {
-    // If the container contains the view HTML, query inside it rather than document
-    const viewRoot = container || document;
+    try {
+        // Fetch the view from the HTML file
+        const html = await ApiService.loadView('parentMenu');
+        container.innerHTML = html;
 
-    // Logic for the buttons
-    const viewInsightsBtn = viewRoot.querySelector('#view-insights');
-    if (viewInsightsBtn) viewInsightsBtn.onclick = () => alert("Åpner innsikt...");
+        // Navigation Logic: Use the store to change views
+        // This triggers the Proxy/Observer in app.mjs
+        container.querySelector('#view-insights').onclick = () => {
+            store.currentView = 'insights';
+        };
 
-    const deleteBtn = viewRoot.querySelector('#delete-account-btn');
-    if (deleteBtn) deleteBtn.onclick = () => {
-        if(confirm("Er du sikker? Dette sletter alle dine data permanent.")) {
-            console.log("Sletter bruker...");
-        }
-    };
+        container.querySelector('#manage-profiles').onclick = () => {
+            store.currentView = 'userManager';
+        };
+
+        // Data Logic: Delete account (GDPR)
+        const deleteBtn = container.querySelector('#delete-account-btn');
+        deleteBtn.onclick = async () =>
+        {
+            if (confirm("Er du sikker? Dette sletter alle dine data permanent (GDPR).")) {
+                try {
+                    // Assuming store.currentUser contains the ID
+                    await ApiService.deleteUser(store.currentUser.id);
+                    alert("Kontoen din er nå slettet.");
+                    store.currentUser = null;
+                    store.currentView = 'login';
+                } catch (error) {
+                    console.error("Deletion failed:", error);
+                    alert("Kunne ikke slette konto. Prøv igjen senere.");
+                }
+            }
+        };
+
+    } catch (error) {
+        console.error("Failed to load parent menu:", error);
+        container.innerHTML = "<p>Feil ved lasting av foreldremeny.</p>";
+    }
 }
