@@ -5,7 +5,13 @@ import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { userUIController } from './modules/controllers/user_ui_controller.mjs';
 
-import { createUserModel } from './modules/models/user_client_model.mjs';
+// Register the <user-manager> custom element so the tag in index.html will initialize the controller
+class UserManagerElement extends HTMLElement {
+    connectedCallback() {
+        userUIController.init(this);
+    }
+}
+customElements.define('user-manager', UserManagerElement);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -13,7 +19,7 @@ import { createUserModel } from './modules/models/user_client_model.mjs';
 const root = document.getElementById('app-root');
 
 // Setup model (Dependency Injection)
-const userModel = createUserModel([{ id: 1, nick: "Mamma" }]);
+// const userModel = createUserModel([{ id: 1, nick: "Mamma" }]); // not used yet
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -108,16 +114,14 @@ const setupLegalListeners = () =>
         // Show Terms of Service
         if (e.target.id === 'view-tos') {
             e.preventDefault();
-            const html = await ApiService.loadView('termsOfService');
-            modalText.innerHTML = html;
+            modalText.innerHTML = await ApiService.loadView('termsOfService');
             modal.style.display = 'block';
         }
 
         // Show Privacy Policy
         if (e.target.id === 'view-privacy') {
             e.preventDefault();
-            const html = await ApiService.loadView('privacyPolicy');
-            modalText.innerHTML = html;
+            modalText.innerHTML = await ApiService.loadView('privacyPolicy');
             modal.style.display = 'block';
         }
 

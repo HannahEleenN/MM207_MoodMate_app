@@ -1,38 +1,32 @@
 import { universalFetch, store } from '../singleton.mjs';
-import { ApiService } from '../api.mjs'; // Use loadView from here
+import { ApiService } from '../api.mjs';
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export const userUIController =
 {
-    // Dependency Injection:
-    // @param {HTMLElement} container - The element in index.html where we inject the view.
-
     async init(container)
     {
-        // Fetch the HTML view file using the single fetch function
-        // This keeps HTML out of your Javascript.
-        const html = await ApiService.loadView('userManager');
-        container.innerHTML = html;
+        container.innerHTML = await ApiService.loadView('userManager');
 
-        // Setup event listeners on the newly injected HTML
         const form = container.querySelector("#regForm");
         const list = container.querySelector("#user-list");
 
         if (form) {
-            form.onsubmit = async (e) => {
+            form.onsubmit = async (e) =>
+            {
                 e.preventDefault();
                 const formData = Object.fromEntries(new FormData(form));
                 await this.handleRegister(formData);
             };
         }
 
-        // Initial render of users from the store (Model)
         this.renderUserList(list);
     },
 
     async handleRegister(formData)
     {
         try {
-            // UI Feedback: Disable button
             const btn = document.querySelector(".btn-reg");
             if (btn) btn.disabled = true;
 
@@ -42,30 +36,74 @@ export const userUIController =
             });
 
             if (result && result.user) {
-                // Update the Proxy-state (Model)
-                // This triggers the 'stateChanged' event in your app
                 store.users = [...store.users, result.user];
-                store.currentUser = result.user;
+                this.renderUserList(document.querySelector("#user-list"));
                 alert("Bruker registrert!");
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            alert("Kunne ikke registrere bruker.");
         } finally {
-            const btn = document.querySelector(".btn-reg");
             if (btn) btn.disabled = false;
+        }
+    },
+
+    async handleEdit(id, oldNick)
+    {
+        const newNick = prompt("Skriv inn nytt kallenavn:", oldNick);
+
+        if (newNick && newNick !== oldNick) {
+            try {
+                const result = await ApiService.updateUser(id, { nick: newNick });
+
+                if (result)
+                {
+                    store.users = store.users.map(user =>
+                        user.id === id ? { ...user, nick: newNick } : user
+                    );
+                    this.renderUserList(document.querySelector("#user-list"));
+                    alert("Navn oppdatert!");
+                }
+            } catch (error) {
+                console.error("Update failed:", error);
+                alert("Kunne ikke oppdatere navn.");
+            }
+        }
+    },
+
+    async handleDelete(id)
+    {
+        if (!confirm("Vil du slette denne brukeren?")) return;
+        try {
+            await ApiService.deleteUser(id);
+            store.users = store.users.filter(user => user.id !== id);
+            this.renderUserList(document.querySelector("#user-list"));
+        } catch (error) {
+            console.error("Delete failed:", error);
         }
     },
 
     renderUserList(listElement)
     {
         if (!listElement) return;
-        // Map data from the store to HTML strings
+
         listElement.innerHTML = store.users.map(user => `
             <li>
                 <span>${user.nick}</span>
-                <button class="btn-del" data-id="${user.id}">Slett</button>
+                <div class="user-actions">
+                    <button class="btn-edit" data-id="${user.id}" data-nick="${user.nick}">Endre</button>
+                    <button class="btn-del" data-id="${user.id}">Slett</button>
+                </div>
             </li>
         `).join('');
+
+        // Connect event listeners for edit and delete buttons
+        listElement.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.onclick = () => this.handleEdit(Number(btn.dataset.id), btn.dataset.nick);
+        });
+
+        listElement.querySelectorAll('.btn-del').forEach(btn => {
+            btn.onclick = () => this.handleDelete(Number(btn.dataset.id));
+        });
     }
-};
+
+}; // End of userUIController
