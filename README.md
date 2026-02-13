@@ -45,11 +45,16 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     │   └── user_client_model.mjs
     ├── controllers/
     │   ├── mood_ui_controller.mjs
-    │   └── user_ui_controller.mjs
+    │   ├── user_ui_controller.mjs
+    │   ├── child_controller.mjs
+    │   └── parent_controller.mjs
     └── views/
-        ├── userManager.mjs
-        ├── moodCheckin.mjs
+        ├── childMenu.html
+        ├── parentMenu.html
         ├── dashboard.html
+        ├── userManager.html
+        ├── moodCheckin.html
+        ├── userManager.mjs
         └── insights.mjs
 ```
 
