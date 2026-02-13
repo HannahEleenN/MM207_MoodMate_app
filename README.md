@@ -43,11 +43,11 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     │   ├── mood_client_model.mjs
     │   └── user_client_model.mjs
     ├── controllers/
-    │   ├── auth_controller.mjs
-    │   ├── child_controller.mjs
-    │   ├── parent_controller.mjs
-    │   ├── user_ui_controller.mjs
-    │   └── mood_ui_controller.mjs
+    │   ├── auth_controller.mjs       # App entry, login, and consent validation.
+    │   ├── child_controller.mjs      # Manages the linear child mood-logging flow.
+    │   ├── parent_controller.mjs     # Navigation hub for the parent dashboard.
+    │   ├── user_ui_controller.mjs    # Management of child profiles (CRUD logic).
+    │   └── mood_ui_controller.mjs    # Historical data visualization and insights.
     └── views/
         ├── login.html
         ├── privacyPolicy.html
