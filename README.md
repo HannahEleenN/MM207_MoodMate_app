@@ -39,7 +39,6 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 └── modules/
     ├── singleton.mjs
     ├── api.mjs
-    ├── legal_content.js
     ├── models/
     │   ├── mood_client_model.mjs
     │   └── user_client_model.mjs
@@ -51,6 +50,8 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     │   └── mood_ui_controller.mjs
     └── views/
         ├── login.html
+        ├── privacyPolicy.html
+        ├── termsOfService.html
         ├── childMenu.html
         ├── moodCheckin.html
         ├── parentMenu.html
