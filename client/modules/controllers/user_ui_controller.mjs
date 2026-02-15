@@ -1,16 +1,20 @@
-import { universalFetch, store } from '../singleton.mjs';
+import { store } from '../singleton.mjs';
 import { ApiService } from '../api.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Controller for User Management (CRUD operations for parent users).
 
 export const userUIController =
 {
     async init(container)
     {
-        container.innerHTML = await ApiService.loadView('userManager');
+        // Store the reference to the container
+        this.container = container;
 
-        const form = container.querySelector("#regForm");
-        const list = container.querySelector("#user-list");
+        this.container.innerHTML = await ApiService.loadView('userManager');
+
+        const form = this.container.querySelector("#regForm");
+        const list = this.container.querySelector("#user-list");
 
         if (form) {
             form.onsubmit = async (e) =>
@@ -21,27 +25,27 @@ export const userUIController =
             };
         }
 
-        this.renderUserList(list);
+        this.loadUserList(list);
     },
 
     async handleRegister(formData)
     {
+        let btn = this.container.querySelector(".btn-reg");
         try {
-            const btn = document.querySelector(".btn-reg");
             if (btn) btn.disabled = true;
 
-            const result = await universalFetch('/api/users/register', {
-                method: 'POST',
-                body: JSON.stringify({ ...formData, hasConsented: true })
-            });
+            const result = await ApiService.register({ ...formData, hasConsented: true });
 
-            if (result && result.user) {
+            if (result && result.user)
+            {
                 store.users = [...store.users, result.user];
-                this.renderUserList(document.querySelector("#user-list"));
+                // Look for the list specifically inside this controller's container
+                this.loadUserList(this.container.querySelector("#user-list"));
                 alert("Bruker registrert!");
             }
         } catch (error) {
             console.error("Registration failed:", error);
+            alert("Kunne ikke registrere bruker.");
         } finally {
             if (btn) btn.disabled = false;
         }
@@ -51,16 +55,16 @@ export const userUIController =
     {
         const newNick = prompt("Skriv inn nytt kallenavn:", oldNick);
 
-        if (newNick && newNick !== oldNick) {
+        if (newNick && newNick !== oldNick)
+        {
             try {
                 const result = await ApiService.updateUser(id, { nick: newNick });
 
-                if (result)
-                {
+                if (result) {
                     store.users = store.users.map(user =>
                         user.id === id ? { ...user, nick: newNick } : user
                     );
-                    this.renderUserList(document.querySelector("#user-list"));
+                    this.loadUserList(this.container.querySelector("#user-list"));
                     alert("Navn oppdatert!");
                 }
             } catch (error) {
@@ -76,33 +80,34 @@ export const userUIController =
         try {
             await ApiService.deleteUser(id);
             store.users = store.users.filter(user => user.id !== id);
-            this.renderUserList(document.querySelector("#user-list"));
+            this.loadUserList(this.container.querySelector("#user-list"));
         } catch (error) {
             console.error("Delete failed:", error);
+            alert("Kunne ikke slette brukeren.");
         }
     },
 
-    renderUserList(listElement)
+    loadUserList(listElement)
     {
         if (!listElement) return;
+        listElement.innerHTML = ''; // Clear existing list
 
-        listElement.innerHTML = store.users.map(user => `
-            <li>
+        store.users.forEach(user =>
+        {
+            const li = document.createElement('li');
+            li.innerHTML = `
                 <span>${user.nick}</span>
                 <div class="user-actions">
-                    <button class="btn-edit" data-id="${user.id}" data-nick="${user.nick}">Endre</button>
-                    <button class="btn-del" data-id="${user.id}">Slett</button>
+                    <button class="btn-edit">Endre</button>
+                    <button class="btn-del">Slett</button>
                 </div>
-            </li>
-        `).join('');
+            `;
 
-        // Connect event listeners for edit and delete buttons
-        listElement.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.onclick = () => this.handleEdit(Number(btn.dataset.id), btn.dataset.nick);
-        });
+            // Attach event listeners for edit and delete buttons
+            li.querySelector('.btn-edit').onclick = () => this.handleEdit(user.id, user.nick);
+            li.querySelector('.btn-del').onclick = () => this.handleDelete(user.id);
 
-        listElement.querySelectorAll('.btn-del').forEach(btn => {
-            btn.onclick = () => this.handleDelete(Number(btn.dataset.id));
+            listElement.appendChild(li);
         });
     }
 

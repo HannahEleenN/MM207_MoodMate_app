@@ -29,6 +29,14 @@ export const ApiService =
         });
     },
 
+    // Login (authentication)
+    login: async (credentials) => {
+        return await universalFetch('/api/users/login', {
+            method: 'POST',
+            body: JSON.stringify(credentials)
+        });
+    },
+
     // Deletes a user account and all associated data (GDPR).
 
     deleteUser: async (id) => {

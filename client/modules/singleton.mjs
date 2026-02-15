@@ -12,10 +12,26 @@ export async function universalFetch(url, options = {}) {
         }
 
         const response = await fetch(url, options);
-        if (!response.ok) throw new Error(`Fetch error: ${response.status}`);
+
+        // Parse body in all cases so we can include useful information on errors
+        const isHtml = url.endsWith('.html');
+
+        if (!response.ok) {
+            // Try to parse JSON body, otherwise read text, otherwise provide an empty message
+            let errorBody = null;
+            try {
+                errorBody = isHtml ? await response.text() : await response.json();
+            } catch (parseErr) {
+                try { errorBody = await response.text(); } catch (_) { errorBody = null; }
+            }
+
+            const err = new Error(`Fetch error: ${response.status}`);
+            err.status = response.status;
+            err.body = errorBody;
+            throw err;
+        }
 
         // Decide whether to return plain text (HTML views) or parsed JSON (API data)
-        const isHtml = url.endsWith('.html');
         return isHtml ? await response.text() : await response.json();
 
     } catch (err) {

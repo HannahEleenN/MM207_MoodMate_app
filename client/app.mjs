@@ -5,13 +5,18 @@ import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { userUIController } from './modules/controllers/user_ui_controller.mjs';
 
-// Register the <user-manager> custom element so the tag in index.html will initialize the controller
-class UserManagerElement extends HTMLElement {
-    connectedCallback() {
-        userUIController.init(this);
-    }
+// ---------------------------------------------------------------------------------------------------------------------
+// Custom Element for User Management
+
+if (!customElements.get('user-manager'))
+{
+    customElements.define('user-manager', class extends HTMLElement
+    {
+        connectedCallback() {
+            userUIController.init(this); // Runs every time the element is added to the DOM.
+        }
+    });
 }
-customElements.define('user-manager', UserManagerElement);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -29,9 +34,10 @@ const root = document.getElementById('app-root');
 
 async function router()
 {
-    const view = store.currentView; // Get current view from Proxy state
+    const view = store.currentView;
+    const root = document.getElementById('app-root');
 
-    // Clear container before loading new content
+    // Empty the root container before rendering the new view
     root.innerHTML = '';
 
     switch (view) {
@@ -42,13 +48,17 @@ async function router()
             await initParentApp(root);
             break;
         case 'childMenu':
-            await initChildApp(root, store); // Dependency injection of store
+            await initChildApp(root, store);
             break;
         case 'userManager':
-            await userUIController.init(root);
+            const manager = document.createElement('user-manager');
+            root.appendChild(manager);
+            break;
+        case 'insights':
+            await moodUIController.init(root);
             break;
         default:
-            await authController.init(root); // Fallback to login
+            await authController.init(root);
     }
 }
 

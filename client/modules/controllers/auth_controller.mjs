@@ -1,5 +1,5 @@
 import { ApiService } from "../api.mjs";
-import { store, universalFetch } from "../singleton.mjs";
+import { store } from "../singleton.mjs";
 
 // Controller for Authentication (Login).
 
@@ -42,12 +42,7 @@ export const authController =
         try {
             if (loginBtn) loginBtn.disabled = true;
 
-            // Using universalFetch from singleton as per your pattern
-            // Note: Replace with actual login endpoint when ready
-            const result = await universalFetch('/api/users/login', {
-                method: 'POST',
-                body: JSON.stringify(credentials)
-            });
+            const result = await ApiService.login(credentials);
 
             if (result && result.user) {
                 // Update Model (Singleton Proxy)
