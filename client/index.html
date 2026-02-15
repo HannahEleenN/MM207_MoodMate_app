@@ -10,21 +10,22 @@
     </head>
 
     <body>
+        <header>
+            <h1>MoodMate</h1>
+        </header>
 
         <main id="app-root">
-
-            <p style="font-size: 0.8rem; text-align: center;">
-                Ved å bruke tjenesten godtar du våre
-                <a href="#" id="view-tos">vilkår</a> og
-                <a href="#" id="view-privacy">personvern</a>.
-            </p>
         </main>
 
-        <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="legal-modal-title">
+        <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
             <div class="modal-content">
-                <h2 id="legal-modal-title" style="margin-top:0;">Vilkår og personvern</h2>
+                <span class="close-modal" id="close-x">&times;</span>
+
+                <h2 id="modal-title">Vilkår og personvern</h2>
+
                 <div id="legal-text"></div>
-                <button id="close-modal-btn">Lukk</button>
+
+                <button id="close-modal-btn" class="secondary-btn">Lukk</button>
             </div>
         </div>
 
