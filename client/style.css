@@ -1,42 +1,228 @@
-.modal {
+/* --- Global Styles & Colors --- */
+:root
+{
+    --primary-blue: #a2d2ff;    /* Sky blue from PPT prototype */
+    --soft-yellow: #fef9c3;     /* Soft yellow background */
+    --mood-glad: #FFD700;       /* Gold/Yellow for happy */
+    --mood-trist: #6495ED;      /* Cornflower blue for sad */
+    --mood-sint: #FF6347;       /* Tomato red for angry */
+    --text-color: #333;
+    --border-radius: 25px;      /* Large rounded corners for a child-friendly look */
+}
+
+/* Ensure buttons and inputs stay within their containers */
+* {
+    box-sizing: border-box;
+}
+
+body
+{
+    /* Playful fonts suitable for children */
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'sans-serif';
+    background-color: var(--soft-yellow);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Main Application Container (Responsive) --- */
+#app-root
+{
+    width: 95%;                 /* Uses most of the width on small screens */
+    max-width: 450px;           /* Maintains "mobile shape" on larger screens */
+    min-height: 90vh;           /* Ensures the app fills the height */
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;          /* Centers horizontally */
+}
+
+/* --- Typography --- */
+h1, h2 {
+    color: var(--text-color);
+}
+
+/* --- Interactive Elements (Buttons) --- */
+button
+{
+    cursor: pointer;
+    border: none;
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 10px 0;
+    width: 100%;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* Standard primary buttons with a 3D effect like the PPT */
+.primary-btn, .btn-reg, .save-btn
+{
+    background-color: var(--primary-blue);
+    color: white;
+    box-shadow: 0 4px 0 #81b1e0;
+}
+
+/* --- Mood Selection Grid (Responsive) --- */
+.mood-grid
+{
+    display: grid;
+    /* Creates as many columns as fit, minimum 140px per button */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.mood-btn
+{
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0;
+    border: 3px solid transparent;
+}
+
+.mood-btn img
+{
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+/* Individual mood colors as defined in your prototype */
+.mood-btn[data-mood="glad"] { background-color: #fff9ae; border-color: #ffd700; }
+.mood-btn[data-mood="trist"] { background-color: #d0e1ff; border-color: #6495ed; }
+.mood-btn[data-mood="sint"] { background-color: #ffcfc9; border-color: #ff6347; }
+
+/* Hover effect for mood buttons */
+.mood-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Selected mood button with a pulsing animation to draw attention */
+.mood-btn.selected {
+    border-width: 5px;
+    animation: pulse 1.5s infinite;
+}
+
+/* --- Pulsing animation for selected mood button --- */
+@keyframes pulse
+{
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* --- Forms & Inputs --- */
+input[type="text"], input[type="password"], textarea
+{
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid var(--primary-blue);
+    border-radius: 15px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* --- Media Elements --- */
+img, video, canvas
+{
+    max-width: 100%;
+    height: auto;
+}
+
+.progress-container
+{
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress-bar
+{
+    height: 100%;
+    background: var(--primary-blue);
+    width: 33%; /* Update this via JS: 33%, 66%, 100% */
+    transition: width 0.3s ease;
+}
+
+/* --- Legal Modal (From PPT boxes) --- */
+.modal
+{
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    padding: 20px;
-    border: 2px solid #333;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    border: 5px solid var(--primary-blue);
     z-index: 1000;
-    max-width: 80%;
+    width: 85%;
+    max-width: 350px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.consent-container {
-    margin: 15px 0;
-}
-
-/* Makes the text inside the legal text area scrollable */
-#legal-text {
+#legal-text
+{
     max-height: 400px;
     overflow-y: auto;
     margin-bottom: 15px;
     font-size: 0.9rem;
     line-height: 1.4;
+    text-align: left;
 }
 
-/* A simple style for the close button */
-#close-modal-btn {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 4px;
+/* --- Media Queries for Screen Adjustments --- */
+
+/* Phones */
+@media (max-width: 350px)
+{
+    :root {
+        --border-radius: 15px;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+    .mood-btn {
+        height: 100px;
+    }
 }
 
-/* Focus styles for accessibility */
-button:focus, input:focus, a:focus {
-    outline: 3px solid #2a8bf2;
-    outline-offset: 2px;
+/* Tablets, PCs, and TVs (Large screens) */
+@media (min-width: 768px)
+{
+    body {
+        /* Frames the app with a gradient on all screens larger than a phone */
+        background: linear-gradient(135deg, var(--soft-yellow) 0%, #d2e9ff 100%);
+    }
+}
+
+/* Specific for TV & Extra Large Screens */
+@media (min-width: 1400px)
+{
+    #app-root {
+        max-width: 500px; /* Allow a slightly larger UI for distant viewing */
+    }
 }

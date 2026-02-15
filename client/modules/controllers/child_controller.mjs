@@ -7,7 +7,7 @@ import { ApiService } from "../api.mjs";
 export async function initChildApp(container, model)
 {
     try {
-        // --- STEP 1: Main Mood Menu ---
+        // STEP 1: Main Mood Menu
         const menuHtml = await ApiService.loadView('childMenu');
         container.innerHTML = menuHtml;
 
@@ -46,7 +46,8 @@ async function initMoodCheckinFlow(container, model)
     const contextButtons = container.querySelectorAll('.context-btn');
     let selectedContext = "";
 
-    contextButtons.forEach(btn => {
+    contextButtons.forEach(btn =>
+    {
         btn.onclick = () => {
             selectedContext = btn.getAttribute('data-context');
             // Visual feedback: highlight selected
