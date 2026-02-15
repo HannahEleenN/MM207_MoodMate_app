@@ -3,6 +3,9 @@
 *This is an individual university assignment for the course MM207.*
 *Contributions or collaborations are not accepted as it is a graded individual project.*
 
+![MVC pattern](https://github.com/user-attachments/assets/7ef2653b-22a0-4015-a073-a5297a755ee7)
+
+
 MoodMate is a Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions.
 **Note on Language:** Technical documentation and code are in English. The client interface is in Norwegian to accommodate the target audience.
 
