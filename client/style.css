@@ -1,4 +1,7 @@
-/* --- Global Styles & Colors --- */
+/* ==========================================================================
+   1. VARIABLES & RESET
+   ========================================================================== */
+
 :root
 {
     --primary-blue: #a2d2ff;    /* Sky blue from PPT prototype */
@@ -7,17 +10,15 @@
     --mood-trist: #6495ED;      /* Cornflower blue for sad */
     --mood-sint: #FF6347;       /* Tomato red for angry */
     --text-color: #333;
-    --border-radius: 25px;      /* Large rounded corners for a child-friendly look */
+    --border-radius: 25px;      /* Child-friendly rounded look */
 }
 
-/* Ensure buttons and inputs stay within their containers */
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* Ensures padding doesn't break widths */
 }
 
 body
 {
-    /* Playful fonts suitable for children */
     font-family: 'Comic Sans MS', 'Chalkboard SE', 'sans-serif';
     background-color: var(--soft-yellow);
     color: var(--text-color);
@@ -28,27 +29,45 @@ body
     min-height: 100vh;
 }
 
-/* --- Main Application Container (Responsive) --- */
+/* ==========================================================================
+   2. MAIN STRUCTURE (SPA CONTAINER)
+   ========================================================================== */
+
 #app-root
 {
-    width: 95%;                 /* Uses most of the width on small screens */
-    max-width: 450px;           /* Maintains "mobile shape" on larger screens */
-    min-height: 90vh;           /* Ensures the app fills the height */
+    width: 95%;
+    max-width: 450px;           /* Maintains mobile-app shape */
+    min-height: 90vh;
     background: white;
     padding: 20px;
     border-radius: var(--border-radius);
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    margin: 20px auto;          /* Centers horizontally */
+    margin: 20px auto;
 }
 
-/* --- Typography --- */
-h1, h2 {
+/* ==========================================================================
+   3. TYPOGRAPHY & MEDIA
+   ========================================================================== */
+
+h1, h2
+{
     color: var(--text-color);
+    text-align: center;
 }
 
-/* --- Interactive Elements (Buttons) --- */
+img, video, canvas
+{
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==========================================================================
+   4. INTERACTIVE ELEMENTS (BUTTONS & INPUTS)
+   ========================================================================== */
+
+/* Base Button Style */
 button
 {
     cursor: pointer;
@@ -66,7 +85,7 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Standard primary buttons with a 3D effect like the PPT */
+/* Primary/Registration Buttons (3D Effect) */
 .primary-btn, .btn-reg, .save-btn
 {
     background-color: var(--primary-blue);
@@ -74,14 +93,26 @@ button:active {
     box-shadow: 0 4px 0 #81b1e0;
 }
 
-/* --- Mood Selection Grid (Responsive) --- */
+/* Form Inputs */
+input[type="text"], input[type="password"], textarea
+{
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 2px solid var(--primary-blue);
+    border-radius: 15px;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   5. VIEW SPECIFIC: MOOD SELECTION (CHILD VIEW)
+   ========================================================================== */
+
 .mood-grid
 {
     display: grid;
-    /* Creates as many columns as fit, minimum 140px per button */
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 15px;
-    width: 100%;
     margin-top: 20px;
 }
 
@@ -104,50 +135,35 @@ button:active {
     object-fit: contain;
 }
 
-/* Individual mood colors as defined in your prototype */
+/* Mood States */
 .mood-btn[data-mood="glad"] { background-color: #fff9ae; border-color: #ffd700; }
 .mood-btn[data-mood="trist"] { background-color: #d0e1ff; border-color: #6495ed; }
-.mood-btn[data-mood="sint"] { background-color: #ffcfc9; border-color: #ff6347; }
+.mood-btn[data-mood="sint"]  { background-color: #ffcfc9; border-color: #ff6347; }
 
-/* Hover effect for mood buttons */
-.mood-btn:hover {
+.mood-btn:hover
+{
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-/* Selected mood button with a pulsing animation to draw attention */
-.mood-btn.selected {
+.mood-btn.selected
+{
     border-width: 5px;
     animation: pulse 1.5s infinite;
 }
 
-/* --- Pulsing animation for selected mood button --- */
 @keyframes pulse
 {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.03); }
     100% { transform: scale(1); }
 }
 
-/* --- Forms & Inputs --- */
-input[type="text"], input[type="password"], textarea
-{
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 2px solid var(--primary-blue);
-    border-radius: 15px;
-    box-sizing: border-box;
-    font-size: 1rem;
-}
+/* ==========================================================================
+   6. COMPONENTS (MODALS & PROGRESS BARS)
+   ========================================================================== */
 
-/* --- Media Elements --- */
-img, video, canvas
-{
-    max-width: 100%;
-    height: auto;
-}
-
+/* Progress Bar */
 .progress-container
 {
     width: 100%;
@@ -162,11 +178,11 @@ img, video, canvas
 {
     height: 100%;
     background: var(--primary-blue);
-    width: 33%; /* Update this via JS: 33%, 66%, 100% */
+    width: 33%; /* Updated via JS */
     transition: width 0.3s ease;
 }
 
-/* --- Legal Modal (From PPT boxes) --- */
+/* Legal Modal */
 .modal
 {
     display: none;
@@ -194,35 +210,27 @@ img, video, canvas
     text-align: left;
 }
 
-/* --- Media Queries for Screen Adjustments --- */
+/* ==========================================================================
+   7. RESPONSIVE QUERIES
+   ========================================================================== */
 
-/* Phones */
+/* Small Phones */
 @media (max-width: 350px)
 {
-    :root {
-        --border-radius: 15px;
-    }
-    h1 {
-        font-size: 1.5rem;
-    }
-    .mood-btn {
-        height: 100px;
-    }
+    :root { --border-radius: 15px; }
+    h1 { font-size: 1.5rem; }
+    .mood-btn { height: 100px; }
 }
 
-/* Tablets, PCs, and TVs (Large screens) */
+/* Tablets / Laptops / TVs */
 @media (min-width: 768px)
 {
     body {
-        /* Frames the app with a gradient on all screens larger than a phone */
         background: linear-gradient(135deg, var(--soft-yellow) 0%, #d2e9ff 100%);
     }
 }
 
-/* Specific for TV & Extra Large Screens */
-@media (min-width: 1400px)
-{
-    #app-root {
-        max-width: 500px; /* Allow a slightly larger UI for distant viewing */
-    }
+/* Extra Large Screens / Distant Viewing */
+@media (min-width: 1400px) {
+    #app-root { max-width: 500px; }
 }
