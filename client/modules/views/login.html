@@ -12,23 +12,17 @@
       <p>Forstå dine følelser 🌟</p>
     </div>
 
-    <form id="login-form">
-      <h2>Logg inn</h2>
+    <form id="loginForm"> <h2>Logg inn</h2>
       <div class="input-group">
-        <label for="login-nick">Kallenavn</label>
-        <input type="text" id="login-nick" name="nick" required placeholder="Ditt kallenavn">
+        <label for="pin-input">Hemmelig kode</label>
+        <input type="password" id="pin-input" required placeholder="****" maxlength="4">
       </div>
 
-      <div class="input-group">
-        <label for="login-secret">Hemmelig kode</label>
-        <input type="password" id="login-secret" name="secret" required placeholder="****">
-      </div>
-
-      <button type="submit" id="login-btn" class="primary-btn">Logg inn</button>
+      <button type="submit" class="primary-btn">Logg inn</button>
     </form>
 
     <div class="login-footer">
-      <p>Ny bruker? <a href="#" id="go-to-register">Opprett en foreldrekonto</a></p>
+      <p>Ny bruker? <button id="go-to-reg" class="link-btn">Opprett en foreldrekonto</button></p>
     </div>
   </section>
 
