@@ -1,30 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
 <section class="user-manager">
     <h2>MoodMate Profiladministrasjon</h2>
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <input type="text" name="nick" placeholder="Kallenavn" required>
-        <input type="password" name="secret" placeholder="Hemmelig kode" required>
+        <p style="font-size: 0.9rem; color: #666;">Foreldre må opprette en konto for å se barnas humørtrender.</p>
+
+        <input type="text" name="nick" placeholder="Kallenavn (f.eks. Mamma)" required>
+        <input type="password" name="secret" placeholder="4-sifret PIN-kode" required maxlength="4">
+
         <label class="consent-label">
-            <input type="checkbox" id="consent-check" required> Jeg godtar vilkårene
+            <input type="checkbox" id="consent-check" required>
+            Jeg godtar <a href="#" id="view-tos">vilkårene</a>
         </label>
-        <button type="submit" class="btn-reg">Registrer</button>
+
+        <button type="submit" class="btn-reg">Lagre profil ✨</button>
     </form>
 
     <hr>
 
     <h3>Eksisterende profiler</h3>
-    <ul id="user-list">
+    <ul id="user-list" class="user-display-list">
     </ul>
 </section>
-
-</body>
-</html>

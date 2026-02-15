@@ -1,42 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
 <section id="mood-checkin-flow">
     <div class="progress-container">
-        <div class="progress-bar" style="width: 66%"></div>
+        <div class="progress-bar" id="checkin-progress" style="width: 33%"></div>
     </div>
 
-    <div id="step-reason">
-        <h2>Hva gjør deg <span id="selected-mood-display">...</span>?</h2>
-        <p>Se på bildene eller bruk ord:</p>
+    <div id="step-1-mood">
+        <h2>Hei på deg! 🌟</h2>
+        <p>Hvordan føler du deg akkurat nå?</p>
+        <div class="mood-grid">
+            <button class="mood-btn" data-mood="glad">😊 Glad</button>
+            <button class="mood-btn" data-mood="lei">😢 Lei meg</button>
+            <button class="mood-btn" data-mood="sint">😡 Sint</button>
+            <button class="mood-btn" data-mood="redd">😨 Redd</button>
+            <button class="mood-btn" data-mood="rolig">😌 Rolig</button>
+            <button class="mood-btn" data-mood="overrasket">😲 Overrasket</button>
+        </div>
+    </div>
 
-        <div class="context-options">
+    <div id="step-2-reason" style="display: none;">
+        <h2>Hva gjør deg <span id="selected-mood-text">...</span>?</h2>
+        <p>Se på bildene eller bruk ord:</p>
+        <div class="mood-grid">
             <button class="context-btn" data-context="morket">🌑 Mørket</button>
             <button class="context-btn" data-context="venner">👭 Venner</button>
             <button class="context-btn" data-context="skole">🏫 Skole</button>
             <button class="context-btn" data-context="familie">🏠 Familie</button>
         </div>
-
         <textarea id="mood-context-text" placeholder="Skriv eller fortell mer her..."></textarea>
-        <button id="next-to-solutions" class="nav-btn">Gå videre ➡️</button>
+        <button id="btn-next-step" class="primary-btn">Gå videre ➡️</button>
     </div>
 
-    <div id="step-solutions" style="display: none;">
+    <div id="step-3-solution" style="display: none;">
         <h2>Hva vil du gjøre nå?</h2>
-        <div class="solution-options">
+        <div class="mood-grid">
             <button class="sol-btn" data-sol="klem">🤗 Få en klem</button>
             <button class="sol-btn" data-sol="snakke">💬 Snakke med en voksen</button>
-            <button class="sol-btn" data-sol="alene">🤫 Være litt alene</button>
-            <button class="sol-btn" data-sol="leke">🧸 Leke</button>
+            <button class="sol-btn" data-sol="leke">🧸 Leke litt</button>
+            <button class="sol-btn" data-sol="fin-tanke">🌈 Tenke på noe fint</button>
         </div>
-        <button id="finish-checkin" class="save-btn">Ferdig! ✨</button>
+        <button id="btn-finish" class="save-btn">Ferdig! ✨</button>
     </div>
 </section>
-
-</body>
-</html>
