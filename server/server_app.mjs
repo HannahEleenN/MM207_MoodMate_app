@@ -20,6 +20,8 @@ app.use('/api/moods', moodRoutes);
 
 // User endpoints
 app.post('/api/users', userController.register);
+// Add login endpoint matching client POST to /api/users/login
+app.post('/api/users/login', userController.login);
 app.delete('/api/users/:id', userController.deleteAccount);
 
 // Start server

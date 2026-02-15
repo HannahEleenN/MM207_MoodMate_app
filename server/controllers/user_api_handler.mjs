@@ -26,7 +26,20 @@ export const registerUser = (req, res) =>
     });
 };
 
-export const deleteUserAccount = (req, res) => 
+export const loginUser = (req, res) =>
+{
+    const { secret } = req.body;
+
+    if (!secret) return res.status(400).json({ error: 'Missing secret' });
+
+    const user = User.findBySecret(secret);
+    if (!user) return res.status(404).json({ error: 'User not found or incorrect secret' });
+
+    // Return minimal user object (GDPR / minimization)
+    return res.status(200).json({ user: { id: user.id, nick: user.nick } });
+};
+
+export const deleteUserAccount = (req, res) =>
 {
     const userId = req.params.id;
 
@@ -49,7 +62,8 @@ export const deleteUserAccount = (req, res) =>
 const userController =
 {
     register: registerUser,
-    deleteAccount: deleteUserAccount
+    deleteAccount: deleteUserAccount,
+    login: loginUser
 };
 
 export default userController;

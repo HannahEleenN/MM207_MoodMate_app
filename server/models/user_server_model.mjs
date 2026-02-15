@@ -62,7 +62,13 @@ export const User = {
 
     findAll: () => Array.from(users.values()),
 
-    // 4. "The Right to be Forgotten" - Deletes parent and all sub-profiles 
+    // Find a user by their plain secret (PIN). This abstracts the hash logic.
+    findBySecret: (secret) => {
+        const hashed = mockHash(secret);
+        return Array.from(users.values()).find(u => u.secretHash === hashed) || null;
+    },
+
+    // 4. "The Right to be Forgotten" - Deletes parent and all sub-profiles
     delete: (id) => users.delete(id)
 };
 
