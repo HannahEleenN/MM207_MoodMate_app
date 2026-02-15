@@ -4,7 +4,8 @@
  * provides a unified fetch function for the entire app.
  */
 
-export async function universalFetch(url, options = {}) {
+export async function universalFetch(url, options = {})
+{
     try {
         // Automatically set Content-Type for POST/PUT requests with a body
         if (options.body && !options.headers) {
@@ -48,6 +49,20 @@ const state = {
     moods: [],
     currentUser: null,
     currentView: 'login' // Initial view for the router
+};
+
+// Add a small helper to subscribe to state changes by property name.
+// Returns an unsubscribe function when called.
+state.onChange = function(property, callback)
+{
+    if (typeof callback !== 'function') return () => {};
+    const listener = (e) => {
+        if (e && e.detail && e.detail.property === property) {
+            callback(e.detail.value);
+        }
+    };
+    window.addEventListener('stateChanged', listener);
+    return () => window.removeEventListener('stateChanged', listener);
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
