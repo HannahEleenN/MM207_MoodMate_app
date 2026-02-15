@@ -34,15 +34,21 @@ export const userUIController =
         try {
             if (btn) btn.disabled = true;
 
-            const result = await ApiService.register({ ...formData, hasConsented: true });
+            // Call the API to register the user (use the single universalFetch in ApiService)
+            // Ensure consent is included if the checkbox exists
+            const consentCheckbox = this.container.querySelector('#consent-check');
+            const payload = { ...formData, hasConsented: !!(consentCheckbox && consentCheckbox.checked) };
+
+            const result = await ApiService.register(payload);
 
             if (result && result.user)
             {
+                // Use server-provided user object to avoid duplicating object structure
                 store.users = [...store.users, result.user];
-                // Look for the list specifically inside this controller's container
-                this.loadUserList(this.container.querySelector("#user-list"));
-                alert("Bruker registrert!");
-            }
+                 // Look for the list specifically inside this controller's container
+                 this.loadUserList(this.container.querySelector("#user-list"));
+                 alert("Bruker registrert!");
+             }
         } catch (error) {
             console.error("Registration failed:", error);
             alert("Kunne ikke registrere bruker.");

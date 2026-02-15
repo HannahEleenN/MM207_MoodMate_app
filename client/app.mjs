@@ -3,157 +3,117 @@ import { ApiService } from './modules/api.mjs';
 import { authController } from './modules/controllers/auth_controller.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
-import { userUIController } from './modules/controllers/user_ui_controller.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Custom Element for User Management
+// Global function to show legal documents in the modal. Exported so controllers can call it.
 
-if (!customElements.get('user-manager'))
+export async function showLegal(viewName)
 {
-    customElements.define('user-manager', class extends HTMLElement
-    {
-        connectedCallback() {
-            userUIController.init(this); // Runs every time the element is added to the DOM.
-        }
-    });
+    const modal = document.getElementById('legal-modal');
+    const modalText = document.getElementById('legal-text');
+    const title = document.getElementById('modal-title');
+
+    if (!modal || !modalText) return;
+
+    try {
+        const content = await ApiService.loadView(viewName);
+        modalText.innerHTML = content;
+        title.textContent = viewName === 'termsOfService' ? 'Brukervilkår' : 'Personvernerklæring';
+        modal.style.display = 'block';
+    } catch (error) {
+        console.error("Could not load legal view:", error);
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-
-// Configuration
-const root = document.getElementById('app-root');
-
-// Setup model (Dependency Injection)
-// const userModel = createUserModel([{ id: 1, nick: "Mamma" }]); // not used yet
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-// ROUTER
-// Responsible for switching between views based on the application state.
-// This implements the "Single Page Application" behavior.
+// ROUTER - Switches views based on the application state (store.currentView).
 
 async function router()
 {
-    const view = store.currentView;
     const root = document.getElementById('app-root');
+    const view = store.currentView;
 
-    // Empty the root container before rendering the new view
+    if (!root) return;
+
+    // Clear root before loading new view to avoid ghost elements
     root.innerHTML = '';
 
     switch (view) {
         case 'login':
             await authController.init(root);
             break;
+        case 'userManager':
+            // Using the custom element defined below
+            root.innerHTML = '<user-manager></user-manager>';
+            break;
         case 'parentMenu':
-            await initParentApp(root);
+            await initParentApp(root, store);
             break;
         case 'childMenu':
             await initChildApp(root, store);
             break;
-        case 'userManager':
-            const manager = document.createElement('user-manager');
-            root.appendChild(manager);
-            break;
-        case 'insights':
-            await moodUIController.init(root);
-            break;
         default:
-            await authController.init(root);
+            root.innerHTML = '<h2>404 - Siden finnes ikke</h2>';
     }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Event Listeners for State Changes
-// We listen for changes in our Singleton Proxy to trigger the router
+// Setup global listeners for the Modal and Store changes
 
-window.addEventListener('stateChanged', (e) => {
-    if (e.detail.property === 'currentView') {
-        router();
-    }
-});
-
-// ---------------------------------------------------------------------------------------------------------------------
-// Legal Modal Logic
-// Handles the Privacy Policy and Terms of Service popups
-
-/*
-const setupLegalListeners = () =>
+const setupEventListeners = () =>
 {
     const modal = document.getElementById('legal-modal');
-    const modalText = document.getElementById('legal-text');
-    const consentBox = document.getElementById('consent-checkbox');
-    const registerBtn = document.getElementById('register-btn');
 
-    // Toggle register button based on consent checkbox
-    if (consentBox && registerBtn) {
-        consentBox.onchange = () => {
-            registerBtn.disabled = !consentBox.checked;
-        };
-    }
-
-    // Link triggers for showing legal text
-    document.addEventListener('click', (e) =>
-    {
-        if (e.target.id === 'view-tos') {
-            e.preventDefault();
-            modalText.innerHTML = termsOfService;
-            modal.style.display = 'block';
-        }
-        if (e.target.id === 'view-privacy') {
-            e.preventDefault();
-            modalText.innerHTML = privacyPolicy;
-            modal.style.display = 'block';
-        }
-        if (e.target.id === 'close-modal-btn') {
+    // Close modal logic
+    document.addEventListener('click', (e) => {
+        if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal) {
             modal.style.display = 'none';
         }
     });
-};
 
-*/
-
-const setupLegalListeners = () =>
-{
-    const modal = document.getElementById('legal-modal');
-    const modalText = document.getElementById('legal-text');
-
-    // Uses event delegation to handle clicks on legal links and modal close button
+    // Handle global footer links (if they exist in index.html)
     document.addEventListener('click', async (e) =>
     {
-
-        // Show Terms of Service
         if (e.target.id === 'view-tos') {
             e.preventDefault();
-            modalText.innerHTML = await ApiService.loadView('termsOfService');
-            modal.style.display = 'block';
+            await showLegal('termsOfService');
         }
-
-        // Show Privacy Policy
         if (e.target.id === 'view-privacy') {
             e.preventDefault();
-            modalText.innerHTML = await ApiService.loadView('privacyPolicy');
-            modal.style.display = 'block';
-        }
-
-        // Close modal if clicking on close button or outside the modal content
-        if (e.target.id === 'close-modal-btn' || e.target.classList.contains('modal')) {
-            modal.style.display = 'none';
+            await showLegal('privacyPolicy');
         }
     });
+
+    // Watch for view changes in the Store
+    store.onChange('currentView', () => router());
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Custom Element for User Management (MVC encapsulation)
+
+if (!customElements.get('user-manager'))
+{
+    customElements.define('user-manager', class extends HTMLElement
+    {
+        async connectedCallback()
+        {
+            // Import dynamically to avoid circular dependencies if needed
+            const { userUIController } = await import('./modules/controllers/user_ui_controller.mjs');
+            userUIController.init(this);
+        }
+    });
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Initialization
-
 document.addEventListener('DOMContentLoaded', () =>
 {
-    setupLegalListeners();
+    setupEventListeners();
 
-    // Start logic: Check if someone is logged in and set initial view accordingly
+    // Set initial view
     if (!store.currentView) {
         store.currentView = store.currentUser ? 'parentMenu' : 'login';
     } else {
-        // If currentView is already set (e.g., from a previous session), just route to it
-        router();
+        router(); // Initial manual call
     }
 });

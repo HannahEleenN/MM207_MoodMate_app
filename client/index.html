@@ -1,34 +1,25 @@
 <!DOCTYPE html>
 <html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodMate - Lær om følelsene dine</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main id="app-root">
+    </main>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MoodMate - Lær om følelsene dine</title>
-        <link rel="manifest" href="manifest.json">
-        <link rel="stylesheet" href="style.css">
-    </head>
-
-    <body>
-        <header>
-            <h1>MoodMate</h1>
-        </header>
-
-        <main id="app-root">
-        </main>
-
-        <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div class="modal-content">
-                <span class="close-modal" id="close-x">&times;</span>
-
-                <h2 id="modal-title">Vilkår og personvern</h2>
-
-                <div id="legal-text"></div>
-
-                <button id="close-modal-btn" class="secondary-btn">Lukk</button>
-            </div>
+    <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <span class="close-modal" id="close-x">&times;</span>
+            <h2 id="modal-title">Vilkår og personvern</h2>
+            <div id="legal-text"></div>
+            <button id="close-modal-btn" class="secondary-btn">Lukk</button>
         </div>
+    </div>
 
-        <script type="module" src="app.mjs"></script>
-    </body>
+    <script type="module" src="app.mjs"></script>
+</body>
 </html>

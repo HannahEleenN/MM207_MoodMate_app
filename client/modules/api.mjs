@@ -23,7 +23,9 @@ export const ApiService =
     // Registers a new parent user account.
 
     register: async (userData) => {
-        return await universalFetch('/api/users/register', {
+        // Use a relative URL (no leading slash) so the client remains portable.
+        // The server exposes POST /api/users which handles registration.
+        return await universalFetch('api/users', {
             method: 'POST',
             body: JSON.stringify(userData)
         });
@@ -31,7 +33,7 @@ export const ApiService =
 
     // Login (authentication)
     login: async (credentials) => {
-        return await universalFetch('/api/users/login', {
+        return await universalFetch('api/users/login', {
             method: 'POST',
             body: JSON.stringify(credentials)
         });
@@ -40,7 +42,7 @@ export const ApiService =
     // Deletes a user account and all associated data (GDPR).
 
     deleteUser: async (id) => {
-        return await universalFetch(`/api/users/${id}`, {
+        return await universalFetch(`api/users/${id}`, {
             method: 'DELETE'
         });
     },
@@ -48,7 +50,7 @@ export const ApiService =
     // Updates user information.
 
     updateUser: async (id, userData) => {
-        return await universalFetch(`/api/users/${id}`, {
+        return await universalFetch(`api/users/${id}`, {
             method: 'PUT',
             body: JSON.stringify(userData)
         });
@@ -58,7 +60,7 @@ export const ApiService =
     // Saves a new mood entry from the child or parent.
 
     saveMood: async (moodData) => {
-        return await universalFetch('/api/moods', {
+        return await universalFetch('api/moods', {
             method: 'POST',
             body: JSON.stringify(moodData)
         });
@@ -67,7 +69,7 @@ export const ApiService =
     // Fetches all mood logs for the current authenticated user.
 
     getAllMoods: async () => {
-        return await universalFetch('/api/moods', {
+        return await universalFetch('api/moods', {
             method: 'GET'
         });
     }
