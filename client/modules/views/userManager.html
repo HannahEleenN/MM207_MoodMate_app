@@ -3,22 +3,26 @@
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <p style="font-size: 0.9rem; color: #666;">Foreldre må opprette en konto for å se barnas humørtrender.</p>
-
-        <input type="text" name="nick" placeholder="Kallenavn (f.eks. Mamma)" required>
-        <input type="password" name="secret" placeholder="4-sifret PIN-kode" required maxlength="4">
-
+        <input type="text" name="nick" placeholder="Kallenavn" required>
+        <input type="password" name="secret" placeholder="Hemmelig kode" required>
         <label class="consent-label">
-            <input type="checkbox" id="consent-check" required>
-            Jeg godtar <a href="#" id="view-tos">vilkårene</a>
+            <input type="checkbox" id="consent-check" required> Jeg godtar vilkårene
         </label>
-
-        <button type="submit" class="btn-reg">Lagre profil ✨</button>
+        <button type="submit" class="btn-reg">Registrer</button>
     </form>
 
     <hr>
 
     <h3>Eksisterende profiler</h3>
-    <ul id="user-list" class="user-display-list">
-    </ul>
+    <ul id="user-list"></ul>
+
+    <template id="user-item-template">
+        <li>
+            <span class="user-nick-display"></span>
+            <div class="user-actions">
+                <button class="btn-edit">Endre</button>
+                <button class="btn-del">Slett</button>
+            </div>
+        </li>
+    </template>
 </section>

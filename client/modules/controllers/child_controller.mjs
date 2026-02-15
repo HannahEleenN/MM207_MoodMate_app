@@ -1,83 +1,130 @@
-import { ApiService } from "../api.mjs";
-
-/**
- * Controller for the child's journey.
- * Handles both the main menu and the follow-up questions.
- */
-export async function initChildApp(container, model)
-{
-    try {
-        // STEP 1: Main Mood Menu
-        const menuHtml = await ApiService.loadView('childMenu');
-        container.innerHTML = menuHtml;
-
-        const moodButtons = container.querySelectorAll('.mood-btn');
-        moodButtons.forEach(btn => {
-            btn.onclick = async () => {
-                const selectedMood = btn.getAttribute('data-mood');
-                model.currentMood = selectedMood; // Update the Proxy state
-
-                // Move to the next part of the flow (Why & Solutions)
-                await initMoodCheckinFlow(container, model);
-            };
-        });
-
-    } catch (error) {
-        console.error("Failed to initialize child view:", error);
-        container.innerHTML = "<p>Beklager, kunne ikke laste menyen.</p>";
-    }
-}
+import { store } from '../singleton.mjs';
+import { ApiService } from '../api.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Controller for the Child Menu (mood logging flow for children).
 
-/**
- * Internal function to handle the "Why" and "Solutions" steps
- */
-async function initMoodCheckinFlow(container, model)
+export const childController =
 {
-    const checkinHtml = await ApiService.loadView('moodCheckin');
-    container.innerHTML = checkinHtml;
-
-    // UI Update: Show what mood was selected
-    const display = container.querySelector("#selected-mood-display");
-    if (display) display.innerText = model.currentMood.toUpperCase();
-
-    // Logic for Step 1: Reason (Context)
-    const contextButtons = container.querySelectorAll('.context-btn');
-    let selectedContext = "";
-
-    contextButtons.forEach(btn =>
+    async init(container, model = store)
     {
-        btn.onclick = () => {
-            selectedContext = btn.getAttribute('data-context');
-            // Visual feedback: highlight selected
-            contextButtons.forEach(b => b.style.border = "none");
-            btn.style.border = "3px solid var(--primary-color, blue)";
-        };
-    });
+        this.container = container;
+        this.model = model;
 
-    // Navigation: Go to Solutions
-    container.querySelector("#next-to-solutions").onclick = () => {
-        container.querySelector("#step-reason").style.display = "none";
-        container.querySelector("#step-solutions").style.display = "block";
-    };
+        // Load view (HTML) into the container
+        this.container.innerHTML = await ApiService.loadView('childMenu');
 
-    // Logic for Step 2: Finalize and Save
-    container.querySelector("#finish-checkin").onclick = async () => {
-        const finalData = {
-            mood: model.currentMood,
-            context: selectedContext || container.querySelector("#mood-context-text").value,
+        // Initialize state
+        this.resetFlow();
+        this.setupEventListeners();
+    },
+
+    setupEventListeners()
+    {
+        const c = this.container;
+
+        // Step 1: Mood buttons
+        c.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.onclick = () => this.handleMoodSelection(btn.dataset.mood);
+        });
+
+        // Step 2: Context buttons
+        c.querySelectorAll('.context-btn').forEach(btn => {
+            btn.onclick = () => this.handleContextSelection(btn.dataset.context);
+        });
+
+        // Step 3: Finish
+        const saveBtn = c.querySelector('#save-mood-btn');
+        if (saveBtn) {
+            saveBtn.onclick = () => this.saveFinalMood();
+        }
+
+        // Optional "Back" button logic
+        c.querySelectorAll('.back-btn').forEach(btn => {
+            btn.onclick = () => {
+                const prevStep = Number(btn.dataset.toStep);
+                this.goToStep(prevStep);
+            };
+        });
+    },
+
+    handleMoodSelection(mood)
+    {
+        if (!mood) return;
+        this.model.tempMood = mood;
+
+        // Update text in the view (avoid HTML strings in JS)
+        const display = this.container.querySelector('#display-mood');
+        if (display) display.textContent = mood;
+
+        this.goToStep(2);
+    },
+
+    handleContextSelection(context)
+    {
+        if (!context) return;
+        this.model.tempContext = context;
+        this.goToStep(3);
+    },
+
+    goToStep(stepNumber)
+    {
+        // 1. Hide all steps (uses the .step-container class from your HTML)
+        this.container.querySelectorAll('.step-container').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        // 2. Show the current step
+        const currentStepEl = this.container.querySelector(`#step-${stepNumber}`);
+        if (currentStepEl) {
+            currentStepEl.style.display = 'block';
+        }
+
+        // 3. Update the progress bar
+        const bar = this.container.querySelector('#mood-progress');
+        if (bar) {
+            const progressMap = { 1: '33%', 2: '66%', 3: '100%' };
+            bar.style.width = progressMap[stepNumber];
+        }
+    },
+
+    resetFlow()
+    {
+        this.model.tempMood = null;
+        this.model.tempContext = null;
+        this.goToStep(1);
+    },
+
+    async saveFinalMood()
+    {
+        // Retrieve any text from the textarea if present
+        const commentEl = this.container.querySelector('#mood-context-text');
+
+        const data = {
+            mood: this.model.tempMood,
+            context: this.model.tempContext,
+            note: commentEl ? commentEl.value : "",
             timestamp: new Date().toISOString()
         };
 
         try {
-            await ApiService.saveMood(finalData);
-            alert("Så flink du er! Humøret ditt er lagret. ✨");
+            await ApiService.saveMood(data);
+            alert('Humøret ditt er lagret! ✨');
 
-            // Redirect back to start via the model/router
-            model.currentView = 'childMenu';
-        } catch (err) {
-            alert("Det skjedde en feil ved lagring.");
+            this.resetFlow();
+            // Navigate to parent menu or show confirmation via the router
+            store.currentView = 'parentMenu';
+        } catch (error) {
+            console.error('Lagringsfeil:', error);
+            alert('Kunne ikke lagre. Prøv igjen senere.');
         }
-    };
+    }
+
+}; // End of childController
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// Legacy wrapper
+export async function initChildApp(container, model) {
+    return childController.init(container, model);
 }

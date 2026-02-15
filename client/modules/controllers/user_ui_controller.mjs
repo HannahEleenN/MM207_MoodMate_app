@@ -90,24 +90,27 @@ export const userUIController =
     loadUserList(listElement)
     {
         if (!listElement) return;
-        listElement.innerHTML = ''; // Clear existing list
+
+        const template = this.container.querySelector('#user-item-template');
+        if (!template) return;
+
+        listElement.innerHTML = ''; // Clear existing list items
 
         store.users.forEach(user =>
         {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${user.nick}</span>
-                <div class="user-actions">
-                    <button class="btn-edit">Endre</button>
-                    <button class="btn-del">Slett</button>
-                </div>
-            `;
+            // Clone the template for each user (Separation of concerns: Structure vs Logic)
+            const clone = template.content.cloneNode(true);
+            const li = clone.querySelector('li');
 
-            // Attach event listeners for edit and delete buttons
+            // Set user data in the cloned node (Data Binding)
+            li.querySelector('.user-nick-display').textContent = user.nick;
+
+            // Attach event listeners for edit and delete (Event Delegation)
             li.querySelector('.btn-edit').onclick = () => this.handleEdit(user.id, user.nick);
             li.querySelector('.btn-del').onclick = () => this.handleDelete(user.id);
 
-            listElement.appendChild(li);
+            // Append the cloned node to the list (DOM Manipulation)
+            listElement.appendChild(clone);
         });
     }
 

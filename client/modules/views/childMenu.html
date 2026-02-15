@@ -1,17 +1,36 @@
 <section id="child-menu">
-  <h2>Hei på deg! 🌟</h2>
-  <p>Hvordan føler du deg akkurat nå?</p>
-
   <div class="progress-container">
-    <div class="progress-bar" style="width: 0%"></div>
+    <div class="progress-bar" id="mood-progress" style="width: 33%"></div>
   </div>
 
-  <div class="mood-options">
-    <button class="mood-btn" data-mood="glad">😊 Glad</button>
-    <button class="mood-btn" data-mood="lei">😢 Lei meg</button>
-    <button class="mood-btn" data-mood="sint">😡 Sint</button>
-    <button class="mood-btn" data-mood="redd">😨 Redd</button>
-    <button class="mood-btn" data-mood="rolig">😌 Rolig</button>
-    <button class="mood-btn" data-mood="overrasket">😲 Overrasket</button>
+  <div id="step-1" class="step-container">
+    <h2>Hei på deg! 🌟</h2>
+    <p>Hvordan føler du deg akkurat nå?</p>
+    <div class="mood-options">
+      <button class="mood-btn" data-mood="glad">😊 Glad</button>
+      <button class="mood-btn" data-mood="lei">😢 Lei meg</button>
+      <button class="mood-btn" data-mood="sint">😡 Sint</button>
+      <button class="mood-btn" data-mood="redd">😨 Redd</button>
+      <button class="mood-btn" data-mood="rolig">😌 Rolig</button>
+      <button class="mood-btn" data-mood="overrasket">😲 Overrasket</button>
+    </div>
+  </div>
+
+  <div id="step-2" class="step-container" style="display: none;">
+    <h2>Hvorfor føler du deg <span id="display-mood">...</span>?</h2>
+    <div class="context-options">
+      <button class="context-btn" data-context="skole">🏫 Skole</button>
+      <button class="context-btn" data-context="venner">👫 Venner</button>
+      <button class="context-btn" data-context="hjemme">🏠 Hjemme</button>
+    </div>
+  </div>
+
+  <div id="step-3" class="step-container" style="display: none;">
+    <h2>Hva vil du gjøre nå?</h2>
+    <div class="solution-options">
+      <button class="sol-btn" data-sol="klem">🤗 Klem</button>
+      <button class="sol-btn" data-sol="snakke">💬 Snakke</button>
+    </div>
+    <button id="save-mood-btn" class="primary-btn">Ferdig! ✨</button>
   </div>
 </section>
