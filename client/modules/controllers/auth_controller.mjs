@@ -33,6 +33,13 @@ export const authController =
                 {
                     e.preventDefault();
                     const pinInput = this.container.querySelector('#pin-input');
+                    const consentCheck = this.container.querySelector('#login-consent-check');
+
+                    // Require explicit consent before attempting login
+                    if (!(consentCheck && consentCheck.checked)) {
+                        alert('Du må godta vilkårene og personvernet for å logge inn.');
+                        return;
+                    }
                     // We send the secret (PIN) to the login handler
                     await this.handleLogin({ secret: pinInput.value });
                 };

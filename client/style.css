@@ -200,18 +200,55 @@ input[type="text"], input[type="password"], textarea
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
+/* ==========================================================================
+   7. LEGAL DOCUMENTS (Inside Modal)
+   ========================================================================== */
+
+.legal-document
+{
+    line-height: 1.6;
+    color: var(--text-color);
+    text-align: left;
+    padding: 10px;
+    font-family: sans-serif; /* Cleaner for long text than Comic Sans */
+}
+
+.legal-document h2
+{
+    color: midnightblue;
+    margin-bottom: 15px;
+    font-family: 'Comic Sans MS', sans-serif;
+}
+
+.legal-document h3
+{
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--soft-yellow);
+    display: inline-block;
+}
+
+.legal-document ul
+{
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.legal-document li {
+    margin-bottom: 8px;
+}
+
+/* Adjusting your existing #legal-text for better scrolling */
 #legal-text
 {
-    max-height: 400px;
+    max-height: 60vh; /* Better than fixed pixels on mobile */
     overflow-y: auto;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    text-align: left;
+    padding-right: 5px;
 }
 
 /* ==========================================================================
-   7. RESPONSIVE QUERIES
+   8. RESPONSIVE QUERIES
    ========================================================================== */
 
 /* Small Phones */

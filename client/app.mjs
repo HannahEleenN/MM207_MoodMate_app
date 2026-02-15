@@ -18,7 +18,6 @@ export async function showLegal(viewName)
     try {
         const content = await ApiService.loadView(viewName);
         modalText.innerHTML = content;
-        title.textContent = viewName === 'termsOfService' ? 'Brukervilkår' : 'Personvernerklæring';
         modal.style.display = 'block';
     } catch (error) {
         console.error("Could not load legal view:", error);
