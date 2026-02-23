@@ -42,7 +42,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 └── modules/
     ├── singleton.mjs
     ├── api.mjs
-    ├── auth_utils.mjs
+    ├── auth_crypto.mjs
     ├── models/
     │   ├── mood_client_model.mjs
     │   └── user_client_model.mjs
