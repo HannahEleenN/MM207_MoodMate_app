@@ -1,38 +1,34 @@
-import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
+import { randomBytes, scrypt as _scrypt, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
+const scrypt = promisify(_scrypt);
 
-// Create a salted scrypt hash for a secret (returns salt:derivedKey)
+// Create a salted scrypt hash for a secret (returns "salt:derivedKeyHex")
 
-export const hashSecret = (secret) =>
+// Salted hashing means that even if two users have the same secret,
+// their stored hashes will differ due to unique salts,
+// enhancing security against rainbow table attacks.
+
+export async function hashSecret(secret)
 {
-    return new Promise((resolve, reject) =>
-    {
-        const salt = randomBytes(16).toString('hex');
-        scrypt(secret, salt, 64, (err, derivedKey) =>
-        {
-            if (err) return reject(err);
-            resolve(`${salt}:${derivedKey.toString('hex')}`);
-        });
-    });
-};
+    const salt = randomBytes(16).toString('hex');
+    const derivedKey = await scrypt(secret, salt, 64);
+    return `${salt}:${derivedKey.toString('hex')}`;
+}
 
-// Verify a plain secret against a stored salt:hash. Returns boolean
+// Verify a plain secret against stored "salt:hash". Returns boolean
 
-export const verifySecret = (secret, storedHash) =>
+export async function verifySecret(secret, stored)
 {
-    return new Promise((resolve, reject) =>
-    {
-        const [salt, key] = storedHash.split(':');
-        if (!salt || !key) return resolve(false);
-        scrypt(secret, salt, 64, (err, derivedKey) =>
-        {
-            if (err) return reject(err);
-            try {
-                const match = timingSafeEqual(Buffer.from(key, 'hex'), derivedKey);
-                resolve(match);
-            } catch (e) {
-                // timingSafeEqual throws on length mismatch
-                resolve(false);
-            }
-        });
-    });
-};
+    if (!stored || typeof stored !== 'string') return false;
+    const parts = stored.split(':');
+    if (parts.length !== 2) return false;
+    const [salt, keyHex] = parts;
+    try {
+        const derivedKey = await scrypt(secret, salt, 64);
+        const keyBuf = Buffer.from(keyHex, 'hex');
+        // timingSafeEqual throws on length mismatch; wrap in try/catch
+        return timingSafeEqual(keyBuf, derivedKey);
+    } catch {
+        return false;
+    }
+}
