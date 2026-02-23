@@ -1,95 +1,41 @@
+import pool from '../database/db.mjs';
 import { hashSecret, verifySecret } from '../utils/auth_crypto.mjs';
-import pool from '../database/moodmate_db.sql';
-
-const users = new Map();
-
-function generateID()
-{
-    let id;
-    do {
-        id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(16);
-    } while (users.has(id));
-    return id;
-}
 
 // ---------------------------------------------------------------------------------------------------------------------
+// User model interacting with the database
 
 export const User =
 {
-    async create(userData)
+    // Creates a new parent by calling the SQL function
+    create: async (userData) =>
     {
+        const secretHash = await hashSecret(userData.secret);
         const sql = `SELECT * FROM register_parent_user($1, $2, $3)`;
-        const values = [userData.nick, userData.secret, userData.hasConsented];
+        const values = [userData.nick, secretHash, !!userData.hasConsented];
 
         const res = await pool.query(sql, values);
-        return res.rows[0];
+        return res.rows[0]; // Returns { id, nick }
     },
 
-    async findByNick(nick)
+    // Retrieves a user by nickname
+    findByNick: async (nick) =>
     {
         const sql = `SELECT * FROM get_user_by_nick($1)`;
         const res = await pool.query(sql, [nick]);
-        return res.rows[0];
-    }
-};
-
- /*
-export const User =
-{
-    // async because we hash secrets
-    create: async (userData) =>
-    {
-        const id = generateID();
-        const secretHash = await hashSecret(userData.secret);
-        const newUser = {
-            id,
-            nick: userData.nick,
-            secretHash,
-            hasConsented: !!userData.hasConsented,
-            consentedAt: new Date().toISOString(),
-            profiles: []
-        };
-        users.set(id, newUser);
-        return newUser;
+        return res.rows[0]; // Returns the full user object (including secret) or undefined
     },
 
-    addChildProfile: async (parentId, childName, pin) =>
-    {
-        const user = users.get(parentId);
-        if (!user) return null;
-        const pinHash = await hashSecret(pin);
-        const newProfile = {
-            profileId: generateID(),
-            name: childName,
-            pinHash,
-            role: 'child'
-        };
-        user.profiles.push(newProfile);
-        return newProfile;
-    },
-
-    findById: (id) => users.get(id),
-
-    findByNick: (nick) => {
-        return Array.from(users.values()).find(u => u.nick === nick);
-    },
-
-    findAll: () => Array.from(users.values()),
-
-    // async search that verifies secret using verifySecret
+    // Verifies secret/passcode (used during login)
     findBySecret: async (secret) =>
     {
-        for (const u of users.values()) {
-            if (await verifySecret(secret, u.secretHash)) return u;
+        // We must fetch all users to check hashes (because each user has a unique salt)
+        const res = await pool.query('SELECT * FROM users');
+        for (const u of res.rows) {
+            if (await verifySecret(secret, u.secret)) return u;
         }
         return null;
-    },
-
-    delete: (id) => users.delete(id)
-
-}; // End of User model
-
-  */
+    }
+};
 
 // ---------------------------------------------------------------------------------------------------------------------
 
