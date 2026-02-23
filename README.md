@@ -66,6 +66,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ```
 /server
 ├── server_app.mjs
+├── messages.mjs
 ├── routes
 │   ├── mood_routes.mjs
 │   └── user_routes.mjs
