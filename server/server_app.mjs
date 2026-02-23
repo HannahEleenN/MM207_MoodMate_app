@@ -2,29 +2,21 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import moodRoutes from './routes/mood_routes.mjs';
-import userController from './controllers/user_api_handler.mjs';
+import userRoutes from './routes/user_routes.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// To handle paths in ES Modules (replacement for __dirname)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Middleware
-app.use(express.json()); // For parsing application/json
-app.use(express.static(path.join(__dirname, '../client'))); // Serve static frontend files
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../client')));
 
-// Use mood routes to handle /api/moods endpoints
 app.use('/api/moods', moodRoutes);
 
-// User endpoints
-app.post('/api/users', userController.register);
-// Add login endpoint matching client POST to /api/users/login
-app.post('/api/users/login', userController.login);
-app.delete('/api/users/:id', userController.deleteAccount);
+// Mount user router (moved out of single controller file)
+app.use('/api/users', userRoutes);
 
-// Start server
 app.listen(PORT, () => {
     console.log(`MoodMate server is running on http://localhost:${PORT}`);
 });
