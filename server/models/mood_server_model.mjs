@@ -1,31 +1,25 @@
-let moods = []; 
+import pool from '../database/db.mjs';
 
-export const Mood = 
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const Mood =
 {
-    create: (data) => {
-        const newMood = 
-        {
-            id: Math.floor(Math.random() * 1000000).toString(16),
-            parentId: data.parentId,
-            childName: data.childName,
-            mood: data.mood,
-            context: data.context,
-            timestamp: data.timestamp
-        };
-        moods.push(newMood);
-        return newMood;
-    },
-
-    findByParent: (parentId) => moods.filter(m => m.parentId === parentId),
-
-    deleteByParentId: (parentId) => 
+    create: async (data) =>
     {
-        const initialCount = moods.length;
-        moods = moods.filter(m => m.parentId !== parentId);
-        return initialCount - moods.length;
+        const sql = `SELECT create_mood_log($1, $2, $3, $4)`;
+        const values = [data.userId, data.mood, data.context, data.note];
+        await pool.query(sql, values);
+        return { success: true };
     },
 
-    findAll: () => moods
+    findByUser: async (userId) =>
+    {
+        const sql = `SELECT * FROM get_mood_logs_by_user($1)`;
+        const res = await pool.query(sql, [userId]);
+        return res.rows;
+    }
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export default Mood;
