@@ -12,7 +12,7 @@ export const privacyGuard = (req, res, next) =>
     }
 
     try {
-        const secret = process.env.JWT_SECRET || 'fallback_development_key';
+        const secret = process.env.JWT_SECRET;
         const decoded = jwt.verify(token, secret);
 
         // Normalize to a single `id` property so other modules can rely on req.user.id
