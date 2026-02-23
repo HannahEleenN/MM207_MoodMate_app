@@ -2,7 +2,7 @@ import User from '../models/user_server_model.mjs';
 import Mood from '../models/mood_server_model.mjs';
 
 export const registerUser = (req, res) => 
-    {
+{
     const { nick, secret, hasConsented } = req.body;
 
     // 1. Validation of consent
@@ -26,6 +26,8 @@ export const registerUser = (req, res) =>
     });
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 export const loginUser = (req, res) =>
 {
     const { secret } = req.body;
@@ -38,6 +40,8 @@ export const loginUser = (req, res) =>
     // Return minimal user object (GDPR / minimization)
     return res.status(200).json({ user: { id: user.id, nick: user.nick } });
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export const deleteUserAccount = (req, res) =>
 {
@@ -58,6 +62,8 @@ export const deleteUserAccount = (req, res) =>
         message: "Brukerkonto og alle tilknyttede humør-logger er slettet permanent." 
     });
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 const userController =
 {

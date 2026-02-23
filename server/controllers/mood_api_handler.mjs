@@ -10,6 +10,9 @@ const formatDate = (date) =>
     });
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Controller for Mood API endpoints (CRUD operations for mood logs).
+
 export const createMood = async (req, res) =>
 {
     try {
@@ -43,6 +46,9 @@ export const createMood = async (req, res) =>
     }
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Additional endpoints for fetching, updating, and deleting mood logs.
+
 export const getAllMoods = async (req, res) =>
 {
     try {
@@ -56,14 +62,23 @@ export const getAllMoods = async (req, res) =>
     }
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Fetch a specific mood log by ID (for details view)
+
 export const getMoodById = async (req, res) => {
     res.status(200).json({ message: `Detaljer for humør ${req.params.id}` });
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Update a mood log (e.g., add solutions or edit context)
 
 export const updateMood = async (req, res) => {
     // Logic for adding solutions or updating the mood
     res.status(200).json({ message: "Humør oppdatert" });
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Delete a mood log.
 
 export const deleteMood = async (req, res) => {
     res.status(204).send();

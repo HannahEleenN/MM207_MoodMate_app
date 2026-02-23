@@ -8,7 +8,8 @@ const users = new Map();
  * - Legal: Consent flag and timestamp. 
  */
 
-function generateID() {
+function generateID()
+{
   let id;
   do {
     id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER).toString(16);
@@ -18,12 +19,16 @@ function generateID() {
 
 function mockHash(string) {
   // Simple "scramble" to avoid plain text storage 
-  return btoa(string).split("").reverse().join(""); 
+  return btoa(string).split("").reverse().join("");
 }
 
-export const User = {
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const User =
+{
     // 1. Create the main parent account 
-    create: (userData) => {
+    create: (userData) =>
+    {
         const id = generateID();
         const newUser = {
             id,
@@ -38,7 +43,8 @@ export const User = {
     },
 
     // 2. Add a child profile to an existing parent account
-    addChildProfile: (parentId, childName, pin) => {
+    addChildProfile: (parentId, childName, pin) =>
+    {
         const user = users.get(parentId);
         if (!user) return null;
 
