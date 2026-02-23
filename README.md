@@ -82,6 +82,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ├── middleware
 │   └── privacyGuard.mjs
 └── database
+    ├── db.mjs
     └── moodmate_db.sql
 ```
 
