@@ -1,18 +1,9 @@
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    nick VARCHAR(50) UNIQUE NOT NULL,
-    secret TEXT NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('parent', 'child')),
-    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    has_consented BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE mood_logs (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    mood VARCHAR(50) NOT NULL, 
-    context VARCHAR(100),
-    note TEXT,
-    timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+CREATE OR REPLACE FUNCTION get_mood_logs_by_user(p_user_id INTEGER)
+RETURNS SETOF mood_logs AS $$
+BEGIN
+    RETURN QUERY 
+    SELECT * FROM mood_logs 
+    WHERE user_id = p_user_id 
+    ORDER BY timestamp DESC;
+END;
+$$ LANGUAGE plpgsql;

@@ -1,4 +1,5 @@
 import { hashSecret, verifySecret } from '../utils/auth_crypto.mjs';
+import pool from '../database/moodmate_db.sql';
 
 const users = new Map();
 
@@ -13,6 +14,26 @@ function generateID()
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+export const User =
+{
+    async create(userData)
+    {
+        const sql = `SELECT * FROM register_parent_user($1, $2, $3)`;
+        const values = [userData.nick, userData.secret, userData.hasConsented];
+
+        const res = await pool.query(sql, values);
+        return res.rows[0];
+    },
+
+    async findByNick(nick)
+    {
+        const sql = `SELECT * FROM get_user_by_nick($1)`;
+        const res = await pool.query(sql, [nick]);
+        return res.rows[0];
+    }
+};
+
+ /*
 export const User =
 {
     // async because we hash secrets
@@ -67,6 +88,8 @@ export const User =
     delete: (id) => users.delete(id)
 
 }; // End of User model
+
+  */
 
 // ---------------------------------------------------------------------------------------------------------------------
 
