@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 
+// Normalize decoded token so downstream code can always use req.user.id
+
 export const privacyGuard = (req, res, next) =>
 {
-    // Retrieve token from Authorization header (Bearer <token>)
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -11,30 +12,25 @@ export const privacyGuard = (req, res, next) =>
     }
 
     try {
-        // First look for the secret in the .env file. If missing, it uses the fallback string.
         const secret = process.env.JWT_SECRET || 'fallback_development_key';
         const decoded = jwt.verify(token, secret);
 
-        // Attach user data to the request object so the controller can access it
-        req.user = decoded;
+        // Normalize to a single `id` property so other modules can rely on req.user.id
+        req.user = { ...decoded, id: decoded.userId || decoded.id };
 
-        const { userId, familyId, role } = decoded;
+        const { id, familyId, role } = req.user;
 
-        // Sibling Privacy Logic
-        if (role === 'child')
-        {
-            // Check if they are trying to access another user's ID via URL parameters
-            if (req.params.userId && req.params.userId !== userId) {
+        if (role === 'child') {
+            if (req.params.userId && req.params.userId !== id) {
                 return res.status(403).json({
                     error: "Personvern: Du kan bare se din egen historikk."
                 });
             }
         }
 
-        // Cross-Family Leak Prevention
-
         next();
     } catch (err) {
         return res.status(403).json({ error: "Sesjonen er utløpt. Vennligst logg inn igjen." });
     }
-};
+
+}; // End of privacyGuard middleware
