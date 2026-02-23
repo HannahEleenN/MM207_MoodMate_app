@@ -42,7 +42,6 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 └── modules/
     ├── singleton.mjs
     ├── api.mjs
-    ├── auth_crypto.mjs
     ├── models/
     │   ├── mood_client_model.mjs
     │   └── user_client_model.mjs
@@ -76,6 +75,8 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ├── models
 │   ├── mood_server_model.mjs
 │   └── user_server_model.mjs
+├── utils
+│   └── auth_crypto.mjs
 ├── middleware
 │   └── privacyGuard.mjs
 └── database
