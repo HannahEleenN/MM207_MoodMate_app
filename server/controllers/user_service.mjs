@@ -20,7 +20,9 @@ export async function registerUserData({ nick, secret, hasConsented })
         throw err;
     }
 
-    if (User.findByNick(nick)) {
+    const existingUser = await User.findByNick(nick);
+
+    if (existingUser) {
         const err = new Error(Messages.NICK_TAKEN_ERROR);
         err.status = 400;
         throw err;
