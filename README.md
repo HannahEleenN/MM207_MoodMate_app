@@ -71,6 +71,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 │   ├── mood_routes.mjs
 │   └── user_routes.mjs
 ├── controllers
+│   ├── user_service.mjs
 │   ├── mood_api_handler.mjs
 │   └── user_api_handler.mjs
 ├── models
