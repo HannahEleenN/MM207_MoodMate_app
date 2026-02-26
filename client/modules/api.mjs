@@ -19,6 +19,12 @@ export const ApiService =
         return await universalFetch(`./modules/views/${viewName}.html`);
     },
 
+    // LOCALES / I18N LOADER
+    loadLocale: async (lang = 'no') => {
+        // Loads ./locales/{lang}.json for Norwegian UI strings.
+        return await universalFetch(`./locales/${lang}.json`);
+    },
+
     // USER MANAGEMENT (CRUD)
     // Registers a new parent user account.
 

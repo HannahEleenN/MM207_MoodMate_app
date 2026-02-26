@@ -13,6 +13,11 @@ export const authController =
         try {
             this.container = container;
 
+            // Ensure translations are loaded
+            if (!store.i18n || Object.keys(store.i18n).length === 0) {
+                await store.loadI18n('no');
+            }
+
             // Load the view from the server/API
             const html = await ApiService.loadView('login');
             this.container.innerHTML = html;
@@ -37,7 +42,7 @@ export const authController =
 
                     // Require explicit consent before attempting login
                     if (!(consentCheck && consentCheck.checked)) {
-                        alert('Du må godta vilkårene og personvernet for å logge inn.');
+                        this.showNotice('login.requireConsent');
                         return;
                     }
                     // We send the secret (PIN) to the login handler
@@ -55,10 +60,22 @@ export const authController =
 
         } catch (error) {
             console.error("Initialization failed:", error);
-            this.container.innerHTML = "<p>Error loading login view.</p>";
+            const errMsg = store.t ? store.t('auth.loadError') : "Error loading login view.";
+            // Set plain text to avoid HTML-in-JS; the actual HTML page should contain proper markup.
+            if (this.container) this.container.textContent = errMsg;
         }
 
     }, // End of init()
+
+    // Small helper to show a Norwegian UI notice using #global-notice
+    showNotice(messageKey)
+    {
+        const el = document.getElementById('global-notice');
+        if (!el) return;
+        el.textContent = store.t(messageKey);
+        el.classList.remove('hidden');
+        setTimeout(() => el.classList.add('hidden'), 3000);
+    },
 
     /**
      * Handles the login logic.
@@ -76,15 +93,22 @@ export const authController =
             if (result && result.user) {
                 // Update Global Model
                 store.currentUser = result.user;
-                // Trigger View Change
-                store.currentView = 'parentMenu';
+                // If the user returned child profiles, and there is exactly one profile,
+                // auto-select that child and go directly to the childMenu. Otherwise let the parent choose.
+                const profiles = result.user.profiles || [];
+                if (profiles.length === 1) {
+                    store.currentChild = profiles[0];
+                    store.currentView = 'childMenu';
+                } else {
+                    store.currentView = 'parentMenu';
+                }
                 console.log("Welcome:", result.user.nick);
             } else {
-                alert("Incorrect PIN code.");
+                this.showNotice('login.incorrectPin');
             }
         } catch (error) {
             console.error("Login request failed:", error);
-            alert("Unable to connect to login service.");
+            this.showNotice('login.networkError');
         } finally {
             if (loginBtn) loginBtn.disabled = false;
         }
@@ -92,3 +116,4 @@ export const authController =
     } // End of handleLogin()
 
 }; // End of authController
+

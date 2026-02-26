@@ -104,22 +104,39 @@ export const childController =
             mood: this.model.tempMood,
             context: this.model.tempContext,
             note: commentEl ? commentEl.value : "",
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            profileId: store.currentChild ? store.currentChild.id : null
         };
+
+        // Ensure a child profile is selected when saving
+        if (!data.profileId) {
+            this.showNotice('child.selectPrompt');
+            store.currentView = 'parentMenu';
+            return;
+        }
 
         try {
             await ApiService.saveMood(data);
-            alert('Humøret ditt er lagret! ✨');
+            this.showNotice('mood.saved');
 
             this.resetFlow();
             // Navigate to parent menu or show confirmation via the router
             store.currentView = 'parentMenu';
         } catch (error) {
-            console.error('Lagringsfeil:', error);
-            alert('Kunne ikke lagre. Prøv igjen senere.');
+            console.error('Save failed:', error);
+            this.showNotice('mood.saveFailed');
         }
-    }
+    },
 
+    // Localized notice helper
+    showNotice(key)
+    {
+        const el = document.getElementById('global-notice');
+        if (!el) return;
+        el.textContent = store.t(key);
+        el.classList.remove('hidden');
+        setTimeout(() => el.classList.add('hidden'), 3000);
+    }
 }; // End of childController
 
 // ---------------------------------------------------------------------------------------------------------------------

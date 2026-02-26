@@ -1,0 +1,21 @@
+{
+  "register.success": "Bruker opprettet. Du kan nå gå til innlogging.",
+  "register.failed": "Kunne ikke registrere bruker. Prøv igjen senere.",
+  "login.requireConsent": "Du må godta vilkårene og personvernet for å logge inn.",
+  "login.incorrectPin": "Feil PIN-kode.",
+  "login.networkError": "Kunne ikke koble til innloggingstjenesten.",
+  "child.selectPrompt": "Velg eller opprett en profil for barnet før du logger humør.",
+  "mood.saved": "Humøret er lagret!",
+  "mood.saveFailed": "Kunne ikke lagre humøret. Prøv igjen senere.",
+  "delete.confirm": "Vil du slette denne brukeren? Dette kan ikke angres.",
+  "delete.success": "Bruker slettet.",
+  "delete.failed": "Kunne ikke slette brukeren.",
+  "child.createPrompt": "Opprett en profil for barnet her.",
+  "child.createSuccess": "Barnets profil er opprettet.",
+  "child.createFailed": "Kunne ikke opprette profil. Prøv igjen senere.",
+  "edit.success": "Oppdateringen er lagret.",
+  "edit.failed": "Kunne ikke oppdatere. Prøv igjen senere.",
+  "child.none": "Ingen",
+  "parent.loadError": "Feil ved lasting av foreldremeny.",
+  "auth.loadError": "Feil ved lasting av innloggingssiden."
+}

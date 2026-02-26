@@ -1,0 +1,35 @@
+<section class="child-profiles">
+  <h2>Barnas profiler</h2>
+  <p>Opprett eller velg en profil for barnet.</p>
+
+  <form id="create-child-form">
+    <input type="text" name="name" placeholder="Barnets kallenavn" required>
+    <input type="number" name="age" placeholder="Alder (valgfritt)">
+    <button type="submit" class="primary-btn">Opprett profil</button>
+  </form>
+
+  <hr>
+
+  <h3>Eksisterende profiler</h3>
+  <ul id="child-list"></ul>
+
+  <template id="child-item-template">
+    <li>
+      <span class="child-name"></span>
+      <div class="child-actions">
+        <button class="select-child">Velg</button>
+        <button class="edit-child">Endre</button>
+        <button class="delete-child">Slett</button>
+      </div>
+    </li>
+  </template>
+
+  <!-- Inline edit template -->
+  <template id="child-edit-template">
+    <div class="edit-inline">
+      <input type="text" class="edit-input" placeholder="Nytt navn">
+      <button class="save-edit">Lagre</button>
+      <button class="cancel-edit">Avbryt</button>
+    </div>
+  </template>
+</section>

@@ -1,4 +1,4 @@
-# MoodMate - Interactive Emotion Journal (School Project, UiA Grimstad, Norway)
+# MoodMate App - MM207- Interactive Emotion Journal (School Project, UiA Grimstad, Norway)
 
 *This is an individual university assignment for the course MM207.*
 *Contributions or collaborations are not accepted as it is a graded individual project.*
@@ -8,6 +8,30 @@
 
 MoodMate is a Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions.
 **Note on Language:** Technical documentation and code are in English. The client interface is in Norwegian to accommodate the target audience.
+
+---
+
+MoodMate is a mood-tracking application developed as part of the course MM-207.
+The application is deployed and running in the cloud, integrated with a PostgreSQL database.
+
+## Live Demo
+You can access the live application here:
+**https://moodmate-server-81ta.onrender.com**
+
+## Technologies Used
+- **Frontend:** HTML, CSS, JavaScript (ES modules)
+- **Backend:** Node.js with Express
+- **Database:** PostgreSQL hosted on Render
+- **Authentication:** JSON Web Tokens (JWT) and bcrypt for password hashing
+
+## Database Architecture
+The project stores both user accounts and mood logs in the database:
+- `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
+- `mood_logs`: Stores mood data linked to individual users with timestamps.
+
+The application follows a layered architecture (Controllers, Services, Models). This modular approach makes it easy to swap the storage mechanism (e.g., from SQL to CSV) without modifying the API endpoints.
+
+---
 
 ## Feature Map
 The following table outlines the core features for the Minimum Viable Product (MVP).
@@ -19,10 +43,13 @@ The following table outlines the core features for the Minimum Viable Product (M
 | *Requirement* | REST API & PostgreSQL storage | Suggesting coping strategies | Service Worker (Caching) | Persistent Auth (JWT) |
 | *Status* | *Critical MVP* | *Value Add* | *Requirement* | *Infrastructure* |
 
+---
 
 ## Project Management
 The project is managed using GitHub Projects. Detailed work items and task progress can be found here:
 [MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3)
+
+---
 
 ## Scaffolding & Architecture
 
@@ -44,26 +71,40 @@ The project is managed using GitHub Projects. Detailed work items and task progr
     ├── api.mjs
     ├── models/
     │   ├── mood_client_model.mjs
-    │   └── user_client_model.mjs
+    │   ├── user_client_model.mjs
+    │   └── profile_client_model.mjs        # (NEW) client-side Profile model (data operations)
     ├── controllers/
     │   ├── auth_controller.mjs       # App entry, login, and consent validation. (Logic for login.html)
     │   ├── child_controller.mjs      # Manages the linear child mood-logging flow. (Logic for childMenu.html & moodCheckin.html)
     │   ├── parent_controller.mjs     # Navigation hub for the parent dashboard. (Logic for parentMenu.html)
-    │   ├── user_ui_controller.mjs    # Management of child profiles (CRUD logic). (Logic for userManager.html)
+    │   ├── user_ui_controller.mjs    # Management of parent account (CRUD). (Logic for userManager.html)
+    │   ├── profile_controller.mjs    # (NEW) Controller for child profile management (view: childProfiles.html)
     │   └── mood_ui_controller.mjs    # Historical data visualization and insights. (Logic for insights.html)
+    ├── locales/
+    │   └── no.json                   # (NEW) Norwegian UI strings used by controllers (keeps UI copy out of JS)
     └── views/
         ├── login.html
         ├── privacyPolicy.html
         ├── termsOfService.html
         ├── childMenu.html
+        ├── childProfiles.html        # (NEW) View for creating/selecting child profiles
         ├── moodCheckin.html
         ├── parentMenu.html
         ├── userManager.html
         └── insights.html
 ```
 
+Notes about the client changes:
+- The MVC pattern is preserved: views (.html) contain all UI text in Norwegian; controllers (.mjs) contain the logic in English; models (.mjs) contain data manipulation.
+- New files introduced to support parent-managed child profiles and i18n:
+  - `modules/models/profile_client_model.mjs` — client-side model for profiles
+  - `modules/controllers/profile_controller.mjs` — controller and UI glue for `childProfiles.html`
+  - `modules/locales/no.json` — Norwegian copy for inline notices and messages
+  - `modules/views/childProfiles.html` — profile manager UI (create, edit, delete, select)
+- A global inline notice area (`#global-notice`) and i18n helpers were added to the client store to avoid alert()/prompt() usage in controllers and to centralize all user-facing copy.
+
 ### /server
-```
+```plaintext
 /server
 ├── server_app.mjs
 ├── messages.mjs
@@ -92,24 +133,42 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 └── moodmate_api_tests.json
 ```
 
+---
+
 ## Technical Architecture
-- **Client:** HTML, CSS, JavaScript (PWA)
+- **Client:** HTML, CSS, JavaScript (ES modules — `.mjs` for client modules)
 - **Server:** Node.js & Express (REST API)
 - **Database:** PostgreSQL
 - **Security:** Standard Node.js password handling and JWT for sessions.
 
+---
+
 ## How to run the project locally
 
 1. **Clone repository:**
-   `git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git`
+   ```bash
+   git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git
+   ```
 
 2. **Server setup:**
-   - Navigate to `/server`, run `npm install` and `npm start`.
+   ```bash
+   cd server
+   npm install
+   npm start
+   ```
    - Default port: `http://localhost:3000`
 
-3. **Database:**
-   - Configure your `.env` file with `DATABASE_URL`.
+3. **Client (optional local preview):**
+   Serve the `client/` folder as a static site. Example using Python:
+   ```bash
+   python -m http.server 8080 -d client
+   ```
+   Then open `http://localhost:8080`.
 
+4. **Database:**
+   - Create a `.env` file in `/server` containing `DATABASE_URL` and `JWT_SECRET` (see `server/.env.example` if provided).
+
+---
 
 ## API Documentation
 
@@ -119,7 +178,7 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 *Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/tests/moodmate_api_tests.json)
 
 Endpoints for tracking and managing emotional entries. 
-*It should be able to add more than one solution, such as "puste dypt" (deep breathing), "høre på musikk" (listen to music) and "spør om en klem" (ask for a hug).*
+*It should be able to add more than one solution, such as "puste dypt" (deep breathing), "høre på musikk" (listen to music) and "spør om en klem" (ask for a hug).* 
 
 | Method | Endpoint | Description | Request Body (JSON) | Auth | Success Code |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -134,6 +193,7 @@ All requests to the `/api/moods` endpoints must include a Bearer Token in the Au
 
 This token is used by the `privacyGuard` middleware to identify the user's `userId` and `familyId`.
 
+---
 
 ## Creating a meaningful middleware: The Family & Sibling Privacy Guard
 
@@ -171,9 +231,11 @@ This token is used by the `privacyGuard` middleware to identify the user's `user
    
 `Client Request -> privacyGuard (Auth Check) -> Mood Controller -> Database`
 
+---
+
 ## File Extensions:
 
 | Location | Extension | Reason |
 | :--- | :--- | :--- |
 | **Server** (API, Middleware, Routes) | `.mjs` | Tells Node.js to use ECMAScript Modules (ESM). |
-| **Client** (App logic, Service Worker) | `.js` | Standard for browsers and ensures PWA features work smoothly. |
+| **Client** (App logic, Service Worker) | `.mjs` | Client modules are ES modules (`.mjs`) and loaded as JavaScript modules in the browser. |

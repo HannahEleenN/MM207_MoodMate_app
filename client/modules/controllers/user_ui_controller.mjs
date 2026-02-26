@@ -11,10 +11,16 @@ export const userUIController =
         // Store the reference to the container
         this.container = container;
 
+        // Ensure translations are loaded (fallbacks handled by store.loadI18n)
+        if (!store.i18n || Object.keys(store.i18n).length === 0) {
+            await store.loadI18n('no');
+        }
+
         this.container.innerHTML = await ApiService.loadView('userManager');
 
         const form = this.container.querySelector("#regForm");
         const list = this.container.querySelector("#user-list");
+        const goToLoginBtn = this.container.querySelector('#go-to-login');
 
         if (form) {
             form.onsubmit = async (e) =>
@@ -25,7 +31,24 @@ export const userUIController =
             };
         }
 
+        if (goToLoginBtn) {
+            goToLoginBtn.onclick = (e) => {
+                e.preventDefault();
+                store.currentView = 'login';
+            };
+        }
+
         this.loadUserList(list);
+    },
+
+    // Small helper to show a Norwegian UI notice using #global-notice
+    showNotice(messageKey)
+    {
+        const el = document.getElementById('global-notice');
+        if (!el) return;
+        el.textContent = store.t(messageKey);
+        el.classList.remove('hidden');
+        setTimeout(() => el.classList.add('hidden'), 3500);
     },
 
     async handleRegister(formData)
@@ -47,11 +70,14 @@ export const userUIController =
                 store.users = [...store.users, result.user];
                  // Look for the list specifically inside this controller's container
                  this.loadUserList(this.container.querySelector("#user-list"));
-                 alert("Bruker registrert!");
+                 // Reveal the "Go to login" button and show a localized success message
+                 const goBtn = this.container.querySelector('#go-to-login');
+                 if (goBtn) goBtn.classList.remove('hidden');
+                 this.showNotice('register.success');
              }
         } catch (error) {
             console.error("Registration failed:", error);
-            alert("Kunne ikke registrere bruker.");
+            this.showNotice('register.failed');
         } finally {
             if (btn) btn.disabled = false;
         }
@@ -59,37 +85,59 @@ export const userUIController =
 
     async handleEdit(id, oldNick)
     {
-        const newNick = prompt("Skriv inn nytt kallenavn:", oldNick);
+        // Use inline edit template instead of prompt()
+        const list = this.container.querySelector('#user-list');
+        const item = Array.from(list.children).find(li => li.dataset.id == id);
+        if (!item) return;
 
-        if (newNick && newNick !== oldNick)
-        {
+        const editTemplate = this.container.querySelector('#user-edit-template');
+        if (!editTemplate) return;
+
+        // If an edit form already exists, don't create another
+        if (item.querySelector('.edit-inline')) return;
+
+        const clone = editTemplate.content.cloneNode(true);
+        const editDiv = clone.querySelector('.edit-inline');
+        const input = editDiv.querySelector('.edit-input');
+        input.value = oldNick || '';
+
+        // Wire save/cancel buttons
+        editDiv.querySelector('.save-edit').onclick = async () => {
+            const newNick = input.value.trim();
+            if (!newNick || newNick === oldNick) { editDiv.remove(); return; }
             try {
                 const result = await ApiService.updateUser(id, { nick: newNick });
-
                 if (result) {
                     store.users = store.users.map(user =>
                         user.id === id ? { ...user, nick: newNick } : user
                     );
                     this.loadUserList(this.container.querySelector("#user-list"));
-                    alert("Navn oppdatert!");
+                    this.showNotice('edit.success');
                 }
             } catch (error) {
                 console.error("Update failed:", error);
-                alert("Kunne ikke oppdatere navn.");
+                this.showNotice('edit.failed');
             }
-        }
+        };
+
+        editDiv.querySelector('.cancel-edit').onclick = () => { editDiv.remove(); };
+
+        item.appendChild(clone);
     },
 
     async handleDelete(id)
     {
-        if (!confirm("Vil du slette denne brukeren?")) return;
+        // Use translated confirm message
+        const confirmMsg = store.t('delete.confirm');
+        if (!confirm(confirmMsg)) return;
         try {
             await ApiService.deleteUser(id);
             store.users = store.users.filter(user => user.id !== id);
             this.loadUserList(this.container.querySelector("#user-list"));
+            this.showNotice('delete.success');
         } catch (error) {
             console.error("Delete failed:", error);
-            alert("Kunne ikke slette brukeren.");
+            this.showNotice('delete.failed');
         }
     },
 
@@ -108,6 +156,9 @@ export const userUIController =
             const clone = template.content.cloneNode(true);
             const li = clone.querySelector('li');
 
+            // Attach data-id for easier lookup when editing
+            li.dataset.id = user.id;
+
             // Set user data in the cloned node (Data Binding)
             li.querySelector('.user-nick-display').textContent = user.nick;
 
@@ -121,3 +172,4 @@ export const userUIController =
     }
 
 }; // End of userUIController
+

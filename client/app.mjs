@@ -51,8 +51,13 @@ async function router()
         case 'childMenu':
             await initChildApp(root, store);
             break;
+        case 'childProfiles':
+            // Use a custom element to load the child profile manager controller
+            root.innerHTML = '<child-profiles></child-profiles>';
+            break;
         default:
-            root.innerHTML = '<h2>404 - Siden finnes ikke</h2>';
+            // Load the 404 view from views/notFound.html to keep UI in HTML files
+            root.innerHTML = await ApiService.loadView('notFound');
     }
 }
 
@@ -103,15 +108,39 @@ if (!customElements.get('user-manager'))
     });
 }
 
+// Custom Element for Child Profiles
+if (!customElements.get('child-profiles'))
+{
+    customElements.define('child-profiles', class extends HTMLElement
+    {
+        async connectedCallback()
+        {
+            const { profileController } = await import('./modules/controllers/profile_controller.mjs');
+            profileController.init(this);
+        }
+    });
+}
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Initialization
-document.addEventListener('DOMContentLoaded', () =>
+document.addEventListener('DOMContentLoaded', async () =>
 {
     setupEventListeners();
 
-    // Set initial view
+    // Load translations early so controllers can use store.t immediately
+    if (!store.i18n || Object.keys(store.i18n).length === 0) {
+        await store.loadI18n('no');
+    }
+
+    // Set initial view: if user and child selected -> childMenu; if user only -> parentMenu; otherwise login
     if (!store.currentView) {
-        store.currentView = store.currentUser ? 'parentMenu' : 'login';
+        if (store.currentUser && store.currentChild) {
+            store.currentView = 'childMenu';
+        } else if (store.currentUser) {
+            store.currentView = 'parentMenu';
+        } else {
+            store.currentView = 'login';
+        }
     } else {
         router(); // Initial manual call
     }

@@ -271,3 +271,22 @@ input[type="text"], input[type="password"], textarea
 @media (min-width: 1400px) {
     #app-root { max-width: 500px; }
 }
+
+/* Global notice / inline messages */
+.notice {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hidden { display: none !important; }
