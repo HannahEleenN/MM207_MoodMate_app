@@ -1,59 +1,55 @@
-# MoodMate App - MM207- Interactive Emotion Journal (School Project, UiA Grimstad, Norway)
-
-*This is an individual university assignment for the course MM207.*
-*Contributions or collaborations are not accepted as it is a graded individual project.*
-
-![MVC pattern](https://github.com/user-attachments/assets/7ef2653b-22a0-4015-a073-a5297a755ee7)
-
+# MoodMate App - MM207: Interactive Emotion Journal
+*Individual university assignment for the course MM207 - UiA Grimstad, Norway.*
 
 MoodMate is a Progressive Web App (PWA) designed for children (ages 6-7) to identify, log, and resolve emotions.
+
 **Note on Language:** Technical documentation and code are in English. The client interface is in Norwegian to accommodate the target audience.
 
 ---
 
-MoodMate is a mood-tracking application developed as part of the course MM-207.
-The application is deployed and running in the cloud, integrated with a PostgreSQL database.
+![MVC pattern](https://github.com/user-attachments/assets/7ef2653b-22a0-4015-a073-a5297a755ee7)
 
-## Live Demo
-You can access the live application here:
-**https://moodmate-server-81ta.onrender.com**
+The project follows a strict MVC pattern to ensure a clean separation between the Norwegian UI (View), the English business logic (Controller), and the PostgreSQL data layer (Model).
+
+---
+
+## Project Management
+The project is managed using GitHub Projects. Detailed work items and task progress can be found here:
+[MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3/views/1)
+
+## Deployment & Persistence
+The application is fully deployed in a production environment:
+* **Live Web Service:** [https://moodmate-server-81ta.onrender.com](https://moodmate-server-81ta.onrender.com)
+* **Database:** Externally hosted PostgreSQL on Render.
+* **Persistence:** Data remains intact even if the server restarts or crashes.
 
 ## Technologies Used
-- **Frontend:** HTML, CSS, JavaScript (ES modules)
-- **Backend:** Node.js with Express
-- **Database:** PostgreSQL hosted on Render
-- **Authentication:** JSON Web Tokens (JWT) and bcrypt for password hashing
+* **Frontend:** HTML5, CSS3, JavaScript (ES modules)
+* **Backend:** Node.js with Express
+* **Database:** PostgreSQL (Hosted on Render)
+* **Security:** JSON Web Tokens (JWT) for session management and bcrypt for password hashing.
 
 ## Database Architecture
-The project stores both user accounts and mood logs in the database:
-- `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
-- `mood_logs`: Stores mood data linked to individual users with timestamps.
+The project uses a relational database to ensure data integrity and persistence:
+* `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
+* `mood_logs`: Stores mood data linked to individual users via Foreign Keys with timestamps.
 
-The application follows a layered architecture (Controllers, Services, Models). This modular approach makes it easy to swap the storage mechanism (e.g., from SQL to CSV) without modifying the API endpoints.
+> **Architecture Reflection:** Thanks to the layered architecture (Controllers -> Services -> Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
 
 ---
 
 ## Feature Map
 The following table outlines the core features for the Minimum Viable Product (MVP).
 
-| Priority | Pri 1: Core Loop (Mood) | Pri 2: Context & Solution | Pri 3: Offline & PWA | Pri 4: User Accounts |
+| Priority | Pri 1: Core Loop (Mood) | Pri 2: Context & Solution | Pri 3: Persistence & PWA | Pri 4: User Accounts |
 |:-------------------|:-------------------|:-------------------|:-------------------|:-------------------|
-| *Main Feature* | **Interactive Logging** | **Contextualizing** | **Persistence & PWA** | **Access Control** |
-| *Sub-features* | Visual icon selection (e.g., "Glad", "Trist") | Linking emotion to activity (Hvorfor?) | Offline storage (IndexedDB) | Separate Child/Parent login |
-| *Requirement* | REST API & PostgreSQL storage | Suggesting coping strategies | Service Worker (Caching) | Persistent Auth (JWT) |
-| *Status* | *Critical MVP* | *Value Add* | *Requirement* | *Infrastructure* |
+| *Main Feature* | **Interactive Logging** | **Contextualizing** | **Cloud & PWA** | **Access Control** |
+| *Sub-features* | Visual mood icon selection for children | Linking emotions to activities and solutions | External data storage and offline support | Role-based login (Child/Parent) |
+| *Requirement* | REST API & Mood Controller | Coping strategy suggestions | PostgreSQL (Render) & Service Worker | JWT Auth & PrivacyGuard Middleware |
+| *Status* | *Critical MVP* | *Value Add* | *Infrastructure* | *Security* |
 
----
 
-## Project Management
-The project is managed using GitHub Projects. Detailed work items and task progress can be found here:
-[MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3)
-
----
-
-## Scaffolding & Architecture
-
-### Folder Structure
+## Scaffolding & Folder Structure
 
 ### /client
 ```plaintext
@@ -61,71 +57,64 @@ The project is managed using GitHub Projects. Detailed work items and task progr
 ├── index.html
 ├── style.css
 ├── manifest.json
-├── app.mjs
-├── service_worker.js
+├── app.mjs                      # Main entry point for client
+├── service_worker.js            # PWA capabilities & caching
 ├── assets/
 │   ├── icons/
 │   └── images/
 └── modules/
     ├── singleton.mjs
-    ├── api.mjs
-    ├── models/
+    ├── api.mjs                       # Centralized fetch calls to backend
+    ├── models/                       # Client-side data models
     │   ├── mood_client_model.mjs
     │   ├── user_client_model.mjs
-    │   └── profile_client_model.mjs        # (NEW) client-side Profile model (data operations)
-    ├── controllers/
-    │   ├── auth_controller.mjs       # App entry, login, and consent validation. (Logic for login.html)
-    │   ├── child_controller.mjs      # Manages the linear child mood-logging flow. (Logic for childMenu.html & moodCheckin.html)
-    │   ├── parent_controller.mjs     # Navigation hub for the parent dashboard. (Logic for parentMenu.html)
-    │   ├── user_ui_controller.mjs    # Management of parent account (CRUD). (Logic for userManager.html)
-    │   ├── profile_controller.mjs    # (NEW) Controller for child profile management (view: childProfiles.html)
-    │   └── mood_ui_controller.mjs    # Historical data visualization and insights. (Logic for insights.html)
+    │   └── profile_client_model.mjs  # Profile data operations
+    ├── controllers/                  # UI Logic and Event Handlers
+    │   ├── auth_controller.mjs       # Login and consent validation
+    │   ├── child_controller.mjs      # Mood-logging flow logic
+    │   ├── parent_controller.mjs     # Navigation hub for dashboard
+    │   ├── user_ui_controller.mjs    # Parent account management (CRUD)
+    │   ├── profile_controller.mjs    # Child profile management
+    │   └── mood_ui_controller.mjs    # Data visualization and insights
     ├── locales/
-    │   └── no.json                   # (NEW) Norwegian UI strings used by controllers (keeps UI copy out of JS)
-    └── views/
+    │   └── no.json                   # Norwegian UI strings (i18n)
+    └── views/                        # Norwegian HTML templates
         ├── login.html
         ├── privacyPolicy.html
         ├── termsOfService.html
         ├── childMenu.html
-        ├── childProfiles.html        # (NEW) View for creating/selecting child profiles
+        ├── childProfiles.html        # Profile selection UI
         ├── moodCheckin.html
         ├── parentMenu.html
         ├── userManager.html
         └── insights.html
 ```
 
-Notes about the client changes:
-- The MVC pattern is preserved: views (.html) contain all UI text in Norwegian; controllers (.mjs) contain the logic in English; models (.mjs) contain data manipulation.
-- New files introduced to support parent-managed child profiles and i18n:
-  - `modules/models/profile_client_model.mjs` — client-side model for profiles
-  - `modules/controllers/profile_controller.mjs` — controller and UI glue for `childProfiles.html`
-  - `modules/locales/no.json` — Norwegian copy for inline notices and messages
-  - `modules/views/childProfiles.html` — profile manager UI (create, edit, delete, select)
-- A global inline notice area (`#global-notice`) and i18n helpers were added to the client store to avoid alert()/prompt() usage in controllers and to centralize all user-facing copy.
-
 ### /server
 ```plaintext
 /server
-├── server_app.mjs
+├── server_app.mjs                # Main entry point (Express)
 ├── messages.mjs
-├── routes
+├── routes/                       # API Route definitions
 │   ├── mood_routes.mjs
 │   └── user_routes.mjs
-├── controllers
+├── controllers/                  # Request/Response handling (Logic)
 │   ├── user_service.mjs
 │   ├── mood_api_handler.mjs
 │   └── user_api_handler.mjs
-├── models
+├── models/                       # SQL Queries (Data access)
 │   ├── mood_server_model.mjs
 │   └── user_server_model.mjs
 ├── utils
 │   └── auth_crypto.mjs
-├── middleware
+├── middleware/                   # PrivacyGuard & Auth checks
 │   └── privacyGuard.mjs
 └── database
-    ├── db.mjs
-    └── moodmate_db.sql
+    ├── db.mjs                    # Postgres connection pool
+    └── moodmate_db.sql           # Database schema
 ```
+
+---
 
 ### /tests
 ```
@@ -143,30 +132,28 @@ Notes about the client changes:
 
 ---
 
-## How to run the project locally
+## Local Installation & Setup
 
-1. **Clone repository:**
-   ```bash
-   git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git
-   ```
+### 1. Clone & Install
+```bash
+git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git
+cd server
+npm install
+```
 
-2. **Server setup:**
-   ```bash
-   cd server
-   npm install
-   npm start
-   ```
-   - Default port: `http://localhost:3000`
+### 2. Environment Variables
+Create a .env file in the /server folder:
 
-3. **Client (optional local preview):**
-   Serve the `client/` folder as a static site. Example using Python:
-   ```bash
-   python -m http.server 8080 -d client
-   ```
-   Then open `http://localhost:8080`.
+```bash
+DATABASE_URL=your_postgresql_url
+JWT_SECRET=your_secret_key
+PORT=3000
+```
 
-4. **Database:**
-   - Create a `.env` file in `/server` containing `DATABASE_URL` and `JWT_SECRET` (see `server/.env.example` if provided).
+### 3. Run the application
+```bash
+npm start
+```
 
 ---
 
@@ -195,41 +182,39 @@ This token is used by the `privacyGuard` middleware to identify the user's `user
 
 ---
 
-## Creating a meaningful middleware: The Family & Sibling Privacy Guard
+## 🔒 Security: The Family & Sibling Privacy Guard
+To protect sensitive emotional data, MoodMate uses a custom middleware as a security gatekeeper. This ensures that every request is verified for **Identity, Role, and Ownership** before any data is processed.
 
-(*Folders:* server/middleware/privacyGuard.mjs, 
-*Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
+**Source Files:**
+* **Middleware:** [`server/middleware/privacyGuard.mjs`](https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
+* **Auth Logic:** [`server/utils/auth_crypto.mjs`](https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/utils/auth_crypto.mjs)
 
-**The Need:** Sensitive Emotional Data Protection
+---
 
-**Problem:** MoodMate handles vulnerable data. We have three privacy risks:
+### The Need for Protection
+MoodMate handles vulnerable data, which introduces three primary privacy risks that this middleware mitigates:
 
-- Cross-Family Leaks: Parent A seeing Child B's logs.
+1. **Cross-Family Leaks:** Prevents User A from accessing logs belonging to Family B.
+2. **Sibling Peeking:** Prevents children within the same family from seeing each other's logs, reducing potential conflict or teasing.
+3. **Unauthorized Edits:** Ensures children cannot accidentally or intentionally delete parental reports or other sensitive entries.
 
-- Sibling Peeking: Sibling A seeing Sibling B's logs, which could lead to teasing or conflict.
+### How it Works
+The `privacyGuard` acts as a security interceptor that extracts the **JWT (JSON Web Token)** from the request headers to enforce the following access rules:
 
-- Unauthorized Edits: A child accidentally or intentionally deleting a parent’s insight report.
+* **Children:** Are restricted to their own data. They can **POST** (log) and **GET** (view history) only if the `userId` in the request matches the `userId` stored in their token.
+* **Parents:** Have broader **GET** (read) access to view logs for any child within their `familyId` for insights, but are strictly **restricted** from modifying the child's original emotional entries.
 
-**Solution:** A privacyGuard middleware. It acts as a gatekeeper that verifies Role and Ownership.
+---
 
-- Children: Can only POST (log) their own data and GET their own history.
-  In that way, siblings are also blocked from accessing any data where the userId doesn't match their own.
+### Request Lifecycle
+The following flow illustrates how the middleware handles a request:
 
-- Parents: Can GET data for any child within their familyId, but cannot modify the child's original logs.
+1. **Client Request:** The user sends data (e.g., a new mood entry) along with their **JWT**.
+2. **PrivacyGuard Middleware:** Validates the token and checks specific permissions based on the user's Role and IDs. If unauthorized, it returns a `401` or `403` error.
+3. **Mood Controller:** Once validated, the controller receives the request and processes the business logic.
+4. **Database:** Data is securely stored or retrieved from **PostgreSQL**.
 
-**How it works:** The `privacyGuard` acts as a security interceptor. It extracts the JWT from the request headers, verifies the user's identity, and ensures they have the right to access the specific resource.
-
-**Request Lifecycle:**
-
-1. Client Request: User sends data (e.g., a new mood entry) + JWT.
-
-2. `privacyGuard` Middleware: Validates the token and checks permissions. If invalid, returns `401` or `403`.
-
-3. Mood Controller: Receives the validated request and processes business logic.
-
-4. Database: Data is securely stored in PostgreSQL.
-   
-`Client Request -> privacyGuard (Auth Check) -> Mood Controller -> Database`
+`Client Request ➔ privacyGuard (Auth Check) ➔ Mood Controller ➔ Database`
 
 ---
 
