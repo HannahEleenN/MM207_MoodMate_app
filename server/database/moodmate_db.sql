@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     nick VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE,
     secret TEXT NOT NULL,
     role VARCHAR(20) DEFAULT 'parent',
     has_consented BOOLEAN DEFAULT FALSE,
@@ -24,15 +25,16 @@ CREATE TABLE mood_logs (
 
 -- 4. FUNCTION: Register a parent user
 CREATE OR REPLACE FUNCTION register_parent_user(
-    p_nick VARCHAR, 
-    p_secret TEXT, 
+    p_nick VARCHAR,
+    p_email VARCHAR,
+    p_secret TEXT,
     p_consented BOOLEAN
 ) 
 RETURNS TABLE(id INTEGER, nick VARCHAR) AS $$
 BEGIN
     RETURN QUERY
-    INSERT INTO users (nick, secret, role, has_consented)
-    VALUES (p_nick, p_secret, 'parent', p_consented)
+    INSERT INTO users (nick, email, secret, role, has_consented)
+    VALUES (p_nick, p_email, p_secret, 'parent', p_consented)
     RETURNING users.id, users.nick;
 END;
 $$ LANGUAGE plpgsql;
@@ -42,6 +44,14 @@ CREATE OR REPLACE FUNCTION get_user_by_nick(p_nick VARCHAR)
 RETURNS SETOF users AS $$
 BEGIN
     RETURN QUERY SELECT * FROM users WHERE nick = p_nick;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 5b. FUNCTION: Get user by email
+CREATE OR REPLACE FUNCTION get_user_by_email(p_email VARCHAR)
+RETURNS SETOF users AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM users WHERE email = p_email;
 END;
 $$ LANGUAGE plpgsql;
 
