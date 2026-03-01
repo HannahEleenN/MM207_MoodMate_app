@@ -60,6 +60,13 @@ export const userUIController =
             // Call the API to register the user (use the single universalFetch in ApiService)
             // Ensure consent is included if the checkbox exists
             const consentCheckbox = this.container.querySelector('#consent-check');
+
+            // Enforce that the checkbox must be checked before attempting to register
+            if (!(consentCheckbox && consentCheckbox.checked)) {
+                this.showNotice('register.requireConsent');
+                return;
+            }
+
             const payload = { ...formData, hasConsented: !!(consentCheckbox && consentCheckbox.checked) };
 
             const result = await ApiService.register(payload);
@@ -87,7 +94,7 @@ export const userUIController =
     {
         // Use inline edit template instead of prompt()
         const list = this.container.querySelector('#user-list');
-        const item = Array.from(list.children).find(li => li.dataset.id == id);
+        const item = Array.from(list.children).find(li => li.dataset.id === String(id));
         if (!item) return;
 
         const editTemplate = this.container.querySelector('#user-edit-template');

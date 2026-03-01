@@ -1,6 +1,5 @@
 import { ApiService } from "../api.mjs";
 import { store } from "../singleton.mjs";
-import { showLegal } from "../../app.mjs";
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Controller for Authentication.
@@ -25,12 +24,8 @@ export const authController =
             // Bind UI elements
             const form = this.container.querySelector('#loginForm');
             const registerBtn = this.container.querySelector('#go-to-reg');
-            const tosLink = this.container.querySelector('#link-tos');
-            const privacyLink = this.container.querySelector('#link-privacy');
 
-            // Setup Legal Links
-            if (tosLink) tosLink.onclick = () => showLegal('termsOfService');
-            if (privacyLink) privacyLink.onclick = () => showLegal('privacyPolicy');
+            // Note: legal links are handled by the global click listener in app.mjs (ids: view-tos/view-privacy)
 
             // Setup Form Submission
             if (form) {
@@ -38,14 +33,8 @@ export const authController =
                 {
                     e.preventDefault();
                     const pinInput = this.container.querySelector('#pin-input');
-                    const consentCheck = this.container.querySelector('#login-consent-check');
 
-                    // Require explicit consent before attempting login
-                    if (!(consentCheck && consentCheck.checked)) {
-                        this.showNotice('login.requireConsent');
-                        return;
-                    }
-                    // We send the secret (PIN) to the login handler
+                    // Directly attempt login without requiring the user to accept legal each time
                     await this.handleLogin({ secret: pinInput.value });
                 };
             }
@@ -116,4 +105,3 @@ export const authController =
     } // End of handleLogin()
 
 }; // End of authController
-
