@@ -22,14 +22,19 @@ export const userUIController =
         const list = this.container.querySelector("#user-list");
         const goToLoginBtn = this.container.querySelector('#go-to-login');
 
-        if (form) {
-            form.onsubmit = async (e) =>
+        form.onsubmit = async (e) =>
+        {
+            e.preventDefault();
+            const rawData = Object.fromEntries(new FormData(form));
+
+            const payload =
             {
-                e.preventDefault();
-                const formData = Object.fromEntries(new FormData(form));
-                await this.handleRegister(formData);
+                ...rawData,
+                hasConsented: rawData.hasConsented === "true"
             };
-        }
+
+            await this.handleRegister(payload);
+        };
 
         if (goToLoginBtn) {
             goToLoginBtn.onclick = (e) => {
@@ -54,7 +59,8 @@ export const userUIController =
     async handleRegister(formData)
     {
         let btn = this.container.querySelector(".btn-reg");
-        try {
+        try
+        {
             if (btn) btn.disabled = true;
 
             // Call the API to register the user (use the single universalFetch in ApiService)

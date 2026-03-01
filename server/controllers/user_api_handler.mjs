@@ -22,8 +22,8 @@ export const registerUser = async (req, res) =>
 export const loginUser = async (req, res) =>
 {
     try {
-        const { secret } = req.body;
-        const user = await userService.authenticateSecret(secret);
+        const { email, secret } = req.body;
+        const user = await userService.authenticateSecret(email, secret);
         return res.status(200).json({ user });
     } catch (err) {
         const status = err.status || 500;

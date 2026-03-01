@@ -1,12 +1,10 @@
 import User from '../models/user_server_model.mjs';
-import Mood from '../models/mood_server_model.mjs';
 import { Messages } from '../messages.mjs';
+import { verifySecret } from '../utils/auth_crypto.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Domain/service layer. Throws errors with a `status` property
-// so HTTP handlers can translate into responses.
 
-export async function registerUserData({ nick, secret, hasConsented })
+export async function registerUserData({ nick, email, secret, hasConsented })
 {
     if (hasConsented !== true) {
         const err = new Error(Messages.CONSENT_ERROR);
@@ -21,51 +19,67 @@ export async function registerUserData({ nick, secret, hasConsented })
     }
 
     const existingUser = await User.findByNick(nick);
-
     if (existingUser) {
         const err = new Error(Messages.NICK_TAKEN_ERROR);
         err.status = 400;
         throw err;
     }
 
-    const newUser = await User.create({ nick, secret, hasConsented });
+    const newUser = await User.create({ nick, email, secret, hasConsented });
     return { id: newUser.id, nick: newUser.nick };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export async function authenticateSecret(secret)
+/**
+ * Authenticates user based on email and password (secret).
+ */
+export async function authenticateSecret(email, secret)
 {
-    if (!secret) {
-        const err = new Error('Missing secret');
+    // 1. Validate that necessary input is provided
+    if (!email || !secret) {
+        const err = new Error('Both email and password must be provided');
         err.status = 400;
         throw err;
     }
 
-    const user = await User.findBySecret(secret);
+    // 2. Find the user in the database via email
+    const user = await User.findByEmail(email);
+
     if (!user) {
         const err = new Error(Messages.AUTH_FAILED);
-        err.status = 404;
+        err.status = 401; // Use 401 for invalid credentials
         throw err;
     }
 
-    return { id: user.id, nick: user.nick };
+    // 3. Verify the password (hash comparison)
+    // user.secret contains the hashed value from the database
+    const isValid = await verifySecret(secret, user.secret);
+
+    if (!isValid) {
+        const err = new Error(Messages.AUTH_FAILED);
+        err.status = 401;
+        throw err;
+    }
+
+    // 4. Return only necessary user info (exclude password hash)
+    return {
+        id: user.id,
+        nick: user.nick,
+        role: user.role,
+        familyId: user.id // In current logic, parentId is often the same as familyId
+    };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 export async function deleteUserById(userId)
 {
-    const user = User.findById(userId);
+    const user = await User.findById(userId);
     if (!user) {
         const err = new Error(Messages.USER_NOT_FOUND);
         err.status = 404;
         throw err;
     }
-
-    // Remove all moods for this parent and then delete user
-    Mood.deleteByParentId(userId);
-    User.delete(userId);
-
-    return { message: Messages.DELETE_SUCCESS };
+    return await User.delete(userId);
 }

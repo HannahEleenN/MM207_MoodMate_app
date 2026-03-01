@@ -29,39 +29,35 @@ export const authController =
             this.loginButton = this.container.querySelector('.login-btn');
 
             // If a prefill secret exists (set after successful registration), prefill the PIN
-            if (store.prefillSecret) {
-                const pinInput = this.container.querySelector('#pin-input');
-                if (pinInput) pinInput.value = store.prefillSecret;
-                // Clear prefill after inserting it once
+            if (store.prefillSecret)
+            {
+                const emailInput = this.container.querySelector('#email-input');
+                if (emailInput) emailInput.value = store.prefillSecret;
                 delete store.prefillSecret;
             }
 
             // Note: legal links are handled by the global click listener in app.mjs (ids: view-tos/view-privacy)
 
             // Setup Form Submission
-            if (form) {
-                form.onsubmit = async (e) =>
+            form.onsubmit = async (e) =>
+            {
+                e.preventDefault();
+
+                const emailInput = this.container.querySelector('#email-input');
+                const passwordInput = this.container.querySelector('#password-input');
+
+                await this.handleLogin(
                 {
-                    e.preventDefault();
-                    const pinInput = this.container.querySelector('#pin-input');
-
-                    // Directly attempt login without requiring the user to accept legal each time
-                    await this.handleLogin({ secret: pinInput.value });
-                };
-            }
-
-            // Also make the login button accessible for programmatic clicks
-            if (this.loginButton) {
-                this.loginButton.onclick = async (e) => {
-                    e.preventDefault();
-                    const pinInput = this.container.querySelector('#pin-input');
-                    await this.handleLogin({ secret: pinInput.value });
-                };
-            }
+                    email: emailInput.value,
+                    secret: passwordInput.value
+                });
+            };
 
             // Navigation to Registration
-            if (registerBtn) {
-                registerBtn.onclick = (e) => {
+            if (registerBtn)
+            {
+                registerBtn.onclick = (e) =>
+                {
                     e.preventDefault();
                     store.currentView = 'userManager';
                 };
@@ -107,7 +103,8 @@ export const authController =
                 // If the user returned child profiles, and there is exactly one profile,
                 // auto-select that child and go directly to the childMenu. Otherwise let the parent choose.
                 const profiles = result.user.profiles || [];
-                if (profiles.length === 1) {
+                if (profiles.length === 1)
+                {
                     store.currentChild = profiles[0];
                     store.currentView = 'childMenu';
                 } else {
