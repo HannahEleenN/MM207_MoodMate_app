@@ -80,6 +80,13 @@ export const userUIController =
                  // Reveal the "Go to login" button and show a localized success message
                  const goBtn = this.container.querySelector('#go-to-login');
                  if (goBtn) goBtn.classList.remove('hidden');
+
+                 // Prefill the login PIN when navigating to login for convenience
+                 // NOTE: the server won't return the plain secret; we keep the secret from the formData locally for immediate login convenience.
+                 if (formData && formData.secret) {
+                     store.prefillSecret = formData.secret;
+                 }
+
                  this.showNotice('register.success');
              }
         } catch (error) {

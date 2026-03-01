@@ -18,12 +18,22 @@ export const authController =
             }
 
             // Load the view from the server/API
-            const html = await ApiService.loadView('login');
-            this.container.innerHTML = html;
+            this.container.innerHTML = await ApiService.loadView('login');
 
             // Bind UI elements
             const form = this.container.querySelector('#loginForm');
             const registerBtn = this.container.querySelector('#go-to-reg');
+
+            // Ensure there is an explicit login button so other views can reuse it
+            this.loginButton = this.container.querySelector('.primary-btn');
+
+            // If a prefill secret exists (set after successful registration), prefill the PIN
+            if (store.prefillSecret) {
+                const pinInput = this.container.querySelector('#pin-input');
+                if (pinInput) pinInput.value = store.prefillSecret;
+                // Clear prefill after inserting it once
+                delete store.prefillSecret;
+            }
 
             // Note: legal links are handled by the global click listener in app.mjs (ids: view-tos/view-privacy)
 
@@ -35,6 +45,15 @@ export const authController =
                     const pinInput = this.container.querySelector('#pin-input');
 
                     // Directly attempt login without requiring the user to accept legal each time
+                    await this.handleLogin({ secret: pinInput.value });
+                };
+            }
+
+            // Also make the login button accessible for programmatic clicks
+            if (this.loginButton) {
+                this.loginButton.onclick = async (e) => {
+                    e.preventDefault();
+                    const pinInput = this.container.querySelector('#pin-input');
                     await this.handleLogin({ secret: pinInput.value });
                 };
             }

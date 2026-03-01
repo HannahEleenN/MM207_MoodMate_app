@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoodMate - Lær om følelsene dine</title>
-    <link rel="manifest" href="manifest.json">
+    <!-- Use an explicit relative path to avoid preview-server path issues -->
+    <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,8 +27,8 @@
     <script type="module">
         // Auto-set API base for local development when served from localhost.
         if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-            // Note: this points to the Express server default port 3000 used by the /server app
-            window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000/api`;
+            // Point to the Express server origin (no '/api' suffix) used by the /server app
+            window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000`;
         }
     </script>
 

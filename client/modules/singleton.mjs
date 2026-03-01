@@ -4,6 +4,30 @@
  * provides a unified fetch function for the entire app.
  */
 
+// Helper to compute absolute URL for API calls when running in dev
+function inferApiBase() {
+    if (typeof window === 'undefined') return null;
+    if (window.__API_BASE__) return window.__API_BASE__;
+
+    const host = location.hostname;
+    // If served from a local preview server (ports like 63342), helpfully point to :3000
+    if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) {
+        // Return the origin only (no '/api' suffix) so callers like 'api/...' become origin + '/api/...'
+        return `${location.protocol}//${host}:3000`;
+    }
+    return null;
+}
+
+function withApiBase(path) {
+    const base = inferApiBase();
+    if (base) {
+        if (/^https?:\/\//i.test(path)) return path;
+        const p = path.replace(/^\//, '');
+        return `${base}/${p}`;
+    }
+    return path;
+}
+
 export async function universalFetch(url, options = {})
 {
     try {
@@ -12,10 +36,13 @@ export async function universalFetch(url, options = {})
             options.headers = { 'Content-Type': 'application/json' };
         }
 
-        const response = await fetch(url, options);
+        // If the request targets our API (starts with "api/") then prefix the API base
+        const finalUrl = url.startsWith('api/') ? withApiBase(url) : url;
+
+        const response = await fetch(finalUrl, options);
 
         // Parse body in all cases so we can include useful information on errors
-        const isHtml = url.endsWith('.html');
+        const isHtml = finalUrl.endsWith('.html');
 
         if (!response.ok) {
             // Try to parse JSON body, otherwise read text, otherwise provide an empty message
