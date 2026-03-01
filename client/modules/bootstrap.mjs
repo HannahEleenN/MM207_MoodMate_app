@@ -1,23 +1,26 @@
 // Purpose: Move inline scripts out of HTML into a module. This file is loaded by index.html
 // and performs lightweight client bootstrap tasks (dev API base and a narrow unhandledrejection suppression).
 
-// Auto-set API base for local development when served from localhost.
-if (typeof window !== 'undefined') {
+// Only adjust the manifest href when it's a relative path (avoid converting already-absolute URLs).
+if (typeof window !== 'undefined')
+{
     if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        // Point to the Express server origin (no '/api' suffix) used by the /server app
         window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000`;
     }
 
-    // If an API base is set and the manifest link exists, point the manifest to the server origin
     try {
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink && window.__API_BASE__) {
-            // Ensure no trailing slash and build absolute manifest URL on the API origin
-            const base = String(window.__API_BASE__).replace(/\/$/, '');
-            manifestLink.href = `${base}/manifest.json`;
-            // Also update the href attribute so the browser re-requests it
-            manifestLink.setAttribute('href', manifestLink.href);
-            console.debug('Manifest href adjusted to', manifestLink.href);
+            const hrefAttr = manifestLink.getAttribute('href') || '';
+            // Only rewrite when href is relative (doesn't start with http(s):// or //)
+            if (!/^(https?:)?\/\//.test(hrefAttr)) {
+                const base = String(window.__API_BASE__).replace(/\/$/, '');
+                manifestLink.href = `${base}/${hrefAttr.replace(/^\.\/|^\//, '')}`;
+                manifestLink.setAttribute('href', manifestLink.href);
+                console.debug('Manifest href adjusted to', manifestLink.href);
+            } else {
+                console.debug('Manifest href is absolute, skipping adjustment:', hrefAttr);
+            }
         }
     } catch (e) {
         console.warn('Could not adjust manifest href:', e);

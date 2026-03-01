@@ -9,7 +9,8 @@ export const authController =
 {
     async init(container)
     {
-        try {
+        try
+        {
             this.container = container;
 
             // Ensure translations are loaded
@@ -25,7 +26,7 @@ export const authController =
             const registerBtn = this.container.querySelector('#go-to-reg');
 
             // Ensure there is an explicit login button so other views can reuse it
-            this.loginButton = this.container.querySelector('.primary-btn');
+            this.loginButton = this.container.querySelector('.login-btn');
 
             // If a prefill secret exists (set after successful registration), prefill the PIN
             if (store.prefillSecret) {
@@ -66,7 +67,8 @@ export const authController =
                 };
             }
 
-        } catch (error) {
+        } catch (error)
+        {
             console.error("Initialization failed:", error);
             const errMsg = store.t ? store.t('auth.loadError') : "Error loading login view.";
             // Set plain text to avoid HTML-in-JS; the actual HTML page should contain proper markup.
@@ -91,14 +93,15 @@ export const authController =
      */
     async handleLogin(credentials)
     {
-        const loginBtn = this.container.querySelector('.primary-btn');
+        const loginBtn = this.container.querySelector('.login-btn');
 
         try {
             if (loginBtn) loginBtn.disabled = true;
 
             const result = await ApiService.login(credentials);
 
-            if (result && result.user) {
+            if (result && result.user)
+            {
                 // Update Global Model
                 store.currentUser = result.user;
                 // If the user returned child profiles, and there is exactly one profile,

@@ -10,25 +10,45 @@ export const User =
     create: async (userData) =>
     {
         const secretHash = await hashSecret(userData.secret);
-        const sql = `SELECT * FROM register_parent_user($1, $2, $3)`;
-        const values = [userData.nick, secretHash, !!userData.hasConsented];
-
+        const sql = `SELECT * FROM register_parent_user($1, $2, $3, $4)`;
+        const values = [userData.nick, userData.email || null, secretHash, !!userData.hasConsented];
         const res = await pool.query(sql, values);
         return res.rows[0]; // Returns { id, nick }
     },
 
-    // Retrieves a user by nickname
+    // Find user by nickname
     findByNick: async (nick) =>
     {
         const sql = `SELECT * FROM get_user_by_nick($1)`;
         const res = await pool.query(sql, [nick]);
-        return res.rows[0]; // Returns the full user object (including secret) or undefined
+        return res.rows[0];
     },
 
-    // Verifies secret/passcode (used during login)
+    // Find by email
+    findByEmail: async (email) =>
+    {
+        const sql = `SELECT * FROM get_user_by_email($1)`;
+        const res = await pool.query(sql, [email]);
+        return res.rows[0];
+    },
+
+    // Find by id
+    findById: async (id) =>
+    {
+        const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+        return res.rows[0];
+    },
+
+    // Delete by id
+    delete: async (id) =>
+    {
+        await pool.query('DELETE FROM users WHERE id = $1', [id]);
+        return true;
+    },
+
+    // Verifies secret/passcode (used during login). Keeps scanning stored users to verify hashes.
     findBySecret: async (secret) =>
     {
-        // We must fetch all users to check hashes (because each user has a unique salt)
         const res = await pool.query('SELECT * FROM users');
         for (const u of res.rows) {
             if (await verifySecret(secret, u.secret)) return u;
