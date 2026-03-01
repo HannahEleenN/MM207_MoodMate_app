@@ -78,3 +78,14 @@ BEGIN
     ORDER BY timestamp DESC;
 END;
 $$ LANGUAGE plpgsql;
+
+-- 8. Child profiles table (parent-child relationship)
+DROP TABLE IF EXISTS child_profiles CASCADE;
+
+CREATE TABLE child_profiles (
+    id SERIAL PRIMARY KEY,
+    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    pin TEXT NOT NULL, -- stored as salted hash
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

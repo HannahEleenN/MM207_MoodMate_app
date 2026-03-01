@@ -57,7 +57,7 @@ The following table outlines the core features for the Minimum Viable Product (M
 ├── index.html
 ├── style.css
 ├── manifest.json
-├── app.mjs                      # Main entry point for client
+├── app.mjs                      # Main entry point for client logic
 ├── service_worker.js            # PWA capabilities & caching
 ├── assets/
 │   ├── icons/
@@ -65,17 +65,19 @@ The following table outlines the core features for the Minimum Viable Product (M
 └── modules/
     ├── singleton.mjs
     ├── api.mjs                       # Centralized fetch calls to backend
+    ├── bootstrap.mjs`                # Lightweight bootstrap (dev API base, suppression)
     ├── models/                       # Client-side data models
     │   ├── mood_client_model.mjs
     │   ├── user_client_model.mjs
-    │   └── profile_client_model.mjs  # Profile data operations
-    ├── controllers/                  # UI Logic and Event Handlers
-    │   ├── auth_controller.mjs       # Login and consent validation
-    │   ├── child_controller.mjs      # Mood-logging flow logic
-    │   ├── parent_controller.mjs     # Navigation hub for dashboard
-    │   ├── user_ui_controller.mjs    # Parent account management (CRUD)
-    │   ├── profile_controller.mjs    # Child profile management
-    │   └── mood_ui_controller.mjs    # Data visualization and insights
+    │   └── profile_client_model.mjs     # Profile data operations (localStorage helpers)
+    ├── controllers/                     # UI Logic and Event Handlers
+    │   ├── auth_controller.mjs          # Login and consent validation
+    │   ├── child_controller.mjs         # Mood-logging flow logic
+    │   ├── child_login_controller.mjs   # Child PIN login controller
+    │   ├── parent_controller.mjs        # Navigation hub for dashboard
+    │   ├── user_ui_controller.mjs       # Parent account management (CRUD)
+    │   ├── profile_controller.mjs       # Child profile management (client + server integration)
+    │   └── mood_ui_controller.mjs       # Data visualization and insights
     ├── locales/
     │   └── no.json                   # Norwegian UI strings (i18n)
     └── views/                        # Norwegian HTML templates
@@ -84,10 +86,12 @@ The following table outlines the core features for the Minimum Viable Product (M
         ├── termsOfService.html
         ├── childMenu.html
         ├── childProfiles.html        # Profile selection UI
+        ├── childLogin.html           # Child PIN login view
         ├── moodCheckin.html
         ├── parentMenu.html
         ├── userManager.html
-        └── insights.html
+        ├── insights.html
+        └── notFound.html             # 404 / not found view
 ```
 
 ### /server
@@ -97,21 +101,24 @@ The following table outlines the core features for the Minimum Viable Product (M
 ├── messages.mjs
 ├── routes/                       # API Route definitions
 │   ├── mood_routes.mjs
-│   └── user_routes.mjs
+│   ├── user_routes.mjs
+│   └── child_routes.mjs          # Child profile & child-login endpoints
 ├── controllers/                  # Request/Response handling (Logic)
-│   ├── user_service.mjs
 │   ├── mood_api_handler.mjs
-│   └── user_api_handler.mjs
-├── models/                       # SQL Queries (Data access)
+│   ├── user_api_handler.mjs
+│   ├── child_api_handler.mjs     # Child create/login/get handlers
+│   └── user_service.mjs          # Domain/service logic used by handlers
+├── models/                       # SQL Queries (Database access)
 │   ├── mood_server_model.mjs
-│   └── user_server_model.mjs
+│   ├── user_server_model.mjs
+│   └── child_server_model.mjs`   # Child profiles model (pin hashing/verification)
 ├── utils
-│   └── auth_crypto.mjs
+│   └── auth_crypto.mjs           # Hashing & verification helpers
 ├── middleware/                   # PrivacyGuard & Auth checks
 │   └── privacyGuard.mjs
 └── database
     ├── db.mjs                    # Postgres connection pool
-    └── moodmate_db.sql           # Database schema
+    └── moodmate_db.sql           # Database schema / functions
 ```
 
 ---
