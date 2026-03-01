@@ -23,6 +23,14 @@
     <!-- Global notice area for inline messages (aria-live for screen readers). Text shown here should be Norwegian. -->
     <div id="global-notice" class="notice hidden" role="status" aria-live="polite"></div>
 
+    <script type="module">
+        // Auto-set API base for local development when served from localhost.
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+            // Note: this points to the Express server default port 3000 used by the /server app
+            window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000/api`;
+        }
+    </script>
+
     <script type="module" src="app.mjs"></script>
 </body>
 </html>
