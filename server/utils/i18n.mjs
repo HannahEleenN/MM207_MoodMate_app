@@ -1,5 +1,6 @@
 // Lightweight i18n helper and message catalog
-export const I18n = {
+export const I18n =
+{
     en: {
         errorCodes: {
             IncorrectId: 'Missing or incorrect id',
@@ -36,7 +37,8 @@ export const I18n = {
 };
 
 // Parse Accept-Language header and pick the best supported locale (fallback to 'en')
-export function pickLocale(acceptLanguageHeader) {
+export function pickLocale(acceptLanguageHeader)
+{
     if (!acceptLanguageHeader || typeof acceptLanguageHeader !== 'string') return 'en';
 
     // Example header: "nb,no;q=0.9,en;q=0.8"
