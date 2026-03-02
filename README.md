@@ -71,11 +71,9 @@ The following table outlines the core features for the Minimum Viable Product (M
     │   ├── user_client_model.mjs
     │   └── profile_client_model.mjs     # Profile data operations (localStorage helpers)
     ├── controllers/                     # UI Logic and Event Handlers
-    │   ├── auth_controller.mjs          # Login and consent validation
-    │   ├── child_controller.mjs         # Mood-logging flow logic
-    │   ├── child_login_controller.mjs   # Child PIN login controller
+    │   ├── child_controller.mjs         # Mood-logging flow logic and Child PIN login controller
     │   ├── parent_controller.mjs        # Navigation hub for dashboard
-    │   ├── user_ui_controller.mjs       # Parent account management (CRUD)
+    │   ├── userController.mjs       
     │   ├── profile_controller.mjs       # Child profile management (client + server integration)
     │   └── mood_ui_controller.mjs       # Data visualization and insights
     ├── locales/
