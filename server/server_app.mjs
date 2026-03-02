@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import moodRoutes from './routes/mood_routes.mjs';
 import userRoutes from './routes/user_routes.mjs';
+import demoRoutes from './routes/demo_routes.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,10 +33,10 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../client')));
 
+// Mount routes
 app.use('/api/moods', moodRoutes);
-
-// Mount user router (moved out of single controller file)
 app.use('/api/users', userRoutes);
+app.use('/api/demo', demoRoutes);
 
 app.listen(PORT, () => {
     console.log(`MoodMate server is running on http://localhost:${PORT}`);

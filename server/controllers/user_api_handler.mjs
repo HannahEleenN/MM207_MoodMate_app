@@ -1,6 +1,6 @@
 import * as userService from './user_service.mjs';
 
- // Thin HTTP handlers that translate service errors into HTTP responses.
+// Thin HTTP handlers that translate service errors into HTTP responses.
 
 export const registerUser = async (req, res) =>
 {
@@ -23,7 +23,10 @@ export const loginUser = async (req, res) =>
 {
     try {
         const { email, secret } = req.body;
+        // Authenticate parent by email + password using the service
         const user = await userService.authenticateSecret(email, secret);
+
+        // Return only the user object (no JWT/token)
         return res.status(200).json({ user });
     } catch (err) {
         const status = err.status || 500;

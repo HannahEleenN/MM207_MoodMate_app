@@ -6,27 +6,38 @@ import { verifySecret } from '../utils/auth_crypto.mjs';
 
 export async function registerUserData({ nick, email, secret, hasConsented })
 {
+    // Require consent for new registrations
     if (hasConsented !== true) {
         const err = new Error(Messages.CONSENT_ERROR);
         err.status = 400;
         throw err;
     }
 
-    if (!nick || !secret) {
+    // Require email and secret (password)
+    if (!email || !secret) {
         const err = new Error('Missing fields');
         err.status = 400;
         throw err;
     }
 
-    const existingUser = await User.findByNick(nick);
-    if (existingUser) {
-        const err = new Error(Messages.NICK_TAKEN_ERROR);
+    // Derive a safe nick from email local-part if not provided (keeps DB schema intact)
+    let safeNick = nick && String(nick).trim();
+    if (!safeNick) {
+        const local = String(email).split('@')[0] || 'parent';
+        // Truncate to 50 chars to match DB constraint
+        safeNick = local.substring(0, 50);
+    }
+
+    // Check if a user already exists with this email
+    const existingByEmail = await User.findByEmail(email);
+    if (existingByEmail) {
+        const err = new Error(Messages.NICK_TAKEN_ERROR || 'Email already registered');
         err.status = 400;
         throw err;
     }
 
-    const newUser = await User.create({ nick, email, secret, hasConsented });
-    return { id: newUser.id, nick: newUser.nick };
+    const newUser = await User.create({ nick: safeNick, email, secret, hasConsented });
+    return { id: newUser.id, email: newUser.email };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -65,7 +76,7 @@ export async function authenticateSecret(email, secret)
     // 4. Return only necessary user info (exclude password hash)
     return {
         id: user.id,
-        nick: user.nick,
+        email: user.email,
         role: user.role,
         familyId: user.id // In current logic, parentId is often the same as familyId
     };

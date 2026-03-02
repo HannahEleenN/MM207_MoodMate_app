@@ -3,7 +3,7 @@
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <input type="text" name="nick" placeholder="Kallenavn" required>
+        <!-- Nickname removed per simplification; we derive a safe nick server-side -->
         <input type="email" name="email" placeholder="E-post" required>
         <input type="password" name="secret" placeholder="Passord" required>
         <label class="consent-label">
@@ -22,7 +22,7 @@
 
     <template id="user-item-template">
         <li>
-            <span class="user-nick-display"></span>
+            <span class="user-email-display"></span>
             <div class="user-actions">
                 <button class="btn-edit">Endre</button>
                 <button class="btn-del">Slett</button>
