@@ -1,6 +1,7 @@
 import { store } from './modules/singleton.mjs';
 import { ApiService } from './modules/api.mjs';
-import { authController } from './modules/controllers/auth_controller.mjs';
+// authController is exported from userController.mjs (combined controllers file)
+import { authController } from './modules/controllers/userController.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 
@@ -11,16 +12,28 @@ export async function showLegal(viewName)
 {
     const modal = document.getElementById('legal-modal');
     const modalText = document.getElementById('legal-text');
-    const title = document.getElementById('modal-title');
+    const titleEl = document.getElementById('modal-title');
 
     if (!modal || !modalText) return;
 
+    // Set a friendly title when possible
+    if (titleEl) {
+        try {
+            // Try to use translations (if available) otherwise fall back to a readable label
+            const tKey = `legal.${viewName}.title`;
+            titleEl.textContent = (store.t ? store.t(tKey) : null) || (viewName === 'termsOfService' ? 'Vilkår' : (viewName === 'privacyPolicy' ? 'Personvern' : 'Vilkår og personvern'));
+        } catch (e) {
+            titleEl.textContent = 'Vilkår og personvern';
+        }
+    }
+
     try {
-        const content = await ApiService.loadView(viewName);
-        modalText.innerHTML = content;
+        modalText.innerHTML = await ApiService.loadView(viewName);
         modal.style.display = 'block';
     } catch (error) {
         console.error("Could not load legal view:", error);
+        modalText.textContent = 'Kunne ikke laste innholdet.';
+        modal.style.display = 'block';
     }
 }
 
@@ -71,7 +84,7 @@ const setupEventListeners = () =>
     // Close modal logic
     document.addEventListener('click', (e) => {
         if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal) {
-            modal.style.display = 'none';
+            if (modal) modal.style.display = 'none';
         }
     });
 
@@ -102,7 +115,8 @@ if (!customElements.get('user-manager'))
         async connectedCallback()
         {
             // Import dynamically to avoid circular dependencies if needed
-            const { userUIController } = await import('./modules/controllers/user_ui_controller.mjs');
+            // The userUIController is exported from userController.mjs (combined controllers file)
+            const { userUIController } = await import('./modules/controllers/userController.mjs');
             userUIController.init(this);
         }
     });
@@ -122,26 +136,45 @@ if (!customElements.get('child-profiles'))
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Initialization helpers
+
+function determineInitialView()
+{
+    if (store.currentUser && store.currentChild) return 'childMenu';
+    if (store.currentUser) return 'parentMenu';
+    return 'login';
+}
+
+async function ensureI18n()
+{
+    if (!store.i18n || Object.keys(store.i18n).length === 0) {
+        await store.loadI18n('no');
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Initialization
+
 document.addEventListener('DOMContentLoaded', async () =>
 {
     setupEventListeners();
 
     // Load translations early so controllers can use store.t immediately
-    if (!store.i18n || Object.keys(store.i18n).length === 0) {
-        await store.loadI18n('no');
+    await ensureI18n();
+
+    // Try to initialize service worker setup (best-effort). Importing executes the setup file.
+    try {
+        await import('./serviceWorkerSetup.mjs');
+    } catch (err) {
+        // Non-fatal in many dev environments (e.g., IDE preview); keep it quiet.
+        console.debug('Service worker setup import failed (dev environment?)', err);
     }
 
-    // Set initial view: if user and child selected -> childMenu; if user only -> parentMenu; otherwise login
+    // Decide and set the initial view in a single, explicit place.
     if (!store.currentView) {
-        if (store.currentUser && store.currentChild) {
-            store.currentView = 'childMenu';
-        } else if (store.currentUser) {
-            store.currentView = 'parentMenu';
-        } else {
-            store.currentView = 'login';
-        }
+        store.currentView = determineInitialView();
     } else {
-        router(); // Initial manual call
+        // If the app state already had a view (e.g., restored state), render it now.
+        router();
     }
 });
