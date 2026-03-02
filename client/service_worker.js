@@ -5,13 +5,15 @@ const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
 const URLS_TO_CACHE = [
     '/index.html',
     '/style.css',
+    '/manifest.json',
+    '/assets/icons/Favicon_Smileys.png',
     ];
 
 self.addEventListener("install", (event) =>
 {
     event.waitUntil((async () =>
     {
-        const cache = await caches.open("cacheName_identifier");
+        const cache = await caches.open(CACHE_NAME);
         cache.addAll(URLS_TO_CACHE);
     })()
     );
