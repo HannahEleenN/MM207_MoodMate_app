@@ -305,4 +305,37 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     font-weight: bold;
 }
 
+/* Insights specific styling */
+.insight-state {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    background: #f6f9ff;
+    border-radius: 12px;
+    margin: 10px 0;
+    color: var(--text-color);
+}
+
+.chart-summary {
+    padding: 10px;
+    background: linear-gradient(90deg, rgba(162,210,255,0.2), rgba(254,249,195,0.2));
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Small table tweaks for history */
+.history-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-card th, .history-card td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
 .hidden { display: none !important; }

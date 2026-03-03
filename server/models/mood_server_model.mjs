@@ -3,7 +3,8 @@ import pool from '../database/db.mjs';
 // Cache of available columns for mood_logs (to support different DB schemas)
 let _moodLogColumns = null;
 
-async function loadMoodLogColumns() {
+async function loadMoodLogColumns()
+{
     if (_moodLogColumns) return _moodLogColumns;
     const res = await pool.query("SELECT column_name FROM information_schema.columns WHERE table_name = 'mood_logs'");
     _moodLogColumns = new Set(res.rows.map(r => r.column_name));

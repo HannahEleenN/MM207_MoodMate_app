@@ -54,6 +54,19 @@
         });
     </script>
 
-    <script type="module" src="app.mjs"></script>
+    <!-- Load the SPA bootstrap module with a cache-busting query during development so changes are always fetched -->
+    <script>
+        (function() {
+            try {
+                const script = document.createElement('script');
+                script.type = 'module';
+                // Append a timestamp to avoid stale module caching in development
+                script.src = `app.mjs?cb=${Date.now()}`;
+                document.head.appendChild(script);
+            } catch (e) {
+                console.error('Could not load app module:', e);
+            }
+        })();
+    </script>
 </body>
 </html>

@@ -4,11 +4,16 @@
         <h2>Humørtrender og Innsikt</h2>
     </header>
 
+    <!-- Loading / Empty / Error states for better UX -->
+    <div id="insights-loading" class="insight-state">Henter data…</div>
+    <div id="insights-empty" class="insight-state hidden">Ingen innsikter å vise</div>
+    <div id="insights-error" class="insight-state hidden">Noe gikk galt ved henting av data</div>
+
     <div class="insight-cards">
         <article class="stat-card">
             <h3>Siste 7 dager</h3>
             <div id="mood-chart-placeholder">
-                <p class="empty-msg">Henter data...</p>
+                <p class="empty-msg hidden">Ingen data for diagram</p>
             </div>
         </article>
 

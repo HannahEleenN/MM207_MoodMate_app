@@ -4,6 +4,8 @@ import { ApiService } from './modules/api.mjs';
 import { authController } from './modules/controllers/userController.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
+// Import mood UI controller for insights view
+import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
@@ -67,6 +69,10 @@ async function router()
         case 'childProfiles':
             // Use a custom element to load the child profile manager controller
             root.innerHTML = '<child-profiles></child-profiles>';
+            break;
+        case 'insights':
+            // Use the moodUIController to initialize the insights view
+            await moodUIController.initInsights(root);
             break;
         default:
             // Load the 404 view from views/notFound.html to keep UI in HTML files
