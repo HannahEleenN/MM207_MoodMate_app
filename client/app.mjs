@@ -7,6 +7,8 @@ import { initChildApp } from './modules/controllers/child_controller.mjs';
 // Import mood UI controller for insights view
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 
+// TODO: Create an SVG favicon at `client/assets/icons/Favicon_Smileys.svg` and update `index.html`/`manifest.json` to reference it when ready.
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
 
