@@ -102,6 +102,12 @@ export const authController =
             {
                 // Update Global Model
                 store.currentUser = result.user;
+                // Store auth token if provided by the server
+                if (result.token) {
+                    store.authToken = result.token;
+                    // Also attach token to currentUser for convenience
+                    store.currentUser.token = result.token;
+                }
                 // If the user returned child profiles, and there is exactly one profile,
                 // auto-select that child and go directly to the childMenu. Otherwise let the parent choose.
                 const profiles = result.user.profiles || [];

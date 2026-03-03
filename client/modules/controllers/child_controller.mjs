@@ -33,6 +33,11 @@ export const childController =
             btn.onclick = () => this.handleContextSelection(btn.dataset.context);
         });
 
+        // Step 2b: Solution buttons
+        c.querySelectorAll('.sol-btn').forEach(btn => {
+            btn.onclick = () => this.handleSolutionSelection(btn.dataset.sol);
+        });
+
         // Step 3: Finish
         const saveBtn = c.querySelector('#save-mood-btn');
         if (saveBtn) {
@@ -67,6 +72,13 @@ export const childController =
         this.goToStep(3);
     },
 
+    handleSolutionSelection(solution)
+    {
+        if (!solution) return;
+        this.model.tempSolution = solution;
+        // Keep the user on step 3 so they can press 'Ferdig!'
+    },
+
     goToStep(stepNumber)
     {
         // 1. Hide all steps (uses the .step-container class from your HTML)
@@ -92,6 +104,7 @@ export const childController =
     {
         this.model.tempMood = null;
         this.model.tempContext = null;
+        this.model.tempSolution = null;
         this.goToStep(1);
     },
 
@@ -103,6 +116,7 @@ export const childController =
         const data = {
             mood: this.model.tempMood,
             context: this.model.tempContext,
+            solution: this.model.tempSolution || null,
             note: commentEl ? commentEl.value : "",
             timestamp: new Date().toISOString(),
             profileId: store.currentChild ? store.currentChild.id : null

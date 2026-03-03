@@ -1,8 +1,18 @@
 -- 1. DROP EXISTING TABLES (To start with a clean slate)
 DROP TABLE IF EXISTS mood_logs CASCADE;
+DROP TABLE IF EXISTS child_profiles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
--- 2. CREATE USERS TABLE
+-- 2. Child profiles table (parent-child relationship)
+CREATE TABLE child_profiles (
+    id SERIAL PRIMARY KEY,
+    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    pin TEXT NOT NULL, -- stored as salted hash
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. CREATE USERS TABLE
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     nick VARCHAR(50) UNIQUE NOT NULL,
@@ -13,17 +23,19 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. CREATE MOOD LOGS TABLE
+-- 4. CREATE MOOD LOGS TABLE
 CREATE TABLE mood_logs (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    child_id INTEGER REFERENCES child_profiles(id) ON DELETE SET NULL,
     mood VARCHAR(50) NOT NULL,
     context VARCHAR(100),
     note TEXT,
+    solution VARCHAR(100),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. FUNCTION: Register a parent user
+-- 5. FUNCTION: Register a parent user
 CREATE OR REPLACE FUNCTION register_parent_user(
     p_nick VARCHAR,
     p_email VARCHAR,
@@ -39,7 +51,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 5. FUNCTION: Get user by nickname
+-- 6. FUNCTION: Get user by nickname
 CREATE OR REPLACE FUNCTION get_user_by_nick(p_nick VARCHAR)
 RETURNS SETOF users AS $$
 BEGIN
@@ -47,7 +59,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 5b. FUNCTION: Get user by email
+-- 6b. FUNCTION: Get user by email
 CREATE OR REPLACE FUNCTION get_user_by_email(p_email VARCHAR)
 RETURNS SETOF users AS $$
 BEGIN
@@ -55,20 +67,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 6. FUNCTION: Create a new mood log
+-- 7. FUNCTION: Create a new mood log
 CREATE OR REPLACE FUNCTION create_mood_log(
     p_user_id INTEGER,
     p_mood VARCHAR,
     p_context VARCHAR,
-    p_note TEXT
+    p_note TEXT,
+    p_solution VARCHAR,
+    p_child_id INTEGER
 ) RETURNS VOID AS $$
 BEGIN
-    INSERT INTO mood_logs (user_id, mood, context, note)
-    VALUES (p_user_id, p_mood, p_context, p_note);
+    INSERT INTO mood_logs (user_id, child_id, mood, context, note, solution)
+    VALUES (p_user_id, p_child_id, p_mood, p_context, p_note, p_solution);
 END;
 $$ LANGUAGE plpgsql;
 
--- 7. FUNCTION: Get mood logs for a specific user
+-- 8. FUNCTION: Get mood logs for a specific user
 CREATE OR REPLACE FUNCTION get_mood_logs_by_user(p_user_id INTEGER)
 RETURNS SETOF mood_logs AS $$
 BEGIN
@@ -78,14 +92,3 @@ BEGIN
     ORDER BY timestamp DESC;
 END;
 $$ LANGUAGE plpgsql;
-
--- 8. Child profiles table (parent-child relationship)
-DROP TABLE IF EXISTS child_profiles CASCADE;
-
-CREATE TABLE child_profiles (
-    id SERIAL PRIMARY KEY,
-    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    name VARCHAR(100) NOT NULL,
-    pin TEXT NOT NULL, -- stored as salted hash
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);

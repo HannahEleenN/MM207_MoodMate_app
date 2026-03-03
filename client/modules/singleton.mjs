@@ -36,6 +36,22 @@ export async function universalFetch(url, options = {})
             options.headers = { 'Content-Type': 'application/json' };
         }
 
+        // If an auth token exists in the global store, attach it as a Bearer token
+        try {
+            // Note: import cycle avoidance — `store` is defined later in this file.
+            // Accessing via global/window allows universalFetch to be used before store initialisation
+            const globalStore = (typeof window !== 'undefined' && window.__STORE__) ? window.__STORE__ : null;
+            const token = globalStore ? globalStore.authToken : null;
+            if (token) {
+                options.headers = options.headers || {};
+                if (!options.headers.Authorization && !options.headers.authorization) {
+                    options.headers['Authorization'] = `Bearer ${token}`;
+                }
+            }
+        } catch (e) {
+            // If window isn't available or __STORE__ isn't set yet, ignore.
+        }
+
         // If the request targets our API (starts with "api/") then prefix the API base
         const finalUrl = url.startsWith('api/') ? withApiBase(url) : url;
 
@@ -132,3 +148,26 @@ export const store = new Proxy(state,
         return true;
     }
 });
+
+// Expose the store on window so universalFetch can access the token early (non-invasive)
+if (typeof window !== 'undefined') window.__STORE__ = store;
+
+// Global handler to catch unhandled promise rejections and provide clearer logging.
+// This is a log-only handler: it does not suppress or change app behavior — it only
+// prints the rejection reason and stack to help debugging.
+if (typeof window !== 'undefined')
+{
+    window.addEventListener('unhandledrejection', (event) =>
+    {
+        try {
+            const reason = event.reason;
+            // Log a readable representation of the rejection
+            console.warn('Unhandled promise rejection:', reason);
+            if (reason && reason.stack) console.warn(reason.stack);
+            // Do not call event.preventDefault() — keep browser behavior unchanged.
+        } catch (e) {
+            // Never crash due to logging
+            console.error('Error while handling unhandledrejection:', e);
+        }
+    });
+}

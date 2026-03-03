@@ -1,4 +1,5 @@
 import * as userService from './user_service.mjs';
+import jwt from 'jsonwebtoken';
 
 // Thin HTTP handlers that translate service errors into HTTP responses.
 
@@ -26,8 +27,12 @@ export const loginUser = async (req, res) =>
         // Authenticate parent by email + password using the service
         const user = await userService.authenticateSecret(email, secret);
 
-        // Return only the user object (no JWT/token)
-        return res.status(200).json({ user });
+        // Create a signed JWT so clients can call protected endpoints
+        const secretKey = process.env.JWT_SECRET || 'dev_secret';
+        const token = jwt.sign({ id: user.id, role: user.role, familyId: user.familyId }, secretKey, { expiresIn: '8h' });
+
+        // Return the user object and token
+        return res.status(200).json({ user, token });
     } catch (err) {
         const status = err.status || 500;
         return res.status(status).json({ error: err.message });
