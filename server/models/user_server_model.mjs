@@ -9,9 +9,13 @@ export const User =
     // Creates a new parent by calling the SQL function
     create: async (userData) =>
     {
+        console.log("Atempting to create user with data:", userData);
+
         const secretHash = await hashSecret(userData.secret);
         const sql = `SELECT * FROM register_parent_user($1, $2, $3, $4)`;
         const values = [userData.nick, userData.email || null, secretHash, !!userData.hasConsented];
+        console.log(values);
+
         const res = await pool.query(sql, values);
         return res.rows[0]; // Returns { id, nick }
     },
@@ -27,8 +31,10 @@ export const User =
     // Find by email
     findByEmail: async (email) =>
     {
+        console.log("Atempting to find user with data:", email);
         const sql = `SELECT * FROM get_user_by_email($1)`;
         const res = await pool.query(sql, [email]);
+        console.log(res);
         return res.rows[0];
     },
 

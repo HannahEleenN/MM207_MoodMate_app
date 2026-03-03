@@ -1,6 +1,6 @@
 .idea/
 .vscode/
 node_modules/
-.env
+server/.env
 *.xml
 .DS_Store

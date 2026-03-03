@@ -6,20 +6,21 @@ import { verifySecret } from '../utils/auth_crypto.mjs';
 
 export async function registerUserData({ nick, email, secret, hasConsented })
 {
+    console.log("Register user");
     // Require consent for new registrations
     if (hasConsented !== true) {
         const err = new Error(Messages.CONSENT_ERROR);
         err.status = 400;
         throw err;
     }
-
+    console.log(1);
     // Require email and secret (password)
     if (!email || !secret) {
         const err = new Error('Missing fields');
         err.status = 400;
         throw err;
     }
-
+    console.log(2);
     // Derive a safe nick from email local-part if not provided (keeps DB schema intact)
     let safeNick = nick && String(nick).trim();
     if (!safeNick) {
@@ -27,7 +28,7 @@ export async function registerUserData({ nick, email, secret, hasConsented })
         // Truncate to 50 chars to match DB constraint
         safeNick = local.substring(0, 50);
     }
-
+    console.log(3);
     // Check if a user already exists with this email
     const existingByEmail = await User.findByEmail(email);
     if (existingByEmail) {
@@ -35,8 +36,9 @@ export async function registerUserData({ nick, email, secret, hasConsented })
         err.status = 400;
         throw err;
     }
-
+    console.log(4);
     const newUser = await User.create({ nick: safeNick, email, secret, hasConsented });
+    console.log(5);
     return { id: newUser.id, email: newUser.email };
 }
 
