@@ -4,33 +4,33 @@
   </div>
 
   <div id="step-1" class="step-container">
-    <h2>Hei på deg! 🌟</h2>
-    <p>Hvordan føler du deg akkurat nå?</p>
-    <div class="mood-options">
-      <button class="mood-btn" data-mood="glad">😊 Glad</button>
-      <button class="mood-btn" data-mood="lei">😢 Lei meg</button>
-      <button class="mood-btn" data-mood="sint">😡 Sint</button>
-      <button class="mood-btn" data-mood="redd">😨 Redd</button>
-      <button class="mood-btn" data-mood="rolig">😌 Rolig</button>
-      <button class="mood-btn" data-mood="overrasket">😲 Overrasket</button>
+    <h2 data-i18n="child.hello">Hei på deg! 🌟</h2>
+    <p data-i18n="child.askMood">Hvordan føler du deg akkurat nå?</p>
+    <div class="mood-options" role="radiogroup" aria-label="Humørvalg" data-i18n-attr="aria-label">
+      <button class="mood-btn" data-mood="glad" data-i18n="mood.happy">😊 Glad</button>
+      <button class="mood-btn" data-mood="lei" data-i18n="mood.sad">😢 Lei meg</button>
+      <button class="mood-btn" data-mood="sint" data-i18n="mood.angry">😡 Sint</button>
+      <button class="mood-btn" data-mood="redd" data-i18n="mood.scared">😨 Redd</button>
+      <button class="mood-btn" data-mood="rolig" data-i18n="mood.calm">😌 Rolig</button>
+      <button class="mood-btn" data-mood="overrasket" data-i18n="mood.surprised">😲 Overrasket</button>
     </div>
   </div>
 
   <div id="step-2" class="step-container" style="display: none;">
-    <h2>Hvorfor føler du deg <span id="display-mood">...</span>?</h2>
+    <h2 data-i18n="child.whyTitle">Hvorfor føler du deg <span id="display-mood">...</span>?</h2>
     <div class="context-options">
-      <button class="context-btn" data-context="skole">🏫 Skole</button>
-      <button class="context-btn" data-context="venner">👫 Venner</button>
-      <button class="context-btn" data-context="hjemme">🏠 Hjemme</button>
+      <button class="context-btn" data-context="skole" data-i18n="context.school">🏫 Skole</button>
+      <button class="context-btn" data-context="venner" data-i18n="context.friends">👫 Venner</button>
+      <button class="context-btn" data-context="hjemme" data-i18n="context.home">🏠 Hjemme</button>
     </div>
   </div>
 
   <div id="step-3" class="step-container" style="display: none;">
-    <h2>Hva vil du gjøre nå?</h2>
+    <h2 data-i18n="child.nextActionTitle">Hva vil du gjøre nå?</h2>
     <div class="solution-options">
-      <button class="sol-btn" data-sol="klem">🤗 Klem</button>
-      <button class="sol-btn" data-sol="snakke">💬 Snakke</button>
+      <button class="sol-btn" data-sol="klem" data-i18n="solution.hug">🤗 Klem</button>
+      <button class="sol-btn" data-sol="snakke" data-i18n="solution.talk">💬 Snakke</button>
     </div>
-    <button id="save-mood-btn" class="primary-btn">Ferdig! ✨</button>
+    <button id="save-mood-btn" class="primary-btn" data-i18n="child.finish">Ferdig! ✨</button>
   </div>
 </section>

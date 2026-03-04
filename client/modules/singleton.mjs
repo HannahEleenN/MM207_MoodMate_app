@@ -164,6 +164,59 @@ state.t = function(key)
     return this.i18n && this.i18n[key] ? this.i18n[key] : key;
 };
 
+// Simple helper to apply translations to a root element. It looks for elements with
+// data-i18n and replaces textContent. For inputs/textareas it also supports data-i18n-placeholder.
+state.applyTranslations = function(root = document)
+{
+    try {
+        const elements = root.querySelectorAll('[data-i18n]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const text = this.t ? this.t(key) : key;
+            // If element has a data-i18n-attr attribute, set that attribute (e.g., placeholder)
+            const attr = el.getAttribute('data-i18n-attr');
+            if (attr && (attr === 'placeholder' || attr === 'title' || attr === 'aria-label')) {
+                el.setAttribute(attr, text);
+            } else {
+                el.textContent = text;
+            }
+        });
+
+        // Also handle placeholders using data-i18n-placeholder for convenience
+        const inputs = root.querySelectorAll('[data-i18n-placeholder]');
+        inputs.forEach(inp => {
+            const key = inp.getAttribute('data-i18n-placeholder');
+            const text = this.t ? this.t(key) : key;
+            inp.setAttribute('placeholder', text);
+        });
+
+    } catch (e) {
+        console.error('applyTranslations error:', e);
+    }
+};
+
+// Helper to change language programmatically and re-apply translations across the app
+state.setLanguage = async function(lang)
+{
+    await this.loadI18n(lang);
+    // Re-apply translations for the current view root
+    const root = document.getElementById('app-root');
+    if (root) this.applyTranslations(root);
+
+    // Also translate static parts in index.html (modal title, skip link, etc.)
+    this.applyTranslations(document);
+
+    // Optionally update document language attribute
+    try {
+        if (typeof document !== 'undefined') {
+            document.documentElement.lang = (lang === 'nb' || lang === 'no') ? 'nb' : (lang === 'sv' ? 'sv' : 'en');
+        }
+    } catch (e) {}
+
+    // Notify listeners of language change
+    window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property: 'i18n', value: this.i18n } }));
+};
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Proxy Wrapper (Observer Pattern)
 

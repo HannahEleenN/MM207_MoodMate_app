@@ -19,6 +19,13 @@
     <link rel="icon" href="assets/icons/Favicon_Smileys.png" type="image/png">
 </head>
 <body>
+    <!-- Language switcher (flags) -->
+    <div class="lang-switcher" role="navigation" aria-label="Språk">
+        <button class="lang-btn" data-lang="nb" title="Norsk" aria-label="Norsk">🇳🇴</button>
+        <button class="lang-btn" data-lang="en" title="English" aria-label="English">🇬🇧</button>
+        <button class="lang-btn" data-lang="sv" title="Svenska" aria-label="Svenska">🇸🇪</button>
+    </div>
+
     <!-- Skip link for keyboard users -->
     <a class="skip-link" href="#app-root">Hopp til innhold</a>
     <main id="app-root" role="main">
@@ -77,6 +84,26 @@
                 console.error('Could not load app module:', e);
             }
         })();
+    </script>
+
+    <script>
+        // Wire language buttons to change language at runtime
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const langBtns = document.querySelectorAll('.lang-btn');
+                langBtns.forEach(btn => btn.addEventListener('click', async (e) => {
+                    const lang = btn.getAttribute('data-lang');
+                    if (window.__STORE__ && window.__STORE__.setLanguage) {
+                        await window.__STORE__.setLanguage(lang);
+                        // Re-render current view by nudging currentView (trigger router listener)
+                        const current = window.__STORE__.currentView;
+                        window.__STORE__.currentView = current;
+                    }
+                }));
+            } catch (e) {
+                console.debug('Language switcher wiring failed (dev environment?)', e);
+            }
+        });
     </script>
 </body>
 </html>

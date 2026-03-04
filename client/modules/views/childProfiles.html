@@ -1,25 +1,25 @@
 <section class="child-profiles">
-  <h2>Barnas profiler</h2>
-  <p>Opprett eller velg en profil for barnet.</p>
+l  <h2 data-i18n="profiles.title">Barnas profiler</h2>
+  <p data-i18n="profiles.description">Opprett eller velg en profil for barnet.</p>
 
   <form id="create-child-form">
-    <input type="text" name="name" placeholder="Barnets kallenavn" required>
-    <input type="number" name="age" placeholder="Alder (valgfritt)">
-    <button type="submit" class="primary-btn">Opprett profil</button>
+    <input type="text" name="name" data-i18n-placeholder="profiles.nicknamePlaceholder" placeholder="Barnets kallenavn" required>
+    <input type="number" name="age" data-i18n-placeholder="profiles.agePlaceholder" placeholder="Alder (valgfritt)">
+    <button type="submit" class="primary-btn" data-i18n="profiles.create">Opprett profil</button>
   </form>
 
   <hr>
 
-  <h3>Eksisterende profiler</h3>
+  <h3 data-i18n="profiles.existing">Eksisterende profiler</h3>
   <ul id="child-list"></ul>
 
   <template id="child-item-template">
     <li>
       <span class="child-name"></span>
       <div class="child-actions">
-        <button class="select-child">Velg</button>
-        <button class="edit-child">Endre</button>
-        <button class="delete-child">Slett</button>
+        <button class="select-child" data-i18n="profiles.select">Velg</button>
+        <button class="edit-child" data-i18n="profiles.edit">Endre</button>
+        <button class="delete-child" data-i18n="profiles.delete">Slett</button>
       </div>
     </li>
   </template>
@@ -27,9 +27,9 @@
   <!-- Inline edit template -->
   <template id="child-edit-template">
     <div class="edit-inline">
-      <input type="text" class="edit-input" placeholder="Nytt navn">
-      <button class="save-edit">Lagre</button>
-      <button class="cancel-edit">Avbryt</button>
+      <input type="text" class="edit-input" data-i18n-placeholder="profiles.newNamePlaceholder" placeholder="Nytt navn">
+      <button class="save-edit" data-i18n="profiles.save">Lagre</button>
+      <button class="cancel-edit" data-i18n="profiles.cancel">Avbryt</button>
     </div>
   </template>
 </section>
