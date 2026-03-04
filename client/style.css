@@ -288,21 +288,37 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     #app-root { max-width: 500px; }
 }
 
-/* Global notice / inline messages */
+/* Skip link styles - visible on focus for keyboard users */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.skip-link:focus {
+    left: 10px;
+    top: 10px;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+    background: #000;
+    color: #fff;
+    z-index: 9999;
+    border-radius: 6px;
+}
+
+/* Ensure focus is highly visible for interactive elements */
+:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+}
+
+/* Improve notice contrast: black background and white text is already good but ensure large text accessible */
 .notice {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #222;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-    z-index: 2000;
-    max-width: 90%;
-    text-align: center;
-    font-weight: bold;
+    background: #111;
+    color: #fff;
 }
 
 /* Insights specific styling */

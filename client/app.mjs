@@ -12,6 +12,8 @@ import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
 
+let _lastFocusedBeforeModal = null;
+
 export async function showLegal(viewName)
 {
     const modal = document.getElementById('legal-modal');
@@ -33,11 +35,20 @@ export async function showLegal(viewName)
 
     try {
         modalText.innerHTML = await ApiService.loadView(viewName);
+        // Store focus and open modal with ARIA updates
+        _lastFocusedBeforeModal = document.activeElement;
         modal.style.display = 'block';
+        modal.setAttribute('aria-hidden', 'false');
+        const closeBtn = document.getElementById('close-modal-btn');
+        if (closeBtn) closeBtn.focus();
     } catch (error) {
         console.error("Could not load legal view:", error);
-        modalText.textContent = 'Kunne ikke laste innholdet.';
+        modalText.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
+        _lastFocusedBeforeModal = document.activeElement;
         modal.style.display = 'block';
+        modal.setAttribute('aria-hidden', 'false');
+        const closeBtn = document.getElementById('close-modal-btn');
+        if (closeBtn) closeBtn.focus();
     }
 }
 
@@ -92,7 +103,13 @@ const setupEventListeners = () =>
     // Close modal logic
     document.addEventListener('click', (e) => {
         if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal) {
-            if (modal) modal.style.display = 'none';
+            if (modal) {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                if (_lastFocusedBeforeModal && typeof _lastFocusedBeforeModal.focus === 'function') {
+                    _lastFocusedBeforeModal.focus();
+                }
+            }
         }
     });
 
@@ -156,7 +173,7 @@ function determineInitialView()
 async function ensureI18n()
 {
     if (!store.i18n || Object.keys(store.i18n).length === 0) {
-        await store.loadI18n('no');
+        await store.loadI18n('auto');
     }
 }
 

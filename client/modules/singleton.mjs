@@ -115,8 +115,41 @@ state.onChange = function(property, callback)
 state.loadI18n = async function(lang = 'no')
 {
     try {
-        const res = await universalFetch(`./locales/${lang}.json`);
-        this.i18n = res || {};
+        // Allow automatic detection when lang === 'auto'
+        let requested = lang;
+        if (lang === 'auto') {
+            // Basic browser language detection and primary subtag extraction
+            if (typeof navigator !== 'undefined') {
+                const nav = navigator.language || navigator.userLanguage || 'en';
+                requested = (nav && nav.split('-')[0]) || 'en';
+            } else {
+                requested = 'en';
+            }
+        }
+
+        // Try requested language, then fall back to Norwegian, then English
+        const attempts = [requested];
+        if (!attempts.includes('nb')) attempts.push('nb');
+        if (!attempts.includes('no')) attempts.push('no');
+        if (!attempts.includes('en')) attempts.push('en');
+
+        let res = null;
+        for (const a of attempts) {
+            try {
+                res = await universalFetch(`./locales/${a}.json`);
+                if (res && Object.keys(res).length > 0) {
+                    this.i18n = res;
+                    break;
+                }
+            } catch (e) {
+                // Try next fallback silently
+                // console.debug('i18n load failed for', a, e);
+            }
+        }
+
+        // If nothing loaded, keep existing i18n or empty object
+        if (!res) this.i18n = this.i18n || {};
+
         // Notify listeners that i18n loaded
         window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property: 'i18n', value: this.i18n } }));
         return this.i18n;

@@ -9,7 +9,10 @@ export const I18n =
         },
         info: {
             MasterUserFound: 'Master user found',
-            Hello: 'Hello'
+            Hello: 'Hello',
+            UserCreated: 'User created. You can now sign in.',
+            MoodSaved: 'Mood saved!',
+            MoodsFetched: 'Fetched mood entries.'
         }
     },
     nb: {
@@ -20,7 +23,10 @@ export const I18n =
         },
         info: {
             MasterUserFound: 'Master-bruker funnet',
-            Hello: 'Hei'
+            Hello: 'Hei',
+            UserCreated: 'Bruker opprettet. Du kan nå gå til innlogging.',
+            MoodSaved: 'Humøret er lagret!',
+            MoodsFetched: 'Hentet humørlogger.'
         }
     },
     sv: {
@@ -31,7 +37,10 @@ export const I18n =
         },
         info: {
             MasterUserFound: 'Master-användare hittad',
-            Hello: 'Hej'
+            Hello: 'Hej',
+            UserCreated: 'Användare skapad. Du kan nu logga in.',
+            MoodSaved: 'Humör sparat!',
+            MoodsFetched: 'Hämtade humörposter.'
         }
     }
 };
@@ -51,4 +60,3 @@ export function pickLocale(acceptLanguageHeader)
     }
     return 'en';
 }
-

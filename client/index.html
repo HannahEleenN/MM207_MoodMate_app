@@ -19,12 +19,14 @@
     <link rel="icon" href="assets/icons/Favicon_Smileys.png" type="image/png">
 </head>
 <body>
-    <main id="app-root">
+    <!-- Skip link for keyboard users -->
+    <a class="skip-link" href="#app-root">Hopp til innhold</a>
+    <main id="app-root" role="main">
     </main>
 
-    <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="legal-modal" class="modal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close-modal" id="close-x">&times;</span>
+            <span class="close-modal" id="close-x" aria-label="Lukk">&times;</span>
             <h2 id="modal-title">Vilkår og personvern</h2>
             <div id="legal-text"></div>
             <button id="close-modal-btn" class="secondary-btn">Lukk</button>

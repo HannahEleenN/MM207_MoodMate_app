@@ -1,0 +1,22 @@
+{
+  "register.success": "User created. You can now sign in.",
+  "register.failed": "Could not register user. Please try again later.",
+  "login.requireConsent": "You must accept the terms and privacy policy to sign in.",
+  "login.incorrectPin": "Incorrect PIN code.",
+  "login.networkError": "Could not connect to the authentication service.",
+  "child.selectPrompt": "Select or create a child profile before logging a mood.",
+  "mood.saved": "Mood saved!",
+  "mood.saveFailed": "Could not save mood. Please try again later.",
+  "delete.confirm": "Do you want to delete this user? This cannot be undone.",
+  "delete.success": "User deleted.",
+  "delete.failed": "Could not delete the user.",
+  "child.createPrompt": "Create a profile for the child here.",
+  "child.createSuccess": "Child profile created.",
+  "child.createFailed": "Could not create profile. Please try again later.",
+  "edit.success": "Update saved.",
+  "edit.failed": "Could not update. Please try again later.",
+  "child.none": "None",
+  "parent.loadError": "Error loading parent menu.",
+  "auth.loadError": "Error loading the login page."
+}
+

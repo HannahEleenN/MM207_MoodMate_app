@@ -1,4 +1,5 @@
 import Mood from '../models/mood_server_model.mjs';
+import { pickLocale, I18n } from '../utils/i18n.mjs';
 
 // Norwegian date format
 const formatDate = (date) =>
@@ -47,14 +48,18 @@ export const createMood = async (req, res) =>
             console.warn('[createMood] Mood model not available');
         }
 
+        const locale = pickLocale(req.headers['accept-language']);
+        const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.MoodSaved) ? I18n[locale].info.MoodSaved : 'Mood saved';
+
         res.status(201).json({
-            message: "Humørlogg lagret",
+            message: msg,
             data: newEntry
         });
     } catch (error) {
         console.error('createMood error:', error);
-        // Always include error details for debugging during development
-        return res.status(500).json({ error: "Kunne ikke lagre humørloggen", message: error.message, stack: error.stack });
+        const locale = pickLocale(req.headers['accept-language']);
+        const errMsg = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.NotFound) ? I18n[locale].errorCodes.NotFound : 'Could not save mood';
+        return res.status(500).json({ error: errMsg, message: error.message });
     }
 };
 
@@ -67,13 +72,17 @@ export const getAllMoods = async (req, res) =>
         // Use req.user.id from middleware to fetch only this user's moods
         const userId = req.user && (req.user.userId || req.user.id);
         const rows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
+        const locale = pickLocale(req.headers['accept-language']);
+        const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.MoodsFetched) ? I18n[locale].info.MoodsFetched : `Fetched moods for user ${userId}`;
         res.status(200).json({
-            message: `Hentet alle humørlogger for bruker ${userId}`,
+            message: msg,
             data: rows
         });
     } catch (error) {
         console.error('getAllMoods error:', error);
-        res.status(500).json({ error: "Kunne ikke hente humørlogg" });
+        const locale = pickLocale(req.headers['accept-language']);
+        const errMsg = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.NotFound) ? I18n[locale].errorCodes.NotFound : 'Could not fetch moods';
+        res.status(500).json({ error: errMsg });
     }
 };
 

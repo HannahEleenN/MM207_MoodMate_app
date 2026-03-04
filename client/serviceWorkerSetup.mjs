@@ -4,14 +4,26 @@
 
 if ('serviceWorker' in navigator)
 {
-    // Always attempt to unregister any previously installed service workers (development-friendly)
-    navigator.serviceWorker.getRegistrations?.().then(regs => {
-        regs.forEach(r => {
-            console.info('Unregistering service worker (dev):', r.scope);
-            r.unregister();
-        });
-    }).catch(err => console.warn('Could not enumerate/unregister service workers:', err));
+    const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.local');
+    const enableSW = window.__ENABLE_SW__ === true;
 
-    // Skip registering a new service worker in development by default. If you want to enable a SW for
-    // production/testing, change this logic to only register when a flag is present.
+    // If explicitly disabled, unregister and exit
+    if (window.__DISABLE_SW__ === true) {
+        navigator.serviceWorker.getRegistrations?.().then(regs => regs.forEach(r => r.unregister()));
+    }
+
+    // In development, we prefer no SW unless explicitly enabled. In production (not localhost) we register.
+    if (!isLocalhost || enableSW) {
+        navigator.serviceWorker.register('/service_worker.js')
+            .then(reg => console.info('Service worker registered:', reg.scope))
+            .catch(err => console.warn('Service worker registration failed:', err));
+    } else {
+        // Still attempt to unregister old SWs to avoid stale caches during dev
+        navigator.serviceWorker.getRegistrations?.().then(regs => {
+            regs.forEach(r => {
+                console.info('Unregistering service worker (dev):', r.scope);
+                r.unregister();
+            });
+        }).catch(err => console.warn('Could not enumerate/unregister service workers:', err));
+    }
 }
