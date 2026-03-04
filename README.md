@@ -17,11 +17,15 @@ The project follows a strict MVC pattern to ensure a clean separation between th
 The project is managed using GitHub Projects. Detailed work items and task progress can be found here:
 [MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3/views/1)
 
+---
+
 ## Deployment & Persistence
 The application is fully deployed in a production environment:
 * **Live Web Service:** [https://moodmate-server-81ta.onrender.com](https://moodmate-server-81ta.onrender.com)
 * **Database:** Externally hosted PostgreSQL on Render.
 * **Persistence:** Data remains intact even if the server restarts or crashes.
+
+---
 
 ## Technologies Used
 * **Frontend:** HTML5, CSS3, JavaScript (ES modules)
@@ -29,12 +33,14 @@ The application is fully deployed in a production environment:
 * **Database:** PostgreSQL (Hosted on Render)
 * **Security:** JSON Web Tokens (JWT) for session management and bcrypt for password hashing.
 
+---
+
 ## Database Architecture
 The project uses a relational database to ensure data integrity and persistence:
 * `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
 * `mood_logs`: Stores mood data linked to individual users via Foreign Keys with timestamps.
 
-> **Architecture Reflection:** Thanks to the layered architecture (Controllers -> Services -> Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
+> **Architecture Reflection:** Thanks to the layered architecture (Controllers → Services → Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
 
 ---
 
@@ -42,190 +48,250 @@ The project uses a relational database to ensure data integrity and persistence:
 The following table outlines the core features for the Minimum Viable Product (MVP).
 
 | Priority | Pri 1: Core Loop (Mood) | Pri 2: Context & Solution | Pri 3: Persistence & PWA | Pri 4: User Accounts |
-|:-------------------|:-------------------|:-------------------|:-------------------|:-------------------|
+|:---|:---|:---|:---|:---|
 | *Main Feature* | **Interactive Logging** | **Contextualizing** | **Cloud & PWA** | **Access Control** |
 | *Sub-features* | Visual mood icon selection for children | Linking emotions to activities and solutions | External data storage and offline support | Role-based login (Child/Parent) |
 | *Requirement* | REST API & Mood Controller | Coping strategy suggestions | PostgreSQL (Render) & Service Worker | JWT Auth & PrivacyGuard Middleware |
 | *Status* | *Critical MVP* | *Value Add* | *Infrastructure* | *Security* |
 
+---
 
 ## Scaffolding & Folder Structure
 
-### /client
-```plaintext
-/client
-├── index.html
-├── style.css
-├── manifest.json
-├── app.mjs                      # Main entry point for client logic
-├── service_worker.js            # PWA capabilities & caching
-├── assets/
-│   ├── icons/
-│   └── images/
-└── modules/
-    ├── singleton.mjs
-    ├── api.mjs                       # Centralized fetch calls to backend
-    ├── bootstrap.mjs`                # Lightweight bootstrap (dev API base, suppression)
-    ├── models/                       # Client-side data models
-    │   ├── mood_client_model.mjs
-    │   ├── user_client_model.mjs
-    │   └── profile_client_model.mjs     # Profile data operations (localStorage helpers)
-    ├── controllers/                     # UI Logic and Event Handlers
-    │   ├── child_controller.mjs         # Mood-logging flow logic and Child PIN login controller
-    │   ├── parent_controller.mjs        # Navigation hub for dashboard
-    │   ├── userController.mjs       
-    │   ├── profile_controller.mjs       # Child profile management (client + server integration)
-    │   └── mood_ui_controller.mjs       # Data visualization and insights
-    ├── locales/
-    │   └── no.json                   # Norwegian UI strings (i18n)
-    └── views/                        # Norwegian HTML templates
-        ├── login.html
-        ├── privacyPolicy.html
-        ├── termsOfService.html
-        ├── childMenu.html
-        ├── childProfiles.html        # Profile selection UI
-        ├── childLogin.html           # Child PIN login view
-        ├── moodCheckin.html
-        ├── parentMenu.html
-        ├── userManager.html
-        ├── insights.html
-        └── notFound.html             # 404 / not found view
-```
-
 ### /server
-```plaintext
+```
 /server
 ├── server_app.mjs                # Main entry point (Express)
-├── messages.mjs
-├── routes/                       # API Route definitions
-│   ├── mood_routes.mjs
-│   ├── user_routes.mjs
+├── messages.mjs                  # Centralized server message keys
+├── routes/
+│   ├── mood_routes.mjs           # Mood-related endpoints (protected)
+│   ├── user_routes.mjs           # User registration/login/CRUD endpoints
 │   └── child_routes.mjs          # Child profile & child-login endpoints
-├── controllers/                  # Request/Response handling (Logic)
-│   ├── mood_api_handler.mjs
-│   ├── user_api_handler.mjs
+├── controllers/
+│   ├── mood_api_handler.mjs      # HTTP handlers for moods
+│   ├── user_api_handler.mjs      # HTTP handlers for user flows
 │   ├── child_api_handler.mjs     # Child create/login/get handlers
 │   └── user_service.mjs          # Domain/service logic used by handlers
-├── models/                       # SQL Queries (Database access)
-│   ├── mood_server_model.mjs
-│   ├── user_server_model.mjs
-│   └── child_server_model.mjs`   # Child profiles model (pin hashing/verification)
-├── utils
-│   └── auth_crypto.mjs           # Hashing & verification helpers
-├── middleware/                   # PrivacyGuard & Auth checks
-│   └── privacyGuard.mjs
-└── database
-    ├── db.mjs                    # Postgres connection pool
-    └── moodmate_db.sql           # Database schema / functions
+├── models/
+│   ├── mood_server_model.mjs     # DB functions for mood logs
+│   ├── user_server_model.mjs     # DB functions for users (create/find/update/delete)
+│   └── child_server_model.mjs    # Child profiles model (pin hashing/verification)
+├── utils/
+│   └── auth_crypto.mjs           # Hashing & verification helpers (bcrypt wrapper)
+├── middleware/
+│   └── privacyGuard.mjs          # JWT-based privacy/ownership enforcement
+└── database/
+    ├── db.mjs                    # Postgres connection pool (uses DATABASE_URL)
+    └── moodmate_db.sql           # Database schema / functions (reference)
+```
+
+### /client
+```
+/client
+├── index.html                    # SPA shell; markup-only, mounts `#app-root`
+├── style.css                     # All styles and focus/accessibility rules
+├── manifest.json                 # PWA manifest (icons, start_url, display)
+├── app.mjs                       # App bootstrap, router, and event wiring
+├── service_worker.js             # Service worker (caching strategies and offline)
+├── serviceWorkerSetup.mjs        # SW registration helper (dev/production flags)
+├── offline.html                  # Offline fallback page
+├── assets/
+│   ├── icons/                    # App icons and flag placeholders (flag-nb/en/sv)
+│   └── images/                   # Images used by views
+└── modules/
+    ├── api.mjs                   # Centralized ApiService (single fetch wrapper)
+    ├── singleton.mjs             # Global store, universalFetch, i18n helpers, applyTranslations
+    ├── bootstrap.mjs             # Small runtime helpers (dev API base, suppression)
+    ├── controllers/
+    │   ├── userController.mjs    # Registration/login/user management UI logic
+    │   ├── child_controller.mjs  # Child mood check-in flow controller
+    │   ├── parent_controller.mjs # Parent dashboard controller
+    │   └── mood_ui_controller.mjs# Insights & data visualization
+    ├── models/
+    │   ├── user_client_model.mjs # Client user helpers
+    │   └── mood_client_model.mjs # Client mood helpers (placeholder)
+    ├── locales/
+    │   ├── no.json               # Norwegian translations (keys)
+    │   ├── en.json               # English translations (keys)
+    │   └── sv.json               # Swedish translations (keys)
+    └── views/
+        ├── login.html            # Login view
+        ├── userManager.html      # Registration + user CRUD view
+        ├── childMenu.html        # Child mood menu view
+        ├── moodCheckin.html      # Mood check-in flow view
+        ├── childProfiles.html    # Child profile management view
+        ├── insights.html         # Parent insights view
+        ├── privacyPolicy.html    # Privacy policy (modal content)
+        ├── termsOfService.html   # Terms of Service (modal content)
+        └── notFound.html         # 404 / not found view
 ```
 
 ---
 
-### /tests
-```
-/tests
-└── moodmate_api_tests.json
-```
+## Local Installation & Quick Start
 
----
-
-## Technical Architecture
-- **Client:** HTML, CSS, JavaScript (ES modules — `.mjs` for client modules)
-- **Server:** Node.js & Express (REST API)
-- **Database:** PostgreSQL
-- **Security:** Standard Node.js password handling and JWT for sessions.
-
----
-
-## Local Installation & Setup
-
-### 1. Clone & Install
-```bash
-git clone https://github.com/HannahEleenN/MM207_MoodMate_app.git
+### 1. Install and start the server
+```powershell
 cd server
 npm install
+npm start
 ```
 
-### 2. Environment Variables
-Create a .env file in the /server folder:
+### 2. Open the app in your browser
+```
+http://localhost:3000
+```
 
+### 3. Environment Variables
+Create a `.env` file in the `/server` folder:
 ```bash
 DATABASE_URL=your_postgresql_url
 JWT_SECRET=your_secret_key
 PORT=3000
 ```
 
-### 3. Run the application
-```bash
-npm start
+### Service Worker in Development
+By default the setup unregisters service workers on localhost. To test locally:
+```js
+// Enable
+window.__ENABLE_SW__ = true; location.reload();
+
+// Disable
+window.__DISABLE_SW__ = true; location.reload();
 ```
 
 ---
 
-## API Documentation
+## PWA & Offline Support
 
-### Mood Logs API
+- Robust service worker (`client/service_worker.js`) with cache versioning, activation/cleanup, offline fallback (`client/offline.html`), and runtime caching strategies.
+- `client/serviceWorkerSetup.mjs` registers the service worker in production and allows explicit enable/disable for development.
+- `manifest.json` provides icons and a sensible `start_url` so browsers can consider the app installable.
 
-(*Folders:* tests/moodmate_api_tests.json,
-*Link:* https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/tests/moodmate_api_tests.json)
-
-Endpoints for tracking and managing emotional entries. 
-*It should be able to add more than one solution, such as "puste dypt" (deep breathing), "høre på musikk" (listen to music) and "spør om en klem" (ask for a hug).* 
-
-| Method | Endpoint | Description | Request Body (JSON) | Auth | Success Code |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **POST** | `/api/moods` | Create new mood entry | `{"mood": "trist", "context": "leken min ble ødelagt", "solutions": []}` | JWT Token | `201 Created` |
-| **GET** | `/api/moods` | Get all mood entries for the user | *None* | JWT Token | `200 OK` |
-| **GET** | `/api/moods/:id` | Get details for one entry | *None* | JWT Token | `200 OK` |
-| **PATCH** | `/api/moods/:id` | Update log (e.g. add solution) | `{"solutions": ["snakk med en voksen", "klem"]}` | JWT Token | `200 OK` |
-| **DELETE** | `/api/moods/:id` | Remove an entry | *None* | JWT Token | `204 No Content` |
-
-**Authentication**
-All requests to the `/api/moods` endpoints must include a Bearer Token in the Authorization header: `Authorization: Bearer <your_jwt_token>`
-
-This token is used by the `privacyGuard` middleware to identify the user's `userId` and `familyId`.
+**How to test:**
+1. Open the app in Chrome/Edge.
+2. DevTools → Application → Manifest — check installability state.
+3. DevTools → Application → Service Workers — verify registration and watch lifecycle events.
+4. Install the app if prompted.
+5. DevTools → Network → set Offline and reload; cached pages or `offline.html` should be served.
 
 ---
 
-## 🔒 Security: The Family & Sibling Privacy Guard
-To protect sensitive emotional data, MoodMate uses a custom middleware as a security gatekeeper. This ensures that every request is verified for **Identity, Role, and Ownership** before any data is processed.
+## Security & Privacy Guard
 
-**Source Files:**
-* **Middleware:** [`server/middleware/privacyGuard.mjs`](https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/middleware/privacyGuard.mjs)
-* **Auth Logic:** [`server/utils/auth_crypto.mjs`](https://github.com/HannahEleenN/MM207_MoodMate_app/blob/main/server/utils/auth_crypto.mjs)
+MoodMate uses a custom middleware as a security gatekeeper, ensuring every request is verified for **Identity, Role, and Ownership** before any data is processed.
 
----
+- **Middleware:** `server/middleware/privacyGuard.mjs`
+- **Auth Logic:** `server/utils/auth_crypto.mjs`
 
-### The Need for Protection
-MoodMate handles vulnerable data, which introduces three primary privacy risks that this middleware mitigates:
-
-1. **Cross-Family Leaks:** Prevents User A from accessing logs belonging to Family B.
-2. **Sibling Peeking:** Prevents children within the same family from seeing each other's logs, reducing potential conflict or teasing.
-3. **Unauthorized Edits:** Ensures children cannot accidentally or intentionally delete parental reports or other sensitive entries.
-
-### How it Works
-The `privacyGuard` acts as a security interceptor that extracts the **JWT (JSON Web Token)** from the request headers to enforce the following access rules:
-
-* **Children:** Are restricted to their own data. They can **POST** (log) and **GET** (view history) only if the `userId` in the request matches the `userId` stored in their token.
-* **Parents:** Have broader **GET** (read) access to view logs for any child within their `familyId` for insights, but are strictly **restricted** from modifying the child's original emotional entries.
+The middleware validates the JWT and enforces role-based permissions: children are restricted to their own data; parents can view family data but cannot modify a child's original entries.
 
 ---
 
-### Request Lifecycle
-The following flow illustrates how the middleware handles a request:
+## Internationalization (I18n)
 
-1. **Client Request:** The user sends data (e.g., a new mood entry) along with their **JWT**.
-2. **PrivacyGuard Middleware:** Validates the token and checks specific permissions based on the user's Role and IDs. If unauthorized, it returns a `401` or `403` error.
-3. **Mood Controller:** Once validated, the controller receives the request and processes the business logic.
-4. **Database:** Data is securely stored or retrieved from **PostgreSQL**.
+**Client**
+- Locale files: `client/locales/no.json`, `client/locales/en.json`, `client/locales/sv.json`
+- On app init, `store.loadI18n('auto')` detects the browser language and loads the matching locale.
+- Views use `data-i18n` attributes; `store.applyTranslations(root)` replaces text content with localized strings.
+- Switch language at runtime via the flag buttons (top-right) or programmatically:
+```js
+  store.setLanguage('en')  // English
+  store.setLanguage('nb')  // Norwegian
+  store.setLanguage('sv')  // Swedish
+```
 
-`Client Request ➔ privacyGuard (Auth Check) ➔ Mood Controller ➔ Database`
+**Server**
+- `server/utils/i18n.mjs` provides a `pickLocale(acceptLanguageHeader)` function supporting `en | nb | sv`.
+- API test:
+```bash
+  curl -H "Accept-Language: en" http://localhost:3000/api/moods
+```
 
 ---
 
-## File Extensions:
+## Accessibility
 
-| Location | Extension | Reason |
-| :--- | :--- | :--- |
-| **Server** (API, Middleware, Routes) | `.mjs` | Tells Node.js to use ECMAScript Modules (ESM). |
-| **Client** (App logic, Service Worker) | `.mjs` | Client modules are ES modules (`.mjs`) and loaded as JavaScript modules in the browser. |
+- Skip-to-content link in `index.html`.
+- Visible keyboard focus styling in `client/style.css`.
+- Modal ARIA attributes and focus-trap behavior when opening/closing legal dialogs.
+- Interactive elements include ARIA roles (e.g. mood options marked as a `radiogroup`).
+
+**Target:** Lighthouse accessibility score ≥ 90.
+
+---
+
+## Language Switcher & Flags
+
+Language switcher (flags) is located in the top-right of the app. Place flag images in `client/assets/icons/`:
+- `flag-nb.png`
+- `flag-en.png`
+- `flag-sv.png`
+
+---
+
+## Testing & Lighthouse
+```powershell
+npx lighthouse http://localhost:3000 --only-categories=accessibility --emulated-form-factor=mobile --output=json --output-path=lh-accessibility.json
+```
+
+Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against your local or deployed server. Update the environment URL and Authorization token where needed.
+
+---
+
+## Assignment Checklist
+
+| Requirement | Status | Files / Notes |
+|:---|:---|:---|
+| Select app idea and feature map | ✅ Done | Feature Map section in this README; project board linked above |
+| Document project and plan | ✅ Done | This README (all sections) |
+| Client: scaffold, MVC separation, single fetch pattern | ✅ Done | `client/app.mjs`, `client/modules/api.mjs`, `client/modules/singleton.mjs`, controllers |
+| Server: REST API, routes, controllers | ✅ Done | `server/server_app.mjs`, `server/routes/*.mjs`, `server/controllers/*.mjs` |
+| User accounts (create, delete, consent + ToS/Privacy) | ✅ Done | `userController.mjs`, `user_api_handler.mjs`, `user_service.mjs`, `user_server_model.mjs` |
+| Persistent cloud storage (PostgreSQL on Render) | ✅ Done | `server/database/db.mjs`, `server/models/*.mjs` — set `DATABASE_URL` in Render env vars |
+| REST API scaffold & documentation | ✅ Done | `server/routes/*.mjs`, `client/modules/api.mjs`, Postman collection |
+| Middleware (meaningful, not logging) | ✅ Done | `server/middleware/privacyGuard.mjs` — JWT identity/role enforcement |
+| Client web component for user CRUD | ✅ Done | `user-manager` element in `client/app.mjs`, `userManager.html`, `userController.mjs` |
+| PWA & offline support | ✅ Done | `client/manifest.json`, `client/service_worker.js`, `client/serviceWorkerSetup.mjs` |
+| Accessibility (WCAG/ARIA) | 🔄 In progress | Skip link, focus styles, ARIA roles added — run Lighthouse and fix until score ≥ 90 |
+| Project management & repository | ✅ Done | GitHub Project board linked above |
+| Tests & test tools | ✅ Done | `tests/moodmate_api_tests.json` — import into Postman/Insomnia |
+
+---
+
+## Quick Manual Verification
+
+1. Start the server:
+```powershell
+   cd server
+   npm install
+   npm start
+```
+2. Open `http://localhost:3000` and verify:
+    - Language switcher (top-right) changes UI text across all three languages.
+    - You can register a user, accept ToS (required), and log in.
+    - You can edit and delete users in the user manager.
+3. API tests: import `tests/moodmate_api_tests.json` into Postman, run registration → login → protected requests.
+4. PWA: DevTools → Application → Manifest (installability), Service Workers (lifecycle), Network → Offline (fallback).
+5. Accessibility: run Lighthouse (Accessibility only) and fix flagged items.
+
+---
+
+## Key Files for Code Review
+
+| File | What it shows |
+|:---|:---|
+| `server/routes/user_routes.mjs` + `server/controllers/user_api_handler.mjs` | API scaffold and endpoint structure |
+| `server/middleware/privacyGuard.mjs` | Meaningful middleware (JWT + role enforcement) |
+| `client/modules/api.mjs` + `client/modules/singleton.mjs` | Single-fetch pattern and i18n loader |
+| `client/modules/controllers/userController.mjs` + `views/userManager.html` | Client CRUD and consent flow |
+| `client/service_worker.js` + `client/manifest.json` | PWA evidence |
+| `tests/moodmate_api_tests.json` | API test collection |
+
+---
+
+## Developer Notes
+
+- Keep `index.html` strictly markup-only. All runtime code lives in `app.mjs` and `client/modules/`.
+- Use `data-i18n` attributes in views for translatable strings; use `store.t('key')` when building strings in JS.
+- To add new UI text: add the key to all locale files (`client/locales/*.json`) and reference it with `data-i18n` or `store.t(key)`.

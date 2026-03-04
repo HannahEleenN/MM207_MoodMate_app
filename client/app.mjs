@@ -1,10 +1,8 @@
 import { store } from './modules/singleton.mjs';
 import { ApiService } from './modules/api.mjs';
-// authController is exported from userController.mjs (combined controllers file)
 import { authController } from './modules/controllers/userController.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
-// Import mood UI controller for insights view
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 
 // TODO: Create an SVG favicon at `client/assets/icons/Favicon_Smileys.svg` and update `index.html`/`manifest.json` to reference it when ready.
@@ -12,7 +10,7 @@ import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
 
-let _lastFocusedBeforeModal = null;
+let previouslyFocusedElement = null;
 
 export async function showLegal(viewName)
 {
@@ -34,18 +32,19 @@ export async function showLegal(viewName)
     }
 
     try {
-        modalText.innerHTML = await ApiService.loadView(viewName);
+        const content = await ApiService.loadView(viewName);
+        modalText.innerHTML = content;
         // Store focus and open modal with ARIA updates
-        _lastFocusedBeforeModal = document.activeElement;
-        modal.style.display = 'block';
+        previouslyFocusedElement = document.activeElement;
+        modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) closeBtn.focus();
     } catch (error) {
         console.error("Could not load legal view:", error);
         modalText.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
-        _lastFocusedBeforeModal = document.activeElement;
-        modal.style.display = 'block';
+        previouslyFocusedElement = document.activeElement;
+        modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) closeBtn.focus();
@@ -67,11 +66,18 @@ async function router()
 
     switch (view) {
         case 'login':
-            await authController.init(root);
+            try {
+                console.debug('[router] rendering login view');
+                await authController.init(root);
+            } catch (e) {
+                console.error('[router] authController.init failed:', e);
+                root.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innloggingsvinduet.';
+            }
             break;
         case 'userManager':
-            // Using the custom element defined below
-            root.innerHTML = '<user-manager></user-manager>';
+            // Create and append the custom element instead of injecting HTML string
+            const userManagerEl = document.createElement('user-manager');
+            root.appendChild(userManagerEl);
             break;
         case 'parentMenu':
             await initParentApp(root, store);
@@ -81,15 +87,39 @@ async function router()
             break;
         case 'childProfiles':
             // Use a custom element to load the child profile manager controller
-            root.innerHTML = '<child-profiles></child-profiles>';
+            const childProfilesEl = document.createElement('child-profiles');
+            root.appendChild(childProfilesEl);
+            break;
+        case 'childLogin':
+            // Use child login controller (merged into childController)
+            try {
+                const { childController } = await import('./modules/controllers/child_controller.mjs');
+                await childController.initLogin(root);
+            } catch (e) {
+                console.error('child login init failed', e);
+            }
             break;
         case 'insights':
             // Use the moodUIController to initialize the insights view
-            await moodUIController.initInsights(root);
+            try {
+                await moodUIController.initInsights(root);
+            } catch (e) {
+                console.error('insights init failed', e);
+                root.innerHTML = await ApiService.loadView('notFound');
+            }
             break;
         default:
             // Load the 404 view from views/notFound.html to keep UI in HTML files
             root.innerHTML = await ApiService.loadView('notFound');
+    }
+
+    // After the view is rendered, apply translations to the new DOM
+    try {
+        if (store && typeof store.applyTranslations === 'function') {
+            store.applyTranslations(root);
+        }
+    } catch (e) {
+        console.warn('applyTranslations after router failed', e);
     }
 }
 
@@ -100,14 +130,35 @@ const setupEventListeners = () =>
 {
     const modal = document.getElementById('legal-modal');
 
+    // Wire language buttons (moved from index.html inline script so HTML is purely markup)
+    try {
+        const langBtns = document.querySelectorAll('.lang-btn');
+        langBtns.forEach(btn => btn.addEventListener('click', async (e) => {
+            const lang = btn.getAttribute('data-lang');
+            try {
+                await store.setLanguage(lang);
+                // Apply translations to static parts and current root
+                try { store.applyTranslations(document); } catch(_){}
+                try { const root = document.getElementById('app-root'); if (root) store.applyTranslations(root); } catch(_){}
+                // Re-render current view by nudging currentView (trigger router listener)
+                const current = store.currentView;
+                store.currentView = current;
+            } catch (err) {
+                console.debug('Language switch failed', err);
+            }
+        }));
+    } catch (e) {
+        console.debug('Language switcher wiring failed (dev environment?)', e);
+    }
+
     // Close modal logic
     document.addEventListener('click', (e) => {
         if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal) {
             if (modal) {
-                modal.style.display = 'none';
+                modal.classList.remove('open');
                 modal.setAttribute('aria-hidden', 'true');
-                if (_lastFocusedBeforeModal && typeof _lastFocusedBeforeModal.focus === 'function') {
-                    _lastFocusedBeforeModal.focus();
+                if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
+                    previouslyFocusedElement.focus();
                 }
             }
         }
@@ -123,6 +174,16 @@ const setupEventListeners = () =>
         if (e.target.id === 'view-privacy') {
             e.preventDefault();
             await showLegal('privacyPolicy');
+        }
+        // NotFound navigation helpers
+        if (e.target && e.target.id === 'back-to-child-checkin') {
+            e.preventDefault();
+            // show the child mood check-in flow
+            store.currentView = 'childMenu';
+        }
+        if (e.target && e.target.id === 'back-to-parent-menu') {
+            e.preventDefault();
+            store.currentView = 'parentMenu';
         }
     });
 
@@ -140,7 +201,6 @@ if (!customElements.get('user-manager'))
         async connectedCallback()
         {
             // Import dynamically to avoid circular dependencies if needed
-            // The userUIController is exported from userController.mjs (combined controllers file)
             const { userUIController } = await import('./modules/controllers/userController.mjs');
             userUIController.init(this);
         }
@@ -178,6 +238,34 @@ async function ensureI18n()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+// Move small runtime helpers from index.html into this module so HTML contains only markup.
+// TODO: Replace placeholder flag images under assets/icons/flag-*.png with real images.
+
+// Auto-set API base for local development when served from localhost.
+if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    // Point to the Express server origin (no '/api' suffix) used by the /server app
+    window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000`;
+}
+
+// Defensive: suppress noisy unhandled promise rejections generated by injected extensions/preview scripts
+// when they indicate an asynchronous response by returning true but never reply. This is not an app bug; it's
+// caused by external tooling (browser extension / IDE preview). Keep suppression limited to the known message.
+window.addEventListener('unhandledrejection', (event) => {
+    try {
+        const reason = event.reason;
+        const msg = reason && reason.message ? String(reason.message) : String(reason);
+        if (typeof msg === 'string' && msg.includes('A listener indicated an asynchronous response')) {
+            // Prevent the default logging of this unhelpful extension/unhandledrejection error
+            event.preventDefault();
+            console.debug('Suppressed noisy extension/unhandledrejection:', msg);
+        }
+    } catch (e) {
+        // If our suppression logic fails, don't interfere with normal error handling
+        console.error('Error in unhandledrejection suppression handler', e);
+    }
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
 // Initialization
 
 document.addEventListener('DOMContentLoaded', async () =>
@@ -186,6 +274,13 @@ document.addEventListener('DOMContentLoaded', async () =>
 
     // Load translations early so controllers can use store.t immediately
     await ensureI18n();
+
+    // Apply translations to static parts (index.html) and current root (if any)
+    try {
+        try { store.applyTranslations(document); } catch(_){}
+        const root = document.getElementById('app-root');
+        if (root) try { store.applyTranslations(root); } catch(_){}
+    } catch (e) { console.warn('applyTranslations initial failed', e); }
 
     // Try to initialize service worker setup (best-effort). Importing executes the setup file.
     try {
@@ -202,4 +297,6 @@ document.addEventListener('DOMContentLoaded', async () =>
         // If the app state already had a view (e.g., restored state), render it now.
         router();
     }
+
+    console.debug('[app] initial view set to', store.currentView);
 });

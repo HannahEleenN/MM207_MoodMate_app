@@ -19,7 +19,7 @@
 
 body
 {
-    font-family: 'Comic Sans MS', 'Chalkboard SE', 'sans-serif';
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
     background-color: var(--soft-yellow);
     color: var(--text-color);
     margin: 0;
@@ -51,30 +51,12 @@ body
    3. TYPOGRAPHY & MEDIA
    ========================================================================== */
 
-h1
-{
-    color: var(--text-color);
-    text-align: center;
-}
+h1, h2, h3 { color: var(--text-color); text-align: center; margin: 0 0 10px 0; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.2rem; }
 
-h2
-{
-    color: var(--text-color);
-    font-size: 1.4rem;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-h3
-{
-    color: var(--text-color);
-    font-size: 1.2rem;
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-img, video, canvas
-{
+img, video, canvas {
     max-width: 100%;
     height: auto;
 }
@@ -97,19 +79,29 @@ button
     width: 100%;
 }
 
-button:active {
-    transform: scale(0.95);
-}
+button:active { transform: scale(0.95); }
 
 /* Primary/Registration Buttons (3D Effect) */
-.primary-btn, .btn-reg, .save-btn
-{
+.primary-btn, .btn-reg, .save-btn {
     background-color: var(--primary-blue);
     color: white;
     box-shadow: 0 4px 0 #81b1e0;
 }
 
+.link-btn
+{
+    background: transparent;
+    color: var(--primary-blue);
+    text-decoration: underline;
+    box-shadow: none;
+    width: auto;
+    padding: 5px;
+}
+
 /* Form Inputs */
+.input-group { margin-bottom: 12px; text-align: left; }
+.input-group label { display: block; font-weight: bold; margin-bottom: 6px; }
+
 input[type="text"], input[type="email"], input[type="password"], textarea
 {
     width: 100%;
@@ -121,13 +113,16 @@ input[type="text"], input[type="email"], input[type="password"], textarea
 }
 
 /* ==========================================================================
-   5. VIEW SPECIFIC: MOOD SELECTION (CHILD VIEW)
+   5. VIEW SPECIFIC: MOOD SELECTION & STEPS
    ========================================================================== */
 
-.mood-grid
+.step-container { display: none; }
+.step-container.active { display: block; }
+
+.mood-grid, .mood-options
 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
@@ -141,6 +136,7 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     align-items: center;
     background: #f0f0f0;
     border: 3px solid transparent;
+    padding: 14px;
 }
 
 .mood-btn img
@@ -156,27 +152,44 @@ input[type="text"], input[type="email"], input[type="password"], textarea
 .mood-btn[data-mood="trist"] { background-color: #d0e1ff; border-color: #6495ed; }
 .mood-btn[data-mood="sint"]  { background-color: #ffcfc9; border-color: #ff6347; }
 
-.mood-btn:hover
-{
+.mood-btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-.mood-btn.selected
-{
+.mood-btn.selected {
     border-width: 5px;
     animation: pulse 1.5s infinite;
 }
 
-@keyframes pulse
-{
+@keyframes pulse {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.03); }
     100% { transform: scale(1); }
 }
 
+/* Solutions & Reasons */
+.context-btn, .sol-btn, .reason-item
+{
+    padding: 12px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid #eee;
+    cursor: pointer;
+    transition: all 120ms ease;
+    text-align: center;
+}
+
+.sol-btn.selected, .reason-item.selected {
+    background: linear-gradient(90deg, rgba(162,210,255,0.15), rgba(254,249,195,0.12));
+    border-color: var(--primary-blue);
+    transform: translateY(-2px);
+}
+
+.reasons-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+
 /* ==========================================================================
-   6. COMPONENTS (MODALS & PROGRESS BARS)
+   6. COMPONENTS (MODALS, PROGRESS, NOTICES)
    ========================================================================== */
 
 /* Progress Bar */
@@ -194,8 +207,26 @@ input[type="text"], input[type="email"], input[type="password"], textarea
 {
     height: 100%;
     background: var(--primary-blue);
-    width: 33%; /* Updated via JS */
+    width: 33%;
     transition: width 0.3s ease;
+}
+
+/* Notices */
+.notice
+{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+    font-weight: bold;
 }
 
 /* Legal Modal */
@@ -212,12 +243,15 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     border: 5px solid var(--primary-blue);
     z-index: 1000;
     width: 85%;
-    max-width: 350px;
+    max-width: 420px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
+.modal.open { display: block; }
+.modal .close-modal { position: absolute; right: 12px; top: 8px; cursor: pointer; font-size: 1.2rem; }
+
 /* ==========================================================================
-   7. LEGAL DOCUMENTS (Inside Modal)
+   7. LEGAL DOCUMENTS & INSIGHTS
    ========================================================================== */
 
 .legal-document
@@ -226,70 +260,76 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     color: var(--text-color);
     text-align: left;
     padding: 10px;
-    font-family: sans-serif; /* Cleaner for long text than Comic Sans */
+    font-family: sans-serif;
 }
 
-.legal-document h2
-{
-    color: midnightblue;
-    margin-bottom: 15px;
-    font-family: 'Comic Sans MS', sans-serif;
-}
-
-.legal-document h3
-{
-    margin-top: 20px;
-    font-size: 1.1rem;
-    color: var(--text-color);
-    border-bottom: 2px solid var(--soft-yellow);
-    display: inline-block;
-}
-
-.legal-document ul
-{
-    padding-left: 20px;
-    margin-bottom: 15px;
-}
-
-.legal-document li {
-    margin-bottom: 8px;
-}
-
-/* Adjusting your existing #legal-text for better scrolling */
 #legal-text
 {
-    max-height: 60vh; /* Better than fixed pixels on mobile */
+    max-height: 60vh;
     overflow-y: auto;
     padding-right: 5px;
 }
 
+.insight-state
+{
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    background: #f6f9ff;
+    border-radius: 12px;
+    margin: 10px 0;
+}
+
+.chart-summary
+{
+    padding: 10px;
+    background: linear-gradient(90deg, rgba(162,210,255,0.2), rgba(254,249,195,0.2));
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.history-card table { width: 100%; border-collapse: collapse; }
+.history-card th, .history-card td
+{
+    padding: 8px 6px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
 /* ==========================================================================
-   8. RESPONSIVE QUERIES
+   8. UTILITIES & ACCESSIBILITY
    ========================================================================== */
 
-/* Small Phones */
-@media (max-width: 350px)
+.hidden { display: none !important; }
+
+/* Language switcher (fixed top-right) */
+.lang-switcher
 {
-    :root { --border-radius: 15px; }
-    h1 { font-size: 1.5rem; }
-    .mood-btn { height: 100px; }
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1200;
+    display: flex;
+    gap: 6px;
 }
 
-/* Tablets / Laptops / TVs */
-@media (min-width: 768px)
+.lang-switcher .lang-btn
 {
-    body {
-        background: linear-gradient(135deg, var(--soft-yellow) 0%, #d2e9ff 100%);
-    }
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Extra Large Screens / Distant Viewing */
-@media (min-width: 1400px) {
-    #app-root { max-width: 500px; }
-}
-
-/* Skip link styles - visible on focus for keyboard users */
-.skip-link {
+.skip-link
+{
     position: absolute;
     left: -9999px;
     top: auto;
@@ -297,7 +337,9 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     height: 1px;
     overflow: hidden;
 }
-.skip-link:focus {
+
+.skip-link:focus
+{
     left: 10px;
     top: 10px;
     width: auto;
@@ -306,71 +348,28 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     background: #000;
     color: #fff;
     z-index: 9999;
-    border-radius: 6px;
 }
 
-/* Ensure focus is highly visible for interactive elements */
 :focus {
     outline: 3px solid #005fcc;
     outline-offset: 2px;
 }
 
-/* Improve notice contrast: black background and white text is already good but ensure large text accessible */
-.notice {
-    background: #111;
-    color: #fff;
+/* ==========================================================================
+   9. RESPONSIVE QUERIES
+   ========================================================================== */
+
+@media (max-width: 350px)
+{
+    :root { --border-radius: 15px; }
+    h1 { font-size: 1.5rem; }
+    .mood-btn { height: 100px; }
 }
 
-/* Insights specific styling */
-.insight-state {
-    width: 100%;
-    padding: 12px;
-    text-align: center;
-    background: #f6f9ff;
-    border-radius: 12px;
-    margin: 10px 0;
-    color: var(--text-color);
+@media (min-width: 768px) {
+    body { background: linear-gradient(135deg, var(--soft-yellow) 0%, #d2e9ff 100%); }
 }
 
-.chart-summary {
-    padding: 10px;
-    background: linear-gradient(90deg, rgba(162,210,255,0.2), rgba(254,249,195,0.2));
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
-    margin-top: 8px;
+@media (min-width: 1400px) {
+    #app-root { max-width: 500px; }
 }
-
-/* Small table tweaks for history */
-.history-card table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.history-card th, .history-card td {
-    padding: 8px 6px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
-    font-size: 0.95rem;
-}
-
-.hidden { display: none !important; }
-
-/* Language switcher (fixed top-right) */
-.lang-switcher {
-    position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 1200;
-    display: flex;
-    gap: 6px;
-}
-.lang-switcher .lang-btn {
-    background: rgba(255,255,255,0.9);
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 6px 8px;
-    cursor: pointer;
-    font-size: 1.1rem;
-}
-.lang-switcher .lang-btn:focus { box-shadow: 0 0 0 3px rgba(0,95,204,0.15); }
