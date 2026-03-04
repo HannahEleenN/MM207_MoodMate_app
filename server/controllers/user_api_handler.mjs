@@ -11,10 +11,7 @@ export const registerUser = async (req, res) =>
         const user = await userService.registerUserData(payload);
         const locale = pickLocale(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.UserCreated) ? I18n[locale].info.UserCreated : 'User created.';
-        return res.status(201).json({
-            message: msg,
-            user
-        });
+        return res.status(201).json({ message: msg, user });
     } catch (err) {
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
@@ -25,8 +22,8 @@ export const registerUser = async (req, res) =>
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const createLoginResponse = (res, user, token, req) => {
-    // helper to create login success response localized
+export const createLoginResponse = (res, user, token, req) =>
+{
     const locale = pickLocale(req.headers['accept-language']);
     const okMsg = (I18n[locale] && I18n[locale].info && I18n[locale].info.Hello) ? I18n[locale].info.Hello : 'OK';
     return res.status(200).json({ user, token, message: okMsg });
@@ -43,7 +40,6 @@ export const loginUser = async (req, res) =>
     } catch (err) {
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
-        // Prefer mapped message if available
         let errorMessage = err.message;
         if (err.message && err.message.includes('PIN')) {
             errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
@@ -67,9 +63,39 @@ export const deleteUserAccount = async (req, res) =>
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+export const listUsers = async (req, res) =>
+{
+    try {
+        const rows = await userService.listAllUsers();
+        return res.status(200).json({ data: rows });
+    } catch (err) {
+        const status = err.status || 500;
+        return res.status(status).json({ error: err.message });
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const updateUser = async (req, res) =>
+{
+    try {
+        const id = req.params.id;
+        const payload = req.body;
+        const updated = await userService.updateUserById(id, payload);
+        return res.status(200).json({ user: updated });
+    } catch (err) {
+        const status = err.status || 500;
+        return res.status(status).json({ error: err.message });
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export default
 {
     register: registerUser,
     login: loginUser,
-    deleteAccount: deleteUserAccount
+    deleteAccount: deleteUserAccount,
+    listUsers,
+    updateUser
 };

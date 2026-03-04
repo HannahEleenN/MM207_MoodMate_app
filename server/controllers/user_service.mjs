@@ -1,109 +1,109 @@
-import * as userService from './user_service.mjs';
-import jwt from 'jsonwebtoken';
-import Child from '../models/child_server_model.mjs';
-
-// Thin HTTP handlers that translate service errors into HTTP responses.
-
-export const registerUser = async (req, res) =>
-{
-    try {
-        const payload = req.body;
-        const user = await userService.registerUserData(payload);
-        return res.status(201).json({
-            message: "Bruker opprettet med foreldresamtykke.",
-            user
-        });
-    } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
-    }
-};
+import User from '../models/user_server_model.mjs';
+import { Messages } from '../messages.mjs';
+import { verifySecret } from '../utils/auth_crypto.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const loginUser = async (req, res) =>
+export async function registerUserData({ nick, email, secret, hasConsented })
 {
-    try {
-        const { email, secret } = req.body;
+    console.log("Registering new user...");
 
-        // Authenticate using email + secret
-        const user = await userService.authenticateSecret(email, secret);
-
-        // Create a signed JWT so clients can call protected endpoints
-        const secretKey = process.env.JWT_SECRET || 'dev_secret';
-        const token = jwt.sign({ id: user.id, role: user.role || 'parent' }, secretKey, { expiresIn: '8h' });
-
-        // Fetch children for this parent (if any)
-        let kids = [];
-        try {
-            kids = await Child.getByParent(user.id);
-        } catch (e) {
-            kids = [];
-        }
-
-        const userPayload = {
-            id: user.id,
-            nick: user.nick,
-            email: user.email || null,
-            role: user.role || 'parent',
-            profiles: (kids || []).map(k => ({ id: String(k.id), name: k.name }))
-        };
-
-        return res.status(200).json({ user: userPayload, token });
-    } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+    if (hasConsented !== true) {
+        const err = new Error(Messages.CONSENT_ERROR);
+        err.status = 400;
+        throw err;
     }
-};
+
+    if (!email || !secret) {
+        const err = new Error('Email and password are required');
+        err.status = 400;
+        throw err;
+    }
+
+    // Derive nick from email local-part if not provided
+    let safeNick = nick && String(nick).trim();
+    if (!safeNick) {
+        const localPart = String(email).split('@')[0] || 'parent';
+        safeNick = localPart.substring(0, 50);
+    }
+
+    const existingByEmail = await User.findByEmail(email);
+    if (existingByEmail) {
+        const err = new Error('Email already registered');
+        err.status = 400;
+        throw err;
+    }
+
+    console.log("Attempting to save user to database...");
+    const newUser = await User.create({ nick: safeNick, email, secret, hasConsented });
+
+    console.log("User registered successfully with ID:", newUser.id);
+    return { id: newUser.id, email: newUser.email };
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const deleteUserAccount = async (req, res) =>
+export async function authenticateSecret(email, secret)
 {
-    try {
-        const result = await userService.deleteUserById(req.params.id);
-        return res.status(200).json(result);
-    } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+    if (!email || !secret) {
+        const err = new Error('Both email and password must be provided');
+        err.status = 400;
+        throw err;
     }
-};
+
+    const user = await User.findByEmail(email);
+    if (!user) {
+        const err = new Error(Messages.AUTH_FAILED);
+        err.status = 401;
+        throw err;
+    }
+
+    const isValid = await verifySecret(secret, user.secret);
+    if (!isValid) {
+        const err = new Error(Messages.AUTH_FAILED);
+        err.status = 401;
+        throw err;
+    }
+
+    return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        familyId: user.id
+    };
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const listUsers = async (req, res) =>
+export async function deleteUserById(userId)
 {
-    try {
-        const rows = await userService.listAllUsers();
-        return res.status(200).json({ data: rows });
-    } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+    const user = await User.findById(userId);
+    if (!user) {
+        const err = new Error(Messages.USER_NOT_FOUND);
+        err.status = 404;
+        throw err;
     }
-};
+
+    return await User.delete(userId);
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const updateUser = async (req, res) =>
+export async function listAllUsers()
 {
-    try {
-        const id = req.params.id;
-        const payload = req.body;
-        const updated = await userService.updateUserById(id, payload);
-        return res.status(200).json({ user: updated });
-    } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
-    }
-};
+    return await User.listAll();
+}
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default
+export async function updateUserById(id, userData)
 {
-    register: registerUser,
-    login: loginUser,
-    deleteAccount: deleteUserAccount,
-    list: listUsers,
-    update: updateUser
-};
+    const user = await User.findById(id);
+    if (!user) {
+        const err = new Error(Messages.USER_NOT_FOUND);
+        err.status = 404;
+        throw err;
+    }
+
+    return await User.update(id, userData);
+}
