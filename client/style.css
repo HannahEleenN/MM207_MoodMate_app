@@ -320,12 +320,20 @@ input[type="text"], input[type="email"], input[type="password"], textarea
     background: rgba(255,255,255,0.9);
     border: 1px solid #ddd;
     border-radius: 6px;
-    padding: 6px 8px;
     cursor: pointer;
     font-size: 1.1rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 34px;
+    padding: 4px;
+}
+
+.lang-switcher .lang-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .skip-link

@@ -128,24 +128,68 @@ const setupEventListeners = () =>
 {
     const modal = document.getElementById('legal-modal');
 
-    // Wire language buttons (moved from index.html inline script so HTML is purely markup)
+    // Dynamically build language switcher from a simple JSON file to keep languages in one place
     try {
-        const langBtns = document.querySelectorAll('.lang-btn');
-        langBtns.forEach(btn => btn.addEventListener('click', async () => {
-            const lang = btn.getAttribute('data-lang');
+        (async () => {
             try {
-                await store.setLanguage(lang);
-                // Apply translations to static parts and current root
-                try { store.applyTranslations(document); } catch(_){ }
-                try { const root = document.getElementById('app-root'); if (root) store.applyTranslations(root); } catch(_){ }
-                // Re-render current view by calling router() directly (avoids redundant local variable)
-                router();
+                const resp = await fetch('assets/flags/flags.json');
+                const flags = await resp.json();
+                const container = document.getElementById('lang-switcher');
+                if (container && Array.isArray(flags)) {
+                    container.innerHTML = '';
+                    for (const f of flags) {
+                        const btn = document.createElement('button');
+                        btn.className = 'lang-btn';
+                        btn.setAttribute('data-lang', f.code);
+                        btn.setAttribute('title', f.title);
+                        btn.setAttribute('aria-label', f.title);
+                        btn.setAttribute('aria-pressed', 'false');
+
+                        const img = document.createElement('img');
+                        img.src = f.file;
+                        img.alt = `${f.title} flag`;
+                        img.width = 28;
+                        img.height = 18;
+                        img.style.objectFit = 'contain';
+                        img.style.display = 'block';
+
+                        btn.appendChild(img);
+                        container.appendChild(btn);
+                    }
+
+                    // Determine currently selected language to mark active button
+                    const currentLang = (store && store.i18n && store.i18n._lang) || (navigator && (navigator.language || navigator.userLanguage) ? (navigator.language.split('-')[0]) : null);
+                    const langBtns = container.querySelectorAll('.lang-btn');
+                    function setActiveButton(code) {
+                        langBtns.forEach(b => {
+                            const isActive = b.getAttribute('data-lang') === code;
+                            b.classList.toggle('active', isActive);
+                            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                        });
+                    }
+
+                    if (currentLang) setActiveButton(currentLang);
+
+                    // Wire the generated buttons with the existing language logic
+                    langBtns.forEach(btn => btn.addEventListener('click', async () => {
+                        const lang = btn.getAttribute('data-lang');
+                        try {
+                            await store.setLanguage(lang);
+                            setActiveButton(lang);
+                            try { store.applyTranslations(document); } catch(_){ }
+                            try { const root = document.getElementById('app-root'); if (root) store.applyTranslations(root); } catch(_){ }
+                            router();
+                        } catch (err) {
+                            console.debug('Language switch failed', err);
+                        }
+                    }));
+                }
             } catch (err) {
-                console.debug('Language switch failed', err);
+                console.debug('Could not load flags.json, falling back to existing DOM buttons (if any)', err);
             }
-        }));
+        })();
     } catch (e) {
-        console.debug('Language switcher wiring failed (dev environment?)', e);
+        console.debug('Language switcher build failed', e);
     }
 
     // Close modal logic
@@ -275,6 +319,21 @@ document.addEventListener('DOMContentLoaded', async () =>
 
     // Load translations early so controllers can use store.t immediately
     await ensureI18n();
+
+    // Mark active language button if one exists (ensure lang buttons reflect loaded locale)
+    try {
+        const activeLang = (store && store.i18n && store.i18n._lang) ? store.i18n._lang : (navigator && (navigator.language || navigator.userLanguage) ? navigator.language.split('-')[0] : null);
+        if (activeLang) {
+            const btns = document.querySelectorAll('#lang-switcher .lang-btn');
+            btns.forEach(b => {
+                const isActive = b.getAttribute('data-lang') === activeLang;
+                b.classList.toggle('active', isActive);
+                b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        }
+    } catch (e) {
+        // Non-fatal
+    }
 
     // Apply translations to static parts (index.html) and current root (if any)
     try {

@@ -138,6 +138,8 @@ state.loadI18n = async function(lang = 'no')
             try {
                 res = await universalFetch(`./locales/${a}.json`);
                 if (res && Object.keys(res).length > 0) {
+                    // Store the loaded language code so callers can know which locale is active
+                    res._lang = a;
                     this.i18n = res;
                     break;
                 }
@@ -209,7 +211,14 @@ state.setLanguage = async function(lang)
     // Optionally update document language attribute
     try {
         if (typeof document !== 'undefined') {
-            document.documentElement.lang = (lang === 'nb' || lang === 'no') ? 'nb' : (lang === 'sv' ? 'sv' : 'en');
+            // Map incoming language codes to valid document language subtags
+            const langMap = {
+                'nb': 'nb', 'no': 'nb',
+                'sv': 'sv',
+                'en': 'en',
+                'es': 'es', 'da': 'da'
+            };
+            document.documentElement.lang = langMap[lang] || (lang === 'nb' || lang === 'no' ? 'nb' : (lang === 'sv' ? 'sv' : 'en'));
         }
     } catch (e) {}
 

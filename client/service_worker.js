@@ -9,11 +9,8 @@ const URLS_TO_CACHE = [
     '/manifest.json',
     '/offline.html',
     '/assets/icons/MoodMate_Favicon.svg',
-    '/assets/icons/Favicon_Smileys.png',
-    // Local flag assets (three small SVGs)
-    '/assets/flags/no.svg',
-    '/assets/flags/gb.svg',
-    '/assets/flags/se.svg'
+    '/assets/icons/Favicon_Smileys.png'
+    // Flag files will be discovered and cached during install by reading assets/flags/flags.json
 ];
 
 self.addEventListener("install", (event) =>
@@ -21,15 +18,39 @@ self.addEventListener("install", (event) =>
     event.waitUntil((async () =>
     {
         const cache = await caches.open(CACHE_NAME);
-        // Cache files individually and tolerate failures for optional assets
+
+        // First, cache the known core files (tolerant per-file)
         for (const url of URLS_TO_CACHE) {
             try {
                 await cache.add(url);
             } catch (err) {
-                // Log and continue - missing optional assets shouldn't block installation
                 console.warn('Service worker: failed to cache', url, err);
             }
         }
+
+        // Then try to fetch flags.json to discover additional flag assets to cache
+        try {
+            const resp = await fetch('/assets/flags/flags.json');
+            if (resp && resp.ok) {
+                const flags = await resp.json();
+                if (Array.isArray(flags)) {
+                    for (const f of flags) {
+                        // Normalize path to start with '/'
+                        const path = f && f.file ? ('/' + String(f.file).replace(/^\/+/, '')) : null;
+                        if (path) {
+                            try {
+                                await cache.add(path);
+                            } catch (err) {
+                                console.warn('Service worker: failed to cache flag', path, err);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Service worker: could not load flags.json', err);
+        }
+
         await self.skipWaiting();
     })()
     );

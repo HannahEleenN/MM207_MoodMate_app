@@ -1,0 +1,8 @@
+[
+  { "code": "nb", "title": "Norsk", "file": "assets/flags/no.svg", "locale": "nb" },
+  { "code": "en", "title": "English", "file": "assets/flags/gb.svg", "locale": "en" },
+  { "code": "sv", "title": "Svenska", "file": "assets/flags/se.svg", "locale": "sv" },
+  { "code": "es", "title": "Español", "file": "assets/flags/es.svg", "locale": "es" },
+  { "code": "da", "title": "Dansk", "file": "assets/flags/dk.svg", "locale": "da" }
+]
+
