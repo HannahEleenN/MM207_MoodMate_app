@@ -1,6 +1,6 @@
 "use strict";
 
-const VERSION = 'v1.2';
+const VERSION = 'v1.3';
 const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
 const URLS_TO_CACHE = [
     '/index.html',
@@ -9,7 +9,11 @@ const URLS_TO_CACHE = [
     '/manifest.json',
     '/offline.html',
     '/assets/icons/MoodMate_Favicon.svg',
-    '/assets/icons/Favicon_Smileys.png'
+    '/assets/icons/Favicon_Smileys.png',
+    // Local flag assets (three small SVGs)
+    '/assets/flags/no.svg',
+    '/assets/flags/gb.svg',
+    '/assets/flags/se.svg'
 ];
 
 self.addEventListener("install", (event) =>
@@ -17,7 +21,15 @@ self.addEventListener("install", (event) =>
     event.waitUntil((async () =>
     {
         const cache = await caches.open(CACHE_NAME);
-        await cache.addAll(URLS_TO_CACHE);
+        // Cache files individually and tolerate failures for optional assets
+        for (const url of URLS_TO_CACHE) {
+            try {
+                await cache.add(url);
+            } catch (err) {
+                // Log and continue - missing optional assets shouldn't block installation
+                console.warn('Service worker: failed to cache', url, err);
+            }
+        }
         await self.skipWaiting();
     })()
     );

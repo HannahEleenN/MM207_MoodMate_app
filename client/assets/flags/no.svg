@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 21" width="28" height="21" role="img" aria-label="Norsk flagg">
+  <title>Norge</title>
+  <rect width="28" height="21" fill="#ba0c2f"/>
+  <!-- white cross -->
+  <rect x="8" y="0" width="4" height="21" fill="#fff"/>
+  <rect x="0" y="8.5" width="28" height="4" fill="#fff"/>
+  <!-- blue cross inside white -->
+  <rect x="9.2" y="0" width="2.4" height="21" fill="#00205b"/>
+  <rect x="0" y="9.9" width="28" height="1.2" fill="#00205b"/>
+</svg>
