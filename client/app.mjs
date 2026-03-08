@@ -284,7 +284,7 @@ async function ensureI18n()
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Move small runtime helpers from index.html into this module so HTML contains only markup.
-// TODO: Replace placeholder flag images under assets/icons/flag-*.png with real images.
+// Language flags are managed from `client/assets/flags/flags.json` and generated at runtime.
 
 // Auto-set API base for local development when served from localhost.
 if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {

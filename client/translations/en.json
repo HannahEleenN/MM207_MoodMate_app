@@ -1,11 +1,16 @@
 {
   "app.title": "MoodMate",
   "app.tagline": "Understand your feelings 🌟",
+
+  "legal.termsOfService.title": "Terms of Service",
+  "legal.privacyPolicy.title": "Privacy Policy",
+
   "register.success": "User created. You can now sign in.",
   "register.failed": "Could not register user. Please try again later.",
   "login.requireConsent": "You must accept the terms and privacy policy to sign in.",
   "login.incorrectPin": "Incorrect PIN code.",
   "login.networkError": "Could not connect to the authentication service.",
+
   "child.selectPrompt": "Select or create a child profile before logging a mood.",
   "mood.saved": "Mood saved!",
   "mood.saveFailed": "Could not save mood. Please try again later.",
@@ -41,7 +46,7 @@
   "mood.scared": "😨 Scared",
   "mood.calm": "😌 Calm",
   "mood.surprised": "😲 Surprised",
-  "child.whyTitle": "Why are you",
+  "child.whyTitle": "Why do you feel",
   "context.school": "School",
   "context.friends": "Friends",
   "context.home": "Home",

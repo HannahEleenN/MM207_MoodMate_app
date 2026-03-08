@@ -1,268 +1,262 @@
 /**
- * Singleton & State Management
- * This file acts as the single source of truth (Model) and
- * provides a unified fetch function for the entire app.
+ * singleton.mjs — Single source of truth (Model + State Management)
+ *
+ * Exports:
+ *   store          — Reactive Proxy over app state. Set properties to trigger listeners.
+ *   universalFetch — Normalised fetch wrapper (handles API base URL, auth token, HTML vs JSON).
+ *   onChange       — Subscribe to a specific state key: onChange('currentView', cb).
  */
 
-// Helper to compute absolute URL for API calls when running in dev
-function inferApiBase() {
+// ─────────────────────────────────────────────────────────────────────────────
+// API base-URL helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+function inferApiBase()
+{
     if (typeof window === 'undefined') return null;
     if (window.__API_BASE__) return window.__API_BASE__;
 
     const host = location.hostname;
-    // If served from a local preview server (ports like 63342), helpfully point to :3000
     if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) {
-        // Return the origin only (no '/api' suffix) so callers like 'api/...' become origin + '/api/...'
+        // Dev preview server → point API calls at :3000
         return `${location.protocol}//${host}:3000`;
     }
     return null;
 }
 
-function withApiBase(path) {
+function withApiBase(path)
+{
     const base = inferApiBase();
-    if (base) {
-        if (/^https?:\/\//i.test(path)) return path;
-        const p = path.replace(/^\//, '');
-        return `${base}/${p}`;
-    }
-    return path;
+    if (!base) return path;
+    if (/^https?:\/\//i.test(path)) return path;          // already absolute
+    return `${base}/${path.replace(/^\//, '')}`;
 }
 
-export async function universalFetch(url, options = {})
-{
+// ─────────────────────────────────────────────────────────────────────────────
+// universalFetch
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function universalFetch(url, options = {}) {
     try {
-        // Automatically set Content-Type for POST/PUT requests with a body
-        if (options.body && !options.headers) {
-            options.headers = { 'Content-Type': 'application/json' };
+        // Resolve API-relative paths (e.g. "api/users") to absolute URL
+        const isApiPath  = typeof url === 'string' && /^(\/)?api\//.test(url);
+        const isHtmlPath = typeof url === 'string' && /\.html$/i.test(url.split('?')[0]);
+
+        const finalUrl = isApiPath ? withApiBase(url) : url;
+
+        // Attach JSON Content-Type when a body is present and no header is set
+        if (options.body && !options.headers?.['Content-Type']) {
+            options.headers = { 'Content-Type': 'application/json', ...options.headers };
         }
 
-        // If an auth token exists in the global store, attach it as a Bearer token
+        // Attach Bearer token from store if available
         try {
-            // Note: import cycle avoidance — `store` is defined later in this file.
-            // Accessing via global/window allows universalFetch to be used before store initialisation
-            const globalStore = (typeof window !== 'undefined' && window.__STORE__) ? window.__STORE__ : null;
-            const token = globalStore ? globalStore.authToken : null;
-            if (token) {
-                options.headers = options.headers || {};
-                if (!options.headers.Authorization && !options.headers.authorization) {
-                    options.headers['Authorization'] = `Bearer ${token}`;
-                }
+            const token = (typeof window !== 'undefined' && window.__STORE__)
+                ? window.__STORE__.token
+                : null;
+            if (token && !options.headers?.Authorization) {
+                options.headers = { Authorization: `Bearer ${token}`, ...options.headers };
             }
-        } catch (e) {
-            // If window isn't available or __STORE__ isn't set yet, ignore.
-        }
+        } catch (_) { /* store not yet initialised — safe to ignore */ }
 
-        // If the request targets our API (starts with "api/") then prefix the API base
-        const finalUrl = url.startsWith('api/') ? withApiBase(url) : url;
-
-        const response = await fetch(finalUrl, options);
-
-        // Parse body in all cases so we can include useful information on errors
-        const isHtml = finalUrl.endsWith('.html');
+        const response = await fetch(finalUrl, { credentials: 'same-origin', ...options });
 
         if (!response.ok) {
-            // Try to parse JSON body, otherwise read text, otherwise provide an empty message
-            let errorBody = null;
-            try {
-                errorBody = isHtml ? await response.text() : await response.json();
-            } catch (parseErr) {
-                try { errorBody = await response.text(); } catch (_) { errorBody = null; }
-            }
+            let body = null;
+            try { body = isHtmlPath ? await response.text() : await response.json(); }
+            catch (_) { try { body = await response.text(); } catch (__) { /* ignore */ } }
 
-            const err = new Error(`Fetch error: ${response.status}`);
-            err.status = response.status;
-            err.body = errorBody;
+            const err   = new Error(`Fetch error: ${response.status}`);
+            err.status  = response.status;
+            err.body    = body;
             throw err;
         }
 
-        // Decide whether to return plain text (HTML views) or parsed JSON (API data)
-        return isHtml ? await response.text() : await response.json();
+        return isHtmlPath ? await response.text() : await response.json();
 
     } catch (err) {
-        console.error("UniversalFetch error:", err);
+        console.error('universalFetch error:', err);
         throw err;
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-// State Management with Proxy (Observer Pattern)
+// ─────────────────────────────────────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────────────────────────────────────
 
-const state = {
-    users: [],
-    moods: [],
-    currentUser: null,
-    currentChild: null, // Holds the selected child profile for mood logging
-    currentView: 'login', // Initial view for the router
-    i18n: {} // Loaded translations (key -> Norwegian string)
+const _state =
+{
+    currentView:  'login',   // drives the SPA router
+    currentUser:  null,      // logged-in parent user object
+    currentChild: null,      // selected child profile
+    users:        [],
+    profiles:     [],
+    moods:        [],
+    token:        null,      // JWT from server
+    i18n:         {}         // loaded translation strings
 };
 
-// Add a small helper to subscribe to state changes by property name.
-// Returns an unsubscribe function when called.
-state.onChange = function(property, callback)
-{
-    if (typeof callback !== 'function') return () => {};
-    const listener = (e) => {
-        if (e && e.detail && e.detail.property === property) {
-            callback(e.detail.value);
+// ─────────────────────────────────────────────────────────────────────────────
+// Listener registry  (key → Set of callbacks)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const _listeners = {};
+
+function _notify(property, value) {
+    // Targeted listeners
+    if (_listeners[property]) {
+        for (const fn of _listeners[property]) {
+            try { fn(value); } catch (e) { console.error('State listener error:', e); }
         }
-    };
-    window.addEventListener('stateChanged', listener);
-    return () => window.removeEventListener('stateChanged', listener);
-};
-
-// Simple i18n helpers: replace in-code Norwegian text with keys loaded from JSON
-// NOTE: controllers should call loadI18n(lang) on startup and use t(key) to fetch strings.
-state.loadI18n = async function(lang = 'no')
-{
-    try {
-        // Allow automatic detection when lang === 'auto'
-        let requested = lang;
-        if (lang === 'auto') {
-            // Basic browser language detection and primary subtag extraction
-            if (typeof navigator !== 'undefined') {
-                const nav = navigator.language || navigator.userLanguage || 'en';
-                requested = (nav && nav.split('-')[0]) || 'en';
-            } else {
-                requested = 'en';
-            }
-        }
-
-        // Try requested language, then fall back to Norwegian, then English
-        const attempts = [requested];
-        if (!attempts.includes('nb')) attempts.push('nb');
-        if (!attempts.includes('no')) attempts.push('no');
-        if (!attempts.includes('en')) attempts.push('en');
-
-        let res = null;
-        for (const a of attempts) {
-            try {
-                res = await universalFetch(`./locales/${a}.json`);
-                if (res && Object.keys(res).length > 0) {
-                    // Store the loaded language code so callers can know which locale is active
-                    res._lang = a;
-                    this.i18n = res;
-                    break;
-                }
-            } catch (e) {
-                // Try next fallback silently
-                // console.debug('i18n load failed for', a, e);
-            }
-        }
-
-        // If nothing loaded, keep existing i18n or empty object
-        if (!res) this.i18n = this.i18n || {};
-
-        // Notify listeners that i18n loaded
-        window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property: 'i18n', value: this.i18n } }));
-        return this.i18n;
-    } catch (err) {
-        console.error('Failed to load i18n:', err);
-        return {};
     }
+    // Wildcard listeners  onChange('*', (key, val) => …)
+    if (_listeners['*']) {
+        for (const fn of _listeners['*']) {
+            try { fn(property, value); } catch (e) { console.error('State listener error:', e); }
+        }
+    }
+
+    // Also emit a DOM CustomEvent so legacy controller code can listen via window
+    if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property, value } }));
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// onChange — subscribe to state changes
+// Usage:  const unsub = onChange('currentView', view => …);
+//         unsub();   // unsubscribe
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function onChange(key, fn) {
+    if (typeof fn !== 'function') return () => {};
+    if (!_listeners[key]) _listeners[key] = new Set();
+    _listeners[key].add(fn);
+    return () => _listeners[key]?.delete(fn);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// i18n helpers attached to _state so store.loadI18n() / store.t() work
+// ─────────────────────────────────────────────────────────────────────────────
+
+_state.loadI18n = async function (lang = 'no') {
+    let requested = lang;
+    if (lang === 'auto' && typeof navigator !== 'undefined') {
+        requested = (navigator.language || 'no').split('-')[0];
+    }
+
+    // Fallback chain: requested → nb → no → en
+    const attempts = [...new Set([requested, 'nb', 'no', 'en'])];
+
+    for (const code of attempts) {
+        try {
+            const res = await universalFetch(`./translations/${code}.json`);
+            if (res && Object.keys(res).length > 0) {
+                res._lang = code;
+                this.i18n  = res;
+                _notify('i18n', res);
+                return res;
+            }
+        } catch (_) { /* try next */ }
+    }
+
+    // Nothing loaded — keep existing translations
+    _notify('i18n', this.i18n);
+    return this.i18n;
 };
 
-state.t = function(key)
-{
-    return this.i18n && this.i18n[key] ? this.i18n[key] : key;
+_state.t = function (key) {
+    return (this.i18n && this.i18n[key]) ? this.i18n[key] : key;
 };
 
-// Simple helper to apply translations to a root element. It looks for elements with
-// data-i18n and replaces textContent. For inputs/textareas it also supports data-i18n-placeholder.
-state.applyTranslations = function(root = document)
-{
+/**
+ * Apply loaded translations to a DOM subtree.
+ * Elements with data-i18n get their textContent replaced.
+ * Elements with data-i18n-placeholder get their placeholder attribute set.
+ * Elements with data-i18n-attr="aria-label" (etc.) get that attribute set.
+ */
+_state.applyTranslations = function (root = document) {
     try {
-        const elements = root.querySelectorAll('[data-i18n]');
-        elements.forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            const text = this.t ? this.t(key) : key;
-            // If element has a data-i18n-attr attribute, set that attribute (e.g., placeholder)
+        root.querySelectorAll('[data-i18n]').forEach(el => {
+            const key  = el.getAttribute('data-i18n');
+            const text = this.t(key);
             const attr = el.getAttribute('data-i18n-attr');
-            if (attr && (attr === 'placeholder' || attr === 'title' || attr === 'aria-label')) {
+            if (attr) {
                 el.setAttribute(attr, text);
             } else {
                 el.textContent = text;
             }
         });
 
-        // Also handle placeholders using data-i18n-placeholder for convenience
-        const inputs = root.querySelectorAll('[data-i18n-placeholder]');
-        inputs.forEach(inp => {
-            const key = inp.getAttribute('data-i18n-placeholder');
-            const text = this.t ? this.t(key) : key;
-            inp.setAttribute('placeholder', text);
+        root.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            el.setAttribute('placeholder', this.t(el.getAttribute('data-i18n-placeholder')));
         });
-
     } catch (e) {
         console.error('applyTranslations error:', e);
     }
 };
 
-// Helper to change language programmatically and re-apply translations across the app
-state.setLanguage = async function(lang)
-{
+_state.setLanguage = async function (lang) {
     await this.loadI18n(lang);
-    // Re-apply translations for the current view root
-    const root = document.getElementById('app-root');
-    if (root) this.applyTranslations(root);
-
-    // Also translate static parts in index.html (modal title, skip link, etc.)
+    const appRoot = document.getElementById('app-root');
+    if (appRoot) this.applyTranslations(appRoot);
     this.applyTranslations(document);
 
-    // Optionally update document language attribute
-    try {
-        if (typeof document !== 'undefined') {
-            // Map incoming language codes to valid document language subtags
-            const langMap = {
-                'nb': 'nb', 'no': 'nb',
-                'sv': 'sv',
-                'en': 'en',
-                'es': 'es', 'da': 'da'
-            };
-            document.documentElement.lang = langMap[lang] || (lang === 'nb' || lang === 'no' ? 'nb' : (lang === 'sv' ? 'sv' : 'en'));
-        }
-    } catch (e) {}
-
-    // Notify listeners of language change
-    window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property: 'i18n', value: this.i18n } }));
+    // Sync <html lang="…">
+    const langMap = { nb: 'nb', no: 'nb', sv: 'sv', en: 'en', es: 'es', da: 'da' };
+    if (typeof document !== 'undefined') {
+        document.documentElement.lang = langMap[lang] ?? 'nb';
+    }
 };
 
-// ---------------------------------------------------------------------------------------------------------------------
-// Proxy Wrapper (Observer Pattern)
+// ─────────────────────────────────────────────────────────────────────────────
+// store — the reactive Proxy exported to the rest of the app
+// ─────────────────────────────────────────────────────────────────────────────
 
-export const store = new Proxy(state,
-{
-    set(target, property, value)
-    {
+export const store = new Proxy(_state, {
+    set(target, property, value) {
         target[property] = value;
-
-        // Notify the application (e.g., the Router) that the state has changed
-        window.dispatchEvent(new CustomEvent('stateChanged', {
-            detail: { property, value }
-        }));
-
+        _notify(property, value);
         return true;
     }
 });
 
-// Expose the store on window so universalFetch can access the token early (non-invasive)
+// Allow store.onChange(key, cb) as a convenience alias
+Object.defineProperty(store, 'onChange', { value: onChange, writable: false, configurable: false });
+
+// Expose on window so universalFetch can grab the token before the first import cycle resolves
 if (typeof window !== 'undefined') window.__STORE__ = store;
 
-// Global handler to catch unhandled promise rejections and provide clearer logging.
-// This is a log-only handler: it does not suppress or change app behavior — it only
-// prints the rejection reason and stack to help debugging.
-if (typeof window !== 'undefined')
-{
-    window.addEventListener('unhandledrejection', (event) =>
-    {
-        try {
-            const reason = event.reason;
-            // Log a readable representation of the rejection
-            console.warn('Unhandled promise rejection:', reason);
-            if (reason && reason.stack) console.warn(reason.stack);
-            // Do not call event.preventDefault() — keep browser behavior unchanged.
-        } catch (e) {
-            // Never crash due to logging
-            console.error('Error while handling unhandledrejection:', e);
+// ─────────────────────────────────────────────────────────────────────────────
+// Session restore — rehydrate token + user from localStorage on page load
+// ─────────────────────────────────────────────────────────────────────────────
+
+if (typeof window !== 'undefined') {
+    try {
+        const saved = localStorage.getItem('moodmate_session');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed?.token) {
+                store.token       = parsed.token;
+                store.currentUser = parsed.user ?? null;
+                const profiles    = parsed.user?.profiles ?? [];
+                if (profiles.length > 0) store.currentChild = profiles[0];
+            }
         }
+    } catch (e) {
+        console.warn('Failed to restore saved session:', e);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Global unhandled-rejection logger (log-only, does not change app behaviour)
+// ─────────────────────────────────────────────────────────────────────────────
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('unhandledrejection', event => {
+        try {
+            console.warn('Unhandled promise rejection:', event.reason);
+            if (event.reason?.stack) console.warn(event.reason.stack);
+        } catch (_) { /* never crash the handler */ }
     });
 }

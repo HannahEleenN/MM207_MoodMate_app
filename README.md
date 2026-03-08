@@ -110,7 +110,7 @@ The following table outlines the core features for the Minimum Viable Product (M
     ├── models/
     │   ├── user_client_model.mjs # Client user helpers
     │   └── mood_client_model.mjs # Client mood helpers (placeholder)
-    ├── locales/
+    ├── translations/
     │   ├── no.json               # Norwegian translations (keys)
     │   ├── en.json               # English translations (keys)
     │   └── sv.json               # Swedish translations (keys)
@@ -190,16 +190,88 @@ The middleware validates the JWT and enforces role-based permissions: children a
 
 ## Internationalization (I18n)
 
-**Client**
-- Locale files: `client/locales/no.json`, `client/locales/en.json`, `client/locales/sv.json`
-- On app init, `store.loadI18n('auto')` detects the browser language and loads the matching locale.
-- Views use `data-i18n` attributes; `store.applyTranslations(root)` replaces text content with localized strings.
-- Switch language at runtime via the flag buttons (top-right) or programmatically:
-```js
-  store.setLanguage('en')  // English
-  store.setLanguage('nb')  // Norwegian
-  store.setLanguage('sv')  // Swedish
+This document provides an overview of the internationalization (I18n) implementation in the app, including supported languages, file structure, and how to add new languages.
+
+### Supported Languages
+
+The app currently supports the following languages (minimum 2 required by assignment; five provided for convenience):
+
+- Norwegian (nb)
+- English (en)
+- Swedish (sv)
+- Spanish (es)
+- Danish (da)
+
+### File Structure
+
+The translation files the client loads at runtime live under `client/translations/` and each locale is a simple JSON file named after the language code (for example `no.json`, `en.json`, `sv.json`, `es.json`, `da.json`). The language-switcher uses a small manifest at `client/assets/flags/flags.json` to render flag buttons and to instruct the service worker which flag SVGs to cache for offline use.
+
+Example minimal file layout (relevant parts):
+
 ```
+client/
+├── translations/
+│   ├── no.json      # Norwegian
+│   ├── en.json      # English
+│   ├── sv.json      # Swedish
+│   ├── es.json      # Spanish
+│   └── da.json      # Danish
+└── assets/
+    └── flags/
+        ├── no.svg
+        ├── gb.svg
+        ├── se.svg
+        ├── es.svg
+        ├── dk.svg
+        ├── MoodMate_Favicon.svg
+        └── flags.json  # manifest used by the app and SW
+```
+
+To add or update a language, add a JSON file in `client/translations/` and an entry in `client/assets/flags/flags.json` that points to the flag SVG file (see the Languages & Flags subsection below).
+
+### Adding a New Language
+
+To add a new language to the app, follow these steps:
+
+1. Create a new JSON file in `client/translations/` using the ISO language code as the filename (e.g., `es.json` for Spanish). Copy the same keys as `no.json` and translate the values — the files should have the same keys and similar line structure so diffs are easy to review.
+2. Add the flag SVG file to `client/assets/flags/` (for example `es.svg` or `dk.svg`). Keep file names short and lowercase.
+3. Add or update an entry in `client/assets/flags/flags.json`. Each entry should include a language `code`, a `title` (human readable), the `file` path relative to the client root, and the `locale` used by the app. Example:
+
+```json
+{ "code": "es", "title": "Español", "file": "assets/flags/es.svg", "locale": "es" }
+```
+
+4. Ensure the new translation file is present in `client/translations/` and contains the same keys as `no.json` (see note below).
+5. Update `client/manifest.json` (if you use the favicon or add icons) and `client/service_worker.js` so the new flag and any SVG icons are added to the cache list. The service worker is tolerant to missing files but keeping `flags.json` accurate ensures offline availability.
+6. Reload the app (or clear site data) and click the new flag — the UI should switch languages.
+
+Notes on translation file consistency:
+- Use `no.json` as the canonical key source. Every translation file (e.g., `en.json`, `sv.json`, `es.json`, `da.json`) must contain the exact same keys as `no.json` (same number of lines where possible) — only the values should be translated. This makes runtime replacement reliable and reduces missing key bugs.
+- Keep JSON files readable: use 2-space indentation, place each key/value pair on its own line, and avoid trailing commas.
+
+### Language Switcher & Flags
+
+The language switcher (flags) used by the app is data-driven and reads `client/assets/flags/flags.json` to build the UI. This keeps the HTML markup static and lets you add/remove languages by editing a single manifest.
+
+- Flag SVGs must be stored under `client/assets/flags/`.
+- `flags.json` is the single source of truth for available languages.
+- The service worker reads `flags.json` at install time and attempts to cache any `file` paths listed there for offline use.
+
+Example `flags.json` structure (array of entries):
+
+```json
+[
+  { "code": "no", "title": "Norsk", "file": "assets/flags/no.svg", "locale": "no" },
+  { "code": "en", "title": "English", "file": "assets/flags/gb.svg", "locale": "en" },
+  { "code": "sv", "title": "Svenska", "file": "assets/flags/se.svg", "locale": "sv" },
+  { "code": "es", "title": "Español", "file": "assets/flags/es.svg", "locale": "es" },
+  { "code": "da", "title": "Dansk", "file": "assets/flags/dk.svg", "locale": "da" }
+]
+```
+
+Notes and best practices:
+- Keep flag SVGs small and optimized (prefer SVG with embedded shapes, not linked external images). In Illustrator, save SVGs with images embedded rather than linked so files remain portable across machines.
+- The app includes `MoodMate_Favicon.svg` in `client/assets/icons/` (and the service worker/manifest should reference it). Ensure `manifest.json` lists the icon paths you want the browser to use for install.
 
 **Server**
 - `server/utils/i18n.mjs` provides a `pickLocale(acceptLanguageHeader)` function supporting `en | nb | sv`.
@@ -294,4 +366,4 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 
 - Keep `index.html` strictly markup-only. All runtime code lives in `app.mjs` and `client/modules/`.
 - Use `data-i18n` attributes in views for translatable strings; use `store.t('key')` when building strings in JS.
-- To add new UI text: add the key to all locale files (`client/locales/*.json`) and reference it with `data-i18n` or `store.t(key)`.
+- To add new UI text: add the key to all translation files (`client/translations/*.json`) and reference it with `data-i18n` or `store.t(key)`.

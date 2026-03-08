@@ -1,7 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30" height="15" role="img" aria-label="Spansk flagg">
   <title>España</title>
-  <rect width="60" height="30" fill="#C60B1E"/>
-  <rect y="8" width="60" height="14" fill="#FFC400"/>
-  <!-- simple emblem placeholder (circle) -->
-  <circle cx="18" cy="15" r="4" fill="#C60B1E" />
+  <rect width="60" height="30" fill="#AA151B"/>
+  <rect y="7" width="60" height="16" fill="#FFC400"/>
+  <!-- simplified coat: shield + crown -->
+  <g transform="translate(20,6) scale(0.8)">
+    <rect x="6" y="4" width="12" height="12" rx="2" fill="#C60B1E" stroke="#000" stroke-width="0.4"/>
+    <circle cx="12" cy="10" r="1.8" fill="#FFC400"/>
+    <path d="M8 3 L16 3 L14 1 L10 1 Z" fill="#F0C419"/>
+  </g>
 </svg>
