@@ -16,7 +16,21 @@ const DEFAULT_BASE = (typeof window !== 'undefined' && (location.hostname === 'l
     ? `${location.protocol}//${location.hostname}:3000/api`
     : '/api';
 
-const BASE = (typeof window !== 'undefined' && window.__API_BASE__) ? window.__API_BASE__ : DEFAULT_BASE;
+// Normalize configured base so callers can always append endpoints like '/users'.
+function resolveApiBase()
+{
+    let base = (typeof window !== 'undefined' && window.__API_BASE__) ? window.__API_BASE__ : DEFAULT_BASE;
+    try {
+        // Ensure no trailing slash and append '/api' if missing
+        base = String(base).replace(/\/+$|\/$/, '');
+        if (!base.endsWith('/api')) base = base.replace(/\/+$/, '') + '/api';
+    } catch (e) {
+        if (!String(base).endsWith('/api')) base = String(base).replace(/\/+$/, '') + '/api';
+    }
+    return base;
+}
+
+const BASE = resolveApiBase();
 
 // --- API SERVICE OBJECT ---
 
@@ -50,7 +64,7 @@ export const ApiService =
          * @param {string} lang - Language code (default 'no').
          */
         loadLocale: async (lang = 'no') => {
-            return await universalFetch(`./locales/${lang}.json`);
+            return await universalFetch(`./translations/${lang}.json`);
         },
 
         // USER MANAGEMENT (CRUD)

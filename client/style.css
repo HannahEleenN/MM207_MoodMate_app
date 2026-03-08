@@ -42,7 +42,7 @@
 
 html, body {
     min-height: 100%;
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 16px;
     color: var(--text-dark);
     background: var(--cream);
@@ -108,7 +108,7 @@ section.user-manager {
 
 /* ── Typography ────────────────────────────────────────────────────────────── */
 h1, h2, h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     letter-spacing: .03em;
     color: var(--text-dark);
     line-height: 1.2;
@@ -158,9 +158,10 @@ input[type="number"],
 textarea {
     width: 100%;
     padding: .85rem 1.1rem;
-    border: 2.5px solid #e8dac8;
+    /* Use whole-pixel border to avoid fractional rendering across browsers */
+    border: 2px solid #e8dac8;
     border-radius: 1rem;
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     color: var(--text-dark);
     background: #fff;
@@ -207,7 +208,7 @@ textarea {
     color: #fff;
     border: none;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1.1rem;
     font-weight: 800;
     letter-spacing: .04em;
@@ -230,7 +231,7 @@ textarea {
     background: none;
     border: none;
     color: var(--teal);
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -244,9 +245,10 @@ textarea {
     padding: .7rem 1.4rem;
     background: transparent;
     color: var(--teal);
-    border: 2.5px solid var(--teal);
+    /* Use whole-pixel border for consistency */
+    border: 2px solid var(--teal);
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -287,9 +289,10 @@ textarea {
 .context-btn,
 .sol-btn {
     padding: .85rem .75rem;
-    border: 2.5px solid transparent;
+    /* Use whole-pixel border for consistent rendering */
+    border: 2px solid transparent;
     border-radius: 1.2rem;
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
@@ -358,7 +361,7 @@ textarea {
 .parent-actions button {
     padding: .85rem 1.2rem;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1rem;
     font-weight: 800;
     cursor: pointer;
@@ -416,10 +419,11 @@ textarea {
 .child-actions button {
     padding: .35rem .85rem;
     border-radius: 9999px;
+    /* Use whole-pixel border for consistency */
     border: 2px solid var(--teal);
     background: transparent;
     color: var(--teal);
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-weight: 700;
     font-size: .85rem;
     cursor: pointer;
@@ -488,7 +492,7 @@ section#parent-insights header {
     color: var(--text-dark);
     border: none;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 800;
     font-size: 1rem;
     cursor: pointer;
@@ -510,10 +514,10 @@ section#parent-insights header {
 .notfound-actions button {
     padding: .7rem 1.5rem;
     border-radius: var(--radius-btn);
-    border: 2.5px solid var(--teal);
+    border: 2px solid var(--teal);
     background: transparent;
     color: var(--teal);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
     cursor: pointer;
     transition: background .15s, color .15s;
@@ -555,6 +559,7 @@ section#parent-insights header {
     font-weight: 700;
     font-size: .85rem;
     cursor: pointer;
+    /* Use whole-pixel border for consistency */
     border: 2px solid var(--teal);
     background: transparent;
     color: var(--teal);

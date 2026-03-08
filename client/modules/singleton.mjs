@@ -69,14 +69,14 @@ export async function universalFetch(url, options = {}) {
             const err   = new Error(`Fetch error: ${response.status}`);
             err.status  = response.status;
             err.body    = body;
-            throw err;
+            return Promise.reject(err);
         }
 
         return isHtmlPath ? await response.text() : await response.json();
 
     } catch (err) {
         console.error('universalFetch error:', err);
-        throw err;
+        return Promise.reject(err);
     }
 }
 
@@ -116,9 +116,34 @@ function _notify(property, value) {
         }
     }
 
-    // Also emit a DOM CustomEvent so legacy controller code can listen via window
+    // Also emit a DOM event so legacy controller code can listen via window
     if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('stateChanged', { detail: { property, value } }));
+        _emitStateChanged({ property, value });
+    }
+}
+
+// Safe CustomEvent emitter with graceful fallback (avoids deprecated initCustomEvent)
+function _emitStateChanged(detail) {
+    if (typeof window === 'undefined') return;
+    try {
+        // Prefer modern constructor
+        const ev = new CustomEvent('stateChanged', { detail });
+        window.dispatchEvent(ev);
+    } catch (e) {
+        // Older environments: create a plain Event and attach detail
+        try {
+            const ev = document.createEvent('Event');
+            ev.initEvent('stateChanged', false, false);
+            ev.detail = detail; // attach detail for consumers
+            window.dispatchEvent(ev);
+        } catch (err) {
+            // As a last resort, call listeners directly (should be rare)
+            if (_listeners['*']) {
+                for (const fn of _listeners['*']) {
+                    try { fn(detail.property, detail.value); } catch (_) {}
+                }
+            }
+        }
     }
 }
 
@@ -170,16 +195,17 @@ _state.t = function (key) {
 };
 
 /**
- * Apply loaded translations to a DOM subtree.
- * Elements with data-i18n get their textContent replaced.
- * Elements with data-i18n-placeholder get their placeholder attribute set.
- * Elements with data-i18n-attr="aria-label" (etc.) get that attribute set.
+ * Apply loaded translations to a Document or Element subtree.
+ * @param {Document|Element} [root=document] - root to search for data-i18n attributes
  */
 _state.applyTranslations = function (root = document) {
     try {
-        root.querySelectorAll('[data-i18n]').forEach(el => {
+        // Ensure root supports querySelectorAll (accepts Document or Element) — fall back to document
+        const scope = (root && typeof root.querySelectorAll === 'function') ? root : document;
+
+        scope.querySelectorAll('[data-i18n]').forEach(el => {
             const key  = el.getAttribute('data-i18n');
-            const text = this.t(key);
+            const text = this.t ? this.t(key) : key;
             const attr = el.getAttribute('data-i18n-attr');
             if (attr) {
                 el.setAttribute(attr, text);
@@ -188,7 +214,7 @@ _state.applyTranslations = function (root = document) {
             }
         });
 
-        root.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        scope.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             el.setAttribute('placeholder', this.t(el.getAttribute('data-i18n-placeholder')));
         });
     } catch (e) {

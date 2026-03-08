@@ -102,8 +102,13 @@ export const authController =
                     store.currentUser = result.user;
                     // Store auth token if provided by the server
                     if (result.token) {
-                        store.authToken = result.token;
+                        store.token = result.token;
                         store.currentUser.token = result.token;
+                        // Persist session so reloads restore the user and token
+                        try {
+                            const session = { token: result.token, user: result.user };
+                            window.localStorage.setItem('moodmate_session', JSON.stringify(session));
+                        } catch (e) { console.warn('Failed to persist session:', e); }
                     }
                     // If exactly one child profile exists, auto-select and go to childMenu
                     const profiles = result.user.profiles || [];
