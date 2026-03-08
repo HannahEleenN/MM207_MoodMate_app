@@ -5,8 +5,6 @@ import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 
-// TODO: Create an SVG favicon at `client/assets/icons/Favicon_Smileys.svg` and update `index.html`/`manifest.json` to reference it when ready.
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
 
@@ -32,8 +30,8 @@ export async function showLegal(viewName)
     }
 
     try {
-        const content = await ApiService.loadView(viewName);
-        modalText.innerHTML = content;
+        // Inline the loaded content to avoid a redundant local variable
+        modalText.innerHTML = await ApiService.loadView(viewName);
         // Store focus and open modal with ARIA updates
         previouslyFocusedElement = document.activeElement;
         modal.classList.add('open');
@@ -133,16 +131,15 @@ const setupEventListeners = () =>
     // Wire language buttons (moved from index.html inline script so HTML is purely markup)
     try {
         const langBtns = document.querySelectorAll('.lang-btn');
-        langBtns.forEach(btn => btn.addEventListener('click', async (e) => {
+        langBtns.forEach(btn => btn.addEventListener('click', async () => {
             const lang = btn.getAttribute('data-lang');
             try {
                 await store.setLanguage(lang);
                 // Apply translations to static parts and current root
-                try { store.applyTranslations(document); } catch(_){}
-                try { const root = document.getElementById('app-root'); if (root) store.applyTranslations(root); } catch(_){}
-                // Re-render current view by nudging currentView (trigger router listener)
-                const current = store.currentView;
-                store.currentView = current;
+                try { store.applyTranslations(document); } catch(_){ }
+                try { const root = document.getElementById('app-root'); if (root) store.applyTranslations(root); } catch(_){ }
+                // Re-render current view by calling router() directly (avoids redundant local variable)
+                router();
             } catch (err) {
                 console.debug('Language switch failed', err);
             }
@@ -198,11 +195,13 @@ if (!customElements.get('user-manager'))
 {
     customElements.define('user-manager', class extends HTMLElement
     {
-        async connectedCallback()
-        {
-            // Import dynamically to avoid circular dependencies if needed
-            const { userUIController } = await import('./modules/controllers/userController.mjs');
-            userUIController.init(this);
+        constructor() {
+            super();
+            // Initialize asynchronously when element is created.
+            (async () => {
+                const { userUIController } = await import('./modules/controllers/userController.mjs');
+                userUIController.init(this);
+            })();
         }
     });
 }
@@ -212,10 +211,12 @@ if (!customElements.get('child-profiles'))
 {
     customElements.define('child-profiles', class extends HTMLElement
     {
-        async connectedCallback()
-        {
-            const { profileController } = await import('./modules/controllers/profile_controller.mjs');
-            profileController.init(this);
+        constructor() {
+            super();
+            (async () => {
+                const { profileController } = await import('./modules/controllers/profile_controller.mjs');
+                profileController.init(this);
+            })();
         }
     });
 }

@@ -9,6 +9,11 @@
   "orientation": "portrait",
   "icons": [
     {
+      "src": "assets/icons/MoodMate_Favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    },
+    {
       "src": "assets/icons/Favicon_Smileys.png",
       "type": "image/png",
       "sizes": "48x48"
