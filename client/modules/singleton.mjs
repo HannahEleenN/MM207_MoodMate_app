@@ -18,7 +18,9 @@ function withApiBase(path)
     return `${base}/${path.replace(/^\//, '')}`;
 }
 
-export async function universalFetch(url, options = {})
+// Core implementation (internal name) - keep as a plain async function so we can optionally reuse a
+// host-provided implementation without redeclaring the identifier.
+async function _universalFetchImpl(url, options = {})
 {
     try {
         const isApiPath = typeof url === 'string' && /^(\/?api\/)/.test(url);
@@ -58,6 +60,20 @@ export async function universalFetch(url, options = {})
     } catch (err) {
         console.error('universalFetch error:', err);
         return Promise.reject(err);
+    }
+}
+
+// Prefer a single shared implementation if the host page already installed one. This avoids accidental
+// duplicate-definition errors when modules are loaded in multiple contexts. Export a stable `universalFetch`.
+let universalFetchImpl = (typeof window !== 'undefined' && window.__UNIVERSAL_FETCH__) ? window.__UNIVERSAL_FETCH__ : _universalFetchImpl;
+
+export const universalFetch = universalFetchImpl;
+
+if (typeof window !== 'undefined') {
+    try {
+        if (!window.__UNIVERSAL_FETCH__) window.__UNIVERSAL_FETCH__ = universalFetchImpl;
+    } catch (e) {
+        // ignore
     }
 }
 

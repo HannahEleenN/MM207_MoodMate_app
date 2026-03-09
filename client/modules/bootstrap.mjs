@@ -15,7 +15,7 @@ if (typeof window !== 'undefined')
             // Only rewrite when href is relative (doesn't start with http(s):// or //)
             if (!/^(https?:)?\/\//.test(hrefAttr)) {
                 const base = String(window.__API_BASE__).replace(/\/$/, '');
-                manifestLink.href = `${base}/${hrefAttr.replace(/^\.\/|^\//, '')}`;
+                manifestLink.href = `${base}/${hrefAttr.replace(/^(?:\.\/|\/) /, '')}`;
                 manifestLink.setAttribute('href', manifestLink.href);
                 console.debug('Manifest href adjusted to', manifestLink.href);
             } else {
@@ -43,6 +43,22 @@ if (typeof window !== 'undefined')
         } catch (e) {
             // If our suppression logic fails, don't interfere with normal error handling
             console.error('Error in unhandledrejection suppression handler', e);
+        }
+    });
+
+    // Some tooling emits an Error event instead of an unhandledrejection; catch that too and suppress the same message.
+    window.addEventListener('error', (event) => {
+        try {
+            const msg = event && event.message ? String(event.message) : '';
+            if (typeof msg === 'string' && msg.includes('A listener indicated an asynchronous response')) {
+                // Prevent the error from being logged loudly in the console
+                try { event.preventDefault(); } catch (_) {}
+                try { event.stopImmediatePropagation(); } catch (_) {}
+                console.debug('Suppressed noisy extension/error event:', msg);
+            }
+        } catch (e) {
+            // Avoid masking real errors if our suppression handler throws
+            console.error('Error in error-event suppression handler', e);
         }
     });
 }
