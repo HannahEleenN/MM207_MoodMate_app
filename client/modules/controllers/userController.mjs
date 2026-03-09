@@ -95,9 +95,16 @@ export const authController =
         try {
             if (submitBtn) submitBtn.disabled = true;
 
-            // Normalize credential fields to be tolerant of backend expectations
             const email = (credentials && (credentials.email || credentials.username || credentials.user)) ? (credentials.email || credentials.username || credentials.user) : '';
             const secret = (credentials && (credentials.secret || credentials.password || credentials.pin)) ? (credentials.secret || credentials.password || credentials.pin) : '';
+
+            const emailIsValid = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!emailIsValid)
+            {
+                const el = document.getElementById('global-notice');
+                if (el) { el.textContent = store.t ? (store.t('login.invalidEmail') || 'Please enter a valid email address.') : 'Please enter a valid email address.'; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
+                return false;
+            }
 
             if (!email || !secret) {
                 this.showNotice('login.incorrectPin');
@@ -106,22 +113,37 @@ export const authController =
 
             console.log('[authController] handleLogin for', email);
 
-            // Send both fields for compatibility: some backends expect 'password', others 'secret'
             const payload = { email, secret, password: secret };
 
             let result;
             try {
                 result = await ApiService.login(payload);
-            } catch (err) {
-                // If the backend returned a JSON body, err.body should contain details (universalFetch populates it)
-                console.error('[authController] login request error', err && err.status, err && err.body ? err.body : err.message || err);
-                if (err && err.status === 401) {
-                    this.showNotice('login.incorrectPin');
-                    return false;
+            } catch (err)
+            {
+                try {
+                    if (err && err.body && typeof err.body === 'object') {
+                        console.error('[authController] login request error', err.status, JSON.stringify(err.body));
+                    } else {
+                        console.error('[authController] login request error', err && err.status, err && err.body ? err.body : err.message || err);
+                    }
+                } catch (logErr) {
+                    console.error('[authController] login request error (failed to stringify)', err, logErr);
                 }
-                this.showNotice('login.networkError');
-                return false;
-            }
+                 if (err && err.status === 401) {
+
+                    const serverMsg = err && err.body && (err.body.error || err.body.message) ? (err.body.error || err.body.message) : null;
+                    if (serverMsg) {
+                        // Create a transient notice showing the server message (assumed to be Norwegian-friendly)
+                        const el = document.getElementById('global-notice');
+                        if (el) { el.textContent = serverMsg; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
+                    } else {
+                        this.showNotice('login.incorrectPin');
+                    }
+                     return false;
+                 }
+                 this.showNotice('login.networkError');
+                 return false;
+             }
 
             console.log('[authController] login result', result && (result.user || result.token) ? (result.user?.email || result.user?.id || '[user]') : result);
 
