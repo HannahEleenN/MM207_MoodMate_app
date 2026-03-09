@@ -39,10 +39,22 @@ app.use((req, res, next) =>
     next();
 });
 
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, '../client'),
+{
+    setHeaders: (res, filePath) =>
+    {
+        if (filePath.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache');
+        } else if (filePath.match(/\.(js|mjs|css)$/)) {
+            res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+    }
+}));
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Mount routes
+
 app.use('/api/moods', moodRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/demo', demoRoutes);

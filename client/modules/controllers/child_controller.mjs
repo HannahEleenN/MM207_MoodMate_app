@@ -428,37 +428,3 @@ export const childController =
 export async function initChildApp(container, model) {
     return childController.init(container, model);
 }
-
-// TODO: Place this code the right place.
-/*
-if (form)
-{
-    form.onsubmit = async (e) =>
-    {
-        e.preventDefault();
-        const pinInput = this.container.querySelector('#child-pin-input');
-        const pin = pinInput ? pinInput.value : '';
-        try
-        {
-            // TODO: Review and improve child PIN authentication flow.
-            // Current behavior: sends plain PIN to ApiService.childLogin({ pin }) and trusts response.
-            // FIXME: Replace with a secure flow (e.g., short-lived tokens, rate-limiting, server-side checks,
-            // and do NOT store plain PINs on client or server). Also add client-side validation and
-            // helpful error messages. See issue: #TODO-FIX-CHILD-PIN for follow-up.
-            const res = await ApiService.childLogin({ pin });
-            if (res && res.child)
-            {
-                // Set currentChild in store and go to childMenu
-                store.currentChild = { id: String(res.child.id), name: res.child.name };
-                // Token handling removed per simplification - we do not store tokens client-side now
-                store.currentView = 'childMenu';
-            } else {
-                alert('Innlogging feilet');
-            }
-        } catch (err) {
-            console.error('Child login failed', err);
-            alert('Innlogging feilet');
-        }
-    };
-}
-*/

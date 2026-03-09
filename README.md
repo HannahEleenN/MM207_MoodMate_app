@@ -367,3 +367,41 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 - Keep `index.html` strictly markup-only. All runtime code lives in `app.mjs` and `client/modules/`.
 - Use `data-i18n` attributes in views for translatable strings; use `store.t('key')` when building strings in JS.
 - To add new UI text: add the key to all translation files (`client/translations/*.json`) and reference it with `data-i18n` or `store.t(key)`.
+
+This folder contains shared request/response handlers that are registered at the Express app level.
+
+When to extract logic into a shared handler
+
+- Cross-cutting concerns: request logging, CORS headers, authentication/token verification, rate-limiting, request size limiting, request body sanitization, request/response metrics.
+- When the same code is used in multiple routes or when the code affects many endpoints and is not part of a single route's core business logic.
+- When a piece of code needs to be tested independently (unit tests) or configured differently for environments.
+
+What goes in this folder
+
+- Small, focused handlers that accept (req, res, next) and either terminate the request by sending a response or call next() to continue.
+- Handlers that return a function (factory) when configuration is required, e.g., rateLimiter({ windowMs, max }).
+
+Examples in this project
+
+- `cors.mjs` — Adds permissive CORS headers and handles preflight OPTIONS requests. Useful during development when the client runs on a different origin.
+- `logger.mjs` — Logs basic API request information. Keeps the server_app file concise and makes logging behavior configurable or replaceable.
+- `privacyGuard.mjs` — Verifies a JSON Web Token and normalizes the decoded payload onto `req.user` so downstream route handlers can rely on a single shape.
+
+Naming guidance
+
+- Name files by what they are (not "middleware"). For example: `logger.mjs`, `cors.mjs`, `privacyGuard.mjs`, `rateLimiter.mjs`.
+- Export the handler as a default function when it is a single responsibility, or export factories/helpers as named exports when appropriate.
+
+Documentation
+
+- Keep small usage notes here. For larger handlers, include a short code example in the module file or add tests.
+
+Registering handlers
+
+- Register general handlers early in `server_app.mjs` (e.g., CORS, logging) so they run before route handlers.
+- Register authentication/authorization closer to the routes that need them or mount them on specific route paths (e.g., `app.use('/api/users', privacyGuard, userRoutes)`).
+
+Security note
+
+- Avoid echoing sensitive information in logs (passwords, full auth tokens).
+- Keep token secrets out of the repo and load them from environment variables.

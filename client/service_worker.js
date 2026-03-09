@@ -1,7 +1,8 @@
 "use strict";
 
-const VERSION = 'v1.3';
+const VERSION = 'v1.4';
 const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
+console.info('Service worker starting, version:', VERSION);
 const URLS_TO_CACHE = [
     '/index.html',
     '/style.css',
