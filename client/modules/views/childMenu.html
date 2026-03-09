@@ -1,12 +1,9 @@
-<!-- Mood check-in flow (3 steps) -->
-<!-- Drop-in fragment: the parent index.html must link to styles.css -->
 <section id="child-menu">
 
   <div class="progress-container">
     <div class="progress-bar" id="mood-progress" style="width: 33%"></div>
   </div>
 
-  <!-- Step 1 — Pick a mood ─────────────────────────────────────────────── -->
   <div id="step-1" class="step-container">
     <h2 data-i18n="child.hello">Hei på deg! 🌟</h2>
     <p data-i18n="child.askMood">Hvordan føler du deg akkurat nå?</p>
@@ -21,7 +18,6 @@
     </div>
   </div>
 
-  <!-- Step 2 — Why? ────────────────────────────────────────────────────── -->
   <div id="step-2" class="step-container" style="display:none">
     <h2 data-i18n="child.whyTitle">
       Hvorfor føler du deg <span id="display-mood" style="color:teal">…</span>?
@@ -34,7 +30,6 @@
     </div>
   </div>
 
-  <!-- Step 3 — What next? ──────────────────────────────────────────────── -->
   <div id="step-3" class="step-container" style="display:none">
     <h2 data-i18n="child.nextActionTitle">Hva vil du gjøre nå?</h2>
 

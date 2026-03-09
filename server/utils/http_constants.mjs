@@ -1,5 +1,5 @@
-// Small collection of HTTP status constants used by the server
-export const HTTP = {
+export const HTTP =
+{
     OK: 200,
     CREATED: 201,
     NO_CONTENT: 204,

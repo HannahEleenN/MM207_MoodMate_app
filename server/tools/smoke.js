@@ -1,9 +1,11 @@
-// Simple smoke test for the running server (checks root loads and contains expected markers)
 import { request } from 'http';
 
-function fetchText(url) {
-    return new Promise((resolve, reject) => {
-        const req = request(url, res => {
+function fetchText(url)
+{
+    return new Promise((resolve, reject) =>
+    {
+        const req = request(url, res =>
+        {
             let data = '';
             res.setEncoding('utf8');
             res.on('data', chunk => data += chunk);
@@ -14,7 +16,8 @@ function fetchText(url) {
     });
 }
 
-async function run() {
+async function run()
+{
     const base = process.env.API_BASE || 'http://localhost:3000';
     console.log('Running smoke test against', base);
     try {
@@ -25,10 +28,9 @@ async function run() {
             process.exit(2);
         }
         if (!root.body.includes('MoodMate')) {
-            console.warn('Root body does not include expected text "MoodMate" (still OK)');
+            console.warn('Root body does not include expected text "MoodMate"');
         }
 
-        // Try to load manifest and flags.json to validate assets
         try {
             const manifest = await fetchText(new URL('/manifest.json', base));
             console.log('GET /manifest.json ->', manifest.status);
@@ -55,4 +57,3 @@ async function run() {
 }
 
 run();
-

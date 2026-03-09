@@ -3,7 +3,6 @@
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <!-- Nickname removed per simplification; we derive a safe nick server-side -->
         <input type="email" name="email" placeholder="E-post" required>
         <input type="password" name="secret" placeholder="Passord" required>
         <label class="consent-label">
@@ -12,7 +11,6 @@
         <button type="submit" class="btn-reg">Registrer</button>
     </form>
 
-    <!-- Button revealed after successful registration (keep visible so users can go back to login anytime) -->
     <button id="go-to-login" class="link-btn">Gå til innlogging</button>
 
     <hr>
@@ -30,7 +28,6 @@
         </li>
     </template>
 
-    <!-- Inline edit template to avoid using prompt() -->
     <template id="user-edit-template">
         <div class="edit-inline">
             <input type="text" class="edit-input">

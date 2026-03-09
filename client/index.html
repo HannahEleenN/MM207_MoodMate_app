@@ -6,15 +6,11 @@
         <title>MoodMate - Lær om følelsene dine</title>
         <link rel="manifest" href="./manifest.json">
         <link rel="stylesheet" href="style.css">
-        <!-- Local flag images (small, inline SVG files under assets/flags) -->
-        <!-- Favicons: prefer SVG, fallback to the included PNG -->
         <link rel="icon" href="assets/icons/MoodMate_Favicon.svg" type="image/svg+xml">
         <link rel="icon" href="assets/icons/Favicon_Smileys.png" type="image/png">
     </head>
     <body>
-        <!-- Language switcher (flags) -->
         <div id="lang-switcher" class="lang-switcher" role="navigation" aria-label="Språk">
-            <!-- Buttons injected by app.mjs from assets/flags/flags.json -->
         </div>
 
         <main id="app-root" role="main">
@@ -32,7 +28,6 @@
         <!-- Global notice area for inline messages (aria-live for screen readers). Text shown here should be Norwegian. -->
         <div id="global-notice" class="notice hidden" role="status" aria-live="polite"></div>
 
-        <!-- External module scripts: bootstrap helpers and the SPA entry module -->
         <script type="module" src="modules/bootstrap.mjs"></script>
         <script type="module" src="app.mjs"></script>
     </body>

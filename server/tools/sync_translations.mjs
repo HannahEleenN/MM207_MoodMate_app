@@ -29,11 +29,9 @@ async function sync()
         try {
             const obj = await loadJson(full);
             let changed = false;
-            // Ensure all keys exist. If missing, fill with Norwegian text as placeholder
             for (const k of keys) {
                 if (!(k in obj)) { obj[k] = ref[k]; changed = true; }
             }
-            // Remove extra keys not in reference
             for (const k of Object.keys(obj)) {
                 if (!keys.includes(k)) { delete obj[k]; changed = true; }
             }
