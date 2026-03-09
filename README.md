@@ -13,34 +13,25 @@ The project follows a strict MVC pattern to ensure a clean separation between th
 
 ---
 
-## Project Management
-The project is managed using GitHub Projects. Detailed work items and task progress can be found here:
-[MoodMate Project Board](https://github.com/users/HannahEleenN/projects/3/views/1)
-
----
-
-## Deployment & Persistence
-The application is fully deployed in a production environment:
-* **Live Web Service:** [https://moodmate-server-81ta.onrender.com](https://moodmate-server-81ta.onrender.com)
-* **Database:** Externally hosted PostgreSQL on Render.
-* **Persistence:** Data remains intact even if the server restarts or crashes.
-
----
-
-## Technologies Used
-* **Frontend:** HTML5, CSS3, JavaScript (ES modules)
-* **Backend:** Node.js with Express
-* **Database:** PostgreSQL (Hosted on Render)
-* **Security:** JSON Web Tokens (JWT) for session management and bcrypt for password hashing.
-
----
-
-## Database Architecture
-The project uses a relational database to ensure data integrity and persistence:
-* `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
-* `mood_logs`: Stores mood data linked to individual users via Foreign Keys with timestamps.
-
-> **Architecture Reflection:** Thanks to the layered architecture (Controllers → Services → Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
+## Table of Contents
+- Introduction
+- Feature Map
+- Technologies Used
+- Architecture & Database
+- Scaffolding & Folder Structure
+  - /server
+  - /client
+- Deployment & Persistence
+- Local Installation & Quick Start
+- PWA & Offline Support
+- Security & Privacy Guard
+- Internationalization (I18n)
+- Accessibility
+- Testing & Lighthouse
+- Assignment Checklist
+- Quick Manual Verification
+- Key Files for Code Review
+- Developer Notes
 
 ---
 
@@ -56,6 +47,25 @@ The following table outlines the core features for the Minimum Viable Product (M
 
 ---
 
+## Technologies Used
+* **Frontend:** HTML5, CSS3, JavaScript (ES modules)
+* **Backend:** Node.js with Express
+* **Database:** PostgreSQL (Hosted on Render)
+* **Security:** JSON Web Tokens (JWT) for session management and bcrypt for password hashing.
+
+---
+
+## Architecture & Database
+The project uses a layered MVC-style architecture which keeps controllers, services/domain logic, and models (DB layer) separated. This allows easy testing and the possibility to swap storage implementations without touching the API/controller code.
+
+### Database
+* `users`: Stores unique nicknames, hashed secrets, roles, and consent status.
+* `mood_logs`: Stores mood data linked to individual users via Foreign Keys with timestamps.
+
+> **Architecture Reflection:** Thanks to the layered architecture (Controllers → Services → Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
+
+---
+
 ## Scaffolding & Folder Structure
 
 ### /server
@@ -66,11 +76,11 @@ The following table outlines the core features for the Minimum Viable Product (M
 ├── routes/
 │   ├── mood_routes.mjs           # Mood-related endpoints (protected)
 │   ├── user_routes.mjs           # User registration/login/CRUD endpoints
-│   └── child_routes.mjs          # Child profile & child-login endpoints
+│   └── demo_routes.mjs           # Demo & auxiliary endpoints (replaces older child_routes naming)
 ├── controllers/
 │   ├── mood_api_handler.mjs      # HTTP handlers for moods
 │   ├── user_api_handler.mjs      # HTTP handlers for user flows
-│   ├── child_api_handler.mjs     # Child create/login/get handlers
+│   ├── child_controller.mjs      # Child profile & child-login handlers
 │   └── user_service.mjs          # Domain/service logic used by handlers
 ├── models/
 │   ├── mood_server_model.mjs     # DB functions for mood logs
@@ -96,8 +106,20 @@ The following table outlines the core features for the Minimum Viable Product (M
 ├── serviceWorkerSetup.mjs        # SW registration helper (dev/production flags)
 ├── offline.html                  # Offline fallback page
 ├── assets/
-│   ├── icons/                    # App icons and flag placeholders (flag-nb/en/sv)
+│   ├── flags/                    # Flag SVGs and a `flags.json` manifest used by the language switcher
+│   │   ├── no.svg
+│   │   ├── gb.svg
+│   │   ├── se.svg
+│   │   ├── es.svg
+│   │   ├── dk.svg
+│   │   └── flags.json
 │   └── images/                   # Images used by views
+├── translations/                 # Runtime translation JSON files used by the client
+│   ├── no.json                   # Norwegian
+│   ├── en.json                   # English
+│   ├── sv.json                   # Swedish
+│   ├── es.json                   # Spanish
+│   └── da.json                   # Danish
 └── modules/
     ├── api.mjs                   # Centralized ApiService (single fetch wrapper)
     ├── singleton.mjs             # Global store, universalFetch, i18n helpers, applyTranslations
@@ -110,10 +132,6 @@ The following table outlines the core features for the Minimum Viable Product (M
     ├── models/
     │   ├── user_client_model.mjs # Client user helpers
     │   └── mood_client_model.mjs # Client mood helpers (placeholder)
-    ├── translations/
-    │   ├── no.json               # Norwegian translations (keys)
-    │   ├── en.json               # English translations (keys)
-    │   └── sv.json               # Swedish translations (keys)
     └── views/
         ├── login.html            # Login view
         ├── userManager.html      # Registration + user CRUD view
@@ -125,6 +143,14 @@ The following table outlines the core features for the Minimum Viable Product (M
         ├── termsOfService.html   # Terms of Service (modal content)
         └── notFound.html         # 404 / not found view
 ```
+
+---
+
+## Deployment & Persistence
+The application is fully deployed in a production environment:
+* **Live Web Service:** [https://moodmate-server-81ta.onrender.com](https://moodmate-server-81ta.onrender.com)
+* **Database:** Externally hosted PostgreSQL on Render.
+* **Persistence:** Data remains intact even if the server restarts or crashes.
 
 ---
 
@@ -185,17 +211,15 @@ The middleware validates the JWT and enforces role-based permissions: children a
 This document provides an overview of the internationalization (I18n) implementation in the app, including supported languages, file structure, and how to add new languages.
 
 ### Supported Languages
-
 The app currently supports the following languages (minimum 2 required by assignment; five provided for convenience):
 
-- Norwegian (nb)
+- Norwegian (no)
 - English (en)
 - Swedish (sv)
 - Spanish (es)
 - Danish (da)
 
 ### File Structure
-
 The translation files the client loads at runtime live under `client/translations/` and each locale is a simple JSON file named after the language code (for example `no.json`, `en.json`, `sv.json`, `es.json`, `da.json`). The language-switcher uses a small manifest at `client/assets/flags/flags.json` to render flag buttons and to instruct the service worker which flag SVGs to cache for offline use.
 
 Example minimal file layout (relevant parts):
@@ -266,7 +290,7 @@ Notes and best practices:
 - The app includes `MoodMate_Favicon.svg` in `client/assets/icons/` (and the service worker/manifest should reference it). Ensure `manifest.json` lists the icon paths you want the browser to use for install.
 
 **Server**
-- `server/utils/i18n.mjs` provides a `pickLocale(acceptLanguageHeader)` function supporting `en | nb | sv`.
+- `server/utils/i18n.mjs` provides a `pickLocale(acceptLanguageHeader)` function supporting `en | no | sv`.
 - API test:
 ```bash
   curl -H "Accept-Language: en" http://localhost:3000/api/moods
@@ -285,16 +309,8 @@ Notes and best practices:
 
 ---
 
-## Language Switcher & Flags
-
-Language switcher (flags) is located in the top-right of the app. Place flag images in `client/assets/icons/`:
-- `flag-nb.png`
-- `flag-en.png`
-- `flag-sv.png`
-
----
-
 ## Testing & Lighthouse
+
 ```powershell
 npx lighthouse http://localhost:3000 --only-categories=accessibility --emulated-form-factor=mobile --output=json --output-path=lh-accessibility.json
 ```
@@ -332,7 +348,7 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
    npm start
 ```
 2. Open `http://localhost:3000` and verify:
-    - Language switcher (top-right) changes UI text across all three languages.
+    - Language switcher (top-right) changes UI text across supported languages.
     - You can register a user, accept ToS (required), and log in.
     - You can edit and delete users in the user manager.
 3. API tests: import `tests/moodmate_api_tests.json` into Postman, run registration → login → protected requests.
