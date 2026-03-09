@@ -10,14 +10,16 @@ function inferApiBase()
     return null;
 }
 
-function withApiBase(path) {
+function withApiBase(path)
+{
     const base = inferApiBase();
     if (!base) return path;
     if (/^https?:\/\//i.test(path)) return path;
     return `${base}/${path.replace(/^\//, '')}`;
 }
 
-export async function universalFetch(url, options = {}) {
+export async function universalFetch(url, options = {})
+{
     try {
         const isApiPath = typeof url === 'string' && /^(\/?api\/)/.test(url);
         const pathOnly = typeof url === 'string' ? url.split('?')[0] : url;

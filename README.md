@@ -142,14 +142,6 @@ npm start
 http://localhost:3000
 ```
 
-### 3. Environment Variables
-Create a `.env` file in the `/server` folder:
-```bash
-DATABASE_URL=your_postgresql_url
-JWT_SECRET=your_secret_key
-PORT=3000
-```
-
 ### Service Worker in Development
 By default the setup unregisters service workers on localhost. To test locally:
 ```js
