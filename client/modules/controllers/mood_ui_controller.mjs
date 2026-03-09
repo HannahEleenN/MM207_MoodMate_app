@@ -38,12 +38,12 @@ export const moodUIController =
             }
 
         } catch (err) {
-            console.error('Kunne ikke laste innsiktsvisningen:', err);
-            // Replace container content with an error message element
-            const p = document.createElement('p');
-            p.textContent = 'Kunne ikke laste innsikter.';
-            while (container.firstChild) container.removeChild(container.firstChild);
-            container.appendChild(p);
+        console.error('[moodUI] failed to load insights view:', err);
+        // Replace container content with an error message element using i18n key
+        const p = document.createElement('p');
+        p.textContent = (store && store.t) ? store.t('insights.error') : 'Could not load insights.';
+        while (container.firstChild) container.removeChild(container.firstChild);
+        container.appendChild(p);
         }
     },
 
