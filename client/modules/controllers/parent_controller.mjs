@@ -20,6 +20,14 @@ export async function initParentApp(container)
             store.currentView = 'childProfiles';
         };
 
+        // New: allow parents to manage accounts (create other parent accounts / profile-like accounts)
+        const manageAccountsBtn = container.querySelector('#manage-accounts');
+        if (manageAccountsBtn) {
+            manageAccountsBtn.onclick = () => {
+                store.currentView = 'userManager';
+            };
+        }
+
         // Update current child display if present
         const childNameEl = container.querySelector('#child-name');
         if (childNameEl) {
@@ -48,10 +56,31 @@ export async function initParentApp(container)
             }
         };
 
+        // Logout handler: clear client-side session state
+        const logoutBtn = container.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+                // Remove auth token from store and clear current user/child
+                if (window.__STORE__) {
+                    window.__STORE__.authToken = null;
+                }
+                // Clear persisted session
+                try { window.localStorage.removeItem('moodmate_session'); } catch (_) {}
+                store.currentUser = null;
+                store.currentChild = null;
+                store.currentView = 'login';
+            };
+        }
+
     } catch (error) {
         console.error("Failed to load parent menu:", error);
         const errMsg = store.t('parent.loadError');
-        container.innerHTML = `<p>${errMsg}</p>`;
+        // Create a paragraph element and append it instead of using innerHTML with HTML content
+        const p = document.createElement('p');
+        p.textContent = errMsg;
+        // Clear container and append
+        while (container.firstChild) container.removeChild(container.firstChild);
+        container.appendChild(p);
     }
 }
 

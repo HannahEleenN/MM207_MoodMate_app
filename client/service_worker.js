@@ -28,6 +28,24 @@ self.addEventListener("install", (event) =>
             }
         }
 
+        // Try to fetch manifest.json and cache any icons listed there
+        try {
+            const mresp = await fetch('/manifest.json');
+            if (mresp && mresp.ok) {
+                const manifest = await mresp.json();
+                if (manifest && Array.isArray(manifest.icons)) {
+                    for (const icon of manifest.icons) {
+                        if (icon && icon.src) {
+                            const path = '/' + String(icon.src).replace(/^\/+/, '');
+                            try { await cache.add(path); } catch (err) { console.warn('Service worker: failed to cache manifest icon', path, err); }
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Service worker: could not load manifest.json', err);
+        }
+
         // Then try to fetch flags.json to discover additional flag assets to cache
         try {
             const resp = await fetch('/assets/flags/flags.json');
@@ -76,6 +94,26 @@ function isNavigationRequest(request) {
 self.addEventListener("fetch", (event) =>
 {
     const req = event.request;
+
+    // Runtime caching for flag assets: if a flag is requested and not cached, fetch and cache it
+    if (req.url.includes('/assets/flags/')) {
+        event.respondWith((async () => {
+            const cache = await caches.open(CACHE_NAME);
+            const cached = await cache.match(req);
+            if (cached) return cached;
+            try {
+                const resp = await fetch(req);
+                if (resp && resp.ok) {
+                    try { await cache.put(req, resp.clone()); } catch (e) { /* ignore */ }
+                    return resp;
+                }
+            } catch (e) {
+                // fallback to offline
+            }
+            return caches.match('/offline.html');
+        })());
+        return;
+    }
 
     // Try specialized handling for API requests
     if (req.url.includes('/api/')) {

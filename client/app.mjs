@@ -5,6 +5,8 @@ import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 
+console.log('[app] module loaded');
+
 // ---------------------------------------------------------------------------------------------------------------------
 // Global function to show legal documents in the modal. Exported so controllers can call it.
 
@@ -12,6 +14,8 @@ let previouslyFocusedElement = null;
 
 export async function showLegal(viewName)
 {
+    console.log('[app] showLegal called for', viewName);
+
     const modal = document.getElementById('legal-modal');
     const modalText = document.getElementById('legal-text');
     const titleEl = document.getElementById('modal-title');
@@ -57,6 +61,8 @@ async function router()
     const root = document.getElementById('app-root');
     const view = store.currentView;
 
+    console.log('[app.router] start - currentView=', view, 'root?', !!root);
+
     if (!root) return;
 
     // Clear root before loading new view to avoid ghost elements
@@ -65,8 +71,9 @@ async function router()
     switch (view) {
         case 'login':
             try {
-                console.debug('[router] rendering login view');
+                console.log('[app.router] rendering login view');
                 await authController.init(root);
+                console.log('[app.router] rendered login view');
             } catch (e) {
                 console.error('[router] authController.init failed:', e);
                 root.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innloggingsvinduet.';
@@ -78,9 +85,11 @@ async function router()
             root.appendChild(userManagerEl);
             break;
         case 'parentMenu':
+            console.log('[app.router] rendering parentMenu');
             await initParentApp(root, store);
             break;
         case 'childMenu':
+            console.log('[app.router] rendering childMenu');
             await initChildApp(root, store);
             break;
         case 'childProfiles':
@@ -91,12 +100,17 @@ async function router()
         case 'childLogin':
             // Use child login controller (merged into childController)
             try {
+                console.log('[app.router] rendering childLogin');
                 const { childController } = await import('./modules/controllers/child_controller.mjs');
                 // childController exposes an init(root) method; call it to initialize child login
                 if (typeof childController.init === 'function') {
+                    console.log('[app.router] calling childController.init');
                     await childController.init(root);
+                    console.log('[app.router] childController.init finished');
                 } else if (typeof childController['initLogin'] === 'function') {
+                    console.log('[app.router] calling childController.initLogin fallback');
                     await childController['initLogin'](root);
+                    console.log('[app.router] childController.initLogin finished');
                 } else {
                     console.error('childController has no init method; rendering fallback view');
                     // Graceful fallback: show notFound view to indicate missing controller
@@ -127,6 +141,7 @@ async function router()
     // After the view is rendered, apply translations to the new DOM
     try {
         if (store && typeof store.applyTranslations === 'function') {
+            console.log('[app.router] applying translations for view', view);
             store.applyTranslations(root);
         }
     } catch (e) {
@@ -139,29 +154,32 @@ async function router()
 
 const setupEventListeners = () =>
 {
+    console.log('[app] setupEventListeners start');
     const modal = document.getElementById('legal-modal');
 
     // Dynamically build language switcher from a simple JSON file to keep languages in one place
     try {
-        (async () =>
-        {
+        (async () => {
             try {
+                console.log('[app.lang] fetching flags.json');
                 const resp = await fetch('assets/flags/flags.json');
                 const flags = await resp.json();
+                console.log('[app.lang] flags.json loaded, count=', Array.isArray(flags) ? flags.length : 0);
                 const container = document.getElementById('lang-switcher');
                 if (container && Array.isArray(flags)) {
                     container.innerHTML = '';
                     for (const f of flags) {
+                        const { code, title, file } = f || {};
                         const btn = document.createElement('button');
                         btn.className = 'lang-btn';
-                        btn.setAttribute('data-lang', f.code);
-                        btn.setAttribute('title', f.title);
-                        btn.setAttribute('aria-label', f.title);
+                        btn.setAttribute('data-lang', code || '');
+                        btn.setAttribute('title', title || '');
+                        btn.setAttribute('aria-label', title || '');
                         btn.setAttribute('aria-pressed', 'false');
 
                         const img = document.createElement('img');
-                        img.src = f.file;
-                        img.alt = `${f.title} flag`;
+                        img.src = file || '';
+                        img.alt = `${title || ''} flag`;
                         img.width = 28;
                         img.height = 18;
                         img.style.objectFit = 'contain';
@@ -173,6 +191,7 @@ const setupEventListeners = () =>
 
                     // Determine currently selected language to mark active button
                     const currentLang = (store && store.i18n && store.i18n._lang) || (navigator && (navigator.language || navigator.userLanguage) ? (navigator.language.split('-')[0]) : null);
+                    console.log('[app.lang] currentLang detected=', currentLang);
                     const langBtns = container.querySelectorAll('.lang-btn');
                     function setActiveButton(code) {
                         langBtns.forEach(b => {
@@ -187,6 +206,7 @@ const setupEventListeners = () =>
                     // Wire the generated buttons with the existing language logic
                     langBtns.forEach(btn => btn.addEventListener('click', async () => {
                         const lang = btn.getAttribute('data-lang');
+                        console.log('[app.lang] button clicked for', lang);
                         try {
                             await store.setLanguage(lang);
                             setActiveButton(lang);
@@ -244,6 +264,8 @@ const setupEventListeners = () =>
 
     // Watch for view changes in the Store
     store.onChange('currentView', () => router());
+
+    console.log('[app] setupEventListeners end');
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -312,10 +334,12 @@ if (typeof location !== 'undefined' && (location.hostname === 'localhost' || loc
 
 document.addEventListener('DOMContentLoaded', async () =>
 {
+    console.log('[app] DOMContentLoaded start');
     setupEventListeners();
 
     // Load translations early so controllers can use store.t immediately
     await ensureI18n();
+    console.log('[app] ensureI18n complete, i18n._lang=', store.i18n && store.i18n._lang);
 
     // Mark active language button if one exists (ensure lang buttons reflect loaded locale)
     try {
@@ -351,6 +375,7 @@ document.addEventListener('DOMContentLoaded', async () =>
     // Always determine the most appropriate initial view after any session restoration
     try {
         const intended = determineInitialView();
+        console.log('[app] determineInitialView ->', intended, 'store.currentView=', store.currentView);
         if (intended !== store.currentView) store.currentView = intended;
     } catch (e) {
         // Fallback: if determineInitialView fails, ensure router runs once with currentView
