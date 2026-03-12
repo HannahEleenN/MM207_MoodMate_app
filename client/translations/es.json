@@ -11,6 +11,10 @@
   "login.incorrectPin": "Código PIN incorrecto.",
   "login.networkError": "No se pudo conectar con el servicio de autenticación.",
 
+  "auth.no_token": "Sin acceso: inicia sesión de nuevo.",
+  "auth.privacy_view_own_history": "Privacidad: solo puedes ver tu propio historial.",
+  "auth.session_expired": "Tu sesión ha expirado. Inicia sesión nuevamente.",
+
   "child.selectPrompt": "Selecciona o crea un perfil infantil antes de registrar un estado de ánimo.",
   "mood.saved": "¡Estado de ánimo guardado!",
   "mood.saveFailed": "No se pudo guardar el estado de ánimo. Intenta nuevamente más tarde.",

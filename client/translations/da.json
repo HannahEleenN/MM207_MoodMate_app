@@ -11,6 +11,10 @@
   "login.incorrectPin": "Forkert PIN-kode.",
   "login.networkError": "Kunne ikke oprette forbindelse til autentificeringstjenesten.",
 
+  "auth.no_token": "Ingen adgang: log ind igen.",
+  "auth.privacy_view_own_history": "Privatliv: du kan kun se din egen historik.",
+  "auth.session_expired": "Din session er udløbet. Log ind igjen.",
+
   "child.selectPrompt": "Vælg eller opret en profil til barnet før du logger et humør.",
   "mood.saved": "Humør gemt!",
   "mood.saveFailed": "Kunne ikke gemme humøret. Prøv igen senere.",

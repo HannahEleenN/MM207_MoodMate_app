@@ -1,11 +1,11 @@
 import express from 'express';
 import { createMood, getAllMoods, getMoodById, updateMood, deleteMood } from '../controllers/mood_api_handler.mjs';
-import { privacyGuard } from '../middleware/privacyGuard.mjs';
+import { authorizeUserIdentity } from '../middleware/privacyGuard.mjs';
 
 const router = express.Router();
 
 // All mood routes are protected by privacyGuard
-router.use(privacyGuard);
+router.use(authorizeUserIdentity);
 
 router.post('/', createMood);
 router.get('/', getAllMoods);

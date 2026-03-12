@@ -26,6 +26,10 @@
   "parent.loadError": "Feil ved lasting av foreldremeny.",
   "auth.loadError": "Feil ved lasting av innloggingssiden.",
 
+  "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
+  "auth.privacy_view_own_history": "Personvern: Du kan bare se din egen historikk.",
+  "auth.session_expired": "Sesjonen er utløpt. Vennligst logg inn igjen.",
+
   "login.title": "Logg inn",
   "login.emailLabel": "E-post",
   "login.emailPlaceholder": "forelder@eksempel.no",

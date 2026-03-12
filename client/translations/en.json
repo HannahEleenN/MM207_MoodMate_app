@@ -11,6 +11,10 @@
   "login.incorrectPin": "Incorrect PIN code.",
   "login.networkError": "Could not connect to the authentication service.",
 
+  "auth.no_token": "No access: please sign in again.",
+  "auth.privacy_view_own_history": "Privacy: you may only view your own history.",
+  "auth.session_expired": "Your session has expired. Please sign in again.",
+
   "child.selectPrompt": "Select or create a child profile before logging a mood.",
   "mood.saved": "Mood saved!",
   "mood.saveFailed": "Could not save mood. Please try again later.",

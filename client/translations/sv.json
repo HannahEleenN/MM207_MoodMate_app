@@ -11,6 +11,10 @@
   "login.incorrectPin": "Fel PIN-kod.",
   "login.networkError": "Kunde inte ansluta till autentiseringstjänsten.",
 
+  "auth.no_token": "Ingen åtkomst: logga in igen.",
+  "auth.privacy_view_own_history": "Integritet: du kan endast se din egen historik.",
+  "auth.session_expired": "Din session har löpt ut. Logga in igen.",
+
   "child.selectPrompt": "Välj eller skapa en profil för barnet innan du loggar ett humör.",
   "mood.saved": "Humör sparat!",
   "mood.saveFailed": "Kunde inte spara humöret. Försök igen senare.",

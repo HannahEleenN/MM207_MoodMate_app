@@ -1,6 +1,6 @@
 import express from 'express';
 import userController from '../controllers/user_api_handler.mjs';
-import { privacyGuard } from '../middleware/privacyGuard.mjs';
+import { authorizeUserIdentity } from '../middleware/privacyGuard.mjs';
 
 const router = express.Router();
 
@@ -15,12 +15,12 @@ router.post('/login', userController.login);
 // -- Protected routes (require authentication) ------------------------------------------------------------------------
 
 // GET /api/users - list all users (admin/debug)
-router.get('/', privacyGuard, userController.listUsers);
+router.get('/', authorizeUserIdentity, userController.listUsers);
 
 // PUT /api/users/:id - update user info
-router.put('/:id', privacyGuard, userController.updateUser);
+router.put('/:id', authorizeUserIdentity, userController.updateUser);
 
 // DELETE /api/users/:id - delete account
-router.delete('/:id', privacyGuard, userController.deleteAccount);
+router.delete('/:id', authorizeUserIdentity, userController.deleteAccount);
 
 export default router;

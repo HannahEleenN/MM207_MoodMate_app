@@ -132,10 +132,18 @@ export const authController =
                  if (err && err.status === 401) {
 
                     const serverMsg = err && err.body && (err.body.error || err.body.message) ? (err.body.error || err.body.message) : null;
+                    // Prefer a stable errorKey if provided by the server so we can translate it client-side
+                    const serverErrorKey = err && err.body && (err.body.errorKey || err.body.error_key || err.body.code) ? (err.body.errorKey || err.body.error_key || err.body.code) : null;
                     if (serverMsg) {
-                        // Create a transient notice showing the server message (assumed to be Norwegian-friendly)
+                        // If an error key exists, translate it using store.t so the message appears in the
+                        // user's selected language; otherwise show the raw server message
                         const el = document.getElementById('global-notice');
-                        if (el) { el.textContent = serverMsg; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
+                        if (el) {
+                            const text = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
+                            el.textContent = text;
+                            el.classList.remove('hidden');
+                            setTimeout(() => el.classList.add('hidden'), 3500);
+                        }
                     } else {
                         this.showNotice('login.incorrectPin');
                     }
