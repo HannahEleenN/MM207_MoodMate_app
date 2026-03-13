@@ -16,7 +16,10 @@ export const registerUser = async (req, res) =>
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
         const errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
-        return res.status(status).json({ error: errorMessage });
+        // Map some common server-side errors to stable client-side translation keys
+        const errorKey = (status === 400 && err.message && err.message.includes('samtykke')) ? 'register.requireConsent' : null;
+        const payload = errorKey ? { error: errorMessage, errorKey } : { error: errorMessage };
+        return res.status(status).json(payload);
     }
 };
 
@@ -43,6 +46,10 @@ export const loginUser = async (req, res) =>
         let errorMessage = err.message;
         if (err.message && err.message.includes('PIN')) {
             errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
+        }
+        // For authentication failures, return a stable client-side key so the UI can translate
+        if (status === 401) {
+            return res.status(401).json({ error: errorMessage, errorKey: 'login.incorrectPin' });
         }
         return res.status(status).json({ error: errorMessage });
     }

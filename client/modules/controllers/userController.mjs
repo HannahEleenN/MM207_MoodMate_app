@@ -139,8 +139,7 @@ export const authController =
                         // user's selected language; otherwise show the raw server message
                         const el = document.getElementById('global-notice');
                         if (el) {
-                            const text = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
-                            el.textContent = text;
+                            el.textContent = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
                             el.classList.remove('hidden');
                             setTimeout(() => el.classList.add('hidden'), 3500);
                         }
@@ -155,7 +154,8 @@ export const authController =
 
             console.log('[authController] login result', result && (result.user || result.token) ? (result.user?.email || result.user?.id || '[user]') : result);
 
-            if (result && (result.user || result.token)) {
+            if (result && (result.user || result.token))
+            {
                 // Some backends return { token, user }, others return user with token nested — be tolerant
                 const token = result.token || (result.user && result.user.token) || null;
                 const user = result.user || (result && !result.user && token ? null : result) || null;

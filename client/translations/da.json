@@ -13,7 +13,7 @@
 
   "auth.no_token": "Ingen adgang: log ind igen.",
   "auth.privacy_view_own_history": "Privatliv: du kan kun se din egen historik.",
-  "auth.session_expired": "Din session er udløbet. Log ind igjen.",
+  "auth.session_expired": "Din session er udløbet. Log ind igen.",
 
   "child.selectPrompt": "Vælg eller opret en profil til barnet før du logger et humør.",
   "mood.saved": "Humør gemt!",

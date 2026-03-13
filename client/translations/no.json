@@ -28,7 +28,7 @@
 
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
   "auth.privacy_view_own_history": "Personvern: Du kan bare se din egen historikk.",
-  "auth.session_expired": "Sesjonen er utløpt. Vennligst logg inn igjen.",
+  "auth.session_expired": "Sesjonen er utløpt. Vennligst logg inn på nytt.",
 
   "login.title": "Logg inn",
   "login.emailLabel": "E-post",
@@ -62,7 +62,7 @@
   "checkin.reasonTitle": "Hva gjør deg",
   "checkin.instructions": "Se på bildene eller bruk ord:",
   "checkin.contextPlaceholder": "Skriv eller fortell mer her...",
-  "checkin.next": "Gå videre ➡️",
+  "checkin.next": "Neste ➡️",
   "checkin.finish": "Ferdig! ✨",
 
   "parent.title": "Foreldrekontroll",
@@ -115,7 +115,7 @@
 
   "reason.morket": "🌑 Mørket",
   "reason.tannlegen": "🦷 Tannlegen",
-  "reason.skummel": "🎬 Skummel film",
+  "reason.skummel": "🎬 Skremmende film",
   "solution.snakke": "💬 Snakke med en voksen",
   "solution.fanget": "🤗 Sitte på fanget",
   "solution.fin-tanke": "🌈 Tenke på noe fint",

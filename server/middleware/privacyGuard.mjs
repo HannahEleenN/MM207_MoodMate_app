@@ -6,7 +6,8 @@ export const authorizeUserIdentity = (req, res, next) =>
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ error: "Ingen tilgang: Du må logge inn på nytt.", errorKey: "auth.no_token" });
+        // Return a stable error key; client will translate using i18n.
+        return res.status(401).json({ errorKey: "auth.no_token", message: "No access: you must log in again." });
     }
 
     try {
@@ -15,20 +16,21 @@ export const authorizeUserIdentity = (req, res, next) =>
 
         req.user = { ...decoded, id: decoded.userId || decoded.id };
 
-        const { id, familyId, role } = req.user;
+        const { id, role } = req.user;
 
         if (role === 'child') {
             if (req.params.userId && req.params.userId !== id) {
                 return res.status(403).json({
-                    error: "Personvern: Du kan bare se din egen historikk.",
-                    errorKey: "auth.privacy_view_own_history"
+                    errorKey: "auth.privacy_view_own_history",
+                    message: "Privacy: you can only view your own history."
                 });
             }
         }
 
         next();
     } catch (err) {
-        return res.status(403).json({ error: "Sesjonen er utløpt. Vennligst logg inn igjen.", errorKey: "auth.session_expired" });
+        // Token invalid / expired
+        return res.status(403).json({ errorKey: "auth.session_expired", message: "Session expired. Please log in again." });
     }
 
 };
