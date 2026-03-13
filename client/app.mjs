@@ -11,6 +11,7 @@ import { createUserModel } from './modules/models/user_client_model.mjs';
 console.log('[app] module loaded');
 
 let previouslyFocusedElement = null;
+let currentLegalView = null;
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -22,6 +23,101 @@ async function applyTranslations()
         }
     } catch (e) {
         console.warn('applyTranslations failed', e);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function buildLegalHtmlFromI18n(viewName)
+{
+    try
+    {
+        if (!store || !store.i18n) return null;
+        const t = (k) => (store.t ? store.t(k) : (store.i18n && store.i18n[k]) || '');
+
+        if (viewName === 'privacyPolicy')
+        {
+            const parts = [];
+            parts.push('<section class="legal-document">');
+            parts.push(`<h2>${t('privacy.title') || 'Privacy Policy'}</h2>`);
+            if (t('privacy.intro')) parts.push(`<p>${t('privacy.intro')}</p>`);
+
+            if (t('privacy.section1.title')) parts.push(`<h3>${t('privacy.section1.title')}</h3>`);
+            if (t('privacy.section1.body')) parts.push(`<p>${t('privacy.section1.body')}</p>`);
+
+            if (t('privacy.fields'))
+            {
+                parts.push(`<h4>${t('privacy.fields')}</h4>`);
+                parts.push('<ul>');
+                const fieldKeys = ['privacy.fields.id','privacy.fields.nickname','privacy.fields.scrambledSecret','privacy.fields.consentFlag','privacy.fields.childrenProfiles'];
+                for (const fk of fieldKeys)
+                {
+                    const val = t(fk);
+                    if (val) parts.push(`<li>${val}</li>`);
+                }
+                parts.push('</ul>');
+            }
+
+            for (let i = 2; i <= 5; i++) {
+                const titleK = `privacy.section${i}.title`;
+                const bodyK = `privacy.section${i}.body`;
+                if (t(titleK)) parts.push(`<h3>${t(titleK)}</h3>`);
+                if (t(bodyK)) parts.push(`<p>${t(bodyK)}</p>`);
+            }
+
+            if (t('privacy.contact') || t('privacy.section5.body')) {
+            }
+
+            parts.push('</section>');
+            return parts.join('\n');
+        }
+
+        if (viewName === 'termsOfService')
+        {
+            const parts = [];
+            parts.push('<section class="legal-document">');
+            parts.push(`<h2>${t('terms.title') || 'Terms of Service'}</h2>`);
+            if (t('terms.intro')) parts.push(`<p>${t('terms.intro')}</p>`);
+
+            for (let i = 1; i <= 6; i++)
+            {
+                const titleK = `terms.section${i}.title`;
+                const bodyK = `terms.section${i}.body`;
+                if (t(titleK)) parts.push(`<h3>${t(titleK)}</h3>`);
+                if (t(bodyK)) parts.push(`<p>${t(bodyK)}</p>`);
+            }
+
+            parts.push('</section>');
+            return parts.join('\n');
+        }
+
+        return null;
+    } catch (e) {
+        console.warn('buildLegalHtmlFromI18n failed', e);
+        return null;
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+async function updateOpenLegal()
+{
+    try
+    {
+        const modal = document.getElementById('legal-modal');
+        const modalText = document.getElementById('legal-text');
+        const titleEl = document.getElementById('modal-title');
+        if (!modal || !modalText || !titleEl) return;
+        if (!currentLegalView) return;
+        const html = buildLegalHtmlFromI18n(currentLegalView);
+        if (html)
+        {
+            modalText.innerHTML = html;
+            try { titleEl.textContent = store?.t ? store.t(`legal.${currentLegalView}.title`) : titleEl.textContent; } catch(_){ }
+            try { await store.applyTranslations(modalText); } catch(_){ }
+        }
+    } catch (e) {
+        console.warn('updateOpenLegal failed', e);
     }
 }
 
@@ -47,9 +143,19 @@ export async function showLegal(viewName)
         }
     }
 
+    currentLegalView = viewName;
+
     try
     {
-        modalText.innerHTML = await ApiService.loadView(viewName);
+        // Prefer rendering from i18n translation keys so the modal updates when language changes
+        const i18nHtml = buildLegalHtmlFromI18n(viewName);
+        if (i18nHtml) {
+            modalText.innerHTML = i18nHtml;
+        } else {
+            // Fallback to loading the static HTML view
+            modalText.innerHTML = await ApiService.loadView(viewName);
+        }
+
         previouslyFocusedElement = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
@@ -260,6 +366,18 @@ const setupEventListeners = () =>
         console.debug('Language switcher build failed', e);
     }
 
+    // update open legal modal when language / i18n changes
+    try {
+        if (store && typeof store.onChange === 'function') {
+            store.onChange('i18n', () => {
+                // if a legal modal is open, re-render from i18n
+                try { updateOpenLegal(); } catch (_) {}
+            });
+        }
+    } catch (e) {
+        console.debug('Failed to attach i18n change listener', e);
+    }
+
     document.addEventListener('click', async (e) =>
     {
         const target = e.target;
@@ -270,6 +388,7 @@ const setupEventListeners = () =>
             {
                 modal.classList.remove('open');
                 modal.setAttribute('aria-hidden', 'true');
+                currentLegalView = null;
                 if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
                     previouslyFocusedElement.focus();
                 }
@@ -300,6 +419,7 @@ const setupEventListeners = () =>
         {
             e.preventDefault();
             store.currentView = 'parentMenu';
+            return;
         }
     });
 
@@ -362,8 +482,8 @@ if (!customElements.get('child-profiles'))
             (async () =>
             {
                 try {
-                    const { profileController } = await import('./modules/controllers/profile_controller.mjs');
-                    await profileController.init(this);
+                    const { childProfilesUI } = await import('./modules/controllers/profile_controller.mjs');
+                    if (childProfilesUI && typeof childProfilesUI.init === 'function') await childProfilesUI.init(this);
                 } catch (e) {
                     console.error('child-profiles init failed', e);
                 }
@@ -374,36 +494,16 @@ if (!customElements.get('child-profiles'))
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-function determineInitialView()
-{
-    if (store?.currentUser && store?.currentChild) return 'childMenu';
-    if (store?.currentUser) return 'parentMenu';
-    return 'login';
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-async function ensureI18n()
-{
-    if (!store?.i18n || Object.keys(store.i18n).length === 0) {
-        await store.loadI18n('auto');
-    }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-async function initApp()
-{
-    await ensureI18n();
-    store.currentView = determineInitialView();
-    setupEventListeners();
-    await router();
+// Initialize i18n and UI
+(async function initApp() {
     try {
-        await import('./serviceWorkerSetup.mjs');
-    } catch (e)
-    {
-        console.warn('Service worker setup failed', e);
+        await store.loadI18n('auto');
+    } catch (e) {
+        console.warn('i18n bootstrap failed', e);
     }
-}
 
-initApp().catch(e => console.error('initApp failed', e));
+    try { setupEventListeners(); } catch (e) { console.warn('setupEventListeners failed', e); }
+
+    // initial router render
+    try { await router(); } catch (e) { console.error('Initial router failed', e); }
+})();

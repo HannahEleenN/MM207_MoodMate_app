@@ -220,82 +220,59 @@ The app currently supports the following languages (minimum 2 required by assign
 - Spanish (es)
 - Danish (da)
 
-### File Structure
-The translation files the client loads at runtime live under `client/translations/` and each locale is a simple JSON file named after the language code (for example `no.json`, `en.json`, `sv.json`, `es.json`, `da.json`). The language-switcher uses a small manifest at `client/assets/flags/flags.json` to render flag buttons and to instruct the service worker which flag SVGs to cache for offline use.
+## Language switcher & flags
 
-Example minimal file layout (relevant parts):
+The client ships with a simple language switcher that uses flag SVGs from `client/assets/flags/` and a small manifest file `client/assets/flags/flags.json` which lists available locales. Below are concise, practical steps to add a new language/flag and wire it into the app.
 
-```
-client/
-├── translations/
-│   ├── no.json      # Norwegian
-│   ├── en.json      # English
-│   ├── sv.json      # Swedish
-│   ├── es.json      # Spanish
-│   └── da.json      # Danish
-└── assets/
-    └── flags/
-        ├── no.svg
-        ├── gb.svg
-        ├── se.svg
-        ├── es.svg
-        ├── dk.svg
-        ├── MoodMate_Favicon.svg
-        └── flags.json  # manifest used by the app and SW
-```
+1) Add the flag image
+- Place a small SVG (recommended 24×24 or 32×32) into `client/assets/flags/` and name it with the two-letter locale code (e.g. `es.svg` for Spanish). Use lightweight SVGs to keep the asset size small.
 
-To add or update a language, add a JSON file in `client/translations/` and an entry in `client/assets/flags/flags.json` that points to the flag SVG file (see the Languages & Flags subsection below).
+2) Update the `flags.json` manifest
+- Edit `client/assets/flags/flags.json` to add an entry for the new locale. The manifest is an array of objects with these properties: `code` (locale code), `label` (human readable name), and `file` (file name of the SVG).
+- Example manifest entry (JSON):
 
-### Adding a New Language
+  {
+    "code": "es",
+    "label": "Español",
+    "file": "es.svg"
+  }
 
-To add a new language to the app, follow these steps:
+- Keep the `code` value consistent with the translation file name in `client/translations/` (for example `es.json`). The client reads this manifest to render the language picker.
 
-1. Create a new JSON file in `client/translations/` using the ISO language code as the filename (e.g., `es.json` for Spanish). Copy the same keys as `no.json` and translate the values — the files should have the same keys and similar line structure so diffs are easy to review.
-2. Add the flag SVG file to `client/assets/flags/` (for example `es.svg` or `dk.svg`). Keep file names short and lowercase.
-3. Add or update an entry in `client/assets/flags/flags.json`. Each entry should include a language `code`, a `title` (human readable), the `file` path relative to the client root, and the `locale` used by the app. Example:
+3) Add a flag button in the UI
+- Add a focusable button in a header or toolbar (for example in `index.html` or a shared header view). A minimal accessible example:
 
-```json
-{ "code": "es", "title": "Español", "file": "assets/flags/es.svg", "locale": "es" }
-```
+  <button class="lang-btn" data-lang="es" aria-label="Switch to Spanish">
+    <img src="/client/assets/flags/es.svg" alt="Español" width="24" height="24">
+  </button>
 
-4. Ensure the new translation file is present in `client/translations/` and contains the same keys as `no.json` (see note below).
-5. Update `client/manifest.json` (if you use the favicon or add icons) and `client/service_worker.js` so the new flag and any SVG icons are added to the cache list. The service worker is tolerant to missing files but keeping `flags.json` accurate ensures offline availability.
-6. Reload the app (or clear site data) and click the new flag — the UI should switch languages.
+- Use a real `<button>` (not a div) and include an `aria-label` and a descriptive `alt` on the image for screen readers.
 
-Notes on translation file consistency:
-- Use `no.json` as the canonical key source. Every translation file (e.g., `en.json`, `sv.json`, `es.json`, `da.json`) must contain the exact same keys as `no.json` (same number of lines where possible) — only the values should be translated. This makes runtime replacement reliable and reduces missing key bugs.
-- Keep JSON files readable: use 2-space indentation, place each key/value pair on its own line, and avoid trailing commas.
+4) Wire the button to the i18n loader
+- The app exposes a translation loader/locale setter in `client/modules/singleton.mjs` (or via `bootstrap.mjs`). Hook your button's click handler to call the existing API rather than reimplementing the loader. Conceptually:
 
-### Language Switcher & Flags
+  // on click of .lang-btn
+  const targetLocale = evt.currentTarget.dataset.lang;
+  store.setLocale(targetLocale); // or call the project's applyTranslations/loader function
 
-The language switcher (flags) used by the app is data-driven and reads `client/assets/flags/flags.json` to build the UI. This keeps the HTML markup static and lets you add/remove languages by editing a single manifest.
+- If your app caches the chosen locale (localStorage), the existing `singleton` should already handle persistence; otherwise persist the value so the choice survives reloads.
 
-- Flag SVGs must be stored under `client/assets/flags/`.
-- `flags.json` is the single source of truth for available languages.
-- The service worker reads `flags.json` at install time and attempts to cache any `file` paths listed there for offline use.
+5) Add the translation file
+- Create or update `client/translations/<code>.json` (for example `client/translations/es.json`) using the same keys used by other locales. The legal copy for `privacy.*` and `terms.*` lives in these files too.
 
-Example `flags.json` structure (array of entries):
+6) Accessibility & keyboard support
+- Ensure the language buttons are reachable by Tab and operable with Enter/Space. If you use a grouped control, apply ARIA attributes (for example `role="radiogroup"` and `aria-checked`) for better assistive technology support.
 
-```json
-[
-  { "code": "no", "title": "Norsk", "file": "assets/flags/no.svg", "locale": "no" },
-  { "code": "en", "title": "English", "file": "assets/flags/gb.svg", "locale": "en" },
-  { "code": "sv", "title": "Svenska", "file": "assets/flags/se.svg", "locale": "sv" },
-  { "code": "es", "title": "Español", "file": "assets/flags/es.svg", "locale": "es" },
-  { "code": "da", "title": "Dansk", "file": "assets/flags/dk.svg", "locale": "da" }
-]
-```
+7) Service Worker and caching
+- If the service worker precaches assets, add the new SVG and `flags.json` to the precache list or bump the cache version so the new asset is available offline.
 
-Notes and best practices:
-- Keep flag SVGs small and optimized (prefer SVG with embedded shapes, not linked external images). In Illustrator, save SVGs with images embedded rather than linked so files remain portable across machines.
-- The app includes `MoodMate_Favicon.svg` in `client/assets/icons/` (and the service worker/manifest should reference it). Ensure `manifest.json` lists the icon paths you want the browser to use for install.
+8) Testing
+- After wiring, verify the UI updates immediately and the language selection persists (if supported). Manually inspect the `privacyPolicy` and `termsOfService` views to ensure the localized legal copy loads from `client/translations/*.json`.
 
-**Server**
-- `server/utils/i18n.mjs` provides a `pickLocale(acceptLanguageHeader)` function supporting `en | no | sv`.
-- API test:
-```bash
-  curl -H "Accept-Language: en" http://localhost:3000/api/moods
-```
+## Troubleshooting
+- 404 on the image: confirm the path `/client/assets/flags/<file>` exists and the `file` field in `flags.json` matches exactly.
+- Missing translations: ensure `client/translations/<code>.json` exists and is valid JSON.
+- Server-side messages: if the server reads `client/translations/en.json` at runtime (see `server/messages.mjs`), make sure the process can read the file.
 
 ---
 
