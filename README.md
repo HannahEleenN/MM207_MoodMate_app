@@ -125,13 +125,13 @@ The project uses a layered MVC-style architecture which keeps controllers, servi
     ├── singleton.mjs             # Global store, universalFetch, i18n helpers, applyTranslations
     ├── bootstrap.mjs             # Small runtime helpers (dev API base, suppression)
     ├── controllers/
-    │   ├── userController.mjs    # Registration/login/user management UI logic
-    │   ├── child_controller.mjs  # Child mood check-in flow controller
-    │   ├── parent_controller.mjs # Parent dashboard controller
-    │   └── mood_ui_controller.mjs# Insights & data visualization
+    │   ├── userController.mjs      # Registration/login/user management UI logic
+    │   ├── child_controller.mjs    # Child mood check-in flow controller
+    │   ├── parent_controller.mjs   # Parent dashboard controller
+    │   └── mood_ui_controller.mjs  # Insights & data visualization
     ├── models/
-    │   ├── user_client_model.mjs # Client user helpers
-    │   └── mood_client_model.mjs # Client mood helpers (placeholder)
+    │   ├── profile_client_model.mjs   # Client child profile helpers
+    │   └── user_client_model.mjs      # Client user helpers
     └── views/
         ├── login.html            # Login view
         ├── userManager.html      # Registration + user CRUD view

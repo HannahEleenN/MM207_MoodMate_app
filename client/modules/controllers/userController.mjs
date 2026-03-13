@@ -2,12 +2,7 @@ import { ApiService } from "../api.mjs";
 import { store } from "../singleton.mjs";
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Combined User Controller
-// Exports two named controller objects to preserve existing usage:
-// - authController: handles login view and authentication
-// - userUIController: handles user registration / management (userManager view)
 
-// Authentication controller (login)
 export const authController =
 {
     async init(container)
@@ -17,32 +12,27 @@ export const authController =
         {
             this.container = container;
 
-            // Ensure translations are loaded
             if (!store.i18n || Object.keys(store.i18n).length === 0) {
                 await store.loadI18n('no');
             }
 
-            // Load the view from the server/API
             this.container.innerHTML = await ApiService.loadView('login');
 
-            // Bind UI elements
             const form = this.container.querySelector('#loginForm');
             const registerBtn = this.container.querySelector('#go-to-reg');
 
-            // If a prefill secret exists (set after successful registration), prefill the password
-            if (store.prefillSecret) {
+            if (store.prefillSecret)
+            {
                 const passwordInput = this.container.querySelector('#password-input');
                 if (passwordInput) passwordInput.value = store.prefillSecret;
-                // Clear prefill after inserting it once
                 delete store.prefillSecret;
             }
 
-            // Set focus to email input for accessibility
             const emailInput = this.container.querySelector('#email-input');
             if (emailInput) try { emailInput.focus(); } catch (_) {}
 
-            // Setup form submission
-            if (form) {
+            if (form)
+            {
                 form.onsubmit = async (e) =>
                 {
                     e.preventDefault();
@@ -58,7 +48,6 @@ export const authController =
                 };
             }
 
-            // Navigation to registration
             if (registerBtn)
             {
                 registerBtn.onclick = (e) =>
@@ -75,9 +64,8 @@ export const authController =
             if (this.container) this.container.textContent = errMsg;
         }
 
-    }, // End of init()
+    },
 
-    // Small helper to show a Norwegian UI notice using #global-notice
     showNotice(messageKey)
     {
         const el = document.getElementById('global-notice');
@@ -92,7 +80,8 @@ export const authController =
         const form = this.container ? this.container.querySelector('#loginForm') : null;
         const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
 
-        try {
+        try
+        {
             if (submitBtn) submitBtn.disabled = true;
 
             const email = (credentials && (credentials.email || credentials.username || credentials.user)) ? (credentials.email || credentials.username || credentials.user) : '';
@@ -120,7 +109,8 @@ export const authController =
                 result = await ApiService.login(payload);
             } catch (err)
             {
-                try {
+                try
+                {
                     if (err && err.body && typeof err.body === 'object') {
                         console.error('[authController] login request error', err.status, JSON.stringify(err.body));
                     } else {
@@ -129,24 +119,32 @@ export const authController =
                 } catch (logErr) {
                     console.error('[authController] login request error (failed to stringify)', err, logErr);
                 }
-                 if (err && err.status === 401) {
-
+                 if (err && err.status === 401)
+                 {
                     const serverMsg = err && err.body && (err.body.error || err.body.message) ? (err.body.error || err.body.message) : null;
-                    // Prefer a stable errorKey if provided by the server so we can translate it client-side
-                    const serverErrorKey = err && err.body && (err.body.errorKey || err.body.error_key || err.body.code) ? (err.body.errorKey || err.body.error_key || err.body.code) : null;
-                    if (serverMsg) {
-                        // If an error key exists, translate it using store.t so the message appears in the
-                        // user's selected language; otherwise show the raw server message
-                        const el = document.getElementById('global-notice');
-                        if (el) {
-                            el.textContent = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
-                            el.classList.remove('hidden');
-                            setTimeout(() => el.classList.add('hidden'), 3500);
+
+                    let serverErrorKey = null;
+                    if (err && err.body && typeof err.body === 'object')
+                    {
+                        serverErrorKey = err.body.errorKey || err.body.code || null;
+
+                        if (!serverErrorKey && Object.prototype.hasOwnProperty.call(err.body, 'error_key')) {
+                            serverErrorKey = err.body['error_key'];
                         }
-                    } else {
-                        this.showNotice('login.incorrectPin');
                     }
-                     return false;
+                     if (serverMsg)
+                     {
+                         const el = document.getElementById('global-notice');
+                         if (el)
+                         {
+                             el.textContent = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
+                             el.classList.remove('hidden');
+                             setTimeout(() => el.classList.add('hidden'), 3500);
+                         }
+                     } else {
+                         this.showNotice('login.incorrectPin');
+                     }
+                      return false;
                  }
                  this.showNotice('login.networkError');
                  return false;
@@ -156,22 +154,22 @@ export const authController =
 
             if (result && (result.user || result.token))
             {
-                // Some backends return { token, user }, others return user with token nested — be tolerant
                 const token = result.token || (result.user && result.user.token) || null;
                 const user = result.user || (result && !result.user && token ? null : result) || null;
 
                 if (user) store.currentUser = user;
-                if (token) {
+                if (token)
+                {
                     store.token = token;
                     try { window.__STORE__ = window.__STORE__ || {}; window.__STORE__.token = token; } catch (_) {}
-                    try {
+                    try
+                    {
                         const session = { token, user: store.currentUser };
                         window.localStorage.setItem('moodmate_session', JSON.stringify(session));
                     } catch (e) { console.warn('Failed to persist session:', e); }
                     console.log('[authController] stored token (len)', token ? String(token).length : 0);
                 }
 
-                // Navigate: if a single child profile exists, go directly to childMenu
                 const profiles = (store.currentUser && store.currentUser.profiles) ? store.currentUser.profiles : [];
                 if (profiles && profiles.length === 1) {
                     store.currentChild = profiles[0];
@@ -186,7 +184,8 @@ export const authController =
                 return false;
             }
 
-        } catch (error) {
+        } catch (error)
+        {
             console.error('Unexpected login failure:', error);
             this.showNotice('login.networkError');
             return false;
@@ -194,24 +193,17 @@ export const authController =
             if (submitBtn) submitBtn.disabled = false;
         }
 
-    }, // End of handleLogin()
-
-    async doLogout() {
-        console.log('[authController] doLogout');
-        await ApiService.logout();
-    }
-
-}; // End of authController
+    },
+};
 
 // ---------------------------------------------------------------------------------------------------------------------
-// User UI Controller (registration and account management)
+
 export const userUIController =
 {
     async init(container)
     {
         this.container = container;
 
-        // Ensure translations are loaded
         if (!store.i18n || Object.keys(store.i18n).length === 0) {
             await store.loadI18n('no');
         }
@@ -222,7 +214,8 @@ export const userUIController =
         const list = this.container.querySelector("#user-list");
         const goToLoginBtn = this.container.querySelector('#go-to-login');
 
-        if (form) {
+        if (form)
+        {
             form.onsubmit = async (e) =>
             {
                 e.preventDefault();
@@ -231,8 +224,10 @@ export const userUIController =
             };
         }
 
-        if (goToLoginBtn) {
-            goToLoginBtn.onclick = (e) => {
+        if (goToLoginBtn)
+        {
+            goToLoginBtn.onclick = (e) =>
+            {
                 e.preventDefault();
                 store.currentView = 'login';
             };
@@ -241,7 +236,6 @@ export const userUIController =
         this.loadUserList(list);
     },
 
-    // Small helper to show a Norwegian UI notice using #global-notice
     showNotice(messageKey)
     {
         const el = document.getElementById('global-notice');
@@ -254,18 +248,19 @@ export const userUIController =
     async handleRegister(formData)
     {
         let btn = this.container.querySelector(".btn-reg");
-        try {
+        try
+        {
             if (btn) btn.disabled = true;
 
             const consentCheckbox = this.container.querySelector('#consent-check');
 
-            // Enforce that the checkbox must be checked before attempting to register
             if (!(consentCheckbox && consentCheckbox.checked)) {
                 this.showNotice('register.requireConsent');
                 return;
             }
 
-            const payload = {
+            const payload =
+            {
                 email: formData.email,
                 secret: formData.secret,
                 hasConsented: !!(consentCheckbox && consentCheckbox.checked)
@@ -281,7 +276,6 @@ export const userUIController =
                 const goBtn = this.container.querySelector('#go-to-login');
                 if (goBtn) goBtn.classList.remove('hidden');
 
-                // Prefill the login password when navigating to login for convenience
                 if (formData && formData.secret) {
                     store.prefillSecret = formData.secret;
                 }
@@ -305,8 +299,8 @@ export const userUIController =
         const editTemplate = this.container.querySelector('#user-edit-template');
         if (!editTemplate) return;
 
-        // Prevent multiple editors on the same item
-        if (item.querySelector('.edit-inline')) {
+        if (item.querySelector('.edit-inline'))
+        {
             const existingInput = item.querySelector('.edit-input');
             if (existingInput) existingInput.focus();
             return;
@@ -318,12 +312,15 @@ export const userUIController =
         input.value = oldEmail || '';
         input.setAttribute('aria-label', store.t ? store.t('edit.emailLabel') : 'Edit email');
 
-        editDiv.querySelector('.save-edit').onclick = async () => {
+        editDiv.querySelector('.save-edit').onclick = async () =>
+        {
             const newEmail = input.value.trim();
             if (!newEmail || newEmail === oldEmail) { editDiv.remove(); return; }
-            try {
+            try
+            {
                 const result = await ApiService.updateUser(id, { email: newEmail });
-                if (result) {
+                if (result)
+                {
                     store.users = store.users.map(user =>
                         user.id === id ? { ...user, email: newEmail } : user
                     );
@@ -340,7 +337,6 @@ export const userUIController =
 
         item.appendChild(clone);
 
-        // Focus the input after appending for accessibility
         const addedInput = item.querySelector('.edit-input');
         if (addedInput) addedInput.focus();
     },
@@ -349,7 +345,8 @@ export const userUIController =
     {
         const confirmMsg = store.t('delete.confirm');
         if (!confirm(confirmMsg)) return;
-        try {
+        try
+        {
             await ApiService.deleteUser(id);
             store.users = store.users.filter(user => user.id !== id);
             this.loadUserList(this.container.querySelector("#user-list"));
@@ -387,5 +384,4 @@ export const userUIController =
             listElement.appendChild(clone);
         });
     }
-
-}; // End of userUIController
+};

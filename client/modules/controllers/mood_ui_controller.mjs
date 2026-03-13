@@ -1,32 +1,33 @@
 import { ApiService } from '../api.mjs';
+import {store} from "../singleton.mjs";
 
 // ---------------------------------------------------------------------------------------------------------------------
-// Controller for the Mood Insights view, which shows a history of mood entries and allows saving new moods.
 
 export const moodUIController =
 {
     async initInsights(container)
     {
-        try {
-            // Load insights HTML view into container
+        try
+        {
             container.innerHTML = await ApiService.loadView('insights');
 
-            // Fetch mood history
             const resp = await ApiService.getAllMoods();
             const entries = (resp && resp.moods) ? resp.moods : (Array.isArray(resp) ? resp : []);
 
-            // Render history table rows
             const historyList = container.querySelector('#history-list');
-            if (historyList) {
+            if (historyList)
+            {
                 historyList.innerHTML = '';
-                for (const e of entries) {
+                for (const e of entries)
+                {
                     const tr = document.createElement('tr');
                     const dateStr = new Date(e.date || e.createdAt || e.timestamp || Date.now()).toLocaleDateString();
-                    // Be tolerant with different API shapes: prefer e.child or e.childName
-                    const child = e.child || e.childName || e.profileName || '—';
-                    // Normalize mood property: e.mood preferred, fall back to e.feeling
-                    const mood = e.mood || e.feeling || e.feelingLabel || '—';
-                    const context = e.context || e.reason || '—';
+
+                    const { child: childProp, childName, profileName, mood: moodProp, feeling, feelingLabel, context: contextProp, reason } = e || {};
+                    const child = childProp || childName || profileName || '—';
+
+                    const mood = moodProp || feeling || feelingLabel || '—';
+                    const context = contextProp || reason || '—';
 
                     const tdDate = document.createElement('td'); tdDate.textContent = dateStr; tr.appendChild(tdDate);
                     const tdChild = document.createElement('td'); tdChild.textContent = child; tr.appendChild(tdChild);
@@ -37,9 +38,9 @@ export const moodUIController =
                 }
             }
 
-        } catch (err) {
+        } catch (err)
+        {
         console.error('[moodUI] failed to load insights view:', err);
-        // Replace container content with an error message element using i18n key
         const p = document.createElement('p');
         p.textContent = (store && store.t) ? store.t('insights.error') : 'Could not load insights.';
         while (container.firstChild) container.removeChild(container.firstChild);

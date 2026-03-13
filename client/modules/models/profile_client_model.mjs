@@ -1,16 +1,16 @@
 import { store } from '../singleton.mjs';
 
-// Profile Model
-// Responsible for storing and manipulating child profiles in the client-side model.
-// Controllers should call these functions and not mutate store.currentUser or store.profiles directly.
+// ---------------------------------------------------------------------------------------------------------------------
 
-export const ProfileModel = {
+export const ProfileModel =
+{
   getAll() {
     if (store.currentUser) return store.currentUser.profiles || [];
     return store.profiles || [];
   },
 
-  create(profile) {
+  create(profile)
+  {
     const p = { id: Date.now().toString(), ...profile };
     if (store.currentUser) {
       store.currentUser = { ...store.currentUser, profiles: [...(store.currentUser.profiles || []), p] };
@@ -20,7 +20,8 @@ export const ProfileModel = {
     return p;
   },
 
-  update(id, data) {
+  update(id, data)
+  {
     if (store.currentUser) {
       const profiles = (store.currentUser.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
       store.currentUser = { ...store.currentUser, profiles };
@@ -31,7 +32,8 @@ export const ProfileModel = {
     return profiles.find(p => p.id === id);
   },
 
-  delete(id) {
+  delete(id)
+  {
     if (store.currentUser) {
       store.currentUser = { ...store.currentUser, profiles: (store.currentUser.profiles || []).filter(p => p.id !== id) };
     } else {
@@ -40,11 +42,11 @@ export const ProfileModel = {
     if (store.currentChild && store.currentChild.id === id) store.currentChild = null;
   },
 
-  select(id) {
+  select(id)
+  {
     const profiles = this.getAll();
     const found = profiles.find(p => p.id === id);
     if (found) store.currentChild = found;
     return found || null;
   }
 };
-

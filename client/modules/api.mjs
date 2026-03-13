@@ -88,6 +88,10 @@ export const ApiService = {
         return await universalFetch(`${BASE}/children`, { method: 'POST', body: JSON.stringify(payload) });
     },
 
+    async childLogin(payload) {
+        return await universalFetch(`${BASE}/children/login`, { method: 'POST', body: JSON.stringify(payload) });
+    },
+
     async saveMood(moodData) {
         return await universalFetch(`${BASE}/moods`, { method: 'POST', body: JSON.stringify(moodData) });
     },

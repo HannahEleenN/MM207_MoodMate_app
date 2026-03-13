@@ -4,10 +4,15 @@ import { authController } from './modules/controllers/userController.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
+import { createUserModel } from './modules/models/user_client_model.mjs';
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 console.log('[app] module loaded');
 
 let previouslyFocusedElement = null;
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export async function showLegal(viewName)
 {
@@ -19,7 +24,8 @@ export async function showLegal(viewName)
 
     if (!modal || !modalText) return;
 
-    if (titleEl) {
+    if (titleEl)
+    {
         try {
             const tKey = `legal.${viewName}.title`;
             titleEl.textContent = (store.t ? store.t(tKey) : null) || (viewName === 'termsOfService' ? 'Vilkår' : (viewName === 'privacyPolicy' ? 'Personvern' : 'Vilkår og personvern'));
@@ -28,14 +34,16 @@ export async function showLegal(viewName)
         }
     }
 
-    try {
+    try
+    {
         modalText.innerHTML = await ApiService.loadView(viewName);
         previouslyFocusedElement = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) closeBtn.focus();
-    } catch (error) {
+    } catch (error)
+    {
         console.error("Could not load legal view:", error);
         modalText.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
         previouslyFocusedElement = document.activeElement;
@@ -45,6 +53,8 @@ export async function showLegal(viewName)
         if (closeBtn) closeBtn.focus();
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 async function router()
 {
@@ -57,9 +67,11 @@ async function router()
 
     root.innerHTML = '';
 
-    switch (view) {
+    switch (view)
+    {
         case 'login':
-            try {
+            try
+            {
                 console.log('[app.router] rendering login view');
                 await authController.init(root);
                 console.log('[app.router] rendered login view');
@@ -85,14 +97,17 @@ async function router()
             root.appendChild(childProfilesEl);
             break;
         case 'childLogin':
-            try {
+            try
+            {
                 console.log('[app.router] rendering childLogin');
                 const { childController } = await import('./modules/controllers/child_controller.mjs');
-                if (typeof childController.init === 'function') {
+                if (typeof childController.init === 'function')
+                {
                     console.log('[app.router] calling childController.init');
                     await childController.init(root);
                     console.log('[app.router] childController.init finished');
-                } else if (typeof childController['initLogin'] === 'function') {
+                } else if (typeof childController['initLogin'] === 'function')
+                {
                     console.log('[app.router] calling childController.initLogin fallback');
                     await childController['initLogin'](root);
                     console.log('[app.router] childController.initLogin finished');
@@ -130,22 +145,29 @@ async function router()
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 const setupEventListeners = () =>
 {
     console.log('[app] setupEventListeners start');
     const modal = document.getElementById('legal-modal');
 
-    try {
-        (async () => {
-            try {
+    try
+    {
+        (async () =>
+        {
+            try
+            {
                 console.log('[app.lang] fetching flags.json');
                 const resp = await fetch('assets/flags/flags.json');
                 const flags = await resp.json();
                 console.log('[app.lang] flags.json loaded, count=', Array.isArray(flags) ? flags.length : 0);
                 const container = document.getElementById('lang-switcher');
-                if (container && Array.isArray(flags)) {
+                if (container && Array.isArray(flags))
+                {
                     container.innerHTML = '';
-                    for (const f of flags) {
+                    for (const f of flags)
+                    {
                         const { code, title, file } = f || {};
                         const btn = document.createElement('button');
                         btn.className = 'lang-btn';
@@ -168,9 +190,12 @@ const setupEventListeners = () =>
 
                     const currentLang = (store && store.i18n && store.i18n._lang) || (navigator && (navigator.language || navigator.userLanguage) ? (navigator.language.split('-')[0]) : null);
                     console.log('[app.lang] currentLang detected=', currentLang);
-                    const langBtns = container.querySelectorAll('.lang-btn');
-                    function setActiveButton(code) {
-                        langBtns.forEach(b => {
+                    const languageButtons = container.querySelectorAll('.lang-btn');
+
+                    function setActiveButton(code)
+                    {
+                        languageButtons.forEach(b =>
+                        {
                             const isActive = b.getAttribute('data-lang') === code;
                             b.classList.toggle('active', isActive);
                             b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
@@ -179,10 +204,12 @@ const setupEventListeners = () =>
 
                     if (currentLang) setActiveButton(currentLang);
 
-                    langBtns.forEach(btn => btn.addEventListener('click', async () => {
+                    languageButtons.forEach(btn => btn.addEventListener('click', async () =>
+                    {
                         const lang = btn.getAttribute('data-lang');
                         console.log('[app.lang] button clicked for', lang);
-                        try {
+                        try
+                        {
                             await store.setLanguage(lang);
                             setActiveButton(lang);
                             try { await store.applyTranslations(document); } catch(_){ }
@@ -201,9 +228,12 @@ const setupEventListeners = () =>
         console.debug('Language switcher build failed', e);
     }
 
-    document.addEventListener('click', (e) => {
-        if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal) {
-            if (modal) {
+    document.addEventListener('click', (e) =>
+    {
+        if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal)
+        {
+            if (modal)
+            {
                 modal.classList.remove('open');
                 modal.setAttribute('aria-hidden', 'true');
                 if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function') {
@@ -215,19 +245,23 @@ const setupEventListeners = () =>
 
     document.addEventListener('click', async (e) =>
     {
-        if (e.target.id === 'view-tos') {
+        if (e.target.id === 'view-tos')
+        {
             e.preventDefault();
             await showLegal('termsOfService');
         }
-        if (e.target.id === 'view-privacy') {
+        if (e.target.id === 'view-privacy')
+        {
             e.preventDefault();
             await showLegal('privacyPolicy');
         }
-        if (e.target && e.target.id === 'back-to-child-checkin') {
+        if (e.target && e.target.id === 'back-to-child-checkin')
+        {
             e.preventDefault();
             store.currentView = 'childMenu';
         }
-        if (e.target && e.target.id === 'back-to-parent-menu') {
+        if (e.target && e.target.id === 'back-to-parent-menu')
+        {
             e.preventDefault();
             store.currentView = 'parentMenu';
         }
@@ -237,6 +271,24 @@ const setupEventListeners = () =>
 
     console.log('[app] setupEventListeners end');
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+const userModel = createUserModel([]);
+
+window.addEventListener('userModelChanged', () => {
+    console.log('User model changed:', userModel.users);
+});
+
+function addUser(user) {
+    userModel.users = [...userModel.users, user];
+}
+
+addUser({ id: 1, name: 'Alice' });
+
+export { userModel };
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 if (!customElements.get('user-manager'))
 {
@@ -252,6 +304,8 @@ if (!customElements.get('user-manager'))
     });
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 if (!customElements.get('child-profiles'))
 {
     customElements.define('child-profiles', class extends HTMLElement
@@ -266,6 +320,8 @@ if (!customElements.get('child-profiles'))
     });
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 function determineInitialView()
 {
     if (store.currentUser && store.currentChild) return 'childMenu';
@@ -273,12 +329,16 @@ function determineInitialView()
     return 'login';
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 async function ensureI18n()
 {
     if (!store.i18n || Object.keys(store.i18n).length === 0) {
         await store.loadI18n('auto');
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 async function initApp()
 {
