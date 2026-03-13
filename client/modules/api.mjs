@@ -1,10 +1,15 @@
 import { universalFetch, store } from './singleton.mjs';
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 const DEFAULT_BASE = (typeof window !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1'))
     ? `${location.protocol}//${location.hostname}:3000/api`
     : '/api';
 
-function resolveApiBase() {
+// ---------------------------------------------------------------------------------------------------------------------
+
+function resolveApiBase()
+{
     let base = (typeof window !== 'undefined' && window.__API_BASE__) ? window.__API_BASE__ : DEFAULT_BASE;
     try {
         base = String(base).replace(/\/+$|\/$/, '');
@@ -17,16 +22,9 @@ function resolveApiBase() {
 
 const BASE = resolveApiBase();
 
-function apiPath(p) {
-    if (!p) return p;
-    if (/^https?:\/\//i.test(p)) return p;
-    if (/^\/?api\//.test(p) || /^api\//.test(p)) {
-        return BASE ? `${BASE}/${String(p).replace(/^\/?/, '')}` : `/${String(p).replace(/^\/?/, '')}`;
-    }
-    return p;
-}
-
-function withAuthHeaders(options = {}) {
+// ---------------------------------------------------------------------------------------------------------------------
+function withAuthHeaders(options = {})
+{
     const headers = Object.assign({}, options.headers || {});
     try {
         const token = (typeof window !== 'undefined' && window.__STORE__) ? window.__STORE__.token : (store ? store.token : null);
@@ -35,8 +33,12 @@ function withAuthHeaders(options = {}) {
     return Object.assign({}, options, { headers, credentials: 'same-origin' });
 }
 
-export const ApiService = {
-    async loadView(viewName) {
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const ApiService =
+{
+    async loadView(viewName)
+    {
         let url = `./modules/views/${viewName}.html`;
         try {
             if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
@@ -58,10 +60,12 @@ export const ApiService = {
         return await universalFetch(`${BASE}/users/login`, { method: 'POST', body: JSON.stringify(credentials) });
     },
 
-    async logout() {
-        try { await universalFetch(`${BASE}/users/logout`, { method: 'POST' }); } catch (e) { console.debug('logout request failed', e); }
+    async logout()
+    {
+        try { await universalFetch(`${BASE}/users/logout`, withAuthHeaders({ method: 'POST' })); } catch (e) { console.debug('logout request failed', e); }
         try { window.localStorage.removeItem('moodmate_session'); } catch (_) {}
-        if (store) {
+        if (store)
+        {
             store.token = null;
             store.currentUser = null;
             store.currentChild = null;
@@ -69,23 +73,23 @@ export const ApiService = {
     },
 
     async listUsers() {
-        return await universalFetch(`${BASE}/users`, { method: 'GET' });
+        return await universalFetch(`${BASE}/users`, withAuthHeaders({ method: 'GET' }));
     },
 
     async updateUser(id, userData) {
-        return await universalFetch(`${BASE}/users/${id}`, { method: 'PUT', body: JSON.stringify(userData) });
+        return await universalFetch(`${BASE}/users/${id}`, withAuthHeaders({ method: 'PUT', body: JSON.stringify(userData) }));
     },
 
     async deleteUser(id) {
-        return await universalFetch(`${BASE}/users/${id}`, { method: 'DELETE' });
+        return await universalFetch(`${BASE}/users/${id}`, withAuthHeaders({ method: 'DELETE' }));
     },
 
     async getChildren() {
-        return await universalFetch(`${BASE}/children`, { method: 'GET' });
+        return await universalFetch(`${BASE}/children`, withAuthHeaders({ method: 'GET' }));
     },
 
     async createChild(payload) {
-        return await universalFetch(`${BASE}/children`, { method: 'POST', body: JSON.stringify(payload) });
+        return await universalFetch(`${BASE}/children`, withAuthHeaders({ method: 'POST', body: JSON.stringify(payload) }));
     },
 
     async childLogin(payload) {
@@ -93,14 +97,26 @@ export const ApiService = {
     },
 
     async saveMood(moodData) {
-        return await universalFetch(`${BASE}/moods`, { method: 'POST', body: JSON.stringify(moodData) });
+        return await universalFetch(`${BASE}/moods`, withAuthHeaders({ method: 'POST', body: JSON.stringify(moodData) }));
     },
 
     async getAllMoods() {
-        return await universalFetch(`${BASE}/moods`, { method: 'GET' });
+        return await universalFetch(`${BASE}/moods`, withAuthHeaders({ method: 'GET' }));
     },
 
     async exportData(format = 'csv') {
-        return await universalFetch(apiPath(`api/export?format=${encodeURIComponent(format)}`), { method: 'GET' });
+        return await universalFetch(`${BASE}/export?format=${encodeURIComponent(format)}`, withAuthHeaders({ method: 'GET' }));
     }
 };
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+if (typeof ApiService !== 'undefined')
+{
+    void ApiService.loadTranslations;
+    void ApiService.logout;
+    void ApiService.listUsers;
+    void ApiService.getChildren;
+    void ApiService.createChild;
+    void ApiService.exportData;
+}

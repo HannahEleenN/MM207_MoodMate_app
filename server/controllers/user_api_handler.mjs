@@ -2,7 +2,7 @@ import * as userService from './user_service.mjs';
 import jwt from 'jsonwebtoken';
 import { pickLocale, I18n } from '../utils/i18n.mjs';
 
-// Thin HTTP handlers that translate service errors into HTTP responses.
+// ---------------------------------------------------------------------------------------------------------------------
 
 export const registerUser = async (req, res) =>
 {
@@ -13,11 +13,11 @@ export const registerUser = async (req, res) =>
         const locale = pickLocale(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.UserCreated) ? I18n[locale].info.UserCreated : 'User created.';
         return res.status(201).json({ message: msg, user });
-    } catch (err) {
+    } catch (err)
+    {
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
         const errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
-        // Map some common server-side errors to stable client-side translation keys
         const errorKey = (status === 400 && err.message && err.message.includes('samtykke')) ? 'register.requireConsent' : null;
         const payload = errorKey ? { error: errorMessage, errorKey } : { error: errorMessage };
         return res.status(status).json(payload);
@@ -33,22 +33,25 @@ export const createLoginResponse = (res, user, token, req) =>
     return res.status(200).json({ user, token, message: okMsg });
 };
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 export const loginUser = async (req, res) =>
 {
-    try {
+    try
+    {
         const { email, secret } = req.body;
         const user = await userService.authenticateSecret(email, secret);
         const secretKey = process.env.JWT_SECRET || 'dev_secret';
         const token = jwt.sign({ id: user.id, role: user.role, familyId: user.familyId }, secretKey, { expiresIn: '8h' });
         return createLoginResponse(res, user, token, req);
-    } catch (err) {
+    } catch (err)
+    {
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
         let errorMessage = err.message;
         if (err.message && err.message.includes('PIN')) {
             errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
         }
-        // For authentication failures, return a stable client-side key so the UI can translate
         if (status === 401) {
             return res.status(401).json({ error: errorMessage, errorKey: 'login.incorrectPin' });
         }
@@ -86,7 +89,8 @@ export const listUsers = async (req, res) =>
 
 export const updateUser = async (req, res) =>
 {
-    try {
+    try
+    {
         const id = req.params.id;
         const payload = req.body;
         const updated = await userService.updateUserById(id, payload);

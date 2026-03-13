@@ -3,6 +3,7 @@
 const VERSION = 'v1.4';
 const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
 console.info('Service worker starting, version:', VERSION);
+
 const URLS_TO_CACHE = [
     '/index.html',
     '/style.css',
@@ -13,13 +14,16 @@ const URLS_TO_CACHE = [
     '/assets/icons/Favicon_Smileys.png'
 ];
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 self.addEventListener("install", (event) =>
 {
     event.waitUntil((async () =>
     {
         const cache = await caches.open(CACHE_NAME);
 
-        for (const url of URLS_TO_CACHE) {
+        for (const url of URLS_TO_CACHE)
+        {
             try {
                 await cache.add(url);
             } catch (err) {
@@ -27,13 +31,20 @@ self.addEventListener("install", (event) =>
             }
         }
 
-        try {
-            const mresp = await fetch('/manifest.json');
-            if (mresp && mresp.ok) {
-                const manifest = await mresp.json();
-                if (manifest && Array.isArray(manifest.icons)) {
-                    for (const icon of manifest.icons) {
-                        if (icon && icon.src) {
+        let icons = [];
+        try
+        {
+            const manifestResponse = await fetch('/manifest.json');
+            if (manifestResponse && manifestResponse.ok)
+            {
+                const manifest = await manifestResponse.json();
+                icons = (manifest && manifest.icons && Array.isArray(manifest.icons)) ? manifest.icons : [];
+                if (icons.length)
+                {
+                    for (const icon of icons)
+                    {
+                        if (icon && icon.src)
+                        {
                             const path = '/' + String(icon.src).replace(/^\/+/, '');
                             try { await cache.add(path); } catch (err) { console.warn('Service worker: failed to cache manifest icon', path, err); }
                         }
@@ -44,14 +55,21 @@ self.addEventListener("install", (event) =>
             console.warn('Service worker: could not load manifest.json', err);
         }
 
-        try {
+        try
+        {
             const resp = await fetch('/assets/flags/flags.json');
-            if (resp && resp.ok) {
+            if (resp && resp.ok)
+            {
                 const flags = await resp.json();
-                if (Array.isArray(flags)) {
-                    for (const f of flags) {
-                        const path = f && f.file ? ('/' + String(f.file).replace(/^\/+/, '')) : null;
-                        if (path) {
+                const flagEntries = Array.isArray(flags) ? flags : [];
+                if (flagEntries.length)
+                {
+                    for (const f of flagEntries)
+                    {
+                        const fileName = f && f.file ? f.file : null;
+                        const path = fileName ? ('/' + String(fileName).replace(/^\/+/, '')) : null;
+                        if (path)
+                        {
                             try {
                                 await cache.add(path);
                             } catch (err) {
@@ -70,6 +88,8 @@ self.addEventListener("install", (event) =>
     );
 });
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 self.addEventListener('activate', (event) =>
 {
     event.waitUntil((async () =>
@@ -78,29 +98,37 @@ self.addEventListener('activate', (event) =>
         await Promise.all(keys.map(k =>
         {
             if (k !== CACHE_NAME) return caches.delete(k);
-            return Promise.resolve();
+            return Promise.resolve(true);
         }));
         await self.clients.claim();
     })());
 });
 
-function isNavigationRequest(request) {
+// ---------------------------------------------------------------------------------------------------------------------
+
+function isNavigationRequest(request)
+{
     return request.mode === 'navigate' || (request.method === 'GET' && request.headers.get('accept') && request.headers.get('accept').includes('text/html'));
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 self.addEventListener("fetch", (event) =>
 {
     const req = event.request;
 
-    if (req.url.includes('/assets/flags/')) {
+    if (req.url.includes('/assets/flags/'))
+    {
         event.respondWith((async () =>
         {
             const cache = await caches.open(CACHE_NAME);
             const cached = await cache.match(req);
             if (cached) return cached;
-            try {
+            try
+            {
                 const resp = await fetch(req);
-                if (resp && resp.ok) {
+                if (resp && resp.ok)
+                {
                     try { await cache.put(req, resp.clone()); } catch (e) { }
                     return resp;
                 }
@@ -111,17 +139,21 @@ self.addEventListener("fetch", (event) =>
         return;
     }
 
-    if (req.url.includes('/api/')) {
+    if (req.url.includes('/api/'))
+    {
         event.respondWith((async () =>
         {
-            try {
+            try
+            {
                 const networkResp = await fetch(req);
-                if (req.method === 'GET') {
+                if (req.method === 'GET')
+                {
                     const cache = await caches.open(CACHE_NAME);
-                    cache.put(req, networkResp.clone());
+                    await cache.put(req, networkResp.clone());
                 }
                 return networkResp;
-            } catch (err) {
+            } catch (err)
+            {
                 const cached = await caches.match(req);
                 return cached || new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
             }
@@ -129,15 +161,18 @@ self.addEventListener("fetch", (event) =>
         return;
     }
 
-    if (isNavigationRequest(req)) {
+    if (isNavigationRequest(req))
+    {
         event.respondWith((async () =>
         {
-            try {
+            try
+            {
                 const networkResp = await fetch(req);
                 const cache = await caches.open(CACHE_NAME);
-                cache.put(req, networkResp.clone());
+                await cache.put(req, networkResp.clone());
                 return networkResp;
-            } catch (err) {
+            } catch (err)
+            {
                 const cached = await caches.match(req);
                 if (cached) return cached;
                 const offline = await caches.match('/offline.html');
@@ -146,6 +181,5 @@ self.addEventListener("fetch", (event) =>
         })());
         return;
     }
-
     event.respondWith(caches.match(req).then(response => response || fetch(req).catch(() => caches.match('/offline.html'))));
 });

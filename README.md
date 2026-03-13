@@ -74,8 +74,9 @@ The project uses a layered MVC-style architecture which keeps controllers, servi
 ├── server_app.mjs                # Main entry point (Express)
 ├── messages.mjs                  # Centralized server message keys
 ├── routes/
+│   ├── child_routes.mjs          # Child-specific endpoints (protected)
 │   ├── mood_routes.mjs           # Mood-related endpoints (protected)
-│   ├── user_routes.mjs           # User registration/login/CRUD endpoints
+│   ├── parent_routes.mjs         # User/Parent registration/login/CRUD endpoints
 │   └── demo_routes.mjs           # Demo & auxiliary endpoints (replaces older child_routes naming)
 ├── controllers/
 │   ├── mood_api_handler.mjs      # HTTP handlers for moods
@@ -172,10 +173,10 @@ http://localhost:3000
 By default the setup unregisters service workers on localhost. To test locally:
 ```js
 // Enable
-window.__ENABLE_SW__ = true; location.reload();
+globalThis.__ENABLE_SW__ = true; location.reload();
 
 // Disable
-window.__DISABLE_SW__ = true; location.reload();
+globalThis.__DISABLE_SW__ = true; location.reload();
 ```
 
 ---
@@ -361,7 +362,7 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 
 | File | What it shows |
 |:---|:---|
-| `server/routes/user_routes.mjs` + `server/controllers/user_api_handler.mjs` | API scaffold and endpoint structure |
+| `server/routes/parent_routes.mjs` + `server/controllers/user_api_handler.mjs` | API scaffold and endpoint structure |
 | `server/middleware/privacyGuard.mjs` | Meaningful middleware (JWT + role enforcement) |
 | `client/modules/api.mjs` + `client/modules/singleton.mjs` | Single-fetch pattern and i18n loader |
 | `client/modules/controllers/userController.mjs` + `views/userManager.html` | Client CRUD and consent flow |

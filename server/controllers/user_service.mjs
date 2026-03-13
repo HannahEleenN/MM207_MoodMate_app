@@ -8,27 +8,30 @@ export async function registerUserData({ nick, email, secret, hasConsented })
 {
     console.log("Registering new user...");
 
-    if (hasConsented !== true) {
+    if (hasConsented !== true)
+    {
         const err = new Error(Messages.CONSENT_ERROR);
         err.status = 400;
         throw err;
     }
 
-    if (!email || !secret) {
+    if (!email || !secret)
+    {
         const err = new Error('Email and password are required');
         err.status = 400;
         throw err;
     }
 
-    // Derive nick from email local-part if not provided
     let safeNick = nick && String(nick).trim();
-    if (!safeNick) {
+    if (!safeNick)
+    {
         const localPart = String(email).split('@')[0] || 'parent';
         safeNick = localPart.substring(0, 50);
     }
 
     const existingByEmail = await User.findByEmail(email);
-    if (existingByEmail) {
+    if (existingByEmail)
+    {
         const err = new Error('Email already registered');
         err.status = 400;
         throw err;
@@ -45,21 +48,24 @@ export async function registerUserData({ nick, email, secret, hasConsented })
 
 export async function authenticateSecret(email, secret)
 {
-    if (!email || !secret) {
+    if (!email || !secret)
+    {
         const err = new Error('Both email and password must be provided');
         err.status = 400;
         throw err;
     }
 
     const user = await User.findByEmail(email);
-    if (!user) {
+    if (!user)
+    {
         const err = new Error(Messages.AUTH_FAILED);
         err.status = 401;
         throw err;
     }
 
     const isValid = await verifySecret(secret, user.secret);
-    if (!isValid) {
+    if (!isValid)
+    {
         const err = new Error(Messages.AUTH_FAILED);
         err.status = 401;
         throw err;
@@ -78,7 +84,8 @@ export async function authenticateSecret(email, secret)
 export async function deleteUserById(userId)
 {
     const user = await User.findById(userId);
-    if (!user) {
+    if (!user)
+    {
         const err = new Error(Messages.USER_NOT_FOUND);
         err.status = 404;
         throw err;
@@ -99,7 +106,8 @@ export async function listAllUsers()
 export async function updateUserById(id, userData)
 {
     const user = await User.findById(id);
-    if (!user) {
+    if (!user)
+    {
         const err = new Error(Messages.USER_NOT_FOUND);
         err.status = 404;
         throw err;

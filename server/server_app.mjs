@@ -3,34 +3,26 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import moodRoutes from './routes/mood_routes.mjs';
-import userRoutes from './routes/user_routes.mjs';
+import parentRoutes from './routes/parent_routes.mjs';
 import demoRoutes from './routes/demo_routes.mjs';
+import childRoutes from './routes/child_routes.mjs';
+import { cors } from './middleware/cors.mjs';
+import logger from './middleware/logger.mjs';
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 app.use(express.json());
 
-app.use((req, res, next) =>
-{
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(204);
-    }
-    next();
-});
+app.use(cors);
 
-app.use((req, res, next) =>
-{
-    if (req.url.startsWith('/api/')) {
-        console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - body:`, JSON.stringify(req.body));
-    }
-    next();
-});
+app.use(logger);
 
 app.use(express.static(path.join(__dirname, '../client'),
 {
@@ -46,10 +38,14 @@ app.use(express.static(path.join(__dirname, '../client'),
     }
 }));
 
+// ---------------------------------------------------------------------------------------------------------------------
 
 app.use('/api/moods', moodRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/users', parentRoutes);
 app.use('/api/demo', demoRoutes);
+app.use('/api', childRoutes);
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 app.listen(PORT, () => {
     console.log(`MoodMate server is running on http://localhost:${PORT}`);

@@ -1,17 +1,21 @@
 import pkg from 'pg';
+
 const { Pool } = pkg;
-
 const connectionString = process.env.DATABASE_URL;
-
 let pool = null;
 
-if (connectionString) {
+// ---------------------------------------------------------------------------------------------------------------------
+
+if (connectionString)
+{
     pool = new Pool({ connectionString });
 
-    try {
+    try
+    {
         await pool.query('SELECT 1');
         console.log('Successfully connected to the database.');
-    } catch (err) {
+    } catch (err)
+    {
         console.error('Database connection failed:', err);
         try { await pool.end(); } catch (e) { /* ignore */ }
         process.exit(1);
@@ -35,5 +39,7 @@ if (connectionString) {
 } else {
     console.warn('No DATABASE_URL provided; database pool not created.');
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export default pool;

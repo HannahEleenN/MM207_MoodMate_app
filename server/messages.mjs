@@ -1,6 +1,3 @@
-// Messages for user feedback and error handling.
-// Used across controllers and views to maintain consistency and ease of maintenance.
-
 export const Messages =
 {
     CONSENT_ERROR: "Du må aktivt samtykke til vilkårene og personvernerklæringen for å opprette konto.",
