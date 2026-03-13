@@ -4,7 +4,7 @@
     </div>
 
     <div id="step-1-mood">
-there         <h2 data-i18n="child.hello">Hei på deg! 🌟</h2>
+        <h2 data-i18n="child.hello">Hei på deg! 🌟</h2>
         <p data-i18n="child.askMood">Hvordan føler du deg akkurat nå?</p>
         <div class="mood-grid">
             <button class="mood-btn" data-mood="glad" data-i18n="mood.happy">😊 Glad</button>
@@ -25,7 +25,8 @@ there         <h2 data-i18n="child.hello">Hei på deg! 🌟</h2>
             <button class="context-btn" data-context="skole" data-i18n="context.school">🏫 Skole</button>
             <button class="context-btn" data-context="familie" data-i18n="context.family">🏠 Familie</button>
         </div>
-        <textarea id="mood-context-text" data-i18n-placeholder="checkin.contextPlaceholder" placeholder="Skriv eller fortell mer her..."></textarea>
+        <label id="mood-context-label" for="mood-context-text" class="sr-only" data-i18n="checkin.contextLabel">Beskriv mer om hva som skjer</label>
+        <textarea id="mood-context-text" aria-labelledby="mood-context-label" data-i18n-placeholder="checkin.contextPlaceholder" placeholder="Skriv eller fortell mer her..."></textarea>
         <button id="btn-next-step" class="primary-btn" data-i18n="checkin.next">Gå videre ➡️</button>
     </div>
 

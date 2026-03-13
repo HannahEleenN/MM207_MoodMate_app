@@ -3,8 +3,8 @@
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <input type="email" name="email" placeholder="E-post" required>
-        <input type="password" name="secret" placeholder="Passord" required>
+        <input type="email" id="reg-email" name="email" placeholder="E-post" aria-label="E-post" required>
+        <input type="password" id="reg-password" name="secret" placeholder="Passord" aria-label="Passord" required>
         <label class="consent-label">
             <input type="checkbox" name="hasConsented" id="consent-check" value="true" required> Jeg har lest og godtar <a href="#" id="view-tos">Vilkår</a> og <a href="#" id="view-privacy">Personvern</a>
         </label>
@@ -30,7 +30,7 @@
 
     <template id="user-edit-template">
         <div class="edit-inline">
-            <input type="text" class="edit-input">
+            <input type="text" class="edit-input" aria-label="Rediger bruker">
             <button class="save-edit">Lagre</button>
             <button class="cancel-edit">Avbryt</button>
         </div>

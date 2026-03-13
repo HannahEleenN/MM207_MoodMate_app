@@ -3,8 +3,10 @@
   <p data-i18n="profiles.description">Opprett eller velg en profil for barnet.</p>
 
   <form id="create-child-form">
-    <input type="text" name="name" data-i18n-placeholder="profiles.nicknamePlaceholder" placeholder="Barnets kallenavn" required>
-    <input type="number" name="age" data-i18n-placeholder="profiles.agePlaceholder" placeholder="Alder (valgfritt)">
+    <label for="child-name-input" class="sr-only" data-i18n="profiles.nicknamePlaceholder">Barnets kallenavn</label>
+    <input id="child-name-input" type="text" name="name" data-i18n-placeholder="profiles.nicknamePlaceholder" placeholder="Barnets kallenavn" required>
+    <label for="child-age-input" class="sr-only" data-i18n="profiles.agePlaceholder">Alder (valgfritt)</label>
+    <input id="child-age-input" type="number" name="age" data-i18n-placeholder="profiles.agePlaceholder" placeholder="Alder (valgfritt)">
     <button type="submit" class="primary-btn" data-i18n="profiles.create">Opprett profil</button>
   </form>
 
@@ -26,7 +28,7 @@
 
   <template id="child-edit-template">
     <div class="edit-inline">
-      <input type="text" class="edit-input" data-i18n-placeholder="profiles.newNamePlaceholder" placeholder="Nytt navn">
+      <input type="text" class="edit-input" aria-label="Nytt navn" data-i18n-placeholder="profiles.newNamePlaceholder" placeholder="Nytt navn">
       <button class="save-edit" data-i18n="profiles.save">Lagre</button>
       <button class="cancel-edit" data-i18n="profiles.cancel">Avbryt</button>
     </div>
