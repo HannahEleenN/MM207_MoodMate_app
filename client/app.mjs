@@ -14,6 +14,19 @@ let previouslyFocusedElement = null;
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+async function applyTranslations()
+{
+    try {
+        if (store && typeof store.applyTranslations === 'function') {
+            await store.applyTranslations(document);
+        }
+    } catch (e) {
+        console.warn('applyTranslations failed', e);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export async function showLegal(viewName)
 {
     console.log('[app] showLegal called for', viewName);
@@ -28,7 +41,7 @@ export async function showLegal(viewName)
     {
         try {
             const tKey = `legal.${viewName}.title`;
-            titleEl.textContent = (store.t ? store.t(tKey) : null) || (viewName === 'termsOfService' ? 'Vilkår' : (viewName === 'privacyPolicy' ? 'Personvern' : 'Vilkår og personvern'));
+            titleEl.textContent = (store?.t ? store.t(tKey) : null) || (viewName === 'termsOfService' ? 'Vilkår' : (viewName === 'privacyPolicy' ? 'Personvern' : 'Vilkår og personvern'));
         } catch (e) {
             titleEl.textContent = 'Vilkår og personvern';
         }
@@ -45,7 +58,7 @@ export async function showLegal(viewName)
     } catch (error)
     {
         console.error("Could not load legal view:", error);
-        modalText.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
+        modalText.textContent = store?.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
         previouslyFocusedElement = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
@@ -59,7 +72,7 @@ export async function showLegal(viewName)
 async function router()
 {
     const root = document.getElementById('app-root');
-    const view = store.currentView;
+    const view = store?.currentView;
 
     console.log('[app.router] start - currentView=', view, 'root?', !!root);
 
@@ -77,12 +90,14 @@ async function router()
                 console.log('[app.router] rendered login view');
             } catch (e) {
                 console.error('[router] authController.init failed:', e);
-                root.textContent = store.t ? store.t('auth.loadError') : 'Kunne ikke laste innloggingsvinduet.';
+                root.textContent = store?.t ? store.t('auth.loadError') : 'Kunne ikke laste innloggingsvinduet.';
             }
             break;
         case 'userManager':
+        {
             const userManagerEl = document.createElement('user-manager');
             root.appendChild(userManagerEl);
+        }
             break;
         case 'parentMenu':
             console.log('[app.router] rendering parentMenu');
@@ -93,8 +108,10 @@ async function router()
             await initChildApp(root, store);
             break;
         case 'childProfiles':
+        {
             const childProfilesEl = document.createElement('child-profiles');
             root.appendChild(childProfilesEl);
+        }
             break;
         case 'childLogin':
             try
@@ -136,12 +153,96 @@ async function router()
     }
 
     try {
-        if (store && typeof store.applyTranslations === 'function') {
-            console.log('[app.router] applying translations for view', view);
-            store.applyTranslations(root);
-        }
+        await applyTranslations();
     } catch (e) {
         console.warn('applyTranslations after router failed', e);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+async function buildLanguageSwitcher()
+{
+    try
+    {
+        console.log('[app.lang] fetching flags.json');
+        const resp = await fetch('assets/flags/flags.json');
+        if (!resp.ok) {
+            console.debug('[app.lang] flags.json HTTP error', resp.status);
+            return;
+        }
+
+        const flags = await resp.json();
+        console.log('[app.lang] flags.json loaded, count=', Array.isArray(flags) ? flags.length : 0);
+        const container = document.getElementById('lang-switcher');
+        if (!container || !Array.isArray(flags)) return;
+
+        container.innerHTML = '';
+        for (const f of flags)
+        {
+            const { code, title, file } = f || {};
+            const btn = document.createElement('button');
+            btn.className = 'lang-btn';
+            btn.setAttribute('data-lang', code || '');
+            btn.setAttribute('title', title || '');
+            btn.setAttribute('aria-label', title || '');
+            btn.setAttribute('aria-pressed', 'false');
+
+            const img = document.createElement('img');
+            img.src = file || '';
+            img.alt = `${title || ''} flag`;
+            img.width = 28;
+            img.height = 18;
+            img.style.objectFit = 'contain';
+            img.style.display = 'block';
+
+            btn.appendChild(img);
+            container.appendChild(btn);
+        }
+
+        const detectedLang = (() =>
+        {
+            if (store?.i18n?._lang) return store.i18n._lang;
+            if (typeof navigator === 'undefined') return null;
+            const nav = navigator;
+            const navLang = (nav.languages && nav.languages[0]) || nav.language || null;
+            return navLang ? navLang.split('-')[0] : null;
+        })();
+
+        console.log('[app.lang] currentLang detected=', detectedLang);
+        const languageButtons = container.querySelectorAll('.lang-btn');
+
+        function setActiveButton(code)
+        {
+            languageButtons.forEach(b =>
+            {
+                const isActive = b.getAttribute('data-lang') === code;
+                b.classList.toggle('active', isActive);
+                b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        }
+
+        if (detectedLang) setActiveButton(detectedLang);
+
+        languageButtons.forEach(btn => btn.addEventListener('click', async () =>
+        {
+            const lang = btn.getAttribute('data-lang');
+            console.log('[app.lang] button clicked for', lang);
+            try
+            {
+                if (store && typeof store.setLanguage === 'function') {
+                    await store.setLanguage(lang);
+                    setActiveButton(lang);
+                    try { await store.applyTranslations(document); } catch(_){ }
+                    try { const root = document.getElementById('app-root'); if (root) await store.applyTranslations(document); } catch(_){ }
+                    await router();
+                }
+            } catch (err) {
+                console.debug('Language switch failed', err);
+            }
+        }));
+    } catch (err) {
+        console.debug('Could not load flags.json, falling back to existing DOM buttons (if any)', err);
     }
 }
 
@@ -154,83 +255,16 @@ const setupEventListeners = () =>
 
     try
     {
-        (async () =>
-        {
-            try
-            {
-                console.log('[app.lang] fetching flags.json');
-                const resp = await fetch('assets/flags/flags.json');
-                const flags = await resp.json();
-                console.log('[app.lang] flags.json loaded, count=', Array.isArray(flags) ? flags.length : 0);
-                const container = document.getElementById('lang-switcher');
-                if (container && Array.isArray(flags))
-                {
-                    container.innerHTML = '';
-                    for (const f of flags)
-                    {
-                        const { code, title, file } = f || {};
-                        const btn = document.createElement('button');
-                        btn.className = 'lang-btn';
-                        btn.setAttribute('data-lang', code || '');
-                        btn.setAttribute('title', title || '');
-                        btn.setAttribute('aria-label', title || '');
-                        btn.setAttribute('aria-pressed', 'false');
-
-                        const img = document.createElement('img');
-                        img.src = file || '';
-                        img.alt = `${title || ''} flag`;
-                        img.width = 28;
-                        img.height = 18;
-                        img.style.objectFit = 'contain';
-                        img.style.display = 'block';
-
-                        btn.appendChild(img);
-                        container.appendChild(btn);
-                    }
-
-                    const currentLang = (store && store.i18n && store.i18n._lang) || (navigator && (navigator.language || navigator.userLanguage) ? (navigator.language.split('-')[0]) : null);
-                    console.log('[app.lang] currentLang detected=', currentLang);
-                    const languageButtons = container.querySelectorAll('.lang-btn');
-
-                    function setActiveButton(code)
-                    {
-                        languageButtons.forEach(b =>
-                        {
-                            const isActive = b.getAttribute('data-lang') === code;
-                            b.classList.toggle('active', isActive);
-                            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                        });
-                    }
-
-                    if (currentLang) setActiveButton(currentLang);
-
-                    languageButtons.forEach(btn => btn.addEventListener('click', async () =>
-                    {
-                        const lang = btn.getAttribute('data-lang');
-                        console.log('[app.lang] button clicked for', lang);
-                        try
-                        {
-                            await store.setLanguage(lang);
-                            setActiveButton(lang);
-                            try { await store.applyTranslations(document); } catch(_){ }
-                            try { const root = document.getElementById('app-root'); if (root) await store.applyTranslations(root); } catch(_){ }
-                            await router();
-                        } catch (err) {
-                            console.debug('Language switch failed', err);
-                        }
-                    }));
-                }
-            } catch (err) {
-                console.debug('Could not load flags.json, falling back to existing DOM buttons (if any)', err);
-            }
-        })();
+        buildLanguageSwitcher().catch(err => console.debug('buildLanguageSwitcher failed', err));
     } catch (e) {
         console.debug('Language switcher build failed', e);
     }
 
-    document.addEventListener('click', (e) =>
+    document.addEventListener('click', async (e) =>
     {
-        if (e.target.id === 'close-x' || e.target.id === 'close-modal-btn' || e.target === modal)
+        const target = e.target;
+
+        if (target === modal || target?.id === 'close-x' || target?.id === 'close-modal-btn')
         {
             if (modal)
             {
@@ -240,34 +274,36 @@ const setupEventListeners = () =>
                     previouslyFocusedElement.focus();
                 }
             }
+            return;
         }
-    });
 
-    document.addEventListener('click', async (e) =>
-    {
-        if (e.target.id === 'view-tos')
+        if (target?.id === 'view-tos')
         {
             e.preventDefault();
             await showLegal('termsOfService');
+            return;
         }
-        if (e.target.id === 'view-privacy')
+        if (target?.id === 'view-privacy')
         {
             e.preventDefault();
             await showLegal('privacyPolicy');
+            return;
         }
-        if (e.target && e.target.id === 'back-to-child-checkin')
+
+        if (target?.id === 'back-to-child-checkin')
         {
             e.preventDefault();
             store.currentView = 'childMenu';
+            return;
         }
-        if (e.target && e.target.id === 'back-to-parent-menu')
+        if (target?.id === 'back-to-parent-menu')
         {
             e.preventDefault();
             store.currentView = 'parentMenu';
         }
     });
 
-    store.onChange('currentView', () => router());
+    store.onChange('currentView', () => { router().catch(err => console.error('[app.router] failed in onChange', err)); });
 
     console.log('[app] setupEventListeners end');
 };
@@ -280,13 +316,17 @@ window.addEventListener('userModelChanged', () => {
     console.log('User model changed:', userModel.users);
 });
 
-function addUser(user) {
-    userModel.users = [...userModel.users, user];
+function addUser(user)
+{
+    if (!user) return;
+    userModel.users = [...(userModel.users || []), user];
+    window.dispatchEvent(new Event('userModelChanged'));
 }
 
-addUser({ id: 1, name: 'Alice' });
+export { userModel, addUser };
 
-export { userModel };
+window.addUser = addUser;
+window.userModel = userModel;
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -294,11 +334,17 @@ if (!customElements.get('user-manager'))
 {
     customElements.define('user-manager', class extends HTMLElement
     {
-        constructor() {
+        constructor()
+        {
             super();
-            (async () => {
-                const { userUIController } = await import('./modules/controllers/userController.mjs');
-                await userUIController.init(this);
+            (async () =>
+            {
+                try {
+                    const { userUIController } = await import('./modules/controllers/userController.mjs');
+                    await userUIController.init(this);
+                } catch (e) {
+                    console.error('user-manager init failed', e);
+                }
             })();
         }
     });
@@ -310,11 +356,17 @@ if (!customElements.get('child-profiles'))
 {
     customElements.define('child-profiles', class extends HTMLElement
     {
-        constructor() {
+        constructor()
+        {
             super();
-            (async () => {
-                const { profileController } = await import('./modules/controllers/profile_controller.mjs');
-                await profileController.init(this);
+            (async () =>
+            {
+                try {
+                    const { profileController } = await import('./modules/controllers/profile_controller.mjs');
+                    await profileController.init(this);
+                } catch (e) {
+                    console.error('child-profiles init failed', e);
+                }
             })();
         }
     });
@@ -324,8 +376,8 @@ if (!customElements.get('child-profiles'))
 
 function determineInitialView()
 {
-    if (store.currentUser && store.currentChild) return 'childMenu';
-    if (store.currentUser) return 'parentMenu';
+    if (store?.currentUser && store?.currentChild) return 'childMenu';
+    if (store?.currentUser) return 'parentMenu';
     return 'login';
 }
 
@@ -333,7 +385,7 @@ function determineInitialView()
 
 async function ensureI18n()
 {
-    if (!store.i18n || Object.keys(store.i18n).length === 0) {
+    if (!store?.i18n || Object.keys(store.i18n).length === 0) {
         await store.loadI18n('auto');
     }
 }
@@ -346,9 +398,12 @@ async function initApp()
     store.currentView = determineInitialView();
     setupEventListeners();
     await router();
-    await import('./serviceWorkerSetup.mjs');
+    try {
+        await import('./serviceWorkerSetup.mjs');
+    } catch (e)
+    {
+        console.warn('Service worker setup failed', e);
+    }
 }
 
-initApp();
-
-export { router as _router };
+initApp().catch(e => console.error('initApp failed', e));
