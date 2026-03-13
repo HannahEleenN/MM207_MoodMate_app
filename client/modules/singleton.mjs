@@ -182,11 +182,13 @@ _state.t = function (key) {
     return (this.i18n && this.i18n[key]) ? this.i18n[key] : key;
 };
 
-_state.applyTranslations = function (root = document) {
+_state.applyTranslations = function (root = document)
+{
     try {
         const scope = (root && typeof root.querySelectorAll === 'function') ? root : document;
 
-        scope.querySelectorAll('[data-i18n]').forEach(el => {
+        scope.querySelectorAll('[data-i18n]').forEach(el =>
+        {
             const key = el.getAttribute('data-i18n');
             const text = this.t ? this.t(key) : key;
             const attr = el.getAttribute('data-i18n-attr');
@@ -205,7 +207,8 @@ _state.applyTranslations = function (root = document) {
     }
 };
 
-_state.setLanguage = async function (lang) {
+_state.setLanguage = async function (lang)
+{
     await this.loadI18n(lang);
     const appRoot = document.getElementById('app-root');
     if (appRoot) this.applyTranslations(appRoot);

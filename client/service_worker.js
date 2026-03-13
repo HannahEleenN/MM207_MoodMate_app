@@ -70,10 +70,13 @@ self.addEventListener("install", (event) =>
     );
 });
 
-self.addEventListener('activate', (event) => {
-    event.waitUntil((async () => {
+self.addEventListener('activate', (event) =>
+{
+    event.waitUntil((async () =>
+    {
         const keys = await caches.keys();
-        await Promise.all(keys.map(k => {
+        await Promise.all(keys.map(k =>
+        {
             if (k !== CACHE_NAME) return caches.delete(k);
             return Promise.resolve();
         }));
@@ -90,7 +93,8 @@ self.addEventListener("fetch", (event) =>
     const req = event.request;
 
     if (req.url.includes('/assets/flags/')) {
-        event.respondWith((async () => {
+        event.respondWith((async () =>
+        {
             const cache = await caches.open(CACHE_NAME);
             const cached = await cache.match(req);
             if (cached) return cached;
@@ -108,7 +112,8 @@ self.addEventListener("fetch", (event) =>
     }
 
     if (req.url.includes('/api/')) {
-        event.respondWith((async () => {
+        event.respondWith((async () =>
+        {
             try {
                 const networkResp = await fetch(req);
                 if (req.method === 'GET') {
@@ -125,7 +130,8 @@ self.addEventListener("fetch", (event) =>
     }
 
     if (isNavigationRequest(req)) {
-        event.respondWith((async () => {
+        event.respondWith((async () =>
+        {
             try {
                 const networkResp = await fetch(req);
                 const cache = await caches.open(CACHE_NAME);

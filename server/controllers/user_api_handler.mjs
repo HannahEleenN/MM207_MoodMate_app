@@ -6,7 +6,8 @@ import { pickLocale, I18n } from '../utils/i18n.mjs';
 
 export const registerUser = async (req, res) =>
 {
-    try {
+    try
+    {
         const payload = req.body;
         const user = await userService.registerUserData(payload);
         const locale = pickLocale(req.headers['accept-language']);
