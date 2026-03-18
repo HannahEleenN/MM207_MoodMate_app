@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server/server_app.mjs",
-    "postinstall": "cd server && npm install"
+    "postinstall": "cd server && npm install",
+    "spellcheck": "cspell \"client/translations/*.json\""
   },
   "engines": {
     "node": "18.x"
@@ -15,5 +16,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.19.0"
+  },
+  "devDependencies": {
+    "cspell": "^6.29.0"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "node_modules/**",
+    "server/node_modules/**"
+  ],
+  "dictionaries": ["en_US", "nb_NO", "da", "sv", "es"],
+  "dictionaryDefinitions": [
+    { "name": "nb_NO", "path": "./client/translations/nb_words.txt" },
+    { "name": "da", "path": "./client/translations/da_words.txt" },
+    { "name": "sv", "path": "./client/translations/sv_words.txt" },
+    { "name": "es", "path": "./client/translations/es_words.txt" }
+  ],
+  "ignoreRegExpList": ["\\\"(\\.|[^\\\"])*\\\""],
+  "patterns": [],
+  "files": ["client/translations/*.json"]
+}
+
