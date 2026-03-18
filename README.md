@@ -129,6 +129,29 @@ globalThis.__DISABLE_SW__ = true; location.reload();
 3. DevTools → Application → Service Workers — verify registration and lifecycle events.
 4. DevTools → Network → set Offline and reload; cached pages or `offline.html` should be served.
 
+Additional offline behaviour (IndexedDB + automatic sync):
+
+- The client includes `client/modules/offline.mjs`, which implements a small IndexedDB store (`moodmate-offline` → `moods`). When the network is unavailable, mood entries are saved locally instead of being lost. When the connection returns, the module attempts to sync stored entries to the server in a bulk POST and clears the local store on success.
+
+- Public developer API exposed on the window namespace (useful for debugging / tests):
+- `window.MoodMate.saveMoodOrSend(mood)` — attempts to POST a single mood; falls back to saving in IndexedDB on failure.
+- `window.MoodMate.syncStoredMoods()` — attempts to send all locally stored moods to the server.
+- `window.MoodMate.getAllStoredMoods()` — returns locally stored mood records.
+- `window.MoodMate.clearStoredMoods()` — clears the local store.
+
+- Auto-start & opt-out: by default the offline sync module auto-initialises on import. To disable auto-initialisation in tests or a debug page, set the opt-out flag before the client modules load: `window['__MOODMATE_DISABLE_AUTO_OFFLINE__'] = true` and then load the app. Alternatively, call `window.MoodMate.initOfflineSync()` manually when you want to start sync behaviour.
+
+Testing offline mood persistence and sync:
+
+1. Open DevTools → Application → IndexedDB and look for `moodmate-offline` → `moods`.
+2. In DevTools → Network, set the network to `Offline`.
+3. Use the app UI to create a mood entry (the app will call `saveMoodOrSend`). The entry should appear in the IndexedDB store.
+4. Switch the network back to `Online` and either wait for the automatic sync or run `window.MoodMate.syncStoredMoods()` in the console. On successful sync, the IndexedDB store should be cleared and the server should receive the entries (check server logs or the API).
+
+Notes and troubleshooting:
+- If you can't see service worker registration locally, enable the service worker in development (`globalThis.__ENABLE_SW__ = true; location.reload();`) as documented above.
+- The offline HTML fallback (`client/offline.html`) is used for navigations when the network is unavailable and a cached response isn't present.
+
 ---
 
 ## Security & Privacy Guard
