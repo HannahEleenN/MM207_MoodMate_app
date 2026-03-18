@@ -9,6 +9,7 @@
   "register.failed": "No se pudo registrar al usuario. Intenta nuevamente más tarde.",
   "register.requireConsent": "Debes aceptar los términos y la política de privacidad para crear una cuenta.",
   "register.nickTaken": "Este apodo ya está en uso.",
+  "register.nickPlaceholder": "Nombre a mostrar (opcional)",
 
   "auth.failed": "Apodo o código PIN incorrecto.",
   "auth.no_token": "Sin acceso: inicia sesión de nuevo.",

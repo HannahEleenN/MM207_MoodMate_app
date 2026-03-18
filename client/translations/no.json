@@ -9,6 +9,7 @@
   "register.failed": "Kunne ikke registrere bruker. Prøv igjen senere.",
   "register.requireConsent": "Du må samtykke til vilkårene og personvernerklæringen for å opprette en konto.",
   "register.nickTaken": "Dette kallenavnet er allerede i bruk.",
+  "register.nickPlaceholder": "Kallenavn (valgfritt)",
 
   "auth.failed": "Feil kallenavn eller PIN-kode.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
@@ -132,7 +133,7 @@
   "reason.krangel": "⚡ Krangel med venn",
   "solution.pute": "🥊 Slå / skrike i en pute",
 
-  "reason.savnet": "💔 Savner noen",
+  "reason.savnet": "💔 Savnet noen",
   "reason.skole": "🏫 Skole",
   "reason.lese": "📚 Lese",
   "reason.natur": "🌿 Natur",
@@ -157,7 +158,7 @@
   "text.lei.2": "Noen jeg er glad i er syk.",
   "text.lei.3": "Jeg er alene.",
   "text.lei.4": "Noen ødelegger mine ting.",
-  "text.lei.5": "Jeg ser på en trist film.",
+  "text.lei.5": "Jeg ser en trist film.",
   "text.lei.6": "Jeg og en venn krangler.",
 
   "text.sint.0": "Jeg føler meg dum og forstår ikke.",
@@ -193,10 +194,10 @@
   "privacy.fields.childrenProfiles": "Barnprofiler: En liste med fornavn/kallenavn slik at flere barn kan bruke samme foreldrekonto uten å dele logger.",
   "privacy.section2.title": "2. Formål med behandlingen",
   "privacy.section2.body": "Vi behandler disse dataene kun for å la foreldre og barn loggføre emosjonelle hendelser over tid og for å visualisere humørtrender og mestringsstrategier for familien.",
-  "privacy.section3.title": "3. Foreldres samtykke og barns personvern",
+  "privacy.section3.title": "3. Parental Consent & Children's Privacy",
   "privacy.section3.body": "MoodMate er designet for barn i alderen 6–7 år. Ettersom barn under 13 ikke kan gi gyldig samtykke, kreves aktivt foreldresamtykke for å opprette konto. Registrering er deaktivert inntil foresatt har krysset av for samtykke.",
-  "privacy.section4.title": "4. Sikkerhet og lagring",
-  "privacy.section4.body": "Ingen passord i klartekst: Alle hemmeligheter blir hashet før lagring. I denne versjonen lagres data i minnet (RAM) og blir ikke bevart over serveromstarter.",
+  "privacy.section4.title": "4. Security & Storage",
+  "privacy.section4.body": "No plain-text passwords: All secrets are scrambled (hashed) before storage. In this version data is stored in-memory (RAM), and is not persisted across server restarts.",
   "privacy.section5.title": "5. Dine rettigheter (GDPR)",
   "privacy.section5.body": "Brukere har rett til å be om sletting (retten til å bli glemt), samt å be om innsyn eller dataportabilitet.",
 
@@ -206,12 +207,12 @@
   "terms.section1.body": "Du beholder eierskapet til all data som du og barnet ditt legger inn i MoodMate. Ved bruk gir du oss en begrenset tillatelse til å behandle og vise denne dataen kun for å tilby humørdagboken og innsikter.",
   "terms.section2.title": "2. Foreldres ansvar",
   "terms.section2.body": "MoodMate er ment for barn i alderen 6–7 år. Som kontoansvarlig er du ansvarlig for å overvåke barnets bruk og sørge for at innholdet er passende.",
-  "terms.section3.title": "3. Akseptabel bruk og dataintegritet",
-  "terms.section3.body": "For å ivareta sikkerhet og personvern i familien: ikke legg inn sensitive personopplysninger som adresser, telefonnummer eller personnummer i fritekstfelt. Tjenesten skal kun brukes til sitt tiltenkte formål: følelsesregistrering og refleksjon.",
-  "terms.section4.title": "4. Samtykke og tilbakekalling",
-  "terms.section4.body": "Opprettelse av konto krever aktivt samtykke. Du har rett til å trekke tilbake dette samtykket når som helst.",
-  "terms.section5.title": "5. Oppsigelse og sletting",
-  "terms.section5.body": "Du kan når som helst slette kontoen din via appens innstillinger. Ved sletting blir all assosiert data permanent fjernet.",
-  "terms.section6.title": "6. Ansvarsfraskrivelse",
-  "terms.section6.body": "MoodMate er et verktøy for følelsesrefleksjon og erstatter ikke profesjonell medisinsk rådgivning eller psykoterapi."
+  "terms.section3.title": "3. Akseptabel bruk & Data Privacy",
+  "terms.section3.body": "For å ivareta sikkerhet og personvern i familien: ikke legg inn sensitive personopplysninger som adresser, telefonnummer eller personnummer i fritekstfelt. Tjenesten skal kun brukes for sitt tiltenkte formål: emosjonell logging og refleksjon.",
+  "terms.section4.title": "4. Consent and Withdrawal",
+  "terms.section4.body": "Account creation requires active consent. You have the right to withdraw this consent at any time.",
+  "terms.section5.title": "5. Termination & Deletion",
+  "terms.section5.body": "You may delete your account at any time through the application settings. Upon deletion, all associated data will be permanently purged.",
+  "terms.section6.title": "6. Disclaimer",
+  "terms.section6.body": "MoodMate is a tool for emotional reflection and is not a substitute for professional medical advice or mental health therapy."
 }

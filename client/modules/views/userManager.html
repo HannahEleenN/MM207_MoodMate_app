@@ -3,9 +3,9 @@
 
     <form id="regForm">
         <h3>Opprett ny foreldrekonto</h3>
-        <input type="text" id="reg-nick" name="nick" placeholder="Kallenavn (valgfritt)" aria-label="Kallenavn">
-        <input type="email" id="reg-email" name="email" placeholder="E-post" aria-label="E-post" required>
-        <input type="password" id="reg-password" name="secret" placeholder="Passord" aria-label="Passord" required>
+        <input type="text" id="reg-nick" name="nick" placeholder="Kallenavn (valgfritt)" aria-label="Kallenavn" data-i18n-placeholder="register.nickPlaceholder">
+        <input type="email" id="reg-email" name="email" placeholder="E-post" aria-label="E-post" required data-i18n-placeholder="login.emailPlaceholder">
+        <input type="password" id="reg-password" name="secret" placeholder="Passord" aria-label="Passord" required data-i18n-placeholder="login.passwordPlaceholder">
         <label class="consent-label">
             <input type="checkbox" name="hasConsented" id="consent-check" value="true" required> Jeg har lest og godtar <a href="#" id="view-tos">Vilkår</a> og <a href="#" id="view-privacy">Personvern</a>
         </label>

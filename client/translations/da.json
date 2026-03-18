@@ -9,6 +9,7 @@
   "register.failed": "Kunne ikke oprette bruger. Prøv igen senere.",
   "register.requireConsent": "Du skal give samtykke til vilkårene og privatlivspolitikken for at oprette en konto.",
   "register.nickTaken": "Dette kaldenavn er allerede i brug.",
+  "register.nickPlaceholder": "Kaldenavn (valgfrit)",
 
   "auth.failed": "Forkert kaldenavn eller PIN-kode.",
   "auth.no_token": "Ingen adgang: log ind igen.",

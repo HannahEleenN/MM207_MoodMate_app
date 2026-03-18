@@ -9,6 +9,7 @@
   "register.failed": "Could not register user. Please try again later.",
   "register.requireConsent": "You must actively consent to the terms and privacy policy to create an account.",
   "register.nickTaken": "This nickname is already in use.",
+  "register.nickPlaceholder": "Display name (optional)",
 
   "auth.failed": "Wrong nickname or PIN code.",
   "auth.no_token": "No access: please sign in again.",

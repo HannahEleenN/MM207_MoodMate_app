@@ -9,6 +9,7 @@
   "register.failed": "Kunde inte registrera användaren. Försök igen senare.",
   "register.requireConsent": "Du måste godkänna användarvillkoren och integritetspolicyn för att skapa ett konto.",
   "register.nickTaken": "Detta smeknamn används redan.",
+  "register.nickPlaceholder": "Smeknamn (valfritt)",
 
   "auth.failed": "Fel smeknamn eller PIN-kod.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",
