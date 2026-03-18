@@ -147,11 +147,17 @@ export async function showLegal(viewName)
 
     try
     {
-        const i18nHtml = buildLegalHtmlFromI18n(viewName);
-        if (i18nHtml) {
-            modalText.innerHTML = i18nHtml;
-        } else {
+        try {
             modalText.innerHTML = await ApiService.loadView(viewName);
+            try { await store.applyTranslations(modalText); } catch (_) {}
+        } catch (loadErr)
+        {
+            const i18nHtml = buildLegalHtmlFromI18n(viewName);
+            if (i18nHtml) {
+                modalText.innerHTML = i18nHtml;
+            } else {
+                modalText.innerHTML = await ApiService.loadView(viewName);
+            }
         }
 
         previouslyFocusedElement = document.activeElement;

@@ -261,9 +261,10 @@ export const userUIController =
 
             const payload =
             {
+                nick: formData.nick || null,
                 email: formData.email,
                 secret: formData.secret,
-                hasConsented: !!(consentCheckbox && consentCheckbox.checked)
+                has_consented: !!(consentCheckbox && consentCheckbox.checked)
             };
 
             const result = await ApiService.register(payload);
@@ -374,7 +375,7 @@ export const userUIController =
             li.dataset.id = user.id;
 
             const emailEl = li.querySelector('.user-email-display') || li.querySelector('.user-nick-display');
-            if (emailEl) emailEl.textContent = user.email || user.nick || '';
+            if (emailEl) emailEl.textContent = user.nick ? `${user.nick} (${user.email || ''})` : (user.email || '');
 
             const editBtn = li.querySelector('.btn-edit');
             if (editBtn) editBtn.onclick = () => this.handleEdit(user.id, user.email || user.nick);

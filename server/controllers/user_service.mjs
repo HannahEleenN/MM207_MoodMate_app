@@ -4,8 +4,11 @@ import { verifySecret } from '../utils/auth_crypto.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export async function registerUserData({ nick, email, secret, hasConsented })
+export async function registerUserData(payload)
 {
+    const { nick, email, secret } = payload || {};
+    const hasConsented = !!(payload && (payload.hasConsented ?? payload.has_consented));
+
     console.log("Registering new user...");
 
     if (hasConsented !== true)
@@ -38,10 +41,18 @@ export async function registerUserData({ nick, email, secret, hasConsented })
     }
 
     console.log("Attempting to save user to database...");
-    const newUser = await User.create({ nick: safeNick, email, secret, hasConsented });
 
-    console.log("User registered successfully with ID:", newUser.id);
-    return { id: newUser.id, email: newUser.email };
+    const createResult = await User.create({ nick: safeNick, email, secret, hasConsented });
+
+    const saved = await User.findById(createResult.id);
+    console.log("User registered successfully with ID:", saved && saved.id);
+
+    return {
+        id: saved.id,
+        email: saved.email,
+        nick: saved.nick,
+        role: saved.role
+    };
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
