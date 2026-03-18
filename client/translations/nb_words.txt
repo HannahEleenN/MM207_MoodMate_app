@@ -4,5 +4,6 @@ kallenavn
 forelder
 foresatt
 barnas
+mote
+moods
 moodmate
-
