@@ -147,12 +147,10 @@ export async function showLegal(viewName)
 
     try
     {
-        // Prefer rendering from i18n translation keys so the modal updates when language changes
         const i18nHtml = buildLegalHtmlFromI18n(viewName);
         if (i18nHtml) {
             modalText.innerHTML = i18nHtml;
         } else {
-            // Fallback to loading the static HTML view
             modalText.innerHTML = await ApiService.loadView(viewName);
         }
 
@@ -358,6 +356,27 @@ const setupEventListeners = () =>
 {
     console.log('[app] setupEventListeners start');
     const modal = document.getElementById('legal-modal');
+    const globalLogoutBtn = document.getElementById('global-logout');
+
+    if (globalLogoutBtn)
+    {
+        try
+        {
+            const label = store?.t ? (store.t('global.logout') || 'Log out') : 'Log out';
+            const lblEl = globalLogoutBtn.querySelector('.logout-label');
+            if (lblEl) lblEl.textContent = label;
+            globalLogoutBtn.setAttribute('aria-label', label);
+        } catch (e) {  }
+
+        globalLogoutBtn.onclick = async (e) =>
+        {
+            e.preventDefault();
+            try {
+                await ApiService.logout();
+            } catch (err) { console.debug('Logout failed (client side)', err); }
+            try { store.currentView = 'login'; } catch(_) {}
+        };
+    }
 
     try
     {
@@ -366,12 +385,22 @@ const setupEventListeners = () =>
         console.debug('Language switcher build failed', e);
     }
 
-    // update open legal modal when language / i18n changes
-    try {
+    try
+    {
         if (store && typeof store.onChange === 'function') {
             store.onChange('i18n', () => {
-                // if a legal modal is open, re-render from i18n
+
                 try { updateOpenLegal(); } catch (_) {}
+
+                try
+                {
+                    if (globalLogoutBtn && store && typeof store.t === 'function') {
+                        const lbl = store.t('global.logout') || '';
+                        const lblEl = globalLogoutBtn.querySelector('.logout-label');
+                        if (lblEl) lblEl.textContent = lbl || lblEl.textContent;
+                        globalLogoutBtn.setAttribute('aria-label', lbl || globalLogoutBtn.getAttribute('aria-label'));
+                    }
+                 } catch (_) {}
             });
         }
     } catch (e) {
@@ -419,9 +448,25 @@ const setupEventListeners = () =>
         {
             e.preventDefault();
             store.currentView = 'parentMenu';
-            return;
         }
     });
+
+    try
+    {
+        store.onChange('currentView', () =>
+        {
+            const v = store.currentView;
+            if (globalLogoutBtn)
+            {
+                const hideOn = ['login', 'userManager', 'childLogin'];
+                if (hideOn.includes(v)) {
+                    globalLogoutBtn.classList.add('hidden');
+                } else {
+                    globalLogoutBtn.classList.remove('hidden');
+                }
+            }
+        });
+    } catch (_) {}
 
     store.onChange('currentView', () => { router().catch(err => console.error('[app.router] failed in onChange', err)); });
 
@@ -494,8 +539,8 @@ if (!customElements.get('child-profiles'))
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-// Initialize i18n and UI
-(async function initApp() {
+(async function initApp()
+{
     try {
         await store.loadI18n('auto');
     } catch (e) {
@@ -504,6 +549,5 @@ if (!customElements.get('child-profiles'))
 
     try { setupEventListeners(); } catch (e) { console.warn('setupEventListeners failed', e); }
 
-    // initial router render
     try { await router(); } catch (e) { console.error('Initial router failed', e); }
 })();

@@ -286,11 +286,6 @@ textarea {
 .back-link:hover { color: var(--coral); }
 
 /* ── Mood / context / solution buttons ─────────────────────────────────────── */
-/*
- * Big emoji-style choice buttons arranged in a grid.
- * Each button has a pastel background, rounded pill shape,
- * and a cheerful coloured left-border accent.
- */
 
 .mood-options,
 .context-options,
@@ -306,7 +301,6 @@ textarea {
 .context-btn,
 .sol-btn {
     padding: .85rem .75rem;
-    /* Use central border width token for consistent rendering */
     border: var(--border-width) solid transparent;
     border-radius: 1.2rem;
     font-family: var(--font-display), sans-serif;
@@ -577,7 +571,6 @@ section#parent-insights header {
     font-weight: 700;
     font-size: .85rem;
     cursor: pointer;
-    /* Use central border width token for consistent rendering */
     border: var(--border-width) solid var(--teal);
     background: transparent;
     color: var(--teal);
@@ -597,6 +590,45 @@ section#parent-insights header {
     font-size: 1rem;
     cursor: pointer;
     text-decoration: underline;
+}
+
+/* ── Global fixed logout button */
+#global-logout
+{
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 9999;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.06);
+    color: var(--teal);
+    font-family: var(--font-body), sans-serif;
+    font-weight: 800;
+    padding: .4rem .8rem;
+    border-radius: .8rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    box-shadow: 0 6px 18px rgba(20,20,20,.08);
+}
+#global-logout:hover { color: var(--coral); transform: translateY(-2px); }
+#global-logout.hidden { display: none !important; }
+#global-logout .logout-icon { display: inline-block; vertical-align: middle; fill: currentColor; }
+#global-logout .logout-label { display: inline-block; font-size: .95rem; }
+
+@media (max-width: 480px)
+{
+    #global-logout
+    {
+        padding: .35rem .45rem;
+        right: .6rem;
+        top: .6rem;
+        border-radius: 9999px;
+        background: rgba(255,255,255,0.98);
+    }
+    #global-logout .logout-label { display: none; }
+    #global-logout .logout-icon { width: 20px; height: 20px; }
 }
 
 /* ── Responsive tweaks ─────────────────────────────────────────────────────── */

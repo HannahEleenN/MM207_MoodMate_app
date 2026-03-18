@@ -60,22 +60,6 @@ export async function initParentApp(container)
             }
         };
 
-        const logoutBtn = container.querySelector('#logout-btn');
-        if (logoutBtn)
-        {
-            logoutBtn.onclick = async () =>
-            {
-                if (window.__STORE__) {
-                    window.__STORE__.authToken = null;
-                }
-
-                try { window.localStorage.removeItem('moodmate_session'); } catch (_) {}
-                store.currentUser = null;
-                store.currentChild = null;
-                store.currentView = 'login';
-            };
-        }
-
     } catch (error)
     {
         console.error("Failed to load parent menu:", error);

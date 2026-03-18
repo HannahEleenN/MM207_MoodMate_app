@@ -42,9 +42,10 @@
   "legal.terms": "Användarvillkor",
   "legal.privacy": "Integritetspolicy",
   "login.newUser": "Ny användare?",
-  "login.createAccount": "Skapa ett föräldrakonto",
+  "login.createAccount": "Skapa ett konto för förälder",
+  "global.logout": "Logga ut",
 
-  "child.hello": "Hej där! 🌟",
+  "child.hello": "Hej! 🌟",
   "child.askMood": "Hur mår du just nu?",
   "mood.happy": "😊 Glad",
   "mood.sad": "😢 Ledsen",

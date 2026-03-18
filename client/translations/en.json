@@ -43,6 +43,7 @@
   "legal.privacy": "Privacy Policy",
   "login.newUser": "New user?",
   "login.createAccount": "Create a parent account",
+  "global.logout": "Sign out",
 
   "child.hello": "Hello there! 🌟",
   "child.askMood": "How are you feeling right now?",
