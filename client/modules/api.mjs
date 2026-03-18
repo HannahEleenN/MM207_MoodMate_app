@@ -107,7 +107,7 @@ export const ApiService =
     async saveDraft(draftData)
     {
         try {
-            return await universalFetch(`${BASE}/moods/draft`, withAuthHeaders({ method: 'PUT', body: JSON.stringify(draftData) }));
+            return await universalFetch(`${BASE}/moods/draft`, withAuthHeaders({ method: 'PUT', body: JSON.stringify(draftData), suppressErrorLogging: true }));
         } catch (e) {
             console.debug('saveDraft failed (server may not support drafts):', e);
             return null;
@@ -118,7 +118,7 @@ export const ApiService =
     {
         try {
             const path = profileId ? `${BASE}/moods/draft?profileId=${encodeURIComponent(profileId)}` : `${BASE}/moods/draft`;
-            return await universalFetch(path, withAuthHeaders({ method: 'GET' }));
+            return await universalFetch(path, withAuthHeaders({ method: 'GET', suppressErrorLogging: true }));
         } catch (e) {
             console.debug('getDraft failed (server may not support drafts):', e);
             return null;
@@ -129,7 +129,7 @@ export const ApiService =
     {
         try {
             const path = profileId ? `${BASE}/moods/draft?profileId=${encodeURIComponent(profileId)}` : `${BASE}/moods/draft`;
-            return await universalFetch(path, withAuthHeaders({ method: 'DELETE' }));
+            return await universalFetch(path, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
         } catch (e) {
             console.debug('deleteDraft failed (server may not support drafts):', e);
             return null;

@@ -13,6 +13,8 @@ const formatDate = (date) =>
     });
 };
 
+const _draftStore = new Map();
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 export const createMood = async (req, res) =>
@@ -102,4 +104,60 @@ export const updateMood = async (req, res) => {
 
 export const deleteMood = async (req, res) => {
     res.status(204).send();
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const saveDraft = async (req, res) =>
+{
+    try
+    {
+        const userId = req.user && (req.user.userId || req.user.id);
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+        const profileId = req.query.profileId || (req.body && req.body.profileId) || null;
+        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
+        const draft = req.body || {};
+        _draftStore.set(key, { draft, savedAt: new Date().toISOString() });
+        return res.status(200).json(draft);
+    } catch (err) {
+        console.error('saveDraft error:', err);
+        return res.status(500).json({ error: 'Could not save draft' });
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const getDraft = async (req, res) =>
+{
+    try
+    {
+        const userId = req.user && (req.user.userId || req.user.id);
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+        const profileId = req.query.profileId || null;
+        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
+        const item = _draftStore.get(key) || null;
+        if (!item) return res.status(404).json({ message: 'No draft found' });
+        return res.status(200).json(item.draft);
+    } catch (err) {
+        console.error('getDraft error:', err);
+        return res.status(500).json({ error: 'Could not fetch draft' });
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export const deleteDraft = async (req, res) =>
+{
+    try
+    {
+        const userId = req.user && (req.user.userId || req.user.id);
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+        const profileId = req.query.profileId || null;
+        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
+        _draftStore.delete(key);
+        return res.status(204).send();
+    } catch (err) {
+        console.error('deleteDraft error:', err);
+        return res.status(500).json({ error: 'Could not delete draft' });
+    }
 };

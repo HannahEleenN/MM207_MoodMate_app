@@ -32,20 +32,24 @@ async function _universalFetchImpl(url, options = {})
 
         const finalUrl = isApiPath ? withApiBase(url) : url;
 
-        if (options.body && !options.headers?.['Content-Type']) {
-            options.headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+        const suppressErrorLogging = options && options.suppressErrorLogging;
+        const fetchOptions = Object.assign({}, options);
+        if (fetchOptions && fetchOptions.suppressErrorLogging) delete fetchOptions.suppressErrorLogging;
+
+        if (fetchOptions.body && !fetchOptions.headers?.['Content-Type']) {
+            fetchOptions.headers = { 'Content-Type': 'application/json', ...(fetchOptions.headers || {}) };
         }
 
         try
         {
             const token = (typeof window !== 'undefined' && window.__STORE__) ? window.__STORE__.token : null;
-            try { console.debug('[universalFetch] preparing request', { finalUrl, hasToken: !!token, providedHeaders: options.headers }); } catch (_) {}
-            if (token && !options.headers?.Authorization && !options.headers?.authorization) {
-                options.headers = { Authorization: `Bearer ${token}`, ...(options.headers || {}) };
+            try { console.debug('[universalFetch] preparing request', { finalUrl, hasToken: !!token, providedHeaders: fetchOptions.headers }); } catch (_) {}
+            if (token && !fetchOptions.headers?.Authorization && !fetchOptions.headers?.authorization) {
+                fetchOptions.headers = { Authorization: `Bearer ${token}`, ...(fetchOptions.headers || {}) };
             }
         } catch (_) {}
 
-        const response = await fetch(finalUrl, { credentials: 'same-origin', ...options });
+        const response = await fetch(finalUrl, { credentials: 'same-origin', ...fetchOptions });
 
         if (!response.ok)
         {
@@ -53,7 +57,9 @@ async function _universalFetchImpl(url, options = {})
             try { body = isHtmlPath ? await response.text() : await response.json(); }
             catch (_) { try { body = await response.text(); } catch (__) { } }
 
-            try { console.error('[universalFetch] non-ok response', { url: finalUrl, status: response.status, body }); } catch (e) { }
+            if (!suppressErrorLogging) {
+                try { console.error('[universalFetch] non-ok response', { url: finalUrl, status: response.status, body }); } catch (e) { }
+            }
 
             if (typeof window !== 'undefined' && (response.status === 401 || response.status === 403))
             {

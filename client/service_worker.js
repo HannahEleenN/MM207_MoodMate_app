@@ -183,3 +183,22 @@ self.addEventListener("fetch", (event) =>
     }
     event.respondWith(caches.match(req).then(response => response || fetch(req).catch(() => caches.match('/offline.html'))));
 });
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+self.addEventListener('message', (event) =>
+{
+    if (!event || !event.data) return;
+    (async () =>
+    {
+        try
+        {
+            const data = event.data;
+            if (data && data.type === 'PING' && event.source && typeof event.source.postMessage === 'function') {
+                try { event.source.postMessage({ type: 'PONG', version: VERSION }); } catch (e) {  }
+            }
+        } catch (err) {
+            console.error('Service worker message handler error:', err);
+        }
+    })();
+});

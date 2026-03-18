@@ -631,6 +631,49 @@ section#parent-insights header {
     #global-logout .logout-icon { width: 20px; height: 20px; }
 }
 
+/* ── Modal (legal) center overlay ───────────────────────────────────────────── */
+#legal-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    z-index: 10000;
+    padding: 1rem;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease;
+}
+
+#legal-modal .modal-content {
+    background: #fff;
+    max-width: 820px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: auto;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+#legal-modal.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Only show legal links (view-privacy, view-tos) when on auth views (login/register) */
+#view-privacy, #view-tos { display: none !important; }
+body.auth-view #view-privacy,
+body.auth-view #view-tos { display: inline-block !important; }
+
+/* Ensure modal is not visible on non-auth views unless opened programmatically */
+#legal-modal[aria-hidden="true"] { display: none; }
+
 /* ── Responsive tweaks ─────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
     section { padding: 1.8rem 1.2rem; }

@@ -358,6 +358,23 @@ const setupEventListeners = () =>
     const modal = document.getElementById('legal-modal');
     const globalLogoutBtn = document.getElementById('global-logout');
 
+    function updateLogoutVisibility()
+    {
+        try
+        {
+            if (!globalLogoutBtn) return;
+            const v = store.currentView;
+            const hideOn = ['login', 'userManager', 'childLogin'];
+            if (hideOn.includes(v)) {
+                globalLogoutBtn.classList.add('hidden');
+            } else {
+                globalLogoutBtn.classList.remove('hidden');
+            }
+        } catch (e) { console.warn('updateLogoutVisibility failed', e); }
+    }
+
+    try { updateLogoutVisibility(); } catch (_) {}
+
     if (globalLogoutBtn)
     {
         try
@@ -420,6 +437,24 @@ const setupEventListeners = () =>
                     }
                  } catch (_) {}
             });
+
+            store.onChange('currentView', () =>
+            {
+                try { updateLogoutVisibility(); } catch (_) {}
+
+                try {
+                    const v = store.currentView;
+                    if (v === 'login' || v === 'userManager') {
+                        document.body.classList.add('auth-view');
+                    } else {
+                        document.body.classList.remove('auth-view');
+                    }
+                } catch (_) {}
+            });
+
+            store.onChange('currentUser', () => {
+                try { updateLogoutVisibility(); } catch (_) {}
+            });
         }
     } catch (e) {
         console.debug('Failed to attach i18n change listener', e);
@@ -446,12 +481,14 @@ const setupEventListeners = () =>
         if (target?.id === 'view-tos')
         {
             e.preventDefault();
+            if (!document.body.classList.contains('auth-view')) return;
             await showLegal('termsOfService');
             return;
         }
         if (target?.id === 'view-privacy')
         {
             e.preventDefault();
+            if (!document.body.classList.contains('auth-view')) return;
             await showLegal('privacyPolicy');
             return;
         }
