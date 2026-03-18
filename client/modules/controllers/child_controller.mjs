@@ -63,78 +63,78 @@ export const childController =
         happy:
         {
             reasons: [
-                { id: 'venner', labelKey: 'reason.venner' },
-                { id: 'familie', labelKey: 'reason.familie' },
-                { id: 'sola', labelKey: 'reason.sola' }
+                { id: 'friends', labelKey: 'reason.friends' },
+                { id: 'family', labelKey: 'reason.family' },
+                { id: 'sunny', labelKey: 'reason.sunny' }
             ],
             solutions: [
-                { id: 'danse', labelKey: 'solution.danse' },
-                { id: 'synge', labelKey: 'solution.synge' },
-                { id: 'tegne', labelKey: 'solution.tegne' },
-                { id: 'leke', labelKey: 'solution.leke' }
+                { id: 'dance', labelKey: 'solution.dance' },
+                { id: 'sing', labelKey: 'solution.sing' },
+                { id: 'draw', labelKey: 'solution.draw' },
+                { id: 'play', labelKey: 'solution.play' }
             ]
         },
         scared:
         {
             reasons: [
-                { id: 'morket', labelKey: 'reason.morket' },
-                { id: 'tannlegen', labelKey: 'reason.tannlegen' },
-                { id: 'skummel', labelKey: 'reason.skummel' }
+                { id: 'dark', labelKey: 'reason.dark' },
+                { id: 'dentist', labelKey: 'reason.dentist' },
+                { id: 'scary', labelKey: 'reason.scary' }
             ],
             solutions: [
-                { id: 'snakke', labelKey: 'solution.snakke' },
-                { id: 'fanget', labelKey: 'solution.fanget' },
-                { id: 'fin-tanke', labelKey: 'solution.fin-tanke' }
+                { id: 'talk', labelKey: 'solution.talk' },
+                { id: 'lap', labelKey: 'solution.lap' },
+                { id: 'thinkNice', labelKey: 'solution.thinkNice' }
             ]
         },
         angry:
         {
             reasons: [
-                { id: 'urett', labelKey: 'reason.urett' },
-                { id: 'tapt', labelKey: 'reason.tapt' },
-                { id: 'krangel', labelKey: 'reason.krangel' }
+                { id: 'unfair', labelKey: 'reason.unfair' },
+                { id: 'lost', labelKey: 'reason.lost' },
+                { id: 'argue', labelKey: 'reason.argue' }
             ],
             solutions: [
-                { id: 'pute', labelKey: 'solution.pute' },
-                { id: 'tegne', labelKey: 'solution.tegne' }
+                { id: 'pillow', labelKey: 'solution.pillow' },
+                { id: 'draw', labelKey: 'solution.draw' }
             ]
         },
         sad:
         {
             reasons: [
-                { id: 'savnet', labelKey: 'reason.savnet' },
-                { id: 'skole', labelKey: 'reason.skole' },
-                { id: 'venner', labelKey: 'reason.venner' }
+                { id: 'missing', labelKey: 'reason.missing' },
+                { id: 'school', labelKey: 'reason.school' },
+                { id: 'friends', labelKey: 'reason.friends' }
             ],
             solutions: [
-                { id: 'snakke', labelKey: 'solution.snakke' },
-                { id: 'klem', labelKey: 'solution.klem' },
-                { id: 'tegne', labelKey: 'solution.tegne' }
+                { id: 'talk', labelKey: 'solution.talk' },
+                { id: 'hug', labelKey: 'solution.hug' },
+                { id: 'draw', labelKey: 'solution.draw' }
             ]
         },
         calm:
         {
             reasons: [
-                { id: 'lese', labelKey: 'reason.lese' },
-                { id: 'natur', labelKey: 'reason.natur' },
-                { id: 'familie', labelKey: 'reason.familie' }
+                { id: 'read', labelKey: 'reason.read' },
+                { id: 'nature', labelKey: 'reason.nature' },
+                { id: 'family', labelKey: 'reason.family' }
             ],
             solutions: [
-                { id: 'musikk', labelKey: 'solution.musikk' },
-                { id: 'puste', labelKey: 'solution.puste' },
-                { id: 'tegne', labelKey: 'solution.tegne' }
+                { id: 'music', labelKey: 'solution.music' },
+                { id: 'breathe', labelKey: 'solution.breathe' },
+                { id: 'draw', labelKey: 'solution.draw' }
             ]
         },
         surprised:
         {
             reasons: [
-                { id: 'gave', labelKey: 'reason.gave' },
-                { id: 'nyhet', labelKey: 'reason.nyhet' },
-                { id: 'skole', labelKey: 'reason.skole' }
+                { id: 'gift', labelKey: 'reason.gift' },
+                { id: 'news', labelKey: 'reason.news' },
+                { id: 'school', labelKey: 'reason.school' }
             ],
             solutions: [
-                { id: 'dele', labelKey: 'solution.dele' },
-                { id: 'feire', labelKey: 'solution.feire' }
+                { id: 'share', labelKey: 'solution.share' },
+                { id: 'celebrate', labelKey: 'solution.celebrate' }
             ]
         }
     },
@@ -142,19 +142,19 @@ export const childController =
     moodTextual:
     {
         happy: [
-            'text.glad.0','text.glad.1','text.glad.2','text.glad.3','text.glad.4','text.glad.5','text.glad.6','text.glad.7'
+            'text.happy.0','text.happy.1','text.happy.2','text.happy.3','text.happy.4','text.happy.5','text.happy.6','text.happy.7'
         ],
         sad: [
-            'text.lei.0','text.lei.1','text.lei.2','text.lei.3','text.lei.4','text.lei.5','text.lei.6'
+            'text.sad.0','text.sad.1','text.sad.2','text.sad.3','text.sad.4','text.sad.5','text.sad.6'
         ],
         angry: [
-            'text.sint.0','text.sint.1','text.sint.2','text.sint.3','text.sint.4'
+            'text.angry.0','text.angry.1','text.angry.2','text.angry.3','text.angry.4'
         ],
         surprised: [
-            'text.overrasket.0','text.overrasket.1','text.overrasket.2','text.overrasket.3','text.overrasket.4','text.overrasket.5'
+            'text.surprised.0','text.surprised.1','text.surprised.2','text.surprised.3','text.surprised.4','text.surprised.5'
         ],
         scared: [
-            'text.redd.0','text.redd.1','text.redd.2','text.redd.3','text.redd.4','text.redd.5','text.redd.6'
+            'text.scared.0','text.scared.1','text.scared.2','text.scared.3','text.scared.4','text.scared.5','text.scared.6'
         ]
     },
 
@@ -225,7 +225,7 @@ export const childController =
         this._persistDraft();
 
         const display = this.container.querySelector('#selected-mood-text');
-        if (display) display.textContent = mood;
+        if (display) display.textContent = (store && store.t) ? (store.t(`mood.${mood}`) || mood) : mood;
 
         const reasonsContainer = this.container.querySelector('#reasons-text');
         const map = this.moodMap[mood] || { reasons: [], solutions: [] };
@@ -238,7 +238,7 @@ export const childController =
             intro.className = 'reasons-intro';
 
             const strong = document.createElement('strong');
-            strong.textContent = (store && store.t) ? store.t('checkin.instructions') : 'Use words';
+            strong.textContent = (store && store.t) ? store.t('checkin.instructions') : 'Look at the pictures or use words:';
             intro.appendChild(strong);
             reasonsContainer.appendChild(intro);
 
@@ -249,13 +249,14 @@ export const childController =
 
             if (textual && Array.isArray(textual) && textual.length > 0)
             {
-                textual.forEach((text, idx) =>
+                textual.forEach((text) =>
                 {
                     const li = document.createElement('li');
                     li.tabIndex = 0;
                     li.className = 'reason-item';
-                    li.dataset.context = `text-${mood}-${idx}`;
-                    li.textContent = text;
+                    const displayed = (store && store.t) ? store.t(text) : text;
+                    li.dataset.context = displayed;
+                    li.textContent = displayed;
                     ul.appendChild(li);
                 });
             } else
@@ -265,8 +266,10 @@ export const childController =
                     const li = document.createElement('li');
                     li.tabIndex = 0;
                     li.className = 'reason-item';
-                    li.dataset.context = r.id || r.label || r;
-                    li.textContent = r.label || r;
+                    const labelKey = r.labelKey || (r.id ? `reason.${r.id}` : null);
+                    const displayed = (store && store.t && labelKey) ? store.t(labelKey) : (r.label || r.id || r);
+                    li.dataset.context = displayed;
+                    li.textContent = displayed;
                     ul.appendChild(li);
                 });
             }
@@ -283,7 +286,8 @@ export const childController =
                 const b = document.createElement('button');
                 b.className = 'sol-btn';
                 b.dataset.sol = s.id;
-                b.textContent = s.label;
+                const solLabelKey = s.labelKey || (s.id ? `solution.${s.id}` : null);
+                b.textContent = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (s.label || s.id || '');
                 solutionsGrid.appendChild(b);
             });
         }
@@ -384,7 +388,10 @@ export const childController =
             const mood = this.model.temporaryMoodSelection;
             const map = this.moodMap[mood] || { solutions: [] };
             const found = map.solutions.find(s => s.id === this.model.temporarySolutionSelection);
-            if (found) data.solutionLabel = found.label;
+            if (found) {
+                const solLabelKey = found.labelKey || (found.id ? `solution.${found.id}` : null);
+                data.solutionLabel = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (found.label || found.id || null);
+            }
         } catch (e) {
             console.error('Error finding solution label:', e);
         }

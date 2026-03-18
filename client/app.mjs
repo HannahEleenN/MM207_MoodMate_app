@@ -137,9 +137,9 @@ export async function showLegal(viewName)
     {
         try {
             const tKey = `legal.${viewName}.title`;
-            titleEl.textContent = (store?.t ? store.t(tKey) : null) || (viewName === 'termsOfService' ? 'Vilkår' : (viewName === 'privacyPolicy' ? 'Personvern' : 'Vilkår og personvern'));
+            titleEl.textContent = (store?.t ? (store.t(tKey) || store.t('legal.modalTitle') || '') : '') || '';
         } catch (e) {
-            titleEl.textContent = 'Vilkår og personvern';
+            titleEl.textContent = '';
         }
     }
 
@@ -290,16 +290,20 @@ async function buildLanguageSwitcher()
         container.innerHTML = '';
         for (const f of flags)
         {
-            const { code, title, file } = f || {};
+            const { languageCode, languageName, flagImage } = f || {};
+            const langCode = languageCode || f.code || '';
+            const title = languageName || f.languageName || f.title || '';
+            const filePath = flagImage || f.flagImage || f.file || '';
+
             const btn = document.createElement('button');
             btn.className = 'lang-btn';
-            btn.setAttribute('data-lang', code || '');
+            btn.setAttribute('data-lang', langCode || '');
             btn.setAttribute('title', title || '');
             btn.setAttribute('aria-label', title || '');
             btn.setAttribute('aria-pressed', 'false');
 
             const img = document.createElement('img');
-            img.src = file || '';
+            img.src = filePath || '';
             img.alt = `${title || ''} flag`;
             img.width = 28;
             img.height = 18;
@@ -391,11 +395,10 @@ const setupEventListeners = () =>
             globalLogoutBtn.setAttribute('aria-label', label);
         } catch (e) {  }
 
-        globalLogoutBtn.onclick = async (e) =>
-        {
+        // Use addEventListener to avoid ambiguity and ensure clear closure of the handler
+        globalLogoutBtn.addEventListener('click', async (e) => {
             e.preventDefault();
-            try
-            {
+            try {
                 const hasTempSelections = !!(store && (store.temporaryMoodSelection || store.temporaryContext || store.temporarySolutionSelection));
                 const hasDraft = !!(store && store.draftMood && (store.draftMood.mood || store.draftMood.context || store.draftMood.solution || store.draftMood.note));
                 const hasUnsavedMood = hasTempSelections || hasDraft;
@@ -411,12 +414,49 @@ const setupEventListeners = () =>
                     return;
                 }
 
-                try { await ApiService.logout(); } catch (err) { console.debug('Logout failed (client side)', err); }
-                try { store.currentView = 'login'; } catch(_) {}
-            } catch (outerErr) {
-                console.error('Logout handler failed:', outerErr);
+                try {
+                    await ApiService.logout();
+                } catch (err) {
+                    console.debug('Logout failed (client side)', err);
+                }
+
+                try {
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.removeItem('moodmate_lang');
+                    }
+                } catch (_) {
+                    // ignore localStorage errors
+                }
+
+                try {
+                    store.currentView = 'login';
+                } catch (err) {
+                    console.debug('Error setting view after logout', err);
+                }
+
+                try {
+                    await ApiService.logout();
+                } catch (err) {
+                    console.debug('Logout failed (client side)', err);
+                }
+
+                try {
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.removeItem('moodmate_lang');
+                    }
+                } catch (innerErr) {
+                    // ignore
+                }
+
+                try {
+                    store.currentView = 'login';
+                } catch (err) {
+                    console.debug('Error setting view after logout', err);
+                }
+            } catch (err) {
+                console.debug('Error in logout handler', err);
             }
-        };
+        });
     }
 
     try
@@ -428,10 +468,11 @@ const setupEventListeners = () =>
 
     try
     {
-        if (store && typeof store.onChange === 'function') {
-            store.onChange('i18n', () => {
-
-                try { updateOpenLegal(); } catch (_) {}
+        if (store && typeof store.onChange === 'function')
+        {
+            store.onChange('i18n', () =>
+            {
+                (async () => { try { await updateOpenLegal(); } catch (_) {} })();
 
                 try
                 {
@@ -602,8 +643,15 @@ if (!customElements.get('child-profiles'))
 
 (async function initApp()
 {
-    try {
-        await store.loadI18n('auto');
+    try
+    {
+        let bootLanguage = 'no';
+        try {
+            const savedLanguage = (typeof localStorage !== 'undefined') ? localStorage.getItem('moodmate_lang') : null;
+            if (savedLanguage) bootLanguage = savedLanguage;
+        } catch (_) {}
+
+        await store.loadI18n(bootLanguage);
     } catch (e) {
         console.warn('i18n bootstrap failed', e);
     }

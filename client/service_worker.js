@@ -31,17 +31,16 @@ self.addEventListener("install", (event) =>
             }
         }
 
-        let icons = [];
         try
         {
             const manifestResponse = await fetch('/manifest.json');
             if (manifestResponse && manifestResponse.ok)
             {
                 const manifest = await manifestResponse.json();
-                icons = (manifest && manifest.icons && Array.isArray(manifest.icons)) ? manifest.icons : [];
-                if (icons.length)
+                const manifestIcons = (manifest && manifest.icons && Array.isArray(manifest.icons)) ? manifest.icons : [];
+                if (manifestIcons.length)
                 {
-                    for (const icon of icons)
+                    for (const icon of manifestIcons)
                     {
                         if (icon && icon.src)
                         {
@@ -66,7 +65,7 @@ self.addEventListener("install", (event) =>
                 {
                     for (const f of flagEntries)
                     {
-                        const fileName = f && f.file ? f.file : null;
+                        const fileName = f && (f['flagImage'] || f['file'] || f['flag']) ? (f['flagImage'] || f['file'] || f['flag']) : null;
                         const path = fileName ? ('/' + String(fileName).replace(/^\/+/, '')) : null;
                         if (path)
                         {

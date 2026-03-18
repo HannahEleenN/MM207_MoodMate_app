@@ -4,7 +4,7 @@ import { ProfileModel } from '../models/profile_client_model.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const profileController =
+export const childProfilesUI =
 {
   async init(container)
   {

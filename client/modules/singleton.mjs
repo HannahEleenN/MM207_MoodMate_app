@@ -268,6 +268,13 @@ _state.setLanguage = async function (lang)
     if (typeof document !== 'undefined') {
         document.documentElement.lang = langMap[lang] ?? 'nb';
     }
+
+    try
+    {
+        if (typeof localStorage !== 'undefined' && lang) {
+            localStorage.setItem('moodmate_lang', lang);
+        }
+    } catch (e) { console.debug('Could not persist language selection', e); }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
