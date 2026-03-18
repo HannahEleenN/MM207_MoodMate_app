@@ -26,9 +26,16 @@ export async function initParentApp(container)
         }
 
         const childNameEl = container.querySelector('#child-name');
-        if (childNameEl) {
+        if (childNameEl)
+        {
             const noneText = store.t('child.none');
-            childNameEl.textContent = store.currentChild ? store.currentChild.name : noneText;
+            if (store.currentChild) {
+                childNameEl.textContent = store.currentChild.name;
+            } else if (store.currentUser && store.currentUser.email) {
+                childNameEl.textContent = store.currentUser.email;
+            } else {
+                childNameEl.textContent = noneText;
+            }
         }
 
         const deleteBtn = container.querySelector('#delete-account-btn');

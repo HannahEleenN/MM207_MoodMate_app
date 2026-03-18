@@ -42,12 +42,11 @@ export const moodUIController =
         {
             console.error('[moodUI] failed to load insights view:', err);
 
-            // If the error is an auth error, guide the user to log in again
             const isAuthError = err && (err.status === 401 || err.status === 403);
             const p = document.createElement('p');
-            if (isAuthError) {
+            if (isAuthError)
+            {
                 p.textContent = (store && store.t) ? store.t('auth.sessionExpired') || store.t('insights.error') : 'Session expired or access denied. Please log in again.';
-                // ensure the UI goes back to login so the user can obtain a fresh token
                 try { store.currentView = 'login'; } catch (_) {}
             } else {
                 p.textContent = (store && store.t) ? store.t('insights.error') : 'Could not load insights.';
