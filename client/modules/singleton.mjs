@@ -39,6 +39,7 @@ async function _universalFetchImpl(url, options = {})
         try
         {
             const token = (typeof window !== 'undefined' && window.__STORE__) ? window.__STORE__.token : null;
+            try { console.debug('[universalFetch] preparing request', { finalUrl, hasToken: !!token, providedHeaders: options.headers }); } catch (_) {}
             if (token && !options.headers?.Authorization && !options.headers?.authorization) {
                 options.headers = { Authorization: `Bearer ${token}`, ...(options.headers || {}) };
             }
@@ -53,6 +54,19 @@ async function _universalFetchImpl(url, options = {})
             catch (_) { try { body = await response.text(); } catch (__) { } }
 
             try { console.error('[universalFetch] non-ok response', { url: finalUrl, status: response.status, body }); } catch (e) { }
+
+            if (typeof window !== 'undefined' && (response.status === 401 || response.status === 403))
+            {
+                try {
+                    console.info('[universalFetch] received 401/403 from API — clearing local session to force re-login');
+                    if (window.__STORE__) {
+                        window.__STORE__.token = null;
+                        window.__STORE__.currentUser = null;
+                        window.__STORE__.currentChild = null;
+                    }
+                } catch (e) { console.warn('Failed to clear store after auth error:', e); }
+                try { localStorage.removeItem('moodmate_session'); } catch (_) {}
+            }
 
             const err = new Error(`Fetch error: ${response.status}`);
             err.status = response.status;

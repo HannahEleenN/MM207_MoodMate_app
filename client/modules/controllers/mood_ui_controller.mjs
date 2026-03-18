@@ -12,7 +12,7 @@ export const moodUIController =
             container.innerHTML = await ApiService.loadView('insights');
 
             const resp = await ApiService.getAllMoods();
-            const entries = (resp && resp.moods) ? resp.moods : (Array.isArray(resp) ? resp : []);
+            const entries = (resp && (Array.isArray(resp.data) ? resp.data : (resp.moods || (Array.isArray(resp) ? resp : [])))) || [];
 
             const historyList = container.querySelector('#history-list');
             if (historyList)
@@ -40,11 +40,21 @@ export const moodUIController =
 
         } catch (err)
         {
-        console.error('[moodUI] failed to load insights view:', err);
-        const p = document.createElement('p');
-        p.textContent = (store && store.t) ? store.t('insights.error') : 'Could not load insights.';
-        while (container.firstChild) container.removeChild(container.firstChild);
-        container.appendChild(p);
+            console.error('[moodUI] failed to load insights view:', err);
+
+            // If the error is an auth error, guide the user to log in again
+            const isAuthError = err && (err.status === 401 || err.status === 403);
+            const p = document.createElement('p');
+            if (isAuthError) {
+                p.textContent = (store && store.t) ? store.t('auth.sessionExpired') || store.t('insights.error') : 'Session expired or access denied. Please log in again.';
+                // ensure the UI goes back to login so the user can obtain a fresh token
+                try { store.currentView = 'login'; } catch (_) {}
+            } else {
+                p.textContent = (store && store.t) ? store.t('insights.error') : 'Could not load insights.';
+            }
+
+            while (container.firstChild) container.removeChild(container.firstChild);
+            container.appendChild(p);
         }
     },
 
