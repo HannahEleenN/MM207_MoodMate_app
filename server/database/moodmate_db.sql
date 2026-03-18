@@ -1,9 +1,10 @@
--- 1. DROP EXISTING TABLES (To start with a clean slate)
 DROP TABLE IF EXISTS mood_logs CASCADE;
 DROP TABLE IF EXISTS child_profiles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP FUNCTION IF EXISTS get_mood_logs_by_user(integer) CASCADE;
+DROP TABLE IF EXISTS mood_drafts CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
--- 2. Child profiles table (parent-child relationship)
 CREATE TABLE child_profiles (
     id SERIAL PRIMARY KEY,
     parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -12,7 +13,6 @@ CREATE TABLE child_profiles (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. CREATE USERS TABLE
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     nick VARCHAR(50) UNIQUE NOT NULL,
@@ -23,7 +23,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. CREATE MOOD LOGS TABLE
 CREATE TABLE mood_logs (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
@@ -35,7 +34,6 @@ CREATE TABLE mood_logs (
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. FUNCTION: Register a parent user
 CREATE OR REPLACE FUNCTION register_parent_user(
     p_nick VARCHAR,
     p_email VARCHAR,
@@ -51,7 +49,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 6. FUNCTION: Get user by nickname
 CREATE OR REPLACE FUNCTION get_user_by_nick(p_nick VARCHAR)
 RETURNS SETOF users AS $$
 BEGIN
@@ -59,7 +56,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 6b. FUNCTION: Get user by email
 CREATE OR REPLACE FUNCTION get_user_by_email(p_email VARCHAR)
 RETURNS SETOF users AS $$
 BEGIN
@@ -67,7 +63,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 7. FUNCTION: Create a new mood log
 CREATE OR REPLACE FUNCTION create_mood_log(
     p_user_id INTEGER,
     p_mood VARCHAR,
@@ -82,7 +77,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- 8. FUNCTION: Get mood logs for a specific user
 CREATE OR REPLACE FUNCTION get_mood_logs_by_user(p_user_id INTEGER)
 RETURNS SETOF mood_logs AS $$
 BEGIN
@@ -92,3 +86,13 @@ BEGIN
     ORDER BY timestamp DESC;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE TABLE IF NOT EXISTS mood_drafts (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    child_id TEXT NOT NULL DEFAULT '',
+    draft JSONB,
+    saved_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS mood_drafts_user_child_idx ON mood_drafts (user_id, child_id);

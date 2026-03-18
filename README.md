@@ -66,84 +66,27 @@ The project uses a layered MVC-style architecture which keeps controllers, servi
 
 ---
 
-## Scaffolding & Folder Structure
+### Project layout (concise)
 
-### /server
-```
-/server
-├── server_app.mjs                # Main entry point (Express)
-├── messages.mjs                  # Centralized server message keys
-├── routes/
-│   ├── child_routes.mjs          # Child-specific endpoints (protected)
-│   ├── mood_routes.mjs           # Mood-related endpoints (protected)
-│   ├── parent_routes.mjs         # User/Parent registration/login/CRUD endpoints
-│   └── demo_routes.mjs           # Demo & auxiliary endpoints (replaces older child_routes naming)
-├── controllers/
-│   ├── mood_api_handler.mjs      # HTTP handlers for moods
-│   ├── user_api_handler.mjs      # HTTP handlers for user flows
-│   ├── child_controller.mjs      # Child profile & child-login handlers
-│   └── user_service.mjs          # Domain/service logic used by handlers
-├── models/
-│   ├── mood_server_model.mjs     # DB functions for mood logs
-│   ├── user_server_model.mjs     # DB functions for users (create/find/update/delete)
-│   └── child_server_model.mjs    # Child profiles model (pin hashing/verification)
-├── utils/
-│   └── auth_crypto.mjs           # Hashing & verification helpers (bcrypt wrapper)
-├── middleware/
-│   └── privacyGuard.mjs          # JWT-based privacy/ownership enforcement
-└── database/
-    ├── db.mjs                    # Postgres connection pool (uses DATABASE_URL)
-    └── moodmate_db.sql           # Database schema / functions (reference)
-```
+- `server/` — Backend (Express + Postgres)
+  - `server_app.mjs` — Express app entry (routes & middleware)
+  - `database/db.mjs` — Postgres pool (uses `DATABASE_URL`)
+  - `middleware/privacyGuard.mjs` — JWT / ownership enforcement
+  - `routes/` — Route registrations (e.g., `parent_routes.mjs`, `mood_routes.mjs`)
+  - `controllers/` — HTTP handlers (e.g., `user_api_handler.mjs`, `mood_api_handler.mjs`)
+  - `models/` — DB access (e.g., `user_server_model.mjs`, `mood_server_model.mjs`)
 
-### /client
-```
-/client
-├── index.html                    # SPA shell; markup-only, mounts `#app-root`
-├── style.css                     # All styles and focus/accessibility rules
-├── manifest.json                 # PWA manifest (icons, start_url, display)
-├── app.mjs                       # App bootstrap, router, and event wiring
-├── service_worker.js             # Service worker (caching strategies and offline)
-├── serviceWorkerSetup.mjs        # SW registration helper (dev/production flags)
-├── offline.html                  # Offline fallback page
-├── assets/
-│   ├── flags/                    # Flag SVGs and a `flags.json` manifest used by the language switcher
-│   │   ├── no.svg
-│   │   ├── gb.svg
-│   │   ├── se.svg
-│   │   ├── es.svg
-│   │   ├── dk.svg
-│   │   └── flags.json
-│   └── images/                   # Images used by views
-├── translations/                 # Runtime translation JSON files used by the client
-│   ├── no.json                   # Norwegian
-│   ├── en.json                   # English
-│   ├── sv.json                   # Swedish
-│   ├── es.json                   # Spanish
-│   └── da.json                   # Danish
-└── modules/
-    ├── api.mjs                   # Centralized ApiService (single fetch wrapper)
-    ├── singleton.mjs             # Global store, universalFetch, i18n helpers, applyTranslations
-    ├── bootstrap.mjs             # Small runtime helpers (dev API base, suppression)
-    ├── controllers/
-    │   ├── userController.mjs      # Registration/login/user management UI logic
-    │   ├── child_controller.mjs    # Child mood check-in flow controller
-    │   ├── parent_controller.mjs   # Parent dashboard controller
-    │   └── mood_ui_controller.mjs  # Insights & data visualization
-    ├── models/
-    │   ├── profile_client_model.mjs   # Client child profile helpers
-    │   └── user_client_model.mjs      # Client user helpers
-    └── views/
-        ├── login.html            # Login view
-        ├── userManager.html      # Registration + user CRUD view
-        ├── childMenu.html        # Child mood menu view
-        ├── moodCheckin.html      # Mood check-in flow view
-        ├── childProfiles.html    # Child profile management view
-        ├── insights.html         # Parent insights view
-        ├── privacyPolicy.html    # Privacy policy (modal content)
-        ├── termsOfService.html   # Terms of Service (modal content)
-        └── notFound.html         # 404 / not found view
-```
+- `client/` — Frontend (PWA, i18n)
+  - `index.html` — SPA shell; mounts `#app-root`
+  - `app.mjs` — App bootstrap, router, event wiring
+  - `style.css` — Global styles & accessibility rules
+  - `service_worker.js` — PWA caching & offline fallback
+  - `manifest.json` — PWA manifest (icons, `start_url`)
+  - `translations/` — Locale files (e.g., `en.json`, `no.json`)
+  - `assets/flags/flags.json` — Locale manifest used by language switcher
+  - `modules/` — Core client modules (e.g., `api.mjs`, `singleton.mjs`)
+
+- `tests/` — API & integration test collections (Insomnia export)
 
 ---
 

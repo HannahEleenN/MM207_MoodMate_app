@@ -1,4 +1,5 @@
 import Mood from '../models/mood_server_model.mjs';
+import Draft from '../models/draft_server_model.mjs';
 import { pickLocale, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -115,10 +116,16 @@ export const saveDraft = async (req, res) =>
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
         const profileId = req.query.profileId || (req.body && req.body.profileId) || null;
-        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
         const draft = req.body || {};
-        _draftStore.set(key, { draft, savedAt: new Date().toISOString() });
-        return res.status(200).json(draft);
+
+        try {
+            await Draft.upsert(userId, profileId, draft);
+            return res.status(200).json(draft);
+        } catch (dbErr) {
+            console.warn('Draft DB upsert failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
+            _draftStore.set(profileId ? `${userId}:${profileId}` : `${userId}`, { draft, savedAt: new Date().toISOString() });
+            return res.status(200).json(draft);
+        }
     } catch (err) {
         console.error('saveDraft error:', err);
         return res.status(500).json({ error: 'Could not save draft' });
@@ -134,10 +141,18 @@ export const getDraft = async (req, res) =>
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
         const profileId = req.query.profileId || null;
-        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
-        const item = _draftStore.get(key) || null;
-        if (!item) return res.status(404).json({ message: 'No draft found' });
-        return res.status(200).json(item.draft);
+
+        try {
+            const row = await Draft.get(userId, profileId);
+            if (!row || !row.draft) return res.status(404).json({ message: 'No draft found' });
+            const draftObj = (typeof row.draft === 'string') ? JSON.parse(row.draft) : row.draft;
+            return res.status(200).json(draftObj);
+        } catch (dbErr) {
+            console.warn('Draft DB read failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
+            const item = _draftStore.get(profileId ? `${userId}:${profileId}` : `${userId}`) || null;
+            if (!item) return res.status(404).json({ message: 'No draft found' });
+            return res.status(200).json(item.draft);
+        }
     } catch (err) {
         console.error('getDraft error:', err);
         return res.status(500).json({ error: 'Could not fetch draft' });
@@ -153,9 +168,15 @@ export const deleteDraft = async (req, res) =>
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
         const profileId = req.query.profileId || null;
-        const key = profileId ? `${userId}:${profileId}` : `${userId}`;
-        _draftStore.delete(key);
-        return res.status(204).send();
+
+        try {
+            await Draft.delete(userId, profileId);
+            return res.status(204).send();
+        } catch (dbErr) {
+            console.warn('Draft DB delete failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
+            _draftStore.delete(profileId ? `${userId}:${profileId}` : `${userId}`);
+            return res.status(204).send();
+        }
     } catch (err) {
         console.error('deleteDraft error:', err);
         return res.status(500).json({ error: 'Could not delete draft' });
