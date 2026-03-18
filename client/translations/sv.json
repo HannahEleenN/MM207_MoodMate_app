@@ -69,6 +69,8 @@
   "checkin.contextPlaceholder": "Skriv eller berätta mer här...",
   "checkin.next": "Nästa ➡️",
   "checkin.finish": "Klart! ✨",
+  "checkin.restoreDraft": "Det finns en oavslutad humörregistrering på servern för denna profil — vill du återställa den?",
+  "checkin.restoreDraftLocal": "Det finns en oavslutad humörregistrering på denna enhet — vill du återställa den?",
 
   "parent.title": "Föräldrakontroll",
   "parent.welcome": "Välkommen! Här kan du hantera dina barns profiler.",

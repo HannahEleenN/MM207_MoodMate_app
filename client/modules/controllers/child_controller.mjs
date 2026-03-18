@@ -12,6 +12,7 @@ export const childController =
         this.model = model;
         this.container.innerHTML = await ApiService.loadView('moodCheckin');
         this.resetFlow();
+        try { await this._maybeRestoreDraft(); } catch (e) { console.debug('Draft restore check failed', e); }
         this.setupEventListeners();
     },
 
@@ -199,6 +200,14 @@ export const childController =
         const finishBtn = c.querySelector('#btn-finish');
         if (finishBtn) finishBtn.onclick = () => this.saveFinalMood();
 
+        const commentEl = c.querySelector('#mood-context-text');
+        if (commentEl)
+        {
+            commentEl.addEventListener('input', () => {
+                this._persistDraft();
+            });
+        }
+
         c.querySelectorAll('.back-btn').forEach(btn =>
         {
             btn.onclick = () =>
@@ -213,12 +222,14 @@ export const childController =
     {
         if (!mood) return;
         this.model.temporaryMoodSelection = mood;
+        this._persistDraft();
 
         const display = this.container.querySelector('#selected-mood-text');
         if (display) display.textContent = mood;
 
         const reasonsContainer = this.container.querySelector('#reasons-text');
         const map = this.moodMap[mood] || { reasons: [], solutions: [] };
+
         if (reasonsContainer)
         {
             reasonsContainer.innerHTML = '';
@@ -307,6 +318,7 @@ export const childController =
     {
         if (!context) return;
         this.model.temporaryContext = context;
+        this._persistDraft();
 
         const mood = this.model.temporaryMoodSelection;
         const map = this.moodMap[mood] || { solutions: [] };
@@ -321,6 +333,7 @@ export const childController =
     {
         if (!solution) return;
         this.model.temporarySolutionSelection = solution;
+        this._persistDraft();
     },
 
     goToStep(stepNumber)
@@ -387,10 +400,13 @@ export const childController =
         {
             await moodUIController.saveMood(data);
 
+            try { await this._clearDraft(); } catch (e) { console.debug('Failed to clear draft after save', e); }
+
             if (data.solutionLabel)
             {
                 const el = document.getElementById('global-notice');
-                if (el) {
+                if (el)
+                {
                     el.textContent = `${store.t('mood.saved')} — ${data.solutionLabel}`;
                     el.classList.remove('hidden');
                     setTimeout(() => el.classList.add('hidden'), 4000);
@@ -417,6 +433,126 @@ export const childController =
         el.textContent = store.t(key);
         el.classList.remove('hidden');
         setTimeout(() => el.classList.add('hidden'), 3000);
+    },
+
+    // ------------------------------------------------------------------
+
+    _getLocalDraftKey()
+    {
+        return 'moodmate_draft_v1';
+    },
+
+    _loadLocalDraft()
+    {
+        try
+        {
+            const raw = localStorage.getItem(this._getLocalDraftKey());
+            if (!raw) return null;
+            return JSON.parse(raw);
+        } catch (e) { return null; }
+    },
+
+    _saveLocalDraft(draft)
+    {
+        try { localStorage.setItem(this._getLocalDraftKey(), JSON.stringify(draft)); } catch (e) { console.debug('Local draft save failed', e); }
+    },
+
+    _clearLocalDraft()
+    {
+        try { localStorage.removeItem(this._getLocalDraftKey()); } catch (e) { }
+    },
+
+    _persistDraft()
+    {
+        try
+        {
+            const draft =
+            {
+                mood: this.model.temporaryMoodSelection || null,
+                context: this.model.temporaryContext || null,
+                solution: this.model.temporarySolutionSelection || null,
+                note: (this.container && this.container.querySelector('#mood-context-text')) ? (this.container.querySelector('#mood-context-text').value || '') : '',
+                timestamp: new Date().toISOString(),
+                profileId: store.currentChild ? store.currentChild.id : null
+            };
+
+            store.draftMood = draft;
+
+            this._saveLocalDraft(draft);
+
+            if (draft.profileId && navigator.onLine)
+            {
+                if (this._draftSyncTimer) clearTimeout(this._draftSyncTimer);
+                this._draftSyncTimer = setTimeout(async () =>
+                {
+                    try {
+                        await ApiService.saveDraft(draft);
+                    } catch (e) { console.debug('Server draft sync failed', e); }
+                }, 800);
+            }
+        } catch (e) { console.debug('Persist draft failed', e); }
+    },
+
+    async _maybeRestoreDraft()
+    {
+        try
+        {
+            const profileId = store.currentChild ? store.currentChild.id : null;
+            if (profileId && navigator.onLine)
+            {
+                const serverDraft = await ApiService.getDraft(profileId);
+                if (serverDraft && serverDraft.mood)
+                {
+                    const msg = (store && store.t) ? (store.t('checkin.restoreDraft') || 'Restore unfinished mood entry?') : 'Restore unfinished mood entry?';
+                    if (confirm(msg)) {
+                        this._applyMoodDraftToModel(serverDraft);
+                        return;
+                    }
+                }
+            }
+
+            const local = this._loadLocalDraft();
+            if (local && (local.mood || local.context || local.solution || local.note))
+            {
+                const msg = (store && store.t) ? (store.t('checkin.restoreDraftLocal') || 'Restore unfinished mood entry from this device?') : 'Restore unfinished mood entry from this device?';
+                if (confirm(msg)) {
+                    this._applyMoodDraftToModel(local);
+                }
+            }
+        } catch (e) { console.debug('maybeRestoreDraft failed', e); }
+    },
+
+    _applyMoodDraftToModel(draft)
+    {
+        try
+        {
+            if (!draft) return;
+            this.model.temporaryMoodSelection = draft.mood || null;
+            this.model.temporaryContext = draft.context || null;
+            this.model.temporarySolutionSelection = draft.solution || null;
+            try { const el = this.container.querySelector('#mood-context-text'); if (el) el.value = draft.note || ''; } catch (_) {}
+            store.draftMood = draft;
+
+            if (draft.solution) {
+                this.goToStep(3);
+            } else if (draft.context) {
+                this.goToStep(2);
+            } else if (draft.mood) {
+                this.goToStep(2);
+            } else {
+                this.goToStep(1);
+            }
+        } catch (e) { console.debug('applyDraft failed', e); }
+    },
+
+    async _clearDraft()
+    {
+        try { this._clearLocalDraft(); } catch (_) {}
+        try { delete store.draftMood; } catch(_) {}
+        const profileId = store.currentChild ? store.currentChild.id : null;
+        if (profileId && navigator.onLine) {
+            try { await ApiService.deleteDraft(profileId); } catch (e) { console.debug('deleteDraft failed', e); }
+        }
     }
 };
 

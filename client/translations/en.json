@@ -69,6 +69,8 @@
   "checkin.contextPlaceholder": "Write or tell more here...",
   "checkin.next": "Next ➡️",
   "checkin.finish": "Done! ✨",
+  "checkin.restoreDraft": "An unfinished mood entry exists on the server for this profile — restore it?",
+  "checkin.restoreDraftLocal": "An unfinished mood entry exists on this device — restore it?",
 
   "parent.title": "Parent control",
   "parent.welcome": "Welcome! Here you can manage your children's profiles.",

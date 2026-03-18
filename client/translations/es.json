@@ -69,6 +69,8 @@
   "checkin.contextPlaceholder": "Escribe o cuenta más aquí...",
   "checkin.next": "Siguiente ➡️",
   "checkin.finish": "¡Listo! ✨",
+  "checkin.restoreDraft": "Existe un registro de estado de ánimo incompleto en el servidor para este perfil — ¿quieres restaurarlo?",
+  "checkin.restoreDraftLocal": "Existe un registro de estado de ánimo incompleto en este dispositivo — ¿quieres restaurarlo?",
 
   "parent.title": "Control parental",
   "parent.welcome": "¡Bienvenido! Aquí puedes gestionar los perfiles de los niños.",

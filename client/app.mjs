@@ -373,9 +373,9 @@ const setupEventListeners = () =>
             e.preventDefault();
             try
             {
-                const hasUnsavedMood = !!(
-                    (store && (store.temporaryMoodSelection || store.temporaryContext || store.temporarySolutionSelection))
-                );
+                const hasTempSelections = !!(store && (store.temporaryMoodSelection || store.temporaryContext || store.temporarySolutionSelection));
+                const hasDraft = !!(store && store.draftMood && (store.draftMood.mood || store.draftMood.context || store.draftMood.solution || store.draftMood.note));
+                const hasUnsavedMood = hasTempSelections || hasDraft;
 
                 const confirmKey = hasUnsavedMood ? 'global.logoutUnsavedWarning' : 'global.logoutConfirm';
                 const defaultConfirm = hasUnsavedMood

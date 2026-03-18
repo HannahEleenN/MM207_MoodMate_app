@@ -69,6 +69,8 @@
   "checkin.contextPlaceholder": "Skriv eller fortell mer her...",
   "checkin.next": "Neste ➡️",
   "checkin.finish": "Ferdig! ✨",
+  "checkin.restoreDraft": "Det finnes en uferdig humørregistrering på serveren for denne profilen — gjenopprette?",
+  "checkin.restoreDraftLocal": "Det finnes en uferdig humørregistrering på denne enheten — gjenopprette?",
 
   "parent.title": "Foreldrekontroll",
   "parent.welcome": "Velkommen! Her kan du administrere barnas profiler.",
