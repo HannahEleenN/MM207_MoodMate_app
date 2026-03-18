@@ -4,5 +4,3 @@ node_modules/
 server/.env
 *.xml
 .DS_Store
-scripts/fill_missing_translations.mjs
-scripts/normalize_translations.mjs

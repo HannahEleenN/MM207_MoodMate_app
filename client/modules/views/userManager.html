@@ -3,9 +3,9 @@
 
     <form id="regForm">
         <h3 data-i18n="userManager.createTitle"></h3>
-        <input type="text" id="reg-nick" name="nick" placeholder="" aria-label="Kallenavn" data-i18n-placeholder="register.nickPlaceholder">
-        <input type="email" id="reg-email" name="email" placeholder="" aria-label="E-post" required data-i18n-placeholder="login.emailPlaceholder">
-        <input type="password" id="reg-password" name="secret" placeholder="" aria-label="Passord" required data-i18n-placeholder="login.passwordPlaceholder">
+        <input type="text" id="reg-nick" name="nick" placeholder="" aria-label="Nickname" data-i18n-placeholder="register.nickPlaceholder">
+        <input type="email" id="reg-email" name="email" placeholder="" aria-label="Email" required data-i18n-placeholder="login.emailPlaceholder">
+        <input type="password" id="reg-password" name="secret" placeholder="" aria-label="Password" required data-i18n-placeholder="login.passwordPlaceholder">
         <label class="consent-label">
             <input type="checkbox" name="hasConsented" id="consent-check" value="true" required>
             <span data-i18n="register.consentPrefix"></span>
@@ -34,7 +34,7 @@
 
     <template id="user-edit-template">
         <div class="edit-inline">
-            <input type="text" class="edit-input" aria-label="Rediger bruker">
+            <input type="text" class="edit-input" aria-label="Edit user">
             <button class="save-edit" data-i18n="profiles.save"></button>
             <button class="cancel-edit" data-i18n="profiles.cancel"></button>
         </div>

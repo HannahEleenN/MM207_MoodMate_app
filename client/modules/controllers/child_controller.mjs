@@ -185,7 +185,7 @@ export const childController =
             {
                 const btn = e.target.closest('button');
                 if (!btn) return;
-                const solution = btn.dataset.sol;
+                const solution = btn.dataset.solution;
                 if (solution)
                 {
                     solutionGrid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
@@ -284,8 +284,8 @@ export const childController =
             map.solutions.forEach(s =>
             {
                 const b = document.createElement('button');
-                b.className = 'sol-btn';
-                b.dataset.sol = s.id;
+                b.className = 'solution-btn';
+                b.dataset.solution = s.id;
                 const solLabelKey = s.labelKey || (s.id ? `solution.${s.id}` : null);
                 b.textContent = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (s.label || s.id || '');
                 solutionsGrid.appendChild(b);

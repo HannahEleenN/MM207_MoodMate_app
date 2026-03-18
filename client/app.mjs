@@ -305,8 +305,9 @@ async function buildLanguageSwitcher()
             const img = document.createElement('img');
             img.src = filePath || '';
             img.alt = `${title || ''} flag`;
-            img.width = 28;
-            img.height = 18;
+            img.width = 40;
+            img.height = 26;
+            img.className = 'flag-img';
             img.style.objectFit = 'contain';
             img.style.display = 'block';
 

@@ -8,25 +8,23 @@
     <h2 data-i18n="child.hello"></h2>
     <p data-i18n="child.askMood"></p>
 
-    <div class="mood-options" role="radiogroup" aria-label="Humørvalg">
-      <button class="mood-btn" data-mood="glad"       data-i18n="mood.happy"></button>
-      <button class="mood-btn" data-mood="lei"        data-i18n="mood.sad"></button>
-      <button class="mood-btn" data-mood="sint"       data-i18n="mood.angry"></button>
-      <button class="mood-btn" data-mood="redd"       data-i18n="mood.scared"></button>
-      <button class="mood-btn" data-mood="rolig"      data-i18n="mood.calm"></button>
-      <button class="mood-btn" data-mood="overrasket" data-i18n="mood.surprised"></button>
+    <div class="mood-options" role="radiogroup" aria-label="Mood options">
+      <button class="mood-btn" data-mood="happy"       data-i18n="mood.happy"></button>
+      <button class="mood-btn" data-mood="sad"        data-i18n="mood.sad"></button>
+      <button class="mood-btn" data-mood="angry"       data-i18n="mood.angry"></button>
+      <button class="mood-btn" data-mood="scared"       data-i18n="mood.scared"></button>
+      <button class="mood-btn" data-mood="calm"      data-i18n="mood.calm"></button>
+      <button class="mood-btn" data-mood="surprised" data-i18n="mood.surprised"></button>
     </div>
   </div>
 
   <div id="step-2" class="step-container" style="display:none">
-    <h2 data-i18n="child.whyTitle">
-      Hvorfor føler du deg <span id="display-mood" style="color:teal">…</span>?
-    </h2>
+    <h2 data-i18n="child.whyTitle"><span id="display-mood" style="color:teal">…</span>?</h2>
 
     <div class="context-options">
-      <button class="context-btn" data-context="skole"   data-i18n="context.school"></button>
-      <button class="context-btn" data-context="venner"  data-i18n="context.friends"></button>
-      <button class="context-btn" data-context="hjemme"  data-i18n="context.home"></button>
+      <button class="context-btn" data-context="school"   data-i18n="context.school"></button>
+      <button class="context-btn" data-context="friends"  data-i18n="context.friends"></button>
+      <button class="context-btn" data-context="home"  data-i18n="context.home"></button>
     </div>
   </div>
 
@@ -34,8 +32,8 @@
     <h2 data-i18n="child.nextActionTitle"></h2>
 
     <div class="solution-options">
-      <button class="sol-btn" data-sol="klem"    data-i18n="solution.hug"></button>
-      <button class="sol-btn" data-sol="snakke"  data-i18n="solution.talk"></button>
+      <button class="solution-btn" data-solution="hug"    data-i18n="solution.hug"></button>
+      <button class="solution-btn" data-solution="talk"  data-i18n="solution.talk"></button>
     </div>
 
     <button id="save-mood-btn" class="primary-btn" data-i18n="child.finish"></button>
