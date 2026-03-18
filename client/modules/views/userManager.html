@@ -1,33 +1,33 @@
 <section class="user-manager">
-    <h2 data-i18n="userManager.title">MoodMate Profiladministrasjon</h2>
+    <h2 data-i18n="userManager.title"></h2>
 
     <form id="regForm">
-        <h3 data-i18n="userManager.createTitle">Opprett ny foreldrekonto</h3>
-        <input type="text" id="reg-nick" name="nick" placeholder="Kallenavn (valgfritt)" aria-label="Kallenavn" data-i18n-placeholder="register.nickPlaceholder">
-        <input type="email" id="reg-email" name="email" placeholder="E-post" aria-label="E-post" required data-i18n-placeholder="login.emailPlaceholder">
-        <input type="password" id="reg-password" name="secret" placeholder="Passord" aria-label="Passord" required data-i18n-placeholder="login.passwordPlaceholder">
+        <h3 data-i18n="userManager.createTitle"></h3>
+        <input type="text" id="reg-nick" name="nick" placeholder="" aria-label="Kallenavn" data-i18n-placeholder="register.nickPlaceholder">
+        <input type="email" id="reg-email" name="email" placeholder="" aria-label="E-post" required data-i18n-placeholder="login.emailPlaceholder">
+        <input type="password" id="reg-password" name="secret" placeholder="" aria-label="Passord" required data-i18n-placeholder="login.passwordPlaceholder">
         <label class="consent-label">
             <input type="checkbox" name="hasConsented" id="consent-check" value="true" required>
-            <span data-i18n="register.consentPrefix">Jeg har lest og godtar</span>
-            <a href="#" id="view-tos" data-i18n="legal.terms">Vilkår</a>
-            <a href="#" id="view-privacy" data-i18n="legal.privacy">Personvern</a>
+            <span data-i18n="register.consentPrefix"></span>
+            <a href="#" id="view-tos" data-i18n="legal.terms"></a>
+            <a href="#" id="view-privacy" data-i18n="legal.privacy"></a>
         </label>
-        <button type="submit" class="btn-reg" data-i18n="register.submit">Registrer</button>
+        <button type="submit" class="btn-reg" data-i18n="register.submit"></button>
     </form>
 
-    <button id="go-to-login" class="link-btn" data-i18n="userManager.goToLogin">Gå til innlogging</button>
+    <button id="go-to-login" class="link-btn" data-i18n="userManager.goToLogin"></button>
 
     <hr>
 
-    <h3 data-i18n="userManager.existingTitle">Eksisterende profiler</h3>
+    <h3 data-i18n="userManager.existingTitle"></h3>
     <ul id="user-list"></ul>
 
     <template id="user-item-template">
         <li>
             <span class="user-email-display"></span>
             <div class="user-actions">
-                <button class="btn-edit" data-i18n="profiles.edit">Endre</button>
-                <button class="btn-del" data-i18n="profiles.delete">Slett</button>
+                <button class="btn-edit" data-i18n="profiles.edit"></button>
+                <button class="btn-del" data-i18n="profiles.delete"></button>
             </div>
         </li>
     </template>
@@ -35,8 +35,8 @@
     <template id="user-edit-template">
         <div class="edit-inline">
             <input type="text" class="edit-input" aria-label="Rediger bruker">
-            <button class="save-edit" data-i18n="profiles.save">Lagre</button>
-            <button class="cancel-edit" data-i18n="profiles.cancel">Avbryt</button>
+            <button class="save-edit" data-i18n="profiles.save"></button>
+            <button class="cancel-edit" data-i18n="profiles.cancel"></button>
         </div>
     </template>
 </section>
