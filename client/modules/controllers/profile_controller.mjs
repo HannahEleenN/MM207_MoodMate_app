@@ -11,7 +11,7 @@ export const childProfilesUI =
     this.container = container;
 
     if (!store.i18n || Object.keys(store.i18n).length === 0) {
-      await store.loadI18n('no');
+      await store.loadI18n('nb');
     }
 
     this.container.innerHTML = await ApiService.loadView('childProfiles');

@@ -18,9 +18,9 @@ for (const f of files)
   all[f] = new Set(keys);
 }
 
-const baseFile = 'no.json';
+const baseFile = 'nb.json';
 if (!all[baseFile]) {
-  console.error('Base file no.json not found in', Object.keys(all));
+  console.error('Base file nb.json not found in', Object.keys(all));
   process.exit(2);
 }
 
@@ -45,10 +45,10 @@ for (const f of files)
   {
     ok = false;
     console.log(`\n${f}: MISMATCH`);
-    if (missing.length) console.log('  Missing keys (present in no.json):', missing.slice(0, 50));
-    if (extra.length) console.log('  Extra keys (not in no.json):', extra.slice(0, 50));
+    if (missing.length) console.log('  Missing keys (present in nb.json):', missing.slice(0, 50));
+    if (extra.length) console.log('  Extra keys (not in nb.json):', extra.slice(0, 50));
   }
 }
 
 if (!ok) process.exit(1);
-console.log('\nAll translation files contain the same keys as no.json');
+console.log('\nAll translation files contain the same keys as nb.json');

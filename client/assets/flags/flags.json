@@ -1,5 +1,5 @@
 [
-  { "languageCode": "nb", "languageName": "Norsk", "flagImage": "assets/flags/no.svg" },
+  { "languageCode": "nb", "languageName": "Norsk bokmål", "flagImage": "assets/flags/no.svg" },
   { "languageCode": "en", "languageName": "English", "flagImage": "assets/flags/gb.svg" },
   { "languageCode": "sv", "languageName": "Svenska", "flagImage": "assets/flags/se.svg" },
   { "languageCode": "es", "languageName": "Español", "flagImage": "assets/flags/es.svg" },

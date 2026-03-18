@@ -48,7 +48,7 @@ export const ApiService =
         return await universalFetch(url);
     },
 
-    async loadTranslations(lang = 'no') {
+    async loadTranslations(lang = 'nb') {
         return await universalFetch(`./translations/${lang}.json`);
     },
 

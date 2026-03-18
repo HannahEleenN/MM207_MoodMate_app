@@ -645,7 +645,7 @@ if (!customElements.get('child-profiles'))
 {
     try
     {
-        let bootLanguage = 'no';
+        let bootLanguage = 'nb';
         try {
             const savedLanguage = (typeof localStorage !== 'undefined') ? localStorage.getItem('moodmate_lang') : null;
             if (savedLanguage) bootLanguage = savedLanguage;

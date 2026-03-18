@@ -172,7 +172,7 @@ export function onChange(key, fn)
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-_state.loadI18n = async function (lang = 'no')
+_state.loadI18n = async function (lang = 'nb')
 {
     try
     {
@@ -181,16 +181,16 @@ _state.loadI18n = async function (lang = 'no')
         {
             if (typeof navigator !== 'undefined')
             {
-                requested = (navigator.language || (navigator.languages && navigator.languages[0]) || 'no').split('-')[0];
+                requested = (navigator.language || (navigator.languages && navigator.languages[0]) || 'nb').split('-')[0];
             } else {
-                requested = 'no';
+                requested = 'nb';
             }
         }
 
-        const langMap = { nb: 'no', 'nb_NO': 'no' };
+        const langMap = { 'nb_NO': 'nb' };
         if (langMap[requested]) requested = langMap[requested];
 
-        const attempts = [...new Set([requested, 'no', 'en'])];
+        const attempts = [...new Set([requested, 'nb', 'en'])];
         console.log('[singleton.i18n] attempts:', attempts);
 
         for (const code of attempts)
