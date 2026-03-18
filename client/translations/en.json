@@ -44,6 +44,8 @@
   "login.newUser": "New user?",
   "login.createAccount": "Create a parent account",
   "global.logout": "Sign out",
+  "global.logoutConfirm": "Are you sure you want to sign out?",
+  "global.logoutUnsavedWarning": "You have an unfinished mood entry that will be lost if you sign out. Sign out anyway?",
 
   "child.hello": "Hello there! 🌟",
   "child.askMood": "How are you feeling right now?",

@@ -44,6 +44,8 @@
   "login.newUser": "Ny bruger?",
   "login.createAccount": "Opret en forældre-konto",
   "global.logout": "Log ud",
+  "global.logoutConfirm": "Er du sikker på at du vil logge ud?",
+  "global.logoutUnsavedWarning": "Du har en igangværende humørregistrering, som vil gå tabt hvis du logger ud. Vil du logge ud alligevel?",
 
   "child.hello": "Hej! 🌟",
   "child.askMood": "Hvordan har du det lige nu?",

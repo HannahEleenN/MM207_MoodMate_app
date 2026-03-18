@@ -44,6 +44,8 @@
   "login.newUser": "¿Nuevo usuario?",
   "login.createAccount": "Crear cuenta de padre",
   "global.logout": "Cerrar sesión",
+  "global.logoutConfirm": "¿Seguro que deseas cerrar sesión?",
+  "global.logoutUnsavedWarning": "Tienes una entrada de estado de ánimo sin terminar que se perderá si cierras sesión. ¿Cerrar sesión de todos modos?",
 
   "child.hello": "¡Hola, qué tal! 🌟",
   "child.askMood": "¿Cómo te sientes ahora mismo?",

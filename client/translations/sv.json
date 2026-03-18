@@ -44,6 +44,8 @@
   "login.newUser": "Ny användare?",
   "login.createAccount": "Skapa ett konto för förälder",
   "global.logout": "Logga ut",
+  "global.logoutConfirm": "Är du säker på att du vill logga ut?",
+  "global.logoutUnsavedWarning": "Du har en påbörjad humörregistrering som kommer att gå förlorad om du loggar ut. Vill du logga ut ändå?",
 
   "child.hello": "Hej! 🌟",
   "child.askMood": "Hur mår du just nu?",

@@ -371,10 +371,28 @@ const setupEventListeners = () =>
         globalLogoutBtn.onclick = async (e) =>
         {
             e.preventDefault();
-            try {
-                await ApiService.logout();
-            } catch (err) { console.debug('Logout failed (client side)', err); }
-            try { store.currentView = 'login'; } catch(_) {}
+            try
+            {
+                const hasUnsavedMood = !!(
+                    (store && (store.temporaryMoodSelection || store.temporaryContext || store.temporarySolutionSelection))
+                );
+
+                const confirmKey = hasUnsavedMood ? 'global.logoutUnsavedWarning' : 'global.logoutConfirm';
+                const defaultConfirm = hasUnsavedMood
+                    ? 'You have an unfinished mood entry that will be lost if you log out. Log out anyway?'
+                    : 'Are you sure you want to log out?';
+
+                const message = (store && typeof store.t === 'function') ? (store.t(confirmKey) || defaultConfirm) : defaultConfirm;
+
+                if (!confirm(message)) {
+                    return;
+                }
+
+                try { await ApiService.logout(); } catch (err) { console.debug('Logout failed (client side)', err); }
+                try { store.currentView = 'login'; } catch(_) {}
+            } catch (outerErr) {
+                console.error('Logout handler failed:', outerErr);
+            }
         };
     }
 
