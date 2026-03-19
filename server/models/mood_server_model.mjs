@@ -36,7 +36,7 @@ export const Mood =
 
         let mergedNote = note || '';
         if (solution) {
-            mergedNote = mergedNote ? `${mergedNote}\nLØSNING: ${solution}` : `LØSNING: ${solution}`;
+            mergedNote = mergedNote ? `${mergedNote}\nSOLUTION: ${solution}` : `SOLUTION: ${solution}`;
         }
 
         const fallbackSql = `INSERT INTO mood_logs (user_id, mood, context, note, timestamp) VALUES ($1,$2,$3,$4,$5)`;

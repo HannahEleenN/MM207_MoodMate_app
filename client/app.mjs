@@ -168,7 +168,7 @@ export async function showLegal(viewName)
     } catch (error)
     {
         console.error("Could not load legal view:", error);
-        modalText.textContent = store?.t ? store.t('auth.loadError') : 'Kunne ikke laste innholdet.';
+        modalText.textContent = store?.t ? store.t('auth.loadError') : 'Could not load content.';
         previouslyFocusedElement = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
@@ -200,7 +200,7 @@ async function router()
                 console.log('[app.router] rendered login view');
             } catch (e) {
                 console.error('[router] authController.init failed:', e);
-                root.textContent = store?.t ? store.t('auth.loadError') : 'Kunne ikke laste innloggingsvinduet.';
+                root.textContent = store?.t ? store.t('auth.loadError') : 'Could not load the login view.';
             }
             break;
         case 'userManager':
@@ -290,10 +290,20 @@ async function buildLanguageSwitcher()
         container.innerHTML = '';
         for (const f of flags)
         {
-            const { languageCode, languageName, flagImage } = f || {};
-            const langCode = languageCode || f.code || '';
-            const title = languageName || f.languageName || f.title || '';
-            const filePath = flagImage || f.flagImage || f.file || '';
+            const
+            {
+                languageCode = '',
+                languageName = '',
+                flagImage = '',
+                code = '',
+                title: entryTitle = '',
+                file = '',
+                flag = ''
+            } = f || {};
+
+            const langCode = languageCode || code || '';
+            const title = languageName || entryTitle || '';
+            const filePath = flagImage || file || flag || '';
 
             const btn = document.createElement('button');
             btn.className = 'lang-btn';

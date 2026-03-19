@@ -1,9 +1,9 @@
 if ('serviceWorker' in navigator)
 {
     const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.local');
-    const enableSW = typeof globalThis.__ENABLE_SW__ !== 'undefined' ? globalThis.__ENABLE_SW__ === true : false;
+    const enableSW = typeof globalThis['__ENABLE_SW__'] !== 'undefined' ? globalThis['__ENABLE_SW__'] === true : false;
 
-    if (typeof globalThis.__DISABLE_SW__ !== 'undefined' && globalThis.__DISABLE_SW__ === true)
+    if (typeof globalThis['__DISABLE_SW__'] !== 'undefined' && globalThis['__DISABLE_SW__'] === true)
     {
         navigator.serviceWorker.getRegistrations?.().then(regs =>
         {

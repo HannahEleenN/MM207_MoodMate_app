@@ -1,7 +1,5 @@
 import * as Child from '../models/child_server_model.mjs';
-import { pickLocale, I18n } from '../utils/i18n.mjs';
 import { HTTP } from '../utils/http_constants.mjs';
-import { authorizeUserIdentity } from '../middleware/privacyGuard.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -52,7 +50,7 @@ export const loginByPin = async (req, res) =>
         const result =
         {
             id: child.id,
-            parentId: child.parent_id || child.parentId,
+            parentId: (child && (child.parentId || child.parent_id)) || null,
             name: child.name
         };
         return res.status(HTTP.OK).json({ child: result });
@@ -70,4 +68,3 @@ export default
     listByParent,
     loginByPin
 };
-

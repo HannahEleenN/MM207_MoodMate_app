@@ -92,13 +92,13 @@ export const getAllMoods = async (req, res) =>
 // ---------------------------------------------------------------------------------------------------------------------
 
 export const getMoodById = async (req, res) => {
-    res.status(200).json({ message: `Detaljer for humør ${req.params.id}` });
+    res.status(200).json({ message: `Details for mood ${req.params.id}` });
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 export const updateMood = async (req, res) => {
-    res.status(200).json({ message: "Humør oppdatert" });
+    res.status(200).json({ message: "Mood updated" });
 };
 
 // ---------------------------------------------------------------------------------------------------------------------

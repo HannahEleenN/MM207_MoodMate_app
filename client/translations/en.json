@@ -46,6 +46,7 @@
   "global.logout": "Sign out",
   "global.logoutConfirm": "Are you sure you want to sign out?",
   "global.logoutUnsavedWarning": "You have an unfinished mood entry that will be lost if you sign out. Sign out anyway?",
+  "lang.switcher.ariaLabel": "Language",
 
   "user.notFound": "User not found.",
 

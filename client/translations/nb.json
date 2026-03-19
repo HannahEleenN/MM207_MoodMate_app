@@ -46,6 +46,7 @@
   "global.logout": "Logg ut",
   "global.logoutConfirm": "Er du sikker på at du vil logge ut?",
   "global.logoutUnsavedWarning": "Du har en påbegynt humørregistrering som ikke er lagret. Logg ut og mist endringene?",
+  "lang.switcher.ariaLabel": "Språk",
 
   "user.notFound": "Bruker ble ikke funnet.",
 

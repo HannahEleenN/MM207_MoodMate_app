@@ -46,6 +46,7 @@
   "global.logout": "Logga ut",
   "global.logoutConfirm": "Är du säker på att du vill logga ut?",
   "global.logoutUnsavedWarning": "Du har en påbörjad humörregistrering som kommer att gå förlorad om du loggar ut. Vill du logga ut ändå?",
+  "lang.switcher.ariaLabel": "Språk",
 
   "user.notFound": "Användaren hittades inte.",
 

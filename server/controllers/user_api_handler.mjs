@@ -18,7 +18,9 @@ export const registerUser = async (req, res) =>
         const status = err.status || 500;
         const locale = pickLocale(req.headers['accept-language']);
         const errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
-        const errorKey = (status === 400 && err.message && err.message.includes('samtykke')) ? 'register.requireConsent' : null;
+        const msgLower = (err.message || '').toLowerCase();
+        const isConsentError = msgLower.includes('samtykke') || msgLower.includes('consent');
+        const errorKey = (status === 400 && isConsentError) ? 'register.requireConsent' : null;
         const payload = errorKey ? { error: errorMessage, errorKey } : { error: errorMessage };
         return res.status(status).json(payload);
     }
