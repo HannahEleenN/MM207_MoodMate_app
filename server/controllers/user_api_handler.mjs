@@ -1,6 +1,6 @@
 import * as userService from './user_service.mjs';
 import jwt from 'jsonwebtoken';
-import { pickLocale, I18n } from '../utils/i18n.mjs';
+import { pickLanguage, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ export const registerUser = async (req, res, next) =>
     {
         const payload = req.body;
         const user = await userService.registerUserData(payload);
-        const locale = pickLocale(req.headers['accept-language']);
+        const locale = pickLanguage(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.UserCreated) ? I18n[locale].info.UserCreated : 'User created.';
         return res.status(201).json({ message: msg, user });
     } catch (err)
@@ -23,7 +23,7 @@ export const registerUser = async (req, res, next) =>
 
 export const createLoginResponse = (res, user, token, req) =>
 {
-    const locale = pickLocale(req.headers['accept-language']);
+    const locale = pickLanguage(req.headers['accept-language']);
     const okMsg = (I18n[locale] && I18n[locale].info && I18n[locale].info.Hello) ? I18n[locale].info.Hello : 'OK';
     return res.status(200).json({ user, token, message: okMsg });
 };

@@ -1,6 +1,6 @@
 import Mood from '../models/mood_server_model.mjs';
 import Draft from '../models/draft_server_model.mjs';
-import { pickLocale, I18n } from '../utils/i18n.mjs';
+import { pickLanguage, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ export const createMood = async (req, res, next) =>
             console.warn('[createMood] Mood model not available');
         }
 
-        const locale = pickLocale(req.headers['accept-language']);
+        const locale = pickLanguage(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.MoodSaved) ? I18n[locale].info.MoodSaved : 'Mood saved';
 
         res.status(201).json
@@ -71,7 +71,7 @@ export const getAllMoods = async (req, res, next) =>
     {
         const userId = req.user && (req.user.userId || req.user.id);
         const rows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
-        const locale = pickLocale(req.headers['accept-language']);
+        const locale = pickLanguage(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.MoodsFetched) ? I18n[locale].info.MoodsFetched : `Fetched moods for user ${userId}`;
         res.status(200).json
         ({
