@@ -1,7 +1,7 @@
 {
   "short_name": "MoodMate",
-  "name": "MoodMate - Lær om følelser",
-  "description": "En interaktiv dagbok som hjelper barn med å forstå og logge følelsene sine.",
+  "name": "MoodMate - Learn about feelings",
+  "description": "An interactive diary that helps children understand and log their feelings.",
   "start_url": "/index.html",
   "display": "standalone",
   "theme_color": "#ffffff",

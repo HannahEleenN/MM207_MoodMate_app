@@ -1,4 +1,6 @@
 {
+  "manifest.name": "MoodMate - Lär dig om känslor",
+  "manifest.description": "En interaktiv dagbok som hjälper barn att förstå och logga sina känslor.",
 
   "app.title": "MoodMate",
   "app.tagline": "Förstå dina känslor 🌟",

@@ -1,4 +1,6 @@
 {
+  "manifest.name": "MoodMate - Aprende sobre los sentimientos",
+  "manifest.description": "Un diario interactivo que ayuda a los niños a comprender y registrar sus sentimientos.",
 
   "app.title": "MoodMate",
   "app.tagline": "Entiende tus sentimientos 🌟",
