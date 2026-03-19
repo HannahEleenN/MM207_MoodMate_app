@@ -3,7 +3,7 @@ import { HTTP } from '../utils/http_constants.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const createChild = async (req, res) =>
+export const createChild = async (req, res, next) =>
 {
     try
     {
@@ -16,26 +16,24 @@ export const createChild = async (req, res) =>
         const created = await Child.create(payload);
         return res.status(HTTP.CREATED).json({ child: created });
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 
-export const listByParent = async (req, res) =>
+export const listByParent = async (req, res, next) =>
 {
     try {
         const parentId = req.params.parentId;
         const rows = await Child.getByParent(parentId);
         return res.status(HTTP.OK).json({ data: rows });
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const loginByPin = async (req, res) =>
+export const loginByPin = async (req, res, next) =>
 {
     try
     {
@@ -55,8 +53,7 @@ export const loginByPin = async (req, res) =>
         };
         return res.status(HTTP.OK).json({ child: result });
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 

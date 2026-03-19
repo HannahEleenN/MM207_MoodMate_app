@@ -8,6 +8,7 @@ import demoRoutes from './routes/demo_routes.mjs';
 import childRoutes from './routes/child_routes.mjs';
 import { cors } from './middleware/cors.mjs';
 import logger from './middleware/logger.mjs';
+import errorHandler from './middleware/errorHandler.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ app.use('/api/users', parentRoutes);
 app.use('/api/demo', demoRoutes);
 app.use('/api', childRoutes);
 
+app.use((err, req, res, next) => errorHandler(err, req, res, next));
 // ---------------------------------------------------------------------------------------------------------------------
 
 app.listen(PORT, () => {

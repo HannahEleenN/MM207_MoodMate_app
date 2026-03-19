@@ -4,7 +4,7 @@ import { pickLocale, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const registerUser = async (req, res) =>
+export const registerUser = async (req, res, next) =>
 {
     try
     {
@@ -15,14 +15,7 @@ export const registerUser = async (req, res) =>
         return res.status(201).json({ message: msg, user });
     } catch (err)
     {
-        const status = err.status || 500;
-        const locale = pickLocale(req.headers['accept-language']);
-        const errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
-        const msgLower = (err.message || '').toLowerCase();
-        const isConsentError = msgLower.includes('samtykke') || msgLower.includes('consent');
-        const errorKey = (status === 400 && isConsentError) ? 'register.requireConsent' : null;
-        const payload = errorKey ? { error: errorMessage, errorKey } : { error: errorMessage };
-        return res.status(status).json(payload);
+        return next(err);
     }
 };
 
@@ -37,7 +30,7 @@ export const createLoginResponse = (res, user, token, req) =>
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const loginUser = async (req, res) =>
+export const loginUser = async (req, res, next) =>
 {
     try
     {
@@ -48,48 +41,37 @@ export const loginUser = async (req, res) =>
         return createLoginResponse(res, user, token, req);
     } catch (err)
     {
-        const status = err.status || 500;
-        const locale = pickLocale(req.headers['accept-language']);
-        let errorMessage = err.message;
-        if (err.message && err.message.includes('PIN')) {
-            errorMessage = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.Unauthorized) ? I18n[locale].errorCodes.Unauthorized : err.message;
-        }
-        if (status === 401) {
-            return res.status(401).json({ error: errorMessage, errorKey: 'login.incorrectPin' });
-        }
-        return res.status(status).json({ error: errorMessage });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const deleteUserAccount = async (req, res) =>
+export const deleteUserAccount = async (req, res, next) =>
 {
     try {
         const result = await userService.deleteUserById(req.params.id);
         return res.status(200).json(result);
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const listUsers = async (req, res) =>
+export const listUsers = async (req, res, next) =>
 {
     try {
         const rows = await userService.listAllUsers();
         return res.status(200).json({ data: rows });
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const updateUser = async (req, res) =>
+export const updateUser = async (req, res, next) =>
 {
     try
     {
@@ -98,8 +80,7 @@ export const updateUser = async (req, res) =>
         const updated = await userService.updateUserById(id, payload);
         return res.status(200).json({ user: updated });
     } catch (err) {
-        const status = err.status || 500;
-        return res.status(status).json({ error: err.message });
+        return next(err);
     }
 };
 

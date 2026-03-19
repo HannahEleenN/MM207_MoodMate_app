@@ -18,7 +18,7 @@ const _draftStore = new Map();
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const createMood = async (req, res) =>
+export const createMood = async (req, res, next) =>
 {
     try
     {
@@ -59,15 +59,13 @@ export const createMood = async (req, res) =>
     } catch (error)
     {
         console.error('createMood error:', error);
-        const locale = pickLocale(req.headers['accept-language']);
-        const errMsg = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.NotFound) ? I18n[locale].errorCodes.NotFound : 'Could not save mood';
-        return res.status(500).json({ error: errMsg, message: error.message });
+        return next(error);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const getAllMoods = async (req, res) =>
+export const getAllMoods = async (req, res, next) =>
 {
     try
     {
@@ -83,9 +81,7 @@ export const getAllMoods = async (req, res) =>
     } catch (error)
     {
         console.error('getAllMoods error:', error);
-        const locale = pickLocale(req.headers['accept-language']);
-        const errMsg = (I18n[locale] && I18n[locale].errorCodes && I18n[locale].errorCodes.NotFound) ? I18n[locale].errorCodes.NotFound : 'Could not fetch moods';
-        res.status(500).json({ error: errMsg });
+        return next(error);
     }
 };
 
@@ -109,7 +105,7 @@ export const deleteMood = async (req, res) => {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const saveDraft = async (req, res) =>
+export const saveDraft = async (req, res, next) =>
 {
     try
     {
@@ -128,13 +124,13 @@ export const saveDraft = async (req, res) =>
         }
     } catch (err) {
         console.error('saveDraft error:', err);
-        return res.status(500).json({ error: 'Could not save draft' });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const getDraft = async (req, res) =>
+export const getDraft = async (req, res, next) =>
 {
     try
     {
@@ -155,13 +151,13 @@ export const getDraft = async (req, res) =>
         }
     } catch (err) {
         console.error('getDraft error:', err);
-        return res.status(500).json({ error: 'Could not fetch draft' });
+        return next(err);
     }
 };
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export const deleteDraft = async (req, res) =>
+export const deleteDraft = async (req, res, next) =>
 {
     try
     {
@@ -179,6 +175,6 @@ export const deleteDraft = async (req, res) =>
         }
     } catch (err) {
         console.error('deleteDraft error:', err);
-        return res.status(500).json({ error: 'Could not delete draft' });
+        return next(err);
     }
 };
