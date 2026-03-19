@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/cspell",
   "version": "0.2",
   "language": "en",
   "ignorePaths": [
@@ -12,8 +13,5 @@
     { "name": "sv", "path": "./client/translations/sv_words.txt" },
     { "name": "es", "path": "./client/translations/es_words.txt" }
   ],
-  "ignoreRegExpList": ["\\\"(\\.|[^\\\"])*\\\""],
-  "patterns": [],
   "files": ["client/translations/*.json"]
 }
-
