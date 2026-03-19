@@ -1,6 +1,6 @@
 import express from 'express';
 import { createMood, getAllMoods, getMoodById, updateMood, deleteMood } from '../controllers/mood_api_handler.mjs';
-import { authorizeUserIdentity } from '../middleware/privacyGuard.mjs';
+import { authorizeUserIdentity } from '../middleware/privacy_guard.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ import demoRoutes from './routes/demo_routes.mjs';
 import childRoutes from './routes/child_routes.mjs';
 import { cors } from './middleware/cors.mjs';
 import logger from './middleware/logger.mjs';
-import errorHandler from './middleware/errorHandler.mjs';
+import errorHandler from './middleware/error_handler.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 

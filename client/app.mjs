@@ -1,6 +1,6 @@
 import { store } from './modules/singleton.mjs';
 import { ApiService } from './modules/api.mjs';
-import { authController } from './modules/controllers/userController.mjs';
+import { authController } from './modules/controllers/user_controller.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
@@ -618,7 +618,7 @@ if (!customElements.get('user-manager'))
             (async () =>
             {
                 try {
-                    const { userUIController } = await import('./modules/controllers/userController.mjs');
+                    const { userUIController } = await import('./modules/controllers/user_controller.mjs');
                     await userUIController.init(this);
                 } catch (e) {
                     console.error('user-manager init failed', e);

@@ -1,6 +1,6 @@
 import express from 'express';
 import userController from '../controllers/user_api_handler.mjs';
-import { authorizeUserIdentity } from '../middleware/privacyGuard.mjs';
+import { authorizeUserIdentity } from '../middleware/privacy_guard.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 

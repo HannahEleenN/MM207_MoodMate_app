@@ -67,7 +67,7 @@ The project uses a layered MVC-style architecture which keeps controllers, servi
 server/                         # Backend (Express + PostgreSQL)
 ├── server_app.mjs              # Express app entry (routes & middleware)
 ├── database/db.mjs             # PostgreSQL pool (uses DATABASE_URL)
-├── middleware/privacyGuard.mjs # JWT / ownership enforcement
+├── middleware/privacy_guard.mjs # JWT / ownership enforcement
 ├── routes/                     # Route registrations
 ├── controllers/                # HTTP handlers
 └── models/                     # DB access layer
@@ -158,7 +158,7 @@ Notes and troubleshooting:
 
 MoodMate uses a custom middleware as a security gatekeeper, ensuring every request is verified for **Identity, Role, and Ownership** before any data is processed.
 
-- **Middleware:** `server/middleware/privacyGuard.mjs`
+- **Middleware:** `server/middleware/privacy_guard.mjs`
 - **Auth Logic:** `server/utils/auth_crypto.mjs`
 
 The middleware validates the JWT and enforces role-based permissions: children are restricted to their own data; parents can view family data but cannot modify a child's original entries.
@@ -209,12 +209,12 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | Document project and plan                              |     ✅ Done      | This README                                                                               |
 | Client: scaffold, MVC separation, single fetch pattern |     ✅ Done      | `client/app.mjs`, `client/modules/api.mjs`, `client/modules/singleton.mjs`                |
 | Server: REST API, routes, controllers                  |     ✅ Done      | `server/server_app.mjs`, `server/routes/*.mjs`, `server/controllers/*.mjs`                |
-| User accounts (create, delete, consent + ToS/Privacy)  |     ✅ Done      | `userController.mjs`, `user_api_handler.mjs`, `user_service.mjs`, `user_server_model.mjs` |
+| User accounts (create, delete, consent + ToS/Privacy)  |     ✅ Done      | `user_controller.mjs`, `user_api_handler.mjs`, `user_service.mjs`, `user_server_model.mjs` |
 | Persistent cloud storage (PostgreSQL on Render)        |     ✅ Done      | `server/database/db.mjs`, `server/models/*.mjs`                                           |
 | REST API scaffold & documentation                      |     ✅ Done      | `server/routes/*.mjs`, `client/modules/api.mjs`, Postman collection                       |
-| Middleware (meaningful, not logging)                   |     ✅ Done      | `server/middleware/privacyGuard.mjs` — JWT identity/role enforcement                      |
-| Client web component for user CRUD                     |     ✅ Done      | `user-manager` element in `client/app.mjs`, `userManager.html`, `userController.mjs`      |
-| PWA & offline support                                  |     ✅ Done      | `client/manifest.json`, `client/service_worker.mjs`, `client/serviceWorkerSetup.mjs`       |
+| Middleware (meaningful, not logging)                   |     ✅ Done      | `server/middleware/privacy_guard.mjs` — JWT identity/role enforcement                      |
+| Client web component for user CRUD                     |     ✅ Done      | `user-manager` element in `client/app.mjs`, `userManager.html`, `user_controller.mjs`      |
+| PWA & offline support                                  |     ✅ Done      | `client/manifest.json`, `client/service_worker.mjs`, `client/service_worker_setup.mjs`       |
 | Accessibility (WCAG/ARIA)                              | 🔄 In progress  | Skip link, focus styles, ARIA roles added — Lighthouse target ≥ 90                        |
 | Project management & repository                        |     ✅ Done      | GitHub Project board                                                                      |
 | Tests & test tools                                     |     ✅ Done      | `tests/moodmate_api_tests.json` — import into Postman/Insomnia                            |
@@ -224,8 +224,8 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | File                                                                         | What it shows                                  |
 |:-----------------------------------------------------------------------------|:-----------------------------------------------|
 | `server/routes/parent_routes.mjs`, `server/controllers/user_api_handler.mjs` | API scaffold and endpoint structure            |
-| `server/middleware/privacyGuard.mjs`                                         | Meaningful middleware (JWT + role enforcement) |
+| `server/middleware/privacy_guard.mjs`                                         | Meaningful middleware (JWT + role enforcement) |
 | `client/modules/api.mjs`, `client/modules/singleton.mjs`                     | Single-fetch pattern and i18n loader           |
-| `client/modules/controllers/userController.mjs`, `views/userManager.html`    | Client CRUD and consent flow                   |
+| `client/modules/controllers/user_controller.mjs`, `views/userManager.html`    | Client CRUD and consent flow                   |
 | `client/service_worker.mjs`, `client/manifest.json`                           | PWA evidence                                   |
 | `tests/moodmate_api_tests.json`                                              | API test collection                            |
