@@ -5,14 +5,6 @@ DROP FUNCTION IF EXISTS get_mood_logs_by_user(integer) CASCADE;
 DROP TABLE IF EXISTS mood_drafts CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
-CREATE TABLE child_profiles (
-    id SERIAL PRIMARY KEY,
-    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    name VARCHAR(100) NOT NULL,
-    pin TEXT NOT NULL, -- stored as salted hash
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     nick VARCHAR(50) UNIQUE NOT NULL,
@@ -20,6 +12,14 @@ CREATE TABLE users (
     secret TEXT NOT NULL,
     role VARCHAR(20) DEFAULT 'parent',
     has_consented BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE child_profiles (
+    id SERIAL PRIMARY KEY,
+    parent_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    pin TEXT NOT NULL, -- stored as salted hash
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
