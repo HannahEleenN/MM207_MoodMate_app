@@ -76,7 +76,7 @@ client/                         # Frontend (PWA, i18n)
 ├── index.html                  # SPA shell; mounts #app-root
 ├── app.mjs                     # App bootstrap, router, event wiring
 ├── style.css                   # Global styles & accessibility rules
-├── service_worker.js           # PWA caching & offline fallback
+├── service_worker.mjs           # PWA caching & offline fallback
 ├── manifest.json               # PWA manifest (icons, start_url)
 ├── translations/               # Locale files (en.json, no.json, …)
 └── modules/                    # Core client modules (api.mjs, singleton.mjs, …)
@@ -120,7 +120,7 @@ globalThis.__DISABLE_SW__ = true; location.reload();
 
 ## PWA & Offline Support
 
-- Robust service worker (`client/service_worker.js`) with cache versioning, activation/cleanup, offline fallback (`client/offline.html`), and runtime caching strategies.
+- Robust service worker (`client/service_worker.mjs`) with cache versioning, activation/cleanup, offline fallback (`client/offline.html`), and runtime caching strategies.
 - `manifest.json` provides icons and a sensible `start_url` so browsers can consider the app installable.
 
 **How to test:**
@@ -214,7 +214,7 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | REST API scaffold & documentation                      |     ✅ Done      | `server/routes/*.mjs`, `client/modules/api.mjs`, Postman collection                       |
 | Middleware (meaningful, not logging)                   |     ✅ Done      | `server/middleware/privacyGuard.mjs` — JWT identity/role enforcement                      |
 | Client web component for user CRUD                     |     ✅ Done      | `user-manager` element in `client/app.mjs`, `userManager.html`, `userController.mjs`      |
-| PWA & offline support                                  |     ✅ Done      | `client/manifest.json`, `client/service_worker.js`, `client/serviceWorkerSetup.mjs`       |
+| PWA & offline support                                  |     ✅ Done      | `client/manifest.json`, `client/service_worker.mjs`, `client/serviceWorkerSetup.mjs`       |
 | Accessibility (WCAG/ARIA)                              | 🔄 In progress  | Skip link, focus styles, ARIA roles added — Lighthouse target ≥ 90                        |
 | Project management & repository                        |     ✅ Done      | GitHub Project board                                                                      |
 | Tests & test tools                                     |     ✅ Done      | `tests/moodmate_api_tests.json` — import into Postman/Insomnia                            |
@@ -227,5 +227,5 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | `server/middleware/privacyGuard.mjs`                                         | Meaningful middleware (JWT + role enforcement) |
 | `client/modules/api.mjs`, `client/modules/singleton.mjs`                     | Single-fetch pattern and i18n loader           |
 | `client/modules/controllers/userController.mjs`, `views/userManager.html`    | Client CRUD and consent flow                   |
-| `client/service_worker.js`, `client/manifest.json`                           | PWA evidence                                   |
+| `client/service_worker.mjs`, `client/manifest.json`                           | PWA evidence                                   |
 | `tests/moodmate_api_tests.json`                                              | API test collection                            |

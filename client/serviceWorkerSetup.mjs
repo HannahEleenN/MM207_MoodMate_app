@@ -15,7 +15,7 @@ if ('serviceWorker' in navigator)
 
     if (!isLocalhost || enableSW)
     {
-        navigator.serviceWorker.register('/service_worker.js')
+        navigator.serviceWorker.register('/service_worker.mjs')
             .then(reg => console.info('Service worker registered:', reg.scope))
             .catch(err => console.warn('Service worker registration failed:', err));
     } else {
