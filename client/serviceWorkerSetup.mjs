@@ -15,9 +15,22 @@ if ('serviceWorker' in navigator)
 
     if (!isLocalhost || enableSW)
     {
-        navigator.serviceWorker.register('/service_worker.mjs')
-            .then(reg => console.info('Service worker registered:', reg.scope))
-            .catch(err => console.warn('Service worker registration failed:', err));
+        const swUrl = '/service_worker.mjs';
+        (async () =>
+        {
+            try {
+                const reg = await navigator.serviceWorker.register(swUrl, { type: 'module' });
+                console.info('Service worker registered (module):', reg.scope);
+            } catch (err)
+            {
+                try {
+                    const reg2 = await navigator.serviceWorker.register(swUrl);
+                    console.info('Service worker registered (classic fallback):', reg2.scope);
+                } catch (err2) {
+                    console.warn('Service worker registration failed (module and classic):', err2);
+                }
+            }
+        })();
     } else {
         navigator.serviceWorker.getRegistrations?.().then(regs =>
         {
