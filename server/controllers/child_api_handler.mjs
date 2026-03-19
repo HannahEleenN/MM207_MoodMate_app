@@ -48,7 +48,7 @@ export const loginByPin = async (req, res, next) =>
         const result =
         {
             id: child.id,
-            parentId: (child && (child.parentId || child.parent_id)) || null,
+            parentId: (child && (child.parentId || child['parent_id'])) || null,
             name: child.name
         };
         return res.status(HTTP.OK).json({ child: result });

@@ -18,7 +18,7 @@ function scryptAsync(password, salt, keyLen)
 
 export async function hashSecret(secret)
 {
-    const salt = randomBytes(16).toString('hex');
+    const salt = /** @type {Buffer} */ (randomBytes(16)).toString('hex');
     const derivedKey = /** @type {Buffer} */ (await scryptAsync(secret, salt, 64));
     return `${salt}:${derivedKey.toString('hex')}`;
 }
