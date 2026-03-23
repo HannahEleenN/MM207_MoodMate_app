@@ -159,8 +159,9 @@
   "profiles.newNamePlaceholder": "Nytt namn",
   "profiles.save": "Spara",
   "profiles.cancel": "Avbryt",
+  "profiles.back": "⬅️ Tillbaka",
 
-  "insights.back": "⬅️ Tillbaka",
+  "profiles.editNameAria": "Redigera namn",
   "insights.title": "Humörtrender och insikter",
   "insights.loading": "Hämtar data…",
   "insights.empty": "Inga insikter att visa",

@@ -28,7 +28,15 @@ export const childProfilesUI =
       this.createProfile(data);
     };
 
-    await this.loadProfiles();
+    const backBtn = this.container.querySelector('#back-to-parent');
+    if (backBtn)
+    {
+      backBtn.onclick = (e) =>
+      {
+        e.preventDefault();
+        store.currentView = 'parentMenu';
+      };
+    }
   },
 
   async loadProfiles()

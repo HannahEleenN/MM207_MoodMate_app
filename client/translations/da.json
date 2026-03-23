@@ -159,6 +159,7 @@
   "profiles.newNamePlaceholder": "Nyt navn",
   "profiles.save": "Gem",
   "profiles.cancel": "Annuller",
+  "profiles.back": "⬅️ Tilbage",
 
   "insights.back": "⬅️ Tilbage",
   "insights.title": "Humørtrends og Indblik",

@@ -1,5 +1,9 @@
 <section class="child-profiles">
-  <h2 data-i18n="profiles.title"></h2>
+  <header class="profiles-header">
+    <button id="back-to-parent" class="back-link" data-i18n="profiles.back"></button>
+    <h2 data-i18n="profiles.title"></h2>
+  </header>
+
   <p data-i18n="profiles.description"></p>
 
   <form id="create-child-form">
@@ -19,9 +23,9 @@
     <li>
       <span class="child-name"></span>
       <div class="child-actions">
-        <button class="select-child" data-i18n="profiles.select"></button>
-        <button class="edit-child" data-i18n="profiles.edit"></button>
-        <button class="delete-child" data-i18n="profiles.delete"></button>
+        <button class="select-child" data-i18n="profiles.select" title="Select this profile"></button>
+        <button class="edit-child" data-i18n="profiles.edit" title="Edit profile name"></button>
+        <button class="delete-child" data-i18n="profiles.delete" title="Delete profile"></button>
       </div>
     </li>
   </template>

@@ -491,6 +491,22 @@ textarea {
 }
 
 /* ── Child profiles list ───────────────────────────────────────────────────── */
+.child-profiles { position: relative; }
+
+.profiles-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.profiles-header .back-link {
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
 .child-profiles h2,
 .child-profiles h3 { margin-bottom: .6rem; }
 
@@ -503,31 +519,83 @@ textarea {
 .child-profiles form input { flex: 1 1 140px; }
 .child-profiles form .primary-btn { flex: 0 0 auto; width: auto; padding: .7rem 1.4rem; }
 
-#child-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+#child-list { list-style: none; display: flex; flex-direction: column; gap: .8rem; }
 #child-list li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .7rem 1rem;
+    padding: 1rem 1.2rem;
     background: #fff;
     border: 2px solid #e8dac8;
     border-radius: 1rem;
     font-weight: 600;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
-.child-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+.child-actions {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: nowrap;
+}
+
 .child-actions button {
-    padding: .35rem .85rem;
+    padding: .65rem 1.2rem;
     border-radius: 9999px;
-    /* Use central border width token for consistent rendering */
-    border: var(--border-width) solid var(--teal);
+    border: 2px solid;
     background: transparent;
-    color: var(--teal);
-    font-family: var(--font-body), sans-serif;
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
-    font-size: .85rem;
+    font-size: .95rem;
     cursor: pointer;
-    transition: background .15s, color .15s;
+    transition: all .2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
 }
+
+/* Select button - teal */
+.child-actions .select-child {
+    color: var(--teal);
+    border-color: var(--teal);
+    background: transparent;
+}
+.child-actions .select-child:hover {
+    background: var(--teal);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(91, 160, 138, .2);
+}
+
+/* Edit button - teal */
+.child-actions .edit-child {
+    color: var(--teal);
+    border-color: var(--teal);
+    background: transparent;
+}
+.child-actions .edit-child:hover {
+    background: var(--teal);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(91, 160, 138, .2);
+}
+
+/* Delete button - coral/red */
+.child-actions .delete-child {
+    color: var(--coral);
+    border-color: var(--coral);
+    background: transparent;
+}
+.child-actions .delete-child:hover {
+    background: var(--coral);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 114, 74, .2);
+}
+
+.edit-inline { display: flex; gap: .5rem; flex-wrap: wrap; }
 .child-actions button:hover { background: var(--teal); color: #fff; }
 .child-actions .delete-child  { border-color: var(--coral); color: var(--coral); }
 .child-actions .delete-child:hover { background: var(--coral); color: #fff; }
