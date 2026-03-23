@@ -14,7 +14,7 @@ export async function initParentApp(container)
         };
 
         container.querySelector('#manage-profiles').onclick = () => {
-            store.currentView = 'child_profiles';
+            store.currentView = 'childProfiles';
         };
 
         const manageAccountsBtn = container.querySelector('#manage-accounts');

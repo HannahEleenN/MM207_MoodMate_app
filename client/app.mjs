@@ -219,10 +219,16 @@ async function router()
             await initChildApp(root, store);
             break;
         case 'childProfiles':
-        {
-            const childProfilesEl = document.createElement('child-profiles');
-            root.appendChild(childProfilesEl);
-        }
+            try
+            {
+                console.log('[app.router] rendering childProfiles');
+                const { childProfilesUI } = await import('./modules/controllers/profile_controller.mjs');
+                await childProfilesUI.init(root);
+                console.log('[app.router] childProfiles rendered');
+            } catch (e) {
+                console.error('[router] childProfiles init failed:', e);
+                root.innerHTML = await ApiService.loadView('notFound');
+            }
             break;
         case 'childLogin':
             try
