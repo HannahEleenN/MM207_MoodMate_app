@@ -1,5 +1,5 @@
-import 'dotenv/config';
 import express from 'express';
+import './utils/load_env.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import moodRoutes from './routes/mood_routes.mjs';
@@ -47,6 +47,7 @@ app.use('/api/demo', demoRoutes);
 app.use('/api', childRoutes);
 
 app.use((err, req, res, next) => errorHandler(err, req, res, next));
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 app.listen(PORT, () => {

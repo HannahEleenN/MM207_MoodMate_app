@@ -2,9 +2,7 @@ import { universalFetch, store } from './singleton.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-const DEFAULT_BASE = (typeof window !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1'))
-    ? `${location.protocol}//${location.hostname}:3000/api`
-    : '/api';
+const DEFAULT_BASE = '/api';
 
 // ---------------------------------------------------------------------------------------------------------------------
 

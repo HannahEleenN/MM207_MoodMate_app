@@ -1,6 +1,8 @@
 export function cors(req, res, next)
 {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const origin = process.env.FRONTEND_URL || '*';
+
+    res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 

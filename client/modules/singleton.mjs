@@ -3,10 +3,6 @@ function inferApiBase()
     if (typeof window === 'undefined') return null;
     if (window.__API_BASE__) return window.__API_BASE__;
 
-    const host = location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1' || host.endsWith('.local')) {
-        return `${location.protocol}//${host}:3000`;
-    }
     return null;
 }
 

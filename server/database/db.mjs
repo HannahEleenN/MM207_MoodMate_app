@@ -1,3 +1,4 @@
+import '../utils/load_env.mjs';
 import pkg from 'pg';
 
 const { Pool } = pkg;

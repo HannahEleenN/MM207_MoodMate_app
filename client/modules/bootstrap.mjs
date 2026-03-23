@@ -1,9 +1,5 @@
 if (typeof window !== 'undefined')
 {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        window.__API_BASE__ = `${location.protocol}//${location.hostname}:3000`;
-    }
-
     try
     {
         const manifestLink = document.querySelector('link[rel="manifest"]');
