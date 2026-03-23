@@ -14,7 +14,7 @@ export const childProfilesUI =
       await store.loadI18n('nb');
     }
 
-    this.container.innerHTML = await ApiService.loadView('childProfiles');
+    this.container.innerHTML = await ApiService.loadView('child_profiles');
 
     this.listEl = this.container.querySelector('#child-list');
     this.form = this.container.querySelector('#create-child-form');

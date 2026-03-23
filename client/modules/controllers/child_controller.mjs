@@ -10,7 +10,7 @@ export const childController =
     {
         this.container = container;
         this.model = model;
-        this.container.innerHTML = await ApiService.loadView('moodCheckin');
+        this.container.innerHTML = await ApiService.loadView('mood_checkin');
         this.resetFlow();
         try { await this._maybeRestoreDraft(); } catch (e) { console.debug('Draft restore check failed', e); }
         this.setupEventListeners();
@@ -19,7 +19,7 @@ export const childController =
     async initLogin(container)
     {
         this.container = container;
-        this.container.innerHTML = await ApiService.loadView('childLogin');
+        this.container.innerHTML = await ApiService.loadView('child_login');
 
         const form = this.container.querySelector('#childLoginForm');
         const backBtn = this.container.querySelector('#back-to-parent');

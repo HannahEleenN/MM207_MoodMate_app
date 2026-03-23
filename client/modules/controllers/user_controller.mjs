@@ -217,7 +217,7 @@ export const userUIController =
             await store.loadI18n('nb');
         }
 
-        this.container.innerHTML = await ApiService.loadView('userManager');
+        this.container.innerHTML = await ApiService.loadView('user_manager');
 
         const form = this.container.querySelector("#regForm");
         const list = this.container.querySelector("#user-list");

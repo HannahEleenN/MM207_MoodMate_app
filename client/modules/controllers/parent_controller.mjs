@@ -7,14 +7,14 @@ export async function initParentApp(container)
 {
     try
     {
-        container.innerHTML = await ApiService.loadView('parentMenu');
+        container.innerHTML = await ApiService.loadView('parent_menu');
 
         container.querySelector('#view-insights').onclick = () => {
             store.currentView = 'insights';
         };
 
         container.querySelector('#manage-profiles').onclick = () => {
-            store.currentView = 'childProfiles';
+            store.currentView = 'child_profiles';
         };
 
         const manageAccountsBtn = container.querySelector('#manage-accounts');
