@@ -19,7 +19,7 @@ if (typeof window !== 'undefined')
     } catch (e) {
         console.warn('Could not adjust manifest href:', e);
     }
-    
+
     const noisyErrorPattern = /A listener indicated an asynchronous response/i;
     
     window.addEventListener('unhandledrejection', (event) =>

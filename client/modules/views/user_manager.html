@@ -5,6 +5,7 @@
         <h3 data-i18n="userManager.createTitle"></h3>
         <div class="input-group">
             <label for="reg-nick" data-i18n="register.nickLabel"></label>
+            <span class="helper-text" data-i18n="register.nickHelper"></span>
             <input type="text" id="reg-nick" name="nick" placeholder="" aria-label="Nickname" data-i18n-placeholder="register.nickPlaceholder">
         </div>
         <div class="input-group">
@@ -15,12 +16,17 @@
             <label for="reg-password" data-i18n="login.passwordLabel"></label>
             <input type="password" id="reg-password" name="secret" placeholder="" aria-label="Password" required data-i18n-placeholder="login.passwordPlaceholder">
         </div>
+        <div class="legal-links-section">
+            <p class="legal-intro" data-i18n="register.legalIntro"></p>
+            <div class="legal-links">
+                <a href="#" id="view-tos" data-i18n="legal.terms"></a>
+                <span class="separator">•</span>
+                <a href="#" id="view-privacy" data-i18n="legal.privacy"></a>
+            </div>
+        </div>
         <label class="consent-label">
             <input type="checkbox" name="hasConsented" id="consent-check" value="true" required>
-            <span data-i18n="register.consentPrefix"></span>
-            <a href="#" id="view-tos" data-i18n="legal.terms"></a>
-            <span data-i18n="register.consentAnd"></span>
-            <a href="#" id="view-privacy" data-i18n="legal.privacy"></a>
+            <span data-i18n="register.consentCheckbox"></span>
         </label>
         <button type="submit" class="btn-reg" data-i18n="register.submit"></button>
     </form>

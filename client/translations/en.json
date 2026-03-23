@@ -23,9 +23,12 @@
   "register.requireConsent": "You must actively consent to the terms and privacy policy to create an account.",
   "register.nickTaken": "This nickname is already in use.",
   "register.nickPlaceholder": "Display name (optional)",
+  "register.nickHelper": "This is how you'll appear in the app",
   "register.submit": "Register",
   "register.consentPrefix": "I have read and accept",
   "register.consentAnd": "and",
+  "register.consentCheckbox": "I agree to the Terms of Service and Privacy Policy",
+  "register.legalIntro": "Please review our policies:",
 
   "auth.failed": "Wrong nickname or PIN code.",
   "auth.no_token": "No access: please sign in again.",

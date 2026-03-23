@@ -214,6 +214,53 @@ textarea {
     margin-top: .1rem;
 }
 
+/* Helper text for form fields */
+.helper-text {
+    font-size: .8rem;
+    color: var(--text-light);
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Legal links section */
+.legal-links-section {
+    margin: 1.5rem 0 1.2rem 0;
+    padding: 1rem;
+    background: rgba(91, 160, 138, .08);
+    border-radius: 0.75rem;
+    border-left: 3px solid var(--teal);
+}
+
+.legal-intro {
+    font-size: .85rem;
+    color: var(--text-mid);
+    margin-bottom: 0.6rem;
+}
+
+.legal-links {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.legal-links a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    transition: color .2s, text-decoration .2s;
+}
+
+.legal-links a:hover {
+    color: var(--coral);
+    text-decoration: underline;
+}
+
+.legal-links .separator {
+    color: var(--text-light);
+}
+
 /* ── Buttons ───────────────────────────────────────────────────────────────── */
 
 /* Primary action button */

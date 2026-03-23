@@ -23,9 +23,12 @@
   "register.requireConsent": "Du måste godkänna villkoren och integritetspolicyn för att skapa ett konto.",
   "register.nickTaken": "Detta smeknamn används redan.",
   "register.nickPlaceholder": "Smeknamn (valfritt)",
+  "register.nickHelper": "Så här visas du i appen",
   "register.submit": "Registrera",
   "register.consentPrefix": "Jag har läst och accepterar",
   "register.consentAnd": "och",
+  "register.consentCheckbox": "Jag godkänner villkoren och integritetspolicyn",
+  "register.legalIntro": "Läs gärna igenom våra riktlinjer:",
 
   "auth.failed": "Fel smeknamn eller PIN-kod.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",

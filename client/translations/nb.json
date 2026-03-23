@@ -23,9 +23,12 @@
   "register.requireConsent": "Du må samtykke til vilkårene og personvernerklæringen for å opprette en konto.",
   "register.nickTaken": "Dette kallenavnet er allerede i bruk.",
   "register.nickPlaceholder": "Kallenavn (valgfritt)",
+  "register.nickHelper": "Slik vil du fremstå i appen",
   "register.submit": "Registrer",
   "register.consentPrefix": "Jeg har lest og godtar",
   "register.consentAnd": "og",
+  "register.consentCheckbox": "Jeg godtar vilkårene og personvernerklæringen",
+  "register.legalIntro": "Vennligst gjennomgå våre retningslinjer:",
 
   "auth.failed": "Feil kallenavn eller PIN-kode.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
