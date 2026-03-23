@@ -90,6 +90,7 @@
   "checkin.reasonTitle": "Vad gör dig",
   "checkin.instructions": "Titta på bilderna eller använd ord:",
   "checkin.contextPlaceholder": "Skriv eller berätta mer här...",
+  "checkin.previous": "⬅️ Tillbaka",
   "checkin.next": "Nästa ➡️",
   "checkin.finish": "Klart! ✨",
   "checkin.restoreDraft": "Det finns en oavslutad humörregistrering på servern för denna profil — vill du återställa den?",

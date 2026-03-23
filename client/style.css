@@ -320,6 +320,25 @@ textarea {
 }
 .secondary-btn:hover { background: var(--teal); color: #fff; }
 
+/* Button group (e.g. Previous/Next buttons) */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: space-between;
+}
+.button-group button {
+    flex: 1;
+}
+.button-group .secondary-btn {
+    display: block;
+    width: 100%;
+    padding: .9rem 1.5rem;
+}
+.button-group .primary-btn {
+    width: 100%;
+}
+
 /* Back link (header navigation) */
 .back-link {
     background: none;

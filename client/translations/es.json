@@ -90,6 +90,7 @@
   "checkin.reasonTitle": "Qué te hace",
   "checkin.instructions": "Mira las imágenes o usa palabras:",
   "checkin.contextPlaceholder": "Escribe o cuenta más aquí...",
+  "checkin.previous": "⬅️ Atrás",
   "checkin.next": "Siguiente ➡️",
   "checkin.finish": "¡Listo! ✨",
   "checkin.restoreDraft": "Existe un registro de estado de ánimo incompleto en el servidor para este perfil — ¿quieres restaurarlo?",

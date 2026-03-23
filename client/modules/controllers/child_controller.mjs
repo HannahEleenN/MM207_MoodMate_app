@@ -166,19 +166,31 @@ export const childController =
             btn.onclick = () => this.handleMoodSelection(btn.dataset.mood);
         });
 
-        const reasonGrid = c.querySelector('#step-2 .mood-grid');
-        if (reasonGrid)
+        const reasonsList = c.querySelector('#reasons-text');
+        if (reasonsList)
         {
-            reasonGrid.addEventListener('click', (e) =>
+            reasonsList.addEventListener('click', (e) =>
             {
-                const btn = e.target.closest('button');
-                if (!btn) return;
-                const ctx = btn.dataset.context;
-                if (ctx) this.handleContextSelection(ctx);
+                const li = e.target.closest('.reason-item');
+                if (!li) return;
+                this.model.temporaryContext = li.textContent;
+                reasonsList.querySelectorAll('.reason-item').forEach(n => n.classList.remove('selected'));
+                li.classList.add('selected');
+                this._persistDraft();
+            });
+
+            reasonsList.addEventListener('keydown', (e) =>
+            {
+                if (e.key === 'Enter')
+                {
+                    const li = e.target.closest('.reason-item');
+                    if (!li) return;
+                    li.click();
+                }
             });
         }
 
-        const solutionGrid = c.querySelector('#step-3 .mood-grid');
+        const solutionGrid = c.querySelector('#step-3-solutions');
         if (solutionGrid)
         {
             solutionGrid.addEventListener('click', (e) =>
@@ -197,6 +209,13 @@ export const childController =
 
         const nextBtn = c.querySelector('#btn-next-step');
         if (nextBtn) nextBtn.onclick = () => this.goToStep(3);
+        
+        const prevBtn2 = c.querySelector('#btn-prev-step-2');
+        if (prevBtn2) prevBtn2.onclick = () => this.goToStep(1);
+        
+        const prevBtn3 = c.querySelector('#btn-prev-step-3');
+        if (prevBtn3) prevBtn3.onclick = () => this.goToStep(2);
+
         const finishBtn = c.querySelector('#btn-finish');
         if (finishBtn) finishBtn.onclick = () => this.saveFinalMood();
 
@@ -277,7 +296,7 @@ export const childController =
             reasonsContainer.appendChild(ul);
         }
 
-        const solutionsGrid = this.container.querySelector('#step-3 .mood-grid');
+        const solutionsGrid = this.container.querySelector('#step-3-solutions');
         if (solutionsGrid)
         {
             solutionsGrid.innerHTML = '';
@@ -292,28 +311,6 @@ export const childController =
             });
         }
 
-        const reasonsList = this.container.querySelector('.reasons-list');
-        if (reasonsList)
-        {
-            reasonsList.addEventListener('click', (e) =>
-            {
-                const li = e.target.closest('.reason-item');
-                if (!li) return;
-                this.model.temporaryContext = li.textContent;
-                reasonsList.querySelectorAll('.reason-item').forEach(n => n.classList.remove('selected'));
-                li.classList.add('selected');
-            });
-
-            reasonsList.addEventListener('keydown', (e) =>
-            {
-                if (e.key === 'Enter')
-                {
-                    const li = e.target.closest('.reason-item');
-                    if (!li) return;
-                    li.click();
-                }
-            });
-        }
 
         this.goToStep(2);
     },
@@ -343,21 +340,19 @@ export const childController =
     goToStep(stepNumber)
     {
         this.container.querySelectorAll('.step-container').forEach(el => {
-            el.classList.remove('active');
+            el.style.display = 'none';
         });
 
         const currentStepEl = this.container.querySelector(`#step-${stepNumber}`);
         if (currentStepEl) {
-            currentStepEl.classList.add('active');
+            currentStepEl.style.display = 'block';
         }
 
-        const bar = this.container.querySelector('#mood-progress');
+        const progressPercentages = { 1: 33, 2: 66, 3: 100 };
+        const bar = this.container.querySelector('#checkin-progress');
         if (bar)
         {
-            const progressClassMap = { 1: 'progress-33', 2: 'progress-66', 3: 'progress-100' };
-            bar.classList.remove('progress-33','progress-66','progress-100');
-            const cls = progressClassMap[stepNumber];
-            if (cls) bar.classList.add(cls);
+            bar.style.width = (progressPercentages[stepNumber] || 33) + '%';
         }
     },
 

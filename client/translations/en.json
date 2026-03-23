@@ -90,6 +90,7 @@
   "checkin.reasonTitle": "What makes you",
   "checkin.instructions": "Look at the pictures or use words:",
   "checkin.contextPlaceholder": "Write or tell more here...",
+  "checkin.previous": "⬅️ Back",
   "checkin.next": "Next ➡️",
   "checkin.finish": "Done! ✨",
   "checkin.restoreDraft": "An unfinished mood entry exists on the server for this profile — restore it?",

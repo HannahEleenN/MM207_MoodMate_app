@@ -90,6 +90,7 @@
   "checkin.reasonTitle": "Hva gjør deg",
   "checkin.instructions": "Se på bildene eller bruk ord:",
   "checkin.contextPlaceholder": "Skriv eller fortell mer her...",
+  "checkin.previous": "⬅️ Tilbake",
   "checkin.next": "Neste ➡️",
   "checkin.finish": "Ferdig! ✨",
   "checkin.restoreDraft": "Det finnes en uferdig humørregistrering på serveren for denne profilen — gjenopprette?",

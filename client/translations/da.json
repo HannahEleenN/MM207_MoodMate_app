@@ -90,6 +90,7 @@
   "checkin.reasonTitle": "Hvad gør dig",
   "checkin.instructions": "Se på billederne eller brug ord:",
   "checkin.contextPlaceholder": "Skriv eller fortæl mere her...",
+  "checkin.previous": "⬅️ Tilbage",
   "checkin.next": "Næste ➡️",
   "checkin.finish": "Færdig! ✨",
   "checkin.restoreDraft": "Der findes en ufuldstændig humørregistrering på serveren for denne profil — vil du gendanne den?",
