@@ -28,13 +28,19 @@ export const childProfilesUI =
       this.createProfile(data);
     };
 
-    this.loadProfiles();
+    await this.loadProfiles();
   },
 
-  loadProfiles()
+  async loadProfiles()
   {
-    const profiles = ProfileModel.getAll();
-    this.renderList(profiles);
+    try {
+      const profiles = await ProfileModel.loadProfiles();
+      this.renderList(profiles);
+    } catch (err) {
+      console.error('Failed to load profiles:', err);
+      const profiles = ProfileModel.getAll();
+      this.renderList(profiles);
+    }
   },
 
   renderList(profiles)
@@ -57,9 +63,16 @@ export const childProfilesUI =
 
   async createProfile(data)
   {
-    ProfileModel.create({ name: data.name, age: data.age || null });
-    this.loadProfiles();
-    this.showNotice('child.createSuccess');
+    try
+    {
+      await ProfileModel.create({ name: data.name, age: data.age || null });
+      this.form.reset();
+      await this.loadProfiles();
+      this.showNotice('child.createSuccess');
+    } catch (err) {
+      console.error('Failed to create profile:', err);
+      this.showNotice('child.createFailed');
+    }
   },
 
   selectProfile(id)
@@ -84,12 +97,12 @@ export const childProfilesUI =
     const input = editDiv.querySelector('.edit-input');
     input.value = found.name || '';
 
-    editDiv.querySelector('.save-edit').onclick = () =>
+    editDiv.querySelector('.save-edit').onclick = async () =>
     {
       const newName = input.value.trim();
       if (!newName || newName === found.name) { editDiv.remove(); return; }
       ProfileModel.update(id, { name: newName });
-      this.loadProfiles();
+      await this.loadProfiles();
       this.showNotice('edit.success');
     };
 
@@ -98,11 +111,11 @@ export const childProfilesUI =
     listItem.appendChild(clone);
   },
 
-  deleteProfile(id)
+  async deleteProfile(id)
   {
     if (!confirm(store.t('delete.confirm'))) return;
     ProfileModel.delete(id);
-    this.loadProfiles();
+    await this.loadProfiles();
   },
 
   showNotice(key)

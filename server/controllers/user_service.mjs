@@ -1,4 +1,5 @@
 import User from '../models/user_server_model.mjs';
+import * as Child from '../models/child_server_model.mjs';
 import { Messages } from '../messages.mjs';
 import { verifySecret } from '../utils/auth_crypto.mjs';
 
@@ -81,12 +82,20 @@ export async function authenticateSecret(email, secret)
         err.status = 401;
         throw err;
     }
+    
+    let profiles = [];
+    try {
+        profiles = await Child.getByParent(user.id);
+    } catch (err) {
+        console.warn('Failed to load child profiles:', err.message);
+    }
 
     return {
         id: user.id,
         email: user.email,
         role: user.role,
-        familyId: user.id
+        familyId: user.id,
+        profiles: profiles || []
     };
 }
 

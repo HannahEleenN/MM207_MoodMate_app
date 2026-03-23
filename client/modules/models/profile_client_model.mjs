@@ -1,4 +1,5 @@
 import { store } from '../singleton.mjs';
+import { ApiService } from '../api.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -9,15 +10,44 @@ export const ProfileModel =
     return store.profiles || [];
   },
 
-  create(profile)
+  async create(profile)
   {
-    const p = { id: Date.now().toString(), ...profile };
-    if (store.currentUser) {
-      store.currentUser = { ...store.currentUser, profiles: [...(store.currentUser.profiles || []), p] };
-    } else {
-      store.profiles = [...(store.profiles || []), p];
+    try
+    {
+      const pin = Math.floor(100000 + Math.random() * 900000).toString();
+
+      const response = await ApiService.createChild({ name: profile.name, pin });
+      const created = response && (response.child || response);
+
+      if (store.currentUser) {
+        store.currentUser = { ...store.currentUser, profiles: [...(store.currentUser.profiles || []), created] };
+      } else {
+        store.profiles = [...(store.profiles || []), created];
+      }
+      return created;
+    } catch (err) {
+      console.error('Failed to create child profile:', err);
+      throw err;
     }
-    return p;
+  },
+
+  async loadProfiles()
+  {
+    try {
+      // Fetch profiles from database
+      const response = await ApiService.getChildren();
+      const profiles = response && (response.data || response.children || []);
+      
+      if (store.currentUser) {
+        store.currentUser = { ...store.currentUser, profiles };
+      } else {
+        store.profiles = profiles;
+      }
+      return profiles;
+    } catch (err) {
+      console.error('Failed to load child profiles:', err);
+      return this.getAll();
+    }
   },
 
   update(id, data)
