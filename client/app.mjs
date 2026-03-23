@@ -1,6 +1,6 @@
 import { store } from './modules/singleton.mjs';
 import { ApiService } from './modules/api.mjs';
-import { authController } from './modules/controllers/user_controller.mjs';
+import { authController, userUIController } from './modules/controllers/user_controller.mjs';
 import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
