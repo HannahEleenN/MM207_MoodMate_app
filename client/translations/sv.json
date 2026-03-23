@@ -64,6 +64,7 @@
   "child.selectPrompt": "Välj eller skapa en profil för barnet innan du loggar ett humör.",
   "child.loginPrompt": "Logga in med hemlig kod",
   "child.pinLabel": "Hemlig kod",
+  "child.pinPlaceholder": "Ange 6-siffrig kod",
   "child.continue": "Fortsätt",
   "child.backToParent": "Tillbaka till föräldrakontroll",
   "child.createPrompt": "Skapa en profil för barnet här.",

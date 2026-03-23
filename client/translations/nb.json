@@ -64,6 +64,7 @@
   "child.selectPrompt": "Velg eller opprett en profil for barnet før du logger humør.",
   "child.loginPrompt": "Logg inn med hemmelig kode",
   "child.pinLabel": "Hemmelig kode",
+  "child.pinPlaceholder": "Skriv inn 6-siffer kode",
   "child.continue": "Fortsett",
   "child.backToParent": "Tilbake til foreldrekontroll",
   "child.createPrompt": "Opprett en profil for barnet her.",

@@ -64,6 +64,7 @@
   "child.selectPrompt": "Select or create a child profile before logging a mood.",
   "child.loginPrompt": "Sign in with secret code",
   "child.pinLabel": "Secret code",
+  "child.pinPlaceholder": "Enter 6-digit code",
   "child.continue": "Continue",
   "child.backToParent": "Back to parent control",
   "child.createPrompt": "Create a profile for the child here.",

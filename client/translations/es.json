@@ -64,6 +64,7 @@
   "child.selectPrompt": "Crea o selecciona un perfil para el niño antes de registrar un estado de ánimo.",
   "child.loginPrompt": "Inicia sesión con código secreto",
   "child.pinLabel": "Código secreto",
+  "child.pinPlaceholder": "Ingresa código de 6 dígitos",
   "child.continue": "Continuar",
   "child.backToParent": "Volver al control parental",
   "child.createPrompt": "Crea un perfil para el niño aquí.",

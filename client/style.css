@@ -326,17 +326,17 @@ textarea {
     gap: 1rem;
     margin-top: 1.5rem;
     justify-content: space-between;
+    width: 100%;
 }
 .button-group button {
     flex: 1;
+    min-width: 0;
 }
 .button-group .secondary-btn {
-    display: block;
-    width: 100%;
     padding: .9rem 1.5rem;
 }
 .button-group .primary-btn {
-    width: 100%;
+    margin-top: 0;
 }
 
 /* Back link (header navigation) */
@@ -401,6 +401,28 @@ textarea {
     border-width: 3px;
     transform: scale(1.06);
     box-shadow: 0 6px 18px rgba(80,50,20,.18);
+}
+
+/* Reason/context list items (text-based options) */
+.reason-item {
+    padding: 0.8rem;
+    list-style: none;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all .2s ease;
+    font-size: 0.95rem;
+}
+.reason-item:hover {
+    background: rgba(91, 160, 138, 0.08);
+    border-color: var(--teal);
+}
+.reason-item.selected {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal);
+    font-weight: 700;
 }
 
 /* ── Progress bar ──────────────────────────────────────────────────────────── */
@@ -559,7 +581,10 @@ section#parent-insights header {
 #mood-history-table tr:hover td { background: #fffbf5; }
 
 .insight-state { padding: 1rem; text-align: center; color: var(--text-mid); font-style: italic; }
+
+/* Utility visibility classes */
 .hidden { display: none !important; }
+.show { display: block !important; }
 
 #export-data-btn {
     display: block;
