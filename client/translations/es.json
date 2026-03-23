@@ -25,6 +25,7 @@
   "register.nickPlaceholder": "Nombre a mostrar (opcional)",
   "register.submit": "Registrar",
   "register.consentPrefix": "He leído y acepto",
+  "register.consentAnd": "y",
 
   "auth.failed": "Apodo o código PIN incorrecto.",
   "auth.no_token": "Sin acceso: inicia sesión de nuevo.",

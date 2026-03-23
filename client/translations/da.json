@@ -25,6 +25,7 @@
   "register.nickPlaceholder": "Kaldenavn (valgfrit)",
   "register.submit": "Opret",
   "register.consentPrefix": "Jeg har læst og accepterer",
+  "register.consentAnd": "og",
 
   "auth.failed": "Forkert kaldenavn eller PIN-kode.",
   "auth.no_token": "Ingen adgang: log ind igen.",

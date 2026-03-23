@@ -25,6 +25,7 @@
   "register.nickPlaceholder": "Smeknamn (valfritt)",
   "register.submit": "Registrera",
   "register.consentPrefix": "Jag har läst och accepterar",
+  "register.consentAnd": "och",
 
   "auth.failed": "Fel smeknamn eller PIN-kod.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",

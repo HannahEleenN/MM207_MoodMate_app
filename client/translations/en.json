@@ -25,6 +25,7 @@
   "register.nickPlaceholder": "Display name (optional)",
   "register.submit": "Register",
   "register.consentPrefix": "I have read and accept",
+  "register.consentAnd": "and",
 
   "auth.failed": "Wrong nickname or PIN code.",
   "auth.no_token": "No access: please sign in again.",

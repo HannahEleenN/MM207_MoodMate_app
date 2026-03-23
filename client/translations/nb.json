@@ -25,6 +25,7 @@
   "register.nickPlaceholder": "Kallenavn (valgfritt)",
   "register.submit": "Registrer",
   "register.consentPrefix": "Jeg har lest og godtar",
+  "register.consentAnd": "og",
 
   "auth.failed": "Feil kallenavn eller PIN-kode.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
