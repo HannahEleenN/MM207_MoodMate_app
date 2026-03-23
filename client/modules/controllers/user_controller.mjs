@@ -75,6 +75,20 @@ export const authController =
         setTimeout(() => el.classList.add('hidden'), 3000);
     },
 
+    showErrorMessage(message)
+    {
+        const el = document.getElementById('global-notice');
+        if (el)
+        {
+            el.textContent = message;
+            el.classList.remove('hidden');
+            el.setAttribute('role', 'alert');
+            setTimeout(() => el.classList.add('hidden'), 4000);
+        } else {
+            alert(message);
+        }
+    },
+
     async handleLogin(credentials)
     {
         const form = this.container ? this.container.querySelector('#loginForm') : null;
@@ -134,13 +148,8 @@ export const authController =
                     }
                      if (serverMsg)
                      {
-                         const el = document.getElementById('global-notice');
-                         if (el)
-                         {
-                             el.textContent = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
-                             el.classList.remove('hidden');
-                             setTimeout(() => el.classList.add('hidden'), 3500);
-                         }
+                         const displayMsg = serverErrorKey && store.t ? (store.t(serverErrorKey) || serverMsg) : serverMsg;
+                         this.showErrorMessage(displayMsg);
                      } else {
                          this.showNotice('login.incorrectPin');
                      }

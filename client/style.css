@@ -728,3 +728,47 @@ hr { border: none; border-top: 2px solid #e8dac8; margin: 1.5rem 0; }
     .flag-img { width: 36px !important; height: 22px !important; }
 }
 
+/* ── Global Notice / Alert messaging ──────────────────────────────────────── */
+#global-notice {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--pink) 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: var(--shadow-soft);
+    font-weight: 600;
+    font-size: 0.95rem;
+    animation: slideDown 0.3s ease-out;
+    transition: opacity 0.3s ease-out;
+}
+
+#global-notice.hidden {
+    display: none;
+    opacity: 0;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ── Success notice variant ───────────────────────────────────────────────── */
+#global-notice.success {
+    background: linear-gradient(135deg, var(--green) 0%, var(--teal) 100%);
+}
+
+/* ── Info notice variant ─────────────────────────────────────────────────── */
+#global-notice.info {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--teal-light) 100%);
+}
+
