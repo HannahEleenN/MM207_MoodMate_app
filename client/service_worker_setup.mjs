@@ -15,7 +15,7 @@ if ('serviceWorker' in navigator)
 
     if (!isLocalhost || enableSW)
     {
-        const swUrl = '/service_worker.mjs';
+        const swUrl = '/service_worker.mjs?v=' + Date.now();
         (async () =>
         {
             try {
