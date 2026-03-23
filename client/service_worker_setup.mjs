@@ -18,9 +18,21 @@ if ('serviceWorker' in navigator)
         const swUrl = '/service_worker.mjs?v=' + Date.now();
         (async () =>
         {
-            try {
+            try
+            {
                 const reg = await navigator.serviceWorker.register(swUrl, { type: 'module' });
                 console.info('Service worker registered (module):', reg.scope);
+
+                if (navigator.serviceWorker.controller)
+                {
+                    navigator.serviceWorker.addEventListener('message', (event) =>
+                    {
+                        if (event && event.data && event.data.type === 'PONG')
+                        {
+                            console.debug('[SW] Received PONG from service worker:', event.data);
+                        }
+                    });
+                }
             } catch (err)
             {
                 try {
