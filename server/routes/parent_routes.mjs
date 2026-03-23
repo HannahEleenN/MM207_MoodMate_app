@@ -12,7 +12,7 @@ router.post('/', userController.register);
 
 router.post('/login', userController.login);
 
-// ---------------------------------------------------------------------------------------------------------------------
+router.post('/logout', authorizeUserIdentity, userController.logout);
 
 router.get('/', authorizeUserIdentity, userController.listUsers);
 

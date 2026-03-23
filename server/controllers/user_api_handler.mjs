@@ -47,6 +47,17 @@ export const loginUser = async (req, res, next) =>
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+export const logoutUser = async (req, res, next) =>
+{
+    try {
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export const deleteUserAccount = async (req, res, next) =>
 {
     try {
@@ -90,6 +101,7 @@ export default
 {
     register: registerUser,
     login: loginUser,
+    logout: logoutUser,
     deleteAccount: deleteUserAccount,
     listUsers,
     updateUser

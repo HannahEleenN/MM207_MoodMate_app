@@ -7,7 +7,11 @@ export const createChild = async (req, res, next) =>
 {
     try
     {
-        const parentId = req.params.parentId;
+        let parentId = req.params.parentId;
+        if (!parentId && req.user) {
+            parentId = req.user.id || req.user.userId;
+        }
+        
         const payload = req.body || {};
         payload.parentId = parentId;
         if (!payload.name || !payload.pin) {
@@ -23,7 +27,11 @@ export const createChild = async (req, res, next) =>
 export const listByParent = async (req, res, next) =>
 {
     try {
-        const parentId = req.params.parentId;
+        let parentId = req.params.parentId;
+        if (!parentId && req.user) {
+            parentId = req.user.id || req.user.userId;
+        }
+        
         const rows = await Child.getByParent(parentId);
         return res.status(HTTP.OK).json({ data: rows });
     } catch (err) {
