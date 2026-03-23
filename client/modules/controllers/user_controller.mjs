@@ -231,6 +231,32 @@ export const userUIController =
                 const formData = Object.fromEntries(new FormData(form));
                 await this.handleRegister(formData);
             };
+
+            // Add real-time password validation listeners
+            const passwordInput = this.container.querySelector('#reg-password');
+            if (passwordInput) {
+                passwordInput.addEventListener('input', (e) => this.updatePasswordRequirements(e.target.value));
+                passwordInput.addEventListener('focus', () => this.showPasswordRequirements());
+                passwordInput.addEventListener('blur', () => this.hidePasswordRequirements());
+            }
+
+            // Add email validation listener
+            const emailInput = this.container.querySelector('#reg-email');
+            if (emailInput) {
+                emailInput.addEventListener('blur', () => this.validateEmail());
+            }
+
+            // Add consent checkbox listener for real-time error clearing
+            const consentCheckbox = this.container.querySelector('#consent-check');
+            if (consentCheckbox) {
+                consentCheckbox.addEventListener('change', () => {
+                    const consentError = this.container.querySelector('#consent-error');
+                    if (consentError && consentCheckbox.checked) {
+                        consentError.textContent = '';
+                        consentError.classList.remove('show');
+                    }
+                });
+            }
         }
 
         if (goToLoginBtn)
@@ -256,22 +282,37 @@ export const userUIController =
 
     async handleRegister(formData)
     {
-        let btn = this.container.querySelector(".btn-reg");
+        const form = this.container.querySelector("#regForm");
+        const btn = this.container.querySelector(".btn-reg");
+        const spinner = this.container.querySelector("#reg-spinner");
+        
         try
         {
-            if (btn) btn.disabled = true;
+            // Clear previous errors
+            this.clearFormErrors();
 
-            const consentCheckbox = this.container.querySelector('#consent-check');
-
-            if (!(consentCheckbox && consentCheckbox.checked)) {
-                this.showNotice('register.requireConsent');
+            // Validate inputs
+            const validationErrors = this.validateRegistrationForm(formData);
+            if (Object.keys(validationErrors).length > 0) {
+                this.displayFormErrors(validationErrors);
                 return;
             }
 
-            const payload =
-            {
+            // Check consent
+            const consentCheckbox = this.container.querySelector('#consent-check');
+            if (!(consentCheckbox && consentCheckbox.checked)) {
+                this.displayFormError('consent-error', 'register.requireConsent');
+                return;
+            }
+
+            // Show loading state
+            if (form) form.classList.add('loading');
+            if (btn) btn.disabled = true;
+            if (spinner) spinner.setAttribute('aria-hidden', 'false');
+
+            const payload = {
                 nick: formData.nick || null,
-                email: formData.email,
+                email: formData.email.trim().toLowerCase(),
                 secret: formData.secret,
                 has_consented: !!(consentCheckbox && consentCheckbox.checked)
             };
@@ -290,14 +331,98 @@ export const userUIController =
                     store.prefillSecret = formData.secret;
                 }
 
+                // Reset form
+                if (form) form.reset();
+                this.clearFormErrors();
+
                 this.showNotice('register.success');
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            this.showNotice('register.failed');
+            
+            // Handle specific error responses
+            if (error && error.body && error.body.errorKey) {
+                this.showNotice(error.body.errorKey);
+            } else if (error && error.body && error.body.error) {
+                const el = document.getElementById('global-notice');
+                if (el) {
+                    el.textContent = error.body.error;
+                    el.classList.remove('hidden');
+                    setTimeout(() => el.classList.add('hidden'), 4000);
+                }
+            } else {
+                this.showNotice('register.failed');
+            }
         } finally {
+            if (form) form.classList.remove('loading');
             if (btn) btn.disabled = false;
+            if (spinner) spinner.setAttribute('aria-hidden', 'true');
         }
+    },
+
+    validateRegistrationForm(formData)
+    {
+        const errors = {};
+
+        // Email validation
+        if (!formData.email || !formData.email.trim()) {
+            errors.email = 'login.emailPlaceholder';
+        } else {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email.trim())) {
+                errors.email = 'login.invalidEmail';
+            }
+        }
+
+        // Password validation
+        if (!formData.secret || !formData.secret.trim()) {
+            errors.password = 'login.passwordPlaceholder';
+        } else {
+            const pwd = formData.secret;
+            if (pwd.length < 6) {
+                errors.password = 'register.passwordTooShort';
+            }
+            // Check for at least one number
+            if (!/\d/.test(pwd)) {
+                errors.password = 'register.passwordNoNumber';
+            }
+        }
+
+        return errors;
+    },
+
+    displayFormErrors(errors)
+    {
+        Object.keys(errors).forEach(field => {
+            this.displayFormError(`${field}-error`, errors[field]);
+            const inputGroup = this.container.querySelector(`#reg-${field}`);
+            if (inputGroup) {
+                const group = inputGroup.closest('.input-group');
+                if (group) group.classList.add('error');
+            }
+        });
+    },
+
+    displayFormError(errorElementId, messageKey)
+    {
+        const errorEl = this.container.querySelector(`#${errorElementId}`);
+        if (errorEl) {
+            const message = store.t ? store.t(messageKey) : messageKey;
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+    },
+
+    clearFormErrors()
+    {
+        const errorEls = this.container.querySelectorAll('.field-error');
+        errorEls.forEach(el => {
+            el.textContent = '';
+            el.classList.remove('show');
+        });
+
+        const errorInputs = this.container.querySelectorAll('.input-group.error');
+        errorInputs.forEach(el => el.classList.remove('error'));
     },
 
     async handleEdit(id, oldEmail)
@@ -393,5 +518,74 @@ export const userUIController =
 
             listElement.appendChild(clone);
         });
+    },
+
+    updatePasswordRequirements(password)
+    {
+        const reqLength = this.container.querySelector('.req-length');
+        const reqNumber = this.container.querySelector('.req-number');
+
+        if (reqLength) {
+            const hasLength = password && password.length >= 6;
+            if (hasLength) {
+                reqLength.classList.add('met');
+            } else {
+                reqLength.classList.remove('met');
+            }
+        }
+
+        if (reqNumber) {
+            const hasNumber = password && /\d/.test(password);
+            if (hasNumber) {
+                reqNumber.classList.add('met');
+            } else {
+                reqNumber.classList.remove('met');
+            }
+        }
+    },
+
+    showPasswordRequirements()
+    {
+        const reqContainer = this.container.querySelector('.password-requirements');
+        if (reqContainer) {
+            reqContainer.classList.add('show');
+        }
+    },
+
+    hidePasswordRequirements()
+    {
+        const reqContainer = this.container.querySelector('.password-requirements');
+        if (reqContainer) {
+            reqContainer.classList.remove('show');
+        }
+    },
+
+    validateEmail()
+    {
+        const emailInput = this.container.querySelector('#reg-email');
+        const emailError = this.container.querySelector('#email-error');
+        
+        if (!emailInput || !emailError) return;
+
+        const email = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const inputGroup = emailInput.closest('.input-group');
+
+        if (!email) {
+            emailError.textContent = store.t ? store.t('login.emailPlaceholder') : 'Email is required';
+            emailError.classList.add('show');
+            if (inputGroup) inputGroup.classList.add('error');
+            return false;
+        } else if (!emailRegex.test(email)) {
+            emailError.textContent = store.t ? store.t('login.invalidEmail') : 'Please enter a valid email';
+            emailError.classList.add('show');
+            if (inputGroup) inputGroup.classList.add('error');
+            return false;
+        } else {
+            emailError.textContent = '';
+            emailError.classList.remove('show');
+            if (inputGroup) inputGroup.classList.remove('error');
+            return true;
+        }
     }
 };

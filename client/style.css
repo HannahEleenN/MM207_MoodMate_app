@@ -599,6 +599,200 @@ section#parent-insights header {
 .login-footer a:hover { text-decoration: underline; }
 
 /* ── User-manager ──────────────────────────────────────────────────────────── */
+.user-manager {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-manager-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.user-manager-header h2 {
+    color: var(--teal);
+    margin-bottom: 0.4rem;
+}
+
+.user-manager-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    font-style: italic;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    position: relative;
+}
+
+.registration-form h3 {
+    margin-bottom: .8rem;
+    color: var(--text-dark);
+}
+
+/* Field error messages */
+.field-error {
+    font-size: 0.8rem;
+    color: var(--coral);
+    margin-top: 0.2rem;
+    display: none;
+    animation: slideDown 0.2s ease-out;
+}
+
+.field-error.show {
+    display: block;
+}
+
+.input-group.error input,
+.input-group.error textarea {
+    border-color: var(--coral);
+    background: rgba(232, 114, 74, 0.05);
+}
+
+.input-group.error input:focus,
+.input-group.error textarea:focus {
+    box-shadow: 0 0 0 4px rgba(232, 114, 74, .15);
+}
+
+/* Password requirements display */
+.password-requirements {
+    display: none;
+    margin-top: 0.6rem;
+    padding: 0.8rem;
+    background: rgba(123, 170, 107, 0.08);
+    border-left: 3px solid var(--green);
+    border-radius: 0.5rem;
+}
+
+.password-requirements.show {
+    display: block;
+}
+
+.requirements-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    margin-bottom: 0.4rem;
+}
+
+.requirements-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.requirements-list li {
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.requirements-list li::before {
+    content: '○';
+    position: absolute;
+    left: 0;
+    color: var(--text-light);
+    transition: all 0.2s ease;
+}
+
+.requirements-list li.met::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: bold;
+}
+
+.requirements-list li.met {
+    color: var(--green);
+}
+
+/* Consent checkbox improved styling */
+.consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+    font-size: .9rem;
+    color: var(--text-mid);
+    cursor: pointer;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background: rgba(91, 160, 138, 0.05);
+    border-radius: 0.75rem;
+    border-left: 3px solid var(--teal);
+    transition: background 0.2s ease;
+}
+
+.consent-label:hover {
+    background: rgba(91, 160, 138, 0.1);
+}
+
+.consent-label input[type="checkbox"] {
+    width: 1.4rem;
+    height: 1.4rem;
+    accent-color: var(--teal);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.consent-label input[type="checkbox"]:checked {
+    transform: scale(1.05);
+}
+
+/* Loading spinner for registration */
+.loading-spinner {
+    display: none;
+    width: 2rem;
+    height: 2rem;
+    margin: 0 auto;
+    border: 3px solid rgba(91, 160, 138, 0.2);
+    border-top-color: var(--teal);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.registration-form.loading {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.registration-form.loading .loading-spinner {
+    display: block;
+}
+
+.registration-form.loading .btn-reg {
+    opacity: 0.5;
+}
+
+/* Submit button improvements */
+.btn-reg {
+    position: relative;
+}
+
+.btn-reg:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn-reg:not(:disabled):hover {
+    transform: translateY(-2px);
+}
+
+/* User list styling */
 .user-manager form { display: flex; flex-direction: column; gap: .8rem; }
 .user-manager h3 { margin-bottom: .8rem; }
 #user-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
@@ -610,7 +804,13 @@ section#parent-insights header {
     background: #fff;
     border: 2px solid #e8dac8;
     border-radius: 1rem;
+    transition: box-shadow 0.2s ease;
 }
+
+#user-list li:hover {
+    box-shadow: 0 4px 12px rgba(80, 50, 20, 0.1);
+}
+
 .user-actions { display: flex; gap: .4rem; }
 .user-actions button {
     padding: .35rem .85rem;
@@ -621,9 +821,13 @@ section#parent-insights header {
     border: var(--border-width) solid var(--teal);
     background: transparent;
     color: var(--teal);
-    transition: background .15s, color .15s;
+    transition: background .15s, color .15s, transform .1s;
 }
-.user-actions button:hover { background: var(--teal); color: #fff; }
+.user-actions button:hover {
+    background: var(--teal);
+    color: #fff;
+    transform: translateY(-1px);
+}
 .user-actions .btn-del { border-color: var(--coral); color: var(--coral); }
 .user-actions .btn-del:hover { background: var(--coral); color: #fff; }
 
@@ -637,6 +841,15 @@ section#parent-insights header {
     font-size: 1rem;
     cursor: pointer;
     text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+#go-to-login:hover {
+    color: var(--coral);
+}
+
+#go-to-login.hidden {
+    display: none;
 }
 
 /* ── Global fixed logout button */

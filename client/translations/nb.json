@@ -28,7 +28,12 @@
   "register.consentPrefix": "Jeg har lest og godtar",
   "register.consentAnd": "og",
   "register.consentCheckbox": "Jeg godtar vilkårene og personvernerklæringen",
-  "register.legalIntro": "Vennligst gjennomgå våre retningslinjer:",
+  "register.legalIntro": "Vennligst gjennomgå vår retningslinjene:",
+  "register.passwordRequirements": "Passordkrav:",
+  "register.reqLength": "Minst 6 tegn",
+  "register.reqNumber": "Minst ett tall",
+  "register.passwordTooShort": "Passordet må være minst 6 tegn",
+  "register.passwordNoNumber": "Passordet må inneholde minst ett tall",
 
   "auth.failed": "Feil kallenavn eller PIN-kode.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
@@ -261,6 +266,7 @@
   "text.placeholder": "",
 
   "userManager.title": "Profiladministrasjon",
+  "userManager.subtitle": "Opprett en foreldrekonto eller håndter eksisterende brukere",
   "register.nickLabel": "Kallenavn",
   "user.editInline.aria": "Rediger bruker",
   "profiles.editNameAria": "Rediger navn",

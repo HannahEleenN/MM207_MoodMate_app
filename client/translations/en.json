@@ -29,6 +29,11 @@
   "register.consentAnd": "and",
   "register.consentCheckbox": "I agree to the Terms of Service and Privacy Policy",
   "register.legalIntro": "Please review our policies:",
+  "register.passwordRequirements": "Password requirements:",
+  "register.reqLength": "At least 6 characters",
+  "register.reqNumber": "At least one number",
+  "register.passwordTooShort": "Password must be at least 6 characters",
+  "register.passwordNoNumber": "Password must contain at least one number",
 
   "auth.failed": "Wrong nickname or PIN code.",
   "auth.no_token": "No access: please sign in again.",
@@ -261,6 +266,7 @@
   "text.placeholder": "",
 
   "userManager.title": "Profile administration",
+  "userManager.subtitle": "Create a parent account or manage existing users",
   "register.nickLabel": "Nickname",
   "user.editInline.aria": "Edit user",
   "profiles.editNameAria": "Edit name",

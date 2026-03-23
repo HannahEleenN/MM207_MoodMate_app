@@ -29,6 +29,11 @@
   "register.consentAnd": "och",
   "register.consentCheckbox": "Jag godkänner villkoren och integritetspolicyn",
   "register.legalIntro": "Läs gärna igenom våra riktlinjer:",
+  "register.passwordRequirements": "Lösenordskrav:",
+  "register.reqLength": "Minst 6 tecken",
+  "register.reqNumber": "Minst en siffra",
+  "register.passwordTooShort": "Lösenordet måste vara minst 6 tecken",
+  "register.passwordNoNumber": "Lösenordet måste innehålla minst en siffra",
 
   "auth.failed": "Fel smeknamn eller PIN-kod.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",
@@ -261,6 +266,7 @@
   "text.placeholder": "",
 
   "userManager.title": "Profiladministration",
+  "userManager.subtitle": "Skapa ett föräldrakonto eller hantera befintliga användare",
   "register.nickLabel": "Smeknamn",
   "user.editInline.aria": "Redigera användare",
   "profiles.editNameAria": "Redigera namn",
