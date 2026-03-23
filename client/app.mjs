@@ -5,6 +5,7 @@ import { initParentApp } from './modules/controllers/parent_controller.mjs';
 import { initChildApp } from './modules/controllers/child_controller.mjs';
 import { moodUIController } from './modules/controllers/mood_ui_controller.mjs';
 import { createUserModel } from './modules/models/user_client_model.mjs';
+import './service_worker_setup.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
