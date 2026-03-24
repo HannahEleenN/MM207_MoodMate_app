@@ -30,6 +30,9 @@ export const childProfilesUI =
     if (!this.template) {
       throw new Error('Template element #child-item-template not found in child_profiles view');
     }
+    if (!this.editTemplate) {
+      throw new Error('Template element #child-edit-template not found in child_profiles view');
+    }
 
     this.form.onsubmit = (e) =>
     {
