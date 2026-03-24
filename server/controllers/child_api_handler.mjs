@@ -65,11 +65,69 @@ export const loginByPin = async (req, res, next) =>
     }
 };
 
+export const updateChild = async (req, res, next) =>
+{
+    try
+    {
+        const childId = req.params.childId;
+        const payload = req.body || {};
+        
+        if (!childId) {
+            return res.status(HTTP.BAD_REQUEST).json({ error: 'Child ID is required' });
+        }
+
+        const child = await Child.getById(childId);
+        if (!child) {
+            return res.status(HTTP.NOT_FOUND).json({ error: 'Child not found' });
+        }
+        
+        const parentId = req.user ? (req.user.id || req.user.userId) : null;
+        if (child.parentId !== parentId && child['parent_id'] !== parentId) {
+            return res.status(HTTP.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        }
+        
+        const updated = await Child.update(childId, payload);
+        return res.status(HTTP.OK).json({ child: updated });
+    } catch (err) {
+        return next(err);
+    }
+};
+
+export const deleteChild = async (req, res, next) =>
+{
+    try
+    {
+        const childId = req.params.childId;
+        
+        if (!childId) {
+            return res.status(HTTP.BAD_REQUEST).json({ error: 'Child ID is required' });
+        }
+        
+        // Verify the child belongs to the authenticated user
+        const child = await Child.getById(childId);
+        if (!child) {
+            return res.status(HTTP.NOT_FOUND).json({ error: 'Child not found' });
+        }
+        
+        const parentId = req.user ? (req.user.id || req.user.userId) : null;
+        if (child.parentId !== parentId && child['parent_id'] !== parentId) {
+            return res.status(HTTP.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        }
+        
+        await Child.deleteChild(childId);
+        return res.status(HTTP.OK).json({ success: true });
+    } catch (err) {
+        return next(err);
+    }
+};
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 export default
 {
     createChild,
     listByParent,
-    loginByPin
+    loginByPin,
+    updateChild,
+    deleteChild
 };

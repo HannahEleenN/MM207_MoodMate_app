@@ -29,3 +29,53 @@ export async function getByParent(parentId)
     const res = await pool.query('SELECT id, parent_id AS "parentId", name FROM child_profiles WHERE parent_id = $1', [parentId]);
     return res.rows;
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export async function getById(childId)
+{
+    const res = await pool.query('SELECT id, parent_id AS "parentId", name FROM child_profiles WHERE id = $1', [childId]);
+    return res.rows[0] || null;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export async function update(childId, { name, hasPin, pin })
+{
+    const updates = [];
+    const values = [];
+    let paramCount = 1;
+
+    if (name !== undefined) {
+        updates.push(`name = $${paramCount++}`);
+        values.push(name);
+    }
+
+    if (hasPin !== undefined) {
+        updates.push(`has_pin = $${paramCount++}`);
+        values.push(hasPin);
+    }
+
+    if (pin !== undefined) {
+        const pinHash = pin ? await hashSecret(pin) : null;
+        updates.push(`pin = $${paramCount++}`);
+        values.push(pinHash);
+    }
+
+    if (updates.length === 0) {
+        return await getById(childId);
+    }
+
+    values.push(childId);
+    const sql = `UPDATE child_profiles SET ${updates.join(', ')} WHERE id = $${paramCount} RETURNING id, parent_id AS "parentId", name`;
+    const res = await pool.query(sql, values);
+    return res.rows[0];
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export async function deleteChild(childId)
+{
+    await pool.query('DELETE FROM child_profiles WHERE id = $1', [childId]);
+    return true;
+}

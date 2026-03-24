@@ -59,6 +59,11 @@ The project uses a layered MVC-style architecture which keeps controllers, servi
 
 > **Architecture Reflection:** Thanks to the layered architecture (Controllers → Services → Models), the storage layer is decoupled from the business logic. Swapping the PostgreSQL database for a CSV file would only require modifying the Model files, leaving the API and Controllers untouched.
 
+### Database Initialization
+To set up the database locally or in the cloud, execute the SQL script `server/database/moodmate_db.sql`. This will create all necessary tables and stored procedures/functions required by the application:
+* **Tables:** `users`, `child_profiles`, `mood_logs`, and `mood_drafts`.
+* **Functions:** Includes logic for user registration, profile retrieval, and mood log persistence.
+
 ---
 
 ## Project Layout

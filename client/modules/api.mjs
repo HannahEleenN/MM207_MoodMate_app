@@ -90,6 +90,14 @@ export const ApiService =
         return await universalFetch(`${BASE}/children`, withAuthHeaders({ method: 'POST', body: JSON.stringify(payload) }));
     },
 
+    async updateChild(childId, payload) {
+        return await universalFetch(`${BASE}/children/${childId}`, withAuthHeaders({ method: 'PUT', body: JSON.stringify(payload) }));
+    },
+
+    async deleteChild(childId) {
+        return await universalFetch(`${BASE}/children/${childId}`, withAuthHeaders({ method: 'DELETE' }));
+    },
+
     async childLogin(payload) {
         return await universalFetch(`${BASE}/children/login`, { method: 'POST', body: JSON.stringify(payload) });
     },

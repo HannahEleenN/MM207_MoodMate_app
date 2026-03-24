@@ -50,26 +50,42 @@ export const ProfileModel =
     }
   },
 
-  update(id, data)
+  async update(id, data)
   {
-    if (store.currentUser) {
-      const profiles = (store.currentUser.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
-      store.currentUser = { ...store.currentUser, profiles };
+    try
+    {
+      await ApiService.updateChild(id, data);
+
+      if (store.currentUser) {
+        const profiles = (store.currentUser.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
+        store.currentUser = { ...store.currentUser, profiles };
+        return profiles.find(p => p.id === id);
+      }
+      const profiles = (store.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
+      store.profiles = profiles;
       return profiles.find(p => p.id === id);
+    } catch (err) {
+      console.error('Failed to update child profile:', err);
+      throw err;
     }
-    const profiles = (store.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
-    store.profiles = profiles;
-    return profiles.find(p => p.id === id);
   },
 
-  delete(id)
+  async delete(id)
   {
-    if (store.currentUser) {
-      store.currentUser = { ...store.currentUser, profiles: (store.currentUser.profiles || []).filter(p => p.id !== id) };
-    } else {
-      store.profiles = (store.profiles || []).filter(p => p.id !== id);
+    try
+    {
+      await ApiService.deleteChild(id);
+
+      if (store.currentUser) {
+        store.currentUser = { ...store.currentUser, profiles: (store.currentUser.profiles || []).filter(p => p.id !== id) };
+      } else {
+        store.profiles = (store.profiles || []).filter(p => p.id !== id);
+      }
+      if (store.currentChild && store.currentChild.id === id) store.currentChild = null;
+    } catch (err) {
+      console.error('Failed to delete child profile:', err);
+      throw err;
     }
-    if (store.currentChild && store.currentChild.id === id) store.currentChild = null;
   },
 
   select(id)

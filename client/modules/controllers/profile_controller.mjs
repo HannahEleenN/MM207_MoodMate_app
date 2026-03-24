@@ -16,6 +16,13 @@ export const childProfilesUI =
 
     this.container.innerHTML = await ApiService.loadView('child_profiles');
 
+    this.cacheElements();
+    this.attachEventListeners();
+    await this.loadProfiles();
+  },
+
+  cacheElements()
+  {
     this.listEl = this.container.querySelector('#child-list');
     this.form = this.container.querySelector('#create-child-form');
     this.template = this.container.querySelector('#child-item-template');
@@ -33,13 +40,18 @@ export const childProfilesUI =
     if (!this.editTemplate) {
       throw new Error('Template element #child-edit-template not found in child_profiles view');
     }
+  },
 
-    this.form.onsubmit = (e) =>
-    {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(this.form));
-      this.createProfile(data);
-    };
+  attachEventListeners()
+  {
+    if (this.form) {
+      this.form.onsubmit = (e) =>
+      {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(this.form));
+        this.createProfile(data);
+      };
+    }
 
     const backBtn = this.container.querySelector('#back-to-parent');
     if (backBtn)
@@ -50,7 +62,6 @@ export const childProfilesUI =
         store.currentView = 'parentMenu';
       };
     }
-    await this.loadProfiles();
   },
 
   async loadProfiles()
@@ -67,6 +78,15 @@ export const childProfilesUI =
 
   updateList(profiles)
   {
+    // Ensure template is still available
+    if (!this.template) {
+      this.template = this.container.querySelector('#child-item-template');
+      if (!this.template) {
+        console.error('Template not found in updateList');
+        return;
+      }
+    }
+
     this.listEl.innerHTML = '';
     profiles.forEach(p =>
     {
@@ -79,7 +99,6 @@ export const childProfilesUI =
       li.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
       li.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
 
-      const pinSection = li.querySelector('.profile-pin-section');
       const createPinBtn = li.querySelector('.create-pin-btn');
       const changePinBtn = li.querySelector('.change-pin-btn');
       const removePinBtn = li.querySelector('.remove-pin-btn');
@@ -160,7 +179,7 @@ export const childProfilesUI =
   {
     try
     {
-      await ProfileModel.create({ name: data.name, age: data.age || null });
+      await ProfileModel.create({ name: data.childName || data.name, age: data.age || null });
       this.form.reset();
       await this.loadProfiles();
       this.showNotice('child.createSuccess');
@@ -186,6 +205,15 @@ export const childProfilesUI =
     const listItem = this.listEl.querySelector(`li[data-id="${id}"]`);
     if (!listItem) return;
     if (listItem.querySelector('.edit-inline')) return;
+
+    // Ensure template is still available
+    if (!this.editTemplate) {
+      this.editTemplate = this.container.querySelector('#child-edit-template');
+      if (!this.editTemplate) {
+        console.error('Edit template not found');
+        return;
+      }
+    }
 
     const clone = this.editTemplate.content.cloneNode(true);
     const editDiv = clone.querySelector('.edit-inline');
