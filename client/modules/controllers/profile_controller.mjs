@@ -21,6 +21,16 @@ export const childProfilesUI =
     this.template = this.container.querySelector('#child-item-template');
     this.editTemplate = this.container.querySelector('#child-edit-template');
 
+    if (!this.form) {
+      throw new Error('Form element #create-child-form not found in child_profiles view');
+    }
+    if (!this.listEl) {
+      throw new Error('List element #child-list not found in child_profiles view');
+    }
+    if (!this.template) {
+      throw new Error('Template element #child-item-template not found in child_profiles view');
+    }
+
     this.form.onsubmit = (e) =>
     {
       e.preventDefault();

@@ -227,7 +227,12 @@ async function router()
                 console.log('[app.router] childProfiles rendered');
             } catch (e) {
                 console.error('[router] childProfiles init failed:', e);
-                root.innerHTML = await ApiService.loadView('notFound');
+                try {
+                    root.innerHTML = await ApiService.loadView('not_found');
+                } catch (fallbackError) {
+                    console.error('[router] Failed to load not_found view:', fallbackError);
+                    root.innerHTML = '<section><h2>Error</h2><p>Failed to load child profiles.</p><button onclick="location.reload()">Reload</button></section>';
+                }
             }
             break;
         case 'childLogin':
@@ -248,7 +253,7 @@ async function router()
                 } else {
                     console.error('childController has no init method; rendering fallback view');
                     try {
-                        root.innerHTML = await ApiService.loadView('notFound');
+                        root.innerHTML = await ApiService.loadView('not_found');
                     } catch (err) {
                         root.textContent = 'Requested view is not available.';
                     }
@@ -262,11 +267,21 @@ async function router()
                 await moodUIController.initInsights(root);
             } catch (e) {
                 console.error('insights init failed', e);
-                root.innerHTML = await ApiService.loadView('notFound');
+                try {
+                    root.innerHTML = await ApiService.loadView('not_found');
+                } catch (fallbackError) {
+                    console.error('[router] Failed to load not_found view:', fallbackError);
+                    root.innerHTML = '<section><h2>Error</h2><p>Failed to load insights.</p><button onclick="location.reload()">Reload</button></section>';
+                }
             }
             break;
         default:
-            root.innerHTML = await ApiService.loadView('notFound');
+            try {
+                root.innerHTML = await ApiService.loadView('not_found');
+            } catch (fallbackError) {
+                console.error('[router] Failed to load not_found view:', fallbackError);
+                root.innerHTML = '<section><h2>Page Not Found</h2><p>The requested view is not available.</p><button onclick="location.reload()">Reload</button></section>';
+            }
     }
 
     try {
