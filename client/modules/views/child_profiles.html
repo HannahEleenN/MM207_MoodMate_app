@@ -1,3 +1,17 @@
+<section id="child-profiles">
+  <div class="profiles-header">
+    <button id="back-to-parent" class="back-link" data-i18n="common.back"></button>
+    <h2 data-i18n="profiles.title"></h2>
+  </div>
+
+  <form id="create-child-form">
+    <input type="text" name="childName" placeholder="Child name" data-i18n="profiles.childNamePlaceholder" required>
+    <button type="submit" class="primary-btn" data-i18n="profiles.addChild"></button>
+  </form>
+
+  <ul id="child-list"></ul>
+</section>
+
 <template id="child-item-template">
   <li>
     <div class="profile-header">
