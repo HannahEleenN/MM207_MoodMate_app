@@ -151,6 +151,14 @@
   "profiles.description": "Crea o selecciona un perfil para el niño.",
   "profiles.nicknamePlaceholder": "Apodo del niño",
   "profiles.agePlaceholder": "Edad (opcional)",
+
+  "profiles.pinMessage": "Protege tus registros de humor de hermanos - crea un código PIN para privacidad",
+  "profiles.createPin": "Agregar PIN",
+  "profiles.changePin": "Cambiar PIN",
+  "profiles.removePin": "Eliminar PIN",
+  "profiles.confirm": "Confirmar",
+  "profiles.noPinWarning": "Cualquiera con acceso a este dispositivo puede ver los registros de humor de este perfil",
+
   "profiles.create": "Crear perfil",
   "profiles.existing": "Perfiles existentes",
   "profiles.select": "Seleccionar",

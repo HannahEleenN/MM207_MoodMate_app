@@ -151,6 +151,14 @@
   "profiles.description": "Skapa eller välj en profil för barnet.",
   "profiles.nicknamePlaceholder": "Barnets smeknamn",
   "profiles.agePlaceholder": "Ålder (valfritt)",
+
+  "profiles.pinMessage": "Skydda dina humörloggar från syskon - skapa en PIN-kod för integritet",
+  "profiles.createPin": "Lägg till PIN",
+  "profiles.changePin": "Ändra PIN",
+  "profiles.removePin": "Ta bort PIN",
+  "profiles.confirm": "Bekräfta",
+  "profiles.noPinWarning": "Alla med tillgång till denna enhet kan se denna profils humörloggar",
+
   "profiles.create": "Skapa profil",
   "profiles.existing": "Befintliga profiler",
   "profiles.select": "Välj",
@@ -161,7 +169,6 @@
   "profiles.cancel": "Avbryt",
   "profiles.back": "⬅️ Tillbaka",
 
-  "profiles.editNameAria": "Redigera namn",
   "insights.title": "Humörtrender och insikter",
   "insights.loading": "Hämtar data…",
   "insights.empty": "Inga insikter att visa",

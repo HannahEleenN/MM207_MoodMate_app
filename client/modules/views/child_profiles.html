@@ -1,40 +1,31 @@
-<section class="child-profiles">
-  <header class="profiles-header">
-    <button id="back-to-parent" class="back-link" data-i18n="profiles.back"></button>
-    <h2 data-i18n="profiles.title"></h2>
-  </header>
-
-  <p data-i18n="profiles.description"></p>
-
-  <form id="create-child-form">
-    <label for="child-name-input" class="sr-only" data-i18n="profiles.nicknamePlaceholder"></label>
-    <input id="child-name-input" type="text" name="name" data-i18n-placeholder="profiles.nicknamePlaceholder" placeholder="" required>
-    <label for="child-age-input" class="sr-only" data-i18n="profiles.agePlaceholder"></label>
-    <input id="child-age-input" type="number" name="age" data-i18n-placeholder="profiles.agePlaceholder" placeholder="">
-    <button type="submit" class="primary-btn" data-i18n="profiles.create"></button>
-  </form>
-
-  <hr>
-
-  <h3 data-i18n="profiles.existing"></h3>
-  <ul id="child-list"></ul>
-
-  <template id="child-item-template">
-    <li>
+<template id="child-item-template">
+  <li>
+    <div class="profile-header">
       <span class="child-name"></span>
       <div class="child-actions">
-        <button class="select-child" data-i18n="profiles.select" title="Select this profile"></button>
-        <button class="edit-child" data-i18n="profiles.edit" title="Edit profile name"></button>
-        <button class="delete-child" data-i18n="profiles.delete" title="Delete profile"></button>
+        <button class="select-child" data-i18n="profiles.select"></button>
+        <button class="edit-child" data-i18n="profiles.edit"></button>
+        <button class="delete-child" data-i18n="profiles.delete"></button>
       </div>
-    </li>
-  </template>
-
-  <template id="child-edit-template">
-    <div class="edit-inline">
-      <input type="text" class="edit-input" aria-label="Edit name" data-i18n-placeholder="profiles.newNamePlaceholder" placeholder="">
-      <button class="save-edit" data-i18n="profiles.save"></button>
-      <button class="cancel-edit" data-i18n="profiles.cancel"></button>
     </div>
-  </template>
-</section>
+    <div class="profile-pin-section">
+      <p class="pin-message" data-i18n="profiles.pinMessage"></p>
+      <div class="pin-status">
+        <span class="pin-status-text"></span>
+      </div>
+      <div class="pin-button-group">
+        <button class="create-pin-btn" data-i18n="profiles.createPin"></button>
+        <button class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;"></button>
+        <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;"></button>
+      </div>
+      <div class="pin-input-section" style="display: none;">
+        <label class="sr-only" data-i18n="profiles.pinLabel"></label>
+        <input type="password" class="pin-input" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required>
+        <div class="pin-button-group">
+          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm"></button>
+          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel"></button>
+        </div>
+      </div>
+    </div>
+  </li>
+</template>

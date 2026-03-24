@@ -151,6 +151,14 @@
   "profiles.description": "Opret eller vælg en profil til barnet.",
   "profiles.nicknamePlaceholder": "Barnets kælenavn",
   "profiles.agePlaceholder": "Alder (valgfrit)",
+
+  "profiles.pinMessage": "Beskyt dine humørlogger fra søskende - opret en PIN-kode for privathed",
+  "profiles.createPin": "Tilføj PIN",
+  "profiles.changePin": "Ændre PIN",
+  "profiles.removePin": "Fjern PIN",
+  "profiles.confirm": "Bekræft",
+  "profiles.noPinWarning": "Alle med adgang til denne enhed kan se denne profils humørlogger",
+
   "profiles.create": "Opret profil",
   "profiles.existing": "Eksisterende profiler",
   "profiles.select": "Vælg",

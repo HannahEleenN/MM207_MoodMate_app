@@ -151,6 +151,14 @@
   "profiles.description": "Create or select a profile for the child.",
   "profiles.nicknamePlaceholder": "Child's nickname",
   "profiles.agePlaceholder": "Age (optional)",
+
+  "profiles.pinMessage": "Protect your mood logs from siblings; create a PIN code for privacy",
+  "profiles.createPin": "Add PIN",
+  "profiles.changePin": "Change PIN",
+  "profiles.removePin": "Remove PIN",
+  "profiles.confirm": "Confirm",
+  "profiles.noPinWarning": "Anyone with access to this device can see this profile's mood logs",
+
   "profiles.create": "Create profile",
   "profiles.existing": "Existing profiles",
   "profiles.select": "Select",

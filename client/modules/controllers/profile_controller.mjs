@@ -37,21 +37,22 @@ export const childProfilesUI =
         store.currentView = 'parentMenu';
       };
     }
+    await this.loadProfiles();
   },
 
   async loadProfiles()
   {
     try {
       const profiles = await ProfileModel.loadProfiles();
-      this.renderList(profiles);
+      this.updateList(profiles);
     } catch (err) {
       console.error('Failed to load profiles:', err);
       const profiles = ProfileModel.getAll();
-      this.renderList(profiles);
+      this.updateList(profiles);
     }
   },
 
-  renderList(profiles)
+  updateList(profiles)
   {
     this.listEl.innerHTML = '';
     profiles.forEach(p =>
@@ -65,8 +66,81 @@ export const childProfilesUI =
       li.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
       li.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
 
+      const pinSection = li.querySelector('.profile-pin-section');
+      const createPinBtn = li.querySelector('.create-pin-btn');
+      const changePinBtn = li.querySelector('.change-pin-btn');
+      const removePinBtn = li.querySelector('.remove-pin-btn');
+      const pinStatusText = li.querySelector('.pin-status-text');
+
+      if (p.hasPin)
+      {
+        pinStatusText.textContent = '🔒 PIN enabled';
+        createPinBtn.style.display = 'none';
+        changePinBtn.style.display = 'block';
+        removePinBtn.style.display = 'block';
+      } else {
+        pinStatusText.textContent = '🔓 No PIN';
+        createPinBtn.style.display = 'block';
+        changePinBtn.style.display = 'none';
+        removePinBtn.style.display = 'none';
+      }
+
+      createPinBtn.onclick = () => this.showPinInput(li, p.id, 'create');
+      changePinBtn.onclick = () => this.showPinInput(li, p.id, 'change');
+      removePinBtn.onclick = () => this.removePin(li, p.id);
+
       this.listEl.appendChild(clone);
     });
+  },
+
+  showPinInput(listItem, profileId, mode)
+  {
+    const inputSection = listItem.querySelector('.pin-input-section');
+    const input = listItem.querySelector('.pin-input');
+    const confirmBtn = listItem.querySelector('.confirm-pin-btn');
+    const cancelBtn = listItem.querySelector('.cancel-pin-btn');
+
+    inputSection.style.display = 'block';
+    input.value = '';
+    input.focus();
+
+    confirmBtn.onclick = async () =>
+    {
+      const pin = input.value.trim();
+      if (pin.length !== 6 || !/^\d+$/.test(pin))
+      {
+        alert(store.t ? store.t('profiles.pinMustBe6Digits') : 'PIN must be 6 digits');
+        return;
+      }
+      const profile = ProfileModel.getAll().find(p => p.id === profileId);
+      if (profile)
+      {
+        profile.hasPin = true;
+        profile.pin = pin;
+        ProfileModel.update(profileId, { hasPin: true });
+        await this.loadProfiles();
+        this.showNotice(mode === 'create' ? 'profiles.pinCreated' : 'profiles.pinChanged');
+      }
+    };
+
+    cancelBtn.onclick = () => {
+      inputSection.style.display = 'none';
+    };
+  },
+
+  async removePin(listItem, profileId)
+  {
+    if (!confirm(store.t ? store.t('profiles.removePinConfirm') : 'Remove PIN?')) return;
+
+    const profile = ProfileModel.getAll().find(p => p.id === profileId);
+    if (profile)
+    {
+      profile.hasPin = false;
+      profile.pin = null;
+      ProfileModel.update(profileId, { hasPin: false, pin: null });
+      await this.loadProfiles();
+      this.showNotice('profiles.pinRemoved');
+    }
   },
 
   async createProfile(data)
