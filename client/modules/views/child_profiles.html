@@ -1,12 +1,12 @@
 <section id="child-profiles">
   <div class="profiles-header">
-    <button id="back-to-parent" class="back-link" data-i18n="profiles.back"></button>
+    <button id="back-to-parent" class="back-link" data-i18n="profiles.back" aria-label="Back"></button>
     <h2 data-i18n="profiles.title"></h2>
   </div>
 
   <form id="create-child-form">
     <input type="text" name="childName" placeholder="Child name" data-i18n="profiles.childNamePlaceholder" required>
-    <button type="submit" class="primary-btn" data-i18n="profiles.addChild"></button>
+    <button type="submit" class="primary-btn" data-i18n="profiles.addChild" aria-label="Add child"></button>
   </form>
 
   <ul id="child-list"></ul>
@@ -17,9 +17,9 @@
     <div class="profile-header">
       <span class="child-name"></span>
       <div class="child-actions">
-        <button class="select-child" data-i18n="profiles.select"></button>
-        <button class="edit-child" data-i18n="profiles.edit"></button>
-        <button class="delete-child" data-i18n="profiles.delete"></button>
+        <button class="select-child" data-i18n="profiles.select" aria-label="Select"></button>
+        <button class="edit-child" data-i18n="profiles.edit" aria-label="Edit"></button>
+        <button class="delete-child" data-i18n="profiles.delete" aria-label="Delete"></button>
       </div>
     </div>
     <div class="profile-pin-section">
@@ -28,16 +28,16 @@
         <span class="pin-status-text"></span>
       </div>
       <div class="pin-button-group">
-        <button class="create-pin-btn" data-i18n="profiles.createPin"></button>
-        <button class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;"></button>
-        <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;"></button>
+        <button class="create-pin-btn" data-i18n="profiles.createPin" aria-label="Create PIN"></button>
+        <button class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;" aria-label="Change PIN"></button>
+        <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;" aria-label="Remove PIN"></button>
       </div>
       <div class="pin-input-section" style="display: none;">
         <label class="sr-only" data-i18n="profiles.pinLabel"></label>
         <input type="password" class="pin-input" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required>
         <div class="pin-button-group">
-          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm"></button>
-          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel"></button>
+          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm" aria-label="Confirm"></button>
+          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel" aria-label="Cancel"></button>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
 <template id="child-edit-template">
   <div class="edit-inline">
     <input type="text" class="edit-input" required>
-    <button type="button" class="save-edit" data-i18n="profiles.save"></button>
-    <button type="button" class="cancel-edit" data-i18n="profiles.cancel"></button>
+    <button type="button" class="save-edit" data-i18n="profiles.save" aria-label="Save"></button>
+    <button type="button" class="cancel-edit" data-i18n="profiles.cancel" aria-label="Cancel"></button>
   </div>
 </template>
