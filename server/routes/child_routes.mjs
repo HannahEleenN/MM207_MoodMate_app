@@ -14,12 +14,4 @@ router.delete('/children/:childId', authorizeUserIdentity, childController.delet
 
 router.post('/children/login', childController.loginByPin);
 
-router.post('/parents/:parentId/children', authorizeUserIdentity, childController.createChild);
-
-router.get('/parents/:parentId/children', authorizeUserIdentity, childController.listByParent);
-
-router.put('/parents/:parentId/children/:childId', authorizeUserIdentity, childController.updateChild);
-
-router.delete('/parents/:parentId/children/:childId', authorizeUserIdentity, childController.deleteChild);
-
 export default router;
