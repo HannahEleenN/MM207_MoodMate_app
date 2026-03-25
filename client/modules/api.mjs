@@ -136,7 +136,9 @@ export const ApiService =
     {
         try {
             const endpoint = profileId ? `${BASE}/moods/drafts/${encodeURIComponent(profileId)}` : `${BASE}/moods/drafts`;
-            return await universalFetch(endpoint, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
+            const result = await universalFetch(endpoint, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
+            // 204 No Content returns null, which is fine - just return success
+            return result === null ? { success: true } : result;
         } catch (e) {
             console.debug('deleteDraft failed (server may not support drafts):', e);
             return null;

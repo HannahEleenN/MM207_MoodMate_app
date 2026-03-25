@@ -5,8 +5,31 @@
   </div>
 
   <form id="create-child-form">
-    <input type="text" name="childName" placeholder="Child name" data-i18n="profiles.childNamePlaceholder" required>
-    <button type="submit" class="primary-btn" data-i18n="profiles.addChild" aria-label="Add child"></button>
+    <label for="childName-input" class="sr-only">Child name</label>
+    <input type="text" id="childName-input" name="childName" placeholder="Child name" data-i18n-placeholder="profiles.childNamePlaceholder" required>
+    <label for="age-select" class="sr-only">Child age</label>
+    <select id="age-select" name="age" data-i18n-placeholder="profiles.childAgePlaceholder" required>
+      <option value="">-- Select age --</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+    </select>
+    <button type="submit" class="primary-btn" data-i18n="profiles.addChild">Add Child</button>
   </form>
 
   <ul id="child-list"></ul>
@@ -15,11 +38,14 @@
 <template id="child-item-template">
   <li>
     <div class="profile-header">
-      <span class="child-name"></span>
+      <div>
+        <span class="child-name"></span>
+        <span class="child-age" style="font-size: 0.9rem; color: var(--text-mid); margin-left: 0.5rem;"></span>
+      </div>
       <div class="child-actions">
-        <button class="select-child" data-i18n="profiles.select" aria-label="Select"></button>
-        <button class="edit-child" data-i18n="profiles.edit" aria-label="Edit"></button>
-        <button class="delete-child" data-i18n="profiles.delete" aria-label="Delete"></button>
+        <button class="select-child" data-i18n="profiles.select">Select</button>
+        <button class="edit-child" data-i18n="profiles.edit">Edit</button>
+        <button class="delete-child" data-i18n="profiles.delete">Delete</button>
       </div>
     </div>
     <div class="profile-pin-section">
@@ -28,16 +54,16 @@
         <span class="pin-status-text"></span>
       </div>
       <div class="pin-button-group">
-        <button class="create-pin-btn" data-i18n="profiles.createPin" aria-label="Create PIN"></button>
-        <button class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;" aria-label="Change PIN"></button>
-        <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;" aria-label="Remove PIN"></button>
+        <button class="create-pin-btn" data-i18n="profiles.createPin">Create PIN</button>
+        <button class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;">Change PIN</button>
+        <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;">Remove PIN</button>
       </div>
       <div class="pin-input-section" style="display: none;">
         <label class="sr-only" data-i18n="profiles.pinLabel"></label>
         <input type="password" class="pin-input" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required>
         <div class="pin-button-group">
-          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm" aria-label="Confirm"></button>
-          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel" aria-label="Cancel"></button>
+          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm">Confirm</button>
+          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel">Cancel</button>
         </div>
       </div>
     </div>
@@ -46,8 +72,31 @@
 
 <template id="child-edit-template">
   <div class="edit-inline">
-    <input type="text" class="edit-input" required>
-    <button type="button" class="save-edit" data-i18n="profiles.save" aria-label="Save"></button>
-    <button type="button" class="cancel-edit" data-i18n="profiles.cancel" aria-label="Cancel"></button>
+    <label for="edit-name" class="sr-only">Child name</label>
+    <input type="text" id="edit-name" class="edit-input" placeholder="Name" required>
+    <label for="edit-age" class="sr-only">Child age</label>
+    <select id="edit-age" class="edit-age">
+      <option value="">-- Age --</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
+      <option value="16">16</option>
+      <option value="17">17</option>
+      <option value="18">18</option>
+    </select>
+    <button type="button" class="save-edit" data-i18n="profiles.save">Save</button>
+    <button type="button" class="cancel-edit" data-i18n="profiles.cancel">Cancel</button>
   </div>
 </template>

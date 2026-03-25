@@ -239,6 +239,31 @@ input:focus-visible, textarea:focus-visible {
     box-shadow: 0 0 0 4px rgba(91,160,138,.15);
 }
 
+/* ── Select elements styling ─────────────────────────────────────────────── */
+select {
+    width: 100%;
+    padding: .85rem 1.1rem;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: 1rem;
+    font-family: var(--font-body), sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background: #fff;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233d8b74' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em 1.2em;
+    padding-right: 2.5rem;
+}
+
+select:focus-visible {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 4px rgba(91,160,138,.15);
+}
+
 textarea {
     resize: vertical;
     min-height: 100px;
@@ -613,10 +638,57 @@ textarea {
     box-shadow: 0 4px 12px rgba(232, 114, 74, .2);
 }
 
-.edit-inline { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .4rem; }
-.edit-inline input { flex: 1 1 120px; }
-.edit-inline .save-edit   { background: var(--teal); color: #fff; border: none; border-radius: var(--radius-pill); padding: .35rem .9rem; font-weight: 700; cursor: pointer; }
-.edit-inline .cancel-edit { background: var(--border-color); color: var(--text-dark); border: none; border-radius: var(--radius-pill); padding: .35rem .9rem; font-weight: 700; cursor: pointer; }
+.edit-inline {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .4rem;
+    align-items: center;
+}
+
+.edit-inline input,
+.edit-inline select {
+    flex: 1 1 120px;
+    padding: .6rem;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: 0.6rem;
+    font-family: var(--font-body), sans-serif;
+    font-size: 0.95rem;
+}
+
+.edit-inline select {
+    cursor: pointer;
+    background: #fff;
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233d8b74' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+.edit-inline .save-edit   {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: .35rem .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.edit-inline .cancel-edit {
+    background: var(--border-color);
+    color: var(--text-dark);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: .35rem .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
 
 /* ── Child profile PIN section ─────────────────────────────────────────────── */
 

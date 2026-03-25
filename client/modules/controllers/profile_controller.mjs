@@ -95,6 +95,11 @@ export const childProfilesUI =
       li.dataset.id = p.id;
       li.querySelector('.child-name').textContent = p.name;
 
+      const ageEl = li.querySelector('.child-age');
+      if (ageEl && p.age) {
+        ageEl.textContent = `(${p.age} ${p.age === '1' ? 'year' : 'years'})`;
+      }
+
       li.querySelector('.select-child').onclick = () => this.selectProfile(p.id);
       li.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
       li.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
@@ -179,7 +184,10 @@ export const childProfilesUI =
   {
     try
     {
-      await ProfileModel.create({ name: data.childName || data.name, age: data.age || null });
+      await ProfileModel.create({ 
+        name: data.childName || data.name, 
+        age: data.age || null 
+      });
       this.form.reset();
       await this.loadProfiles();
       this.showNotice('child.createSuccess');
@@ -218,13 +226,24 @@ export const childProfilesUI =
     const clone = this.editTemplate.content.cloneNode(true);
     const editDiv = clone.querySelector('.edit-inline');
     const input = editDiv.querySelector('.edit-input');
+    const ageSelect = editDiv.querySelector('.edit-age');
+    
     input.value = found.name || '';
+    if (ageSelect && found.age) {
+      ageSelect.value = found.age;
+    }
 
     editDiv.querySelector('.save-edit').onclick = async () =>
     {
       const newName = input.value.trim();
-      if (!newName || newName === found.name) { editDiv.remove(); return; }
-      ProfileModel.update(id, { name: newName });
+      const newAge = ageSelect ? ageSelect.value : found.age;
+      
+      if (!newName || (newName === found.name && newAge === found.age)) { 
+        editDiv.remove(); 
+        return; 
+      }
+      
+      ProfileModel.update(id, { name: newName, age: newAge || null });
       await this.loadProfiles();
       this.showNotice('edit.success');
     };

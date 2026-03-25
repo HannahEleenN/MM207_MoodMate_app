@@ -76,6 +76,11 @@ async function _universalFetchImpl(url, options = {})
             return Promise.reject(err);
         }
 
+        // Handle 204 No Content - return null or empty object
+        if (response.status === 204) {
+            return null;
+        }
+
         return isHtmlPath ? await response.text() : await response.json();
 
     } catch (err) {
