@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+g<!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="UTF-8">
@@ -25,10 +25,12 @@
 
 <div id="legal-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
     <div class="modal-content">
-        <span class="close-modal" id="close-x" data-i18n-attr="aria-label" data-i18n="legal.close">&times;</span>
-        <h2 id="modal-title" data-i18n="legal.modalTitle"></h2>
-        <div id="legal-text"></div>
-        <button id="close-modal-btn" class="secondary-btn" data-i18n="legal.close"></button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-shrink: 0;">
+            <h2 id="modal-title" data-i18n="legal.modalTitle" style="margin: 0; flex: 1;"></h2>
+            <span class="close-modal" id="close-x" data-i18n-attr="aria-label" data-i18n="legal.close" aria-label="Close" role="button" tabindex="0">&times;</span>
+        </div>
+        <div id="legal-text" style="flex: 1; overflow-y: auto; padding-right: 0.5rem;"></div>
+        <button id="close-modal-btn" class="secondary-btn" data-i18n="legal.close" style="margin-top: 1.5rem;"></button>
     </div>
 </div>
 
