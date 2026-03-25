@@ -364,7 +364,6 @@ export const userUIController =
     {
         const errors = {};
 
-        // Email validation
         if (!formData.email || !formData.email.trim()) {
             errors.email = 'login.emailPlaceholder';
         } else {

@@ -1397,6 +1397,237 @@ body.auth-view #view-tos { display: inline-block !important; }
     flex: 1;
 }
 
+/* ── User Manager Section ─────────────────────────────────────────────────── */
+
+.user-manager {
+    max-width: 550px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.user-manager-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.user-manager-header h2 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    font-family: var(--font-display);
+    font-weight: 800;
+}
+
+.registration-card {
+    background-color: var(--cream-card);
+    border: 2px solid var(--border-color);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+}
+
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Form sections */
+.form-section {
+    margin-bottom: 0;
+}
+
+.form-section h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+}
+
+.form-section h4.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.input-group {
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+}
+
+input::placeholder {
+    color: var(--text-light);
+    opacity: 0.8;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.8rem;
+    background: white;
+    color: var(--text-dark);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(91, 160, 138, 0.1);
+}
+
+.helper-text {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-top: 0.2rem;
+    display: block;
+}
+
+/* Legal section styling */
+.legal-links-section {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: rgba(91, 160, 138, 0.05);
+    border-radius: 0.8rem;
+    border-left: 4px solid var(--teal);
+}
+
+.legal-intro {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-bottom: 0.8rem;
+}
+
+.legal-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.legal-links a {
+    color: var(--teal);
+    text-decoration: underline;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.legal-links a:hover {
+    color: var(--teal-dark);
+}
+
+.legal-links .separator {
+    color: var(--border-color);
+    font-weight: 300;
+}
+
+/* Consent checkbox styling */
+.consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+
+.consent-label input[type="checkbox"] {
+    width: auto;
+    min-width: 20px;
+    height: 20px;
+    margin-top: 0.2rem;
+    cursor: pointer;
+    accent-color: var(--teal);
+}
+
+.consent-label span {
+    flex: 1;
+    line-height: 1.4;
+}
+
+/* Existing users section */
+.existing-users-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.existing-users-section h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+#user-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+#user-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: rgba(91, 160, 138, 0.08);
+    border-radius: 0.8rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.user-email-display {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.user-actions button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--teal);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-actions button:hover {
+    background-color: var(--teal-dark);
+}
+
+.user-actions .btn-del {
+    background-color: var(--danger);
+}
+
+.user-actions .btn-del:hover {
+    background-color: #c84040;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .registration-card {
