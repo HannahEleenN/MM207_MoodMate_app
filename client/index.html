@@ -6,9 +6,11 @@
     <meta name="description" content="MoodMate helps children explore and log their emotions in a safe, interactive environment.">
     <title data-i18n="app.title"></title>
     <link rel="manifest" href="./manifest.json">
+    <link rel="preload" href="style.css" as="style">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="icon" href="assets/icons/MoodMate_Favicon.svg" type="image/svg+xml">
     <link rel="shortcut icon" href="assets/icons/MoodMate_Favicon.svg" type="image/svg+xml">
 </head>
@@ -39,7 +41,7 @@
 
 <div id="global-notice" class="notice hidden" role="status" aria-live="polite"></div>
 
-<script type="module" src="modules/bootstrap.mjs"></script>
-<script type="module" src="app.mjs"></script>
+<script type="module" defer src="modules/bootstrap.mjs"></script>
+<script type="module" defer src="app.mjs"></script>
 </body>
 </html>
