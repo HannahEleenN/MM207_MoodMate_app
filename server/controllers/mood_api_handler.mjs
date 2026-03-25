@@ -4,16 +4,6 @@ import { pickLanguage, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-const formatDate = (date) =>
-{
-    return date.toLocaleDateString('no-NO',
-    {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-};
-
 const _draftStore = new Map();
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -27,7 +17,6 @@ export const createMood = async (req, res, next) =>
 
         const { mood, context, solution, note } = req.body;
         const userId = req.user && (req.user.userId || req.user.id);
-        const dateForStorage = formatDate(new Date());
 
         const newEntry =
         {
@@ -36,7 +25,7 @@ export const createMood = async (req, res, next) =>
             context,
             solution: solution || null,
             note: note || '',
-            timestamp: dateForStorage
+            timestamp: new Date()
         };
 
         if (Mood && Mood.create)
