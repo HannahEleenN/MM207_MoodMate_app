@@ -8,8 +8,22 @@
  *   • Cheerful, child-friendly colour palette
  */
 
-/* ── Google Fonts ─────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap');
+/* ── Google Fonts are now loaded via HTML link for optimal performance ─────── */
+/* See index.html for Google Fonts link with display=swap ────────────────── */
+
+/* ── Font-face fallbacks with size-adjust to match Google Fonts ──────────────── */
+/* This technique minimizes CLS by adjusting fallback font metrics */
+@font-face {
+    font-family: 'Nunito';
+    size-adjust: 102%;
+    src: local('Trebuchet MS'), local('Segoe UI'), local('-apple-system');
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    size-adjust: 101%;
+    src: local('Trebuchet MS'), local('Segoe UI'), local('-apple-system');
+}
 
 /* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
@@ -47,8 +61,8 @@
     /* Centralize border width so we can tune rendering consistency */
     --border-width: 2px;
 
-    --font-display: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-    --font-body:    'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    --font-display: 'Baloo 2', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    --font-body:    'Nunito', 'Trebuchet MS', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 /* ── Reset & base ──────────────────────────────────────────────────────────── */
@@ -138,11 +152,23 @@ h1, h2, h3 {
     letter-spacing: .03em;
     color: var(--text-dark);
     line-height: 1.2;
+    /* CLS optimization: Maintain consistent height during font swap */
+    text-rendering: optimizeSpeed;
 }
 
-h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
-h2 { font-size: clamp(1.4rem, 4vw, 2rem);   }
-h3 { font-size: clamp(1.1rem, 3vw, 1.4rem); }
+h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    /* Prevent CLS by reserving space for font */
+    min-height: 2.2rem;
+}
+h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    min-height: 1.6rem;
+}
+h3 {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    min-height: 1.2rem;
+}
 
 p  { color: var(--text-mid); line-height: 1.6; }
 
@@ -472,7 +498,7 @@ textarea {
 }
 .parent-actions button:hover { transform: translateY(-2px); opacity: .9; }
 
-#view-insights     { background: var(--yellow); color: #3d2f1e; }
+#view-insights     { background: var(--yellow); color: var(--text-dark); font-weight: 800; }
 #manage-profiles   { background: var(--teal);   color: #fff; }
 #delete-account-btn {
     background: transparent;
@@ -589,7 +615,7 @@ textarea {
 
 .edit-inline { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .4rem; }
 .edit-inline input { flex: 1 1 120px; }
-.edit-inline .save-edit   { background: var(--green); color: #fff; border: none; border-radius: var(--radius-pill); padding: .35rem .9rem; font-weight: 700; cursor: pointer; }
+.edit-inline .save-edit   { background: var(--teal); color: #fff; border: none; border-radius: var(--radius-pill); padding: .35rem .9rem; font-weight: 700; cursor: pointer; }
 .edit-inline .cancel-edit { background: var(--border-color); color: var(--text-dark); border: none; border-radius: var(--radius-pill); padding: .35rem .9rem; font-weight: 700; cursor: pointer; }
 
 /* ── Child profile PIN section ─────────────────────────────────────────────── */

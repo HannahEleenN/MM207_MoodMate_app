@@ -6,11 +6,24 @@
     <meta name="description" content="MoodMate helps children explore and log their emotions in a safe, interactive environment.">
     <title data-i18n="app.title"></title>
     <link rel="manifest" href="./manifest.json">
-    <link rel="preload" href="style.css" as="style">
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap">
+    <link rel="preload" href="style.css" as="style">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CLS Optimization: Font fallback size adjustment */
+        /* Reduces layout shift when Google Fonts loads by adjusting fallback font metrics */
+        @supports (font-synthesis: none) {
+            body {
+                font-synthesis: none;
+                text-rendering: optimizeLegibility;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+    </style>
     <link rel="icon" href="assets/icons/MoodMate_Favicon.svg" type="image/svg+xml">
     <link rel="shortcut icon" href="assets/icons/MoodMate_Favicon.svg" type="image/svg+xml">
 </head>
