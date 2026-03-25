@@ -1,49 +1,34 @@
 <section class="user-manager">
     <div class="user-manager-header">
-        <h2 data-i18n="userManager.title"></h2>
-        <p class="user-manager-subtitle" data-i18n="userManager.subtitle"></p>
+        <h2 data-i18n="userManager.title">User Management</h2>
     </div>
 
     <div class="registration-card">
         <form id="regForm" class="registration-form">
             <div class="form-section">
-                <h3>✨ <span data-i18n="userManager.createTitle"></span></h3>
-                <p class="form-section-info" data-i18n="userManager.subtitle"></p>
+                <h3 data-i18n="userManager.createTitle">Register Parent Account</h3>
             </div>
 
-            <div class="form-section">
-                <h4 class="section-title">👤 <span data-i18n="userManager.accountInfoTitle"></span></h4>
-
-                <div class="input-group">
-                    <label for="reg-nick" data-i18n="userManager.nicknameLabel"></label>
-                    <span class="helper-text" data-i18n="register.nickHelper"></span>
-                    <input type="text" id="reg-nick" name="nick" aria-label="Nickname" data-i18n-placeholder="register.nickPlaceholder" placeholder="">
-                    <span class="field-error" id="nick-error"></span>
-                </div>
-
-                <div class="input-group">
-                    <label for="reg-email" data-i18n="userManager.emailLabel"></label>
-                    <input type="email" id="reg-email" name="email" aria-label="Email" required data-i18n-placeholder="login.emailPlaceholder" placeholder="">
-                    <span class="field-error" id="email-error"></span>
-                </div>
+            <div class="input-group">
+                <label for="reg-nick" data-i18n="userManager.nicknameLabel">Nickname</label>
+                <input type="text" id="reg-nick" name="nick"
+                       data-i18n-placeholder="register.nickPlaceholder"
+                       placeholder="e.g. MamaBear" required>
+                <span class="helper-text" data-i18n="register.nickHelper">This is your display name</span>
             </div>
 
-            <div class="form-section">
-                <h4 class="section-title">🔒 <span data-i18n="userManager.passwordTitle"></span></h4>
+            <div class="input-group">
+                <label for="reg-email" data-i18n="userManager.emailLabel">Email Address</label>
+                <input type="email" id="reg-email" name="email"
+                       data-i18n-placeholder="login.emailPlaceholder"
+                       placeholder="yourname@email.com" required>
+            </div>
 
-                <div class="input-group">
-                    <label for="reg-password" data-i18n="login.passwordLabel"></label>
-                    <input type="password" id="reg-password" name="secret" aria-label="Password" required data-i18n-placeholder="login.passwordPlaceholder" placeholder="">
-                    <span class="field-error" id="password-error"></span>
-                </div>
-
-                <div class="password-requirements">
-                    <p class="requirements-label" data-i18n="register.passwordRequirements"></p>
-                    <ul class="requirements-list">
-                        <li class="req-length" data-i18n="register.reqLength"></li>
-                        <li class="req-number" data-i18n="register.reqNumber"></li>
-                    </ul>
-                </div>
+            <div class="input-group">
+                <label for="reg-password" data-i18n="login.passwordLabel">Password</label>
+                <input type="password" id="reg-password" name="secret"
+                       data-i18n-placeholder="login.passwordPlaceholder"
+                       placeholder="Enter a secure password" required>
             </div>
 
             <div class="form-section">
@@ -59,23 +44,17 @@
                 </div>
 
                 <label class="consent-label">
-                    <input type="checkbox" name="hasConsented" id="consent-check" value="true" required aria-label="I consent to privacy policy">
-                    <span data-i18n="register.consentCheckbox"></span>
+                    <input type="checkbox" name="hasConsented" id="consent-check" required>
+                    <span data-i18n="register.consentCheckbox">I agree to Terms and Privacy Policy</span>
                 </label>
-                <span class="field-error" id="consent-error"></span>
             </div>
 
-            <button type="submit" class="btn-reg primary-btn" data-i18n="register.submit"></button>
-            <div class="loading-spinner" id="reg-spinner" aria-hidden="true"></div>
+            <button type="submit" class="primary-btn" data-i18n="register.submit">Create Account</button>
         </form>
     </div>
 
-    <div class="login-footer" style="text-align: center; margin-top: 2rem;">
-        <p><button id="go-to-login" class="link-btn" data-i18n="userManager.goToLogin"></button></p>
-    </div>
-
     <div class="existing-users-section">
-        <h3 data-i18n="userManager.existingTitle"></h3>
+        <h3 data-i18n="userManager.existingTitle">Registered Users</h3>
         <ul id="user-list"></ul>
     </div>
 
