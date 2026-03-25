@@ -33,7 +33,6 @@
   "register.reqLength": "Minst 6 tecken",
   "register.reqNumber": "Minst en siffra",
   "register.passwordTooShort": "Lösenordet måste vara minst 6 tecken",
-  "register.passwordNoNumber": "Lösenordet måste innehålla minst en siffra",
 
   "auth.failed": "Fel e-post eller lösenord.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",
@@ -169,6 +168,7 @@
   "profiles.cancel": "Avbryt",
   "profiles.back": "⬅️ Tillbaka",
 
+  "insights.back": "⬅️ Tillbaka",
   "insights.title": "Humörtrender och insikter",
   "insights.loading": "Hämtar data…",
   "insights.empty": "Inga insikter att visa",

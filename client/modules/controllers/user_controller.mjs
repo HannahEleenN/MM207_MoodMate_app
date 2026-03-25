@@ -382,10 +382,6 @@ export const userUIController =
             if (pwd.length < 6) {
                 errors.password = 'register.passwordTooShort';
             }
-            // Check for at least one number
-            if (!/\d/.test(pwd)) {
-                errors.password = 'register.passwordNoNumber';
-            }
         }
 
         return errors;

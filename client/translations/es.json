@@ -33,7 +33,6 @@
   "register.reqLength": "Al menos 6 caracteres",
   "register.reqNumber": "Al menos un número",
   "register.passwordTooShort": "La contraseña debe tener al menos 6 caracteres",
-  "register.passwordNoNumber": "La contraseña debe contener al menos un número",
 
   "auth.failed": "Correo electrónico o contraseña incorrectos.",
   "auth.no_token": "Sin acceso: inicia sesión de nuevo.",

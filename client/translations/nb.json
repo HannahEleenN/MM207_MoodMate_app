@@ -33,7 +33,6 @@
   "register.reqLength": "Minst 6 tegn",
   "register.reqNumber": "Minst ett tall",
   "register.passwordTooShort": "Passordet må være minst 6 tegn",
-  "register.passwordNoNumber": "Passordet må inneholde minst ett tall",
 
   "auth.failed": "Feil e-post eller passord.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",

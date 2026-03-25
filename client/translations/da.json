@@ -33,7 +33,6 @@
   "register.reqLength": "Mindst 6 tegn",
   "register.reqNumber": "Mindst ét tal",
   "register.passwordTooShort": "Adgangskoden skal være mindst 6 tegn",
-  "register.passwordNoNumber": "Adgangskoden skal indeholde mindst ét tal",
 
   "auth.failed": "Forkert e-mail eller adgangskode.",
   "auth.no_token": "Ingen adgang: log ind igen.",
