@@ -1106,7 +1106,7 @@ body.auth-view #view-tos { display: inline-block !important; }
 .form-section {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px dashed rgba(91, 160, 138, 0.2);
+    border-bottom: 1px solid rgba(91, 160, 138, 0.15);
 }
 
 .form-section:last-of-type {
@@ -1118,12 +1118,13 @@ body.auth-view #view-tos { display: inline-block !important; }
 .form-section:first-child {
     margin-bottom: 2.2rem;
     padding-bottom: 1.8rem;
-    border-bottom: 2px solid rgba(91, 160, 138, 0.25);
+    border-bottom: 2px solid rgba(91, 160, 138, 0.2);
 }
 
 .form-section:first-child h3 {
     color: var(--teal);
     margin-bottom: 0.4rem;
+    font-size: 1.3rem;
 }
 
 .form-section-info {
@@ -1134,14 +1135,14 @@ body.auth-view #view-tos { display: inline-block !important; }
 
 /* Section titles with emoji icons */
 .section-title {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    letter-spacing: 0.03em;
+    gap: 0.4rem;
+    letter-spacing: 0.02em;
 }
 
 /* Enhanced input groups */
@@ -1168,30 +1169,31 @@ body.auth-view #view-tos { display: inline-block !important; }
 .form-section input[type="email"],
 .form-section input[type="password"] {
     width: 100%;
-    padding: 1rem 1.2rem;
-    border: var(--border-width) solid var(--border-color);
+    padding: 0.875rem 1.2rem;
+    border: 2px solid var(--border-color);
     border-radius: 0.9rem;
     font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     color: var(--text-dark);
     background: #fff;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .form-section input:focus-visible {
     border-color: var(--teal);
-    box-shadow: 0 0 0 4px rgba(91, 160, 138, 0.15), 0 2px 8px rgba(91, 160, 138, 0.1);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 160, 138, 0.15), 0 4px 12px rgba(91, 160, 138, 0.15);
     transform: translateY(-2px);
 }
 
 .form-section input:hover:not(:focus-visible) {
     border-color: var(--teal-light);
-    box-shadow: 0 4px 12px rgba(91, 160, 138, 0.08);
+    box-shadow: 0 2px 8px rgba(91, 160, 138, 0.08);
 }
 
 /* Enhanced password requirements */
 .form-section .password-requirements {
-    margin-top: 1.2rem;
+    margin-top: 1rem;
     padding: 1rem 1.2rem;
     background: linear-gradient(135deg, rgba(123, 170, 107, 0.06) 0%, rgba(123, 170, 107, 0.03) 100%);
     border: 2px solid rgba(123, 170, 107, 0.15);
@@ -1203,7 +1205,7 @@ body.auth-view #view-tos { display: inline-block !important; }
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--text-mid);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.03em;
 }
@@ -1233,6 +1235,11 @@ body.auth-view #view-tos { display: inline-block !important; }
     transform: scale(1.1);
 }
 
+.form-section .requirements-list li.met {
+    color: var(--green);
+    font-weight: 600;
+}
+
 /* Enhanced consent label */
 .form-section .consent-label {
     display: flex;
@@ -1241,12 +1248,12 @@ body.auth-view #view-tos { display: inline-block !important; }
     font-size: 0.95rem;
     color: var(--text-mid);
     cursor: pointer;
-    padding: 1.1rem 1.2rem;
+    padding: 1rem 1.2rem;
     background: linear-gradient(135deg, rgba(91, 160, 138, 0.08) 0%, rgba(91, 160, 138, 0.04) 100%);
     border: 2px solid rgba(91, 160, 138, 0.15);
-    border-radius: 0.9rem;
-    margin-top: 1rem;
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    border-radius: 0.8rem;
+    margin-top: 0.8rem;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-section .consent-label:hover {
@@ -1257,11 +1264,11 @@ body.auth-view #view-tos { display: inline-block !important; }
 }
 
 .form-section .consent-label input[type="checkbox"] {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.4rem;
+    height: 1.4rem;
     accent-color: var(--teal);
     flex-shrink: 0;
-    margin-top: 0.15rem;
+    margin-top: 0.2rem;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -1273,17 +1280,17 @@ body.auth-view #view-tos { display: inline-block !important; }
 /* Enhanced legal links section */
 .form-section .legal-links-section {
     margin-bottom: 1.2rem;
-    padding: 1.1rem 1.2rem;
-    background: linear-gradient(135deg, rgba(91, 160, 138, 0.06) 0%, rgba(91, 160, 138, 0.02) 100%);
+    padding: 1rem 1.2rem;
+    background: linear-gradient(135deg, rgba(91, 160, 138, 0.05) 0%, rgba(91, 160, 138, 0.02) 100%);
     border: 2px solid rgba(91, 160, 138, 0.12);
     border-left: 4px solid var(--teal);
-    border-radius: 0.85rem;
+    border-radius: 0.8rem;
 }
 
 .form-section .legal-intro {
     font-size: 0.85rem;
     color: var(--text-mid);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.7rem;
     font-weight: 500;
 }
 
@@ -1297,15 +1304,16 @@ body.auth-view #view-tos { display: inline-block !important; }
 .form-section .legal-links a {
     color: var(--teal);
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 0.95rem;
     transition: color 0.2s ease, background 0.2s ease;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
+    padding: 0.2rem 0.4rem;
 }
 
 .form-section .legal-links a:hover {
     color: var(--coral);
-    background: rgba(232, 114, 74, 0.08);
+    background: rgba(232, 114, 74, 0.06);
     text-decoration: underline;
 }
 
@@ -1322,19 +1330,24 @@ body.auth-view #view-tos { display: inline-block !important; }
     font-weight: 800;
     letter-spacing: 0.05em;
     border-radius: 1rem;
-    box-shadow: 0 6px 0 var(--teal-shadow), 0 8px 20px rgba(91, 160, 138, 0.2);
+    background: linear-gradient(135deg, var(--teal), var(--teal-light));
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 0 var(--teal-dark), 0 8px 20px rgba(91, 160, 138, 0.25);
     transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    width: 100%;
 }
 
 .registration-form .btn-reg:hover:not(:disabled) {
-    background: var(--teal-dark);
     transform: translateY(-4px);
-    box-shadow: 0 8px 0 var(--teal-shadow), 0 12px 28px rgba(91, 160, 138, 0.25);
+    box-shadow: 0 8px 0 var(--teal-dark), 0 12px 28px rgba(91, 160, 138, 0.3);
+    background: linear-gradient(135deg, var(--teal-light), var(--teal));
 }
 
 .registration-form .btn-reg:active:not(:disabled) {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 var(--teal-shadow), 0 4px 12px rgba(91, 160, 138, 0.15);
+    box-shadow: 0 2px 0 var(--teal-dark), 0 4px 12px rgba(91, 160, 138, 0.2);
 }
 
 /* Existing users section */
