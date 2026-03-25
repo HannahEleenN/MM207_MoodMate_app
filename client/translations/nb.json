@@ -35,7 +35,7 @@
   "register.passwordTooShort": "Passordet må være minst 6 tegn",
   "register.passwordNoNumber": "Passordet må inneholde minst ett tall",
 
-  "auth.failed": "Feil kallenavn eller PIN-kode.",
+  "auth.failed": "Feil e-post eller passord.",
   "auth.no_token": "Ingen tilgang: Du må logge inn på nytt.",
   "auth.privacy_view_own_history": "Personvern: Du kan bare se din egen historikk.",
   "auth.session_expired": "Sesjonen er utløpt. Vennligst logg inn på nytt.",

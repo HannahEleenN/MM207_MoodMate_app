@@ -35,7 +35,7 @@
   "register.passwordTooShort": "Adgangskoden skal være mindst 6 tegn",
   "register.passwordNoNumber": "Adgangskoden skal indeholde mindst ét tal",
 
-  "auth.failed": "Forkert kaldenavn eller PIN-kode.",
+  "auth.failed": "Forkert e-mail eller adgangskode.",
   "auth.no_token": "Ingen adgang: log ind igen.",
   "auth.privacy_view_own_history": "Privatliv: du kan kun se din egen historik.",
   "auth.session_expired": "Din session er udløbet. Log ind igen.",

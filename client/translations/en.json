@@ -35,7 +35,7 @@
   "register.passwordTooShort": "Password must be at least 6 characters",
   "register.passwordNoNumber": "Password must contain at least one number",
 
-  "auth.failed": "Wrong nickname or PIN code.",
+  "auth.failed": "Wrong email or password.",
   "auth.no_token": "No access: please sign in again.",
   "auth.privacy_view_own_history": "Privacy: you may only view your own history.",
   "auth.session_expired": "Your session has expired. Please sign in again.",

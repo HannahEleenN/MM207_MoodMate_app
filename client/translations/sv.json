@@ -35,7 +35,7 @@
   "register.passwordTooShort": "Lösenordet måste vara minst 6 tecken",
   "register.passwordNoNumber": "Lösenordet måste innehålla minst en siffra",
 
-  "auth.failed": "Fel smeknamn eller PIN-kod.",
+  "auth.failed": "Fel e-post eller lösenord.",
   "auth.no_token": "Ingen åtkomst: logga in igen.",
   "auth.privacy_view_own_history": "Integritet: du kan endast se din egen historik.",
   "auth.session_expired": "Din session har löpt ut. Logga in igen.",

@@ -30,7 +30,7 @@ if (!en || Object.keys(en).length === 0)
     en = {
         "register.requireConsent": "You must actively consent to the terms and privacy policy to create an account.",
         "register.nickTaken": "This nickname is already in use.",
-        "auth.failed": "Wrong nickname or PIN code.",
+        "auth.failed": "Wrong email or password.",
         "user.notFound": "User not found."
     };
 }
@@ -42,6 +42,6 @@ export const Messages =
     CONSENT_ERROR: en['register.requireConsent'] || 'You must actively consent to the terms and privacy policy to create an account.',
     NICK_TAKEN_ERROR: en['register.nickTaken'] || 'This nickname is already in use.',
     DELETE_SUCCESS: 'User account and all associated data deleted permanently.',
-    AUTH_FAILED: en['auth.failed'] || 'Wrong nickname or PIN code.',
+    AUTH_FAILED: en['auth.failed'] || 'Wrong email or password.',
     USER_NOT_FOUND: en['user.notFound'] || 'User not found.'
 };
