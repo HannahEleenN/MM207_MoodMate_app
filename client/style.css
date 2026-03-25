@@ -122,9 +122,8 @@ section {
     position: relative;
 }
 
-/* Wide sections (insights, userManager) */
-section#parent-insights,
-section.user-manager {
+/* Wide sections (insights only) */
+section#parent-insights {
     max-width: 820px;
 }
 
