@@ -64,7 +64,7 @@
 
 html, body {
     min-height: 100%;
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 16px;
     color: var(--text-dark);
     background: var(--cream);
@@ -130,7 +130,7 @@ section.user-manager {
 
 /* ── Typography ────────────────────────────────────────────────────────────── */
 h1, h2, h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     letter-spacing: .03em;
     color: var(--text-dark);
     line-height: 1.2;
@@ -197,7 +197,7 @@ textarea {
     /* Use central border width token for consistent rendering */
     border: var(--border-width) solid var(--border-color);
     border-radius: 1rem;
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     color: var(--text-dark);
     background: #fff;
@@ -273,7 +273,7 @@ textarea {
     color: #fff;
     border: none;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1.1rem;
     font-weight: 800;
     letter-spacing: .04em;
@@ -295,7 +295,7 @@ textarea {
     background: none;
     border: none;
     color: var(--teal);
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -312,7 +312,7 @@ textarea {
     /* Use central border width token for consistent rendering */
     border: var(--border-width) solid var(--teal);
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
@@ -369,7 +369,7 @@ textarea {
     padding: .85rem .75rem;
     border: var(--border-width) solid transparent;
     border-radius: 1.2rem;
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1.05rem;
     font-weight: 700;
     cursor: pointer;
@@ -412,6 +412,8 @@ textarea {
     border-radius: 1rem;
     cursor: pointer;
     transition: background .2s ease, border-color .2s ease;
+}
+.reason-item:hover {
     background: rgba(91, 160, 138, 0.08);
     border-color: var(--teal);
 }
@@ -457,7 +459,7 @@ textarea {
 .parent-actions button {
     padding: .85rem 1.2rem;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-size: 1rem;
     font-weight: 800;
     cursor: pointer;
@@ -541,7 +543,7 @@ textarea {
     border-radius: var(--radius-pill);
     border: 2px solid;
     background: transparent;
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
     font-size: .95rem;
     cursor: pointer;
@@ -626,7 +628,7 @@ textarea {
     border-radius: .6rem;
     background: transparent;
     color: var(--teal);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
     font-size: .9rem;
     cursor: pointer;
@@ -712,7 +714,7 @@ section#parent-insights header {
     color: var(--text-dark);
     border: none;
     border-radius: var(--radius-btn);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 800;
     font-size: 1rem;
     cursor: pointer;
@@ -738,7 +740,7 @@ section#parent-insights header {
     border: var(--border-width) solid var(--teal);
     background: transparent;
     color: var(--teal);
-    font-family: var(--font-display);
+    font-family: var(--font-display), sans-serif;
     font-weight: 700;
     cursor: pointer;
     transition: background .15s, color .15s;
@@ -863,6 +865,9 @@ section#parent-insights header {
     left: 0;
     color: var(--text-light);
     transition: color 0.2s ease;
+}
+
+.requirements-list li.met::before {
     content: '✓';
     color: var(--green);
     font-weight: bold;
@@ -1010,7 +1015,7 @@ section#parent-insights header {
     background: rgba(255,255,255,0.9);
     border: 1px solid rgba(0,0,0,0.06);
     color: var(--teal);
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-weight: 800;
     padding: .4rem .8rem;
     border-radius: .8rem;
@@ -1162,7 +1167,7 @@ body.auth-view #view-tos { display: inline-block !important; }
     padding: 1rem 1.2rem;
     border: var(--border-width) solid var(--border-color);
     border-radius: 0.9rem;
-    font-family: var(--font-body);
+    font-family: var(--font-body), sans-serif;
     font-size: 1rem;
     color: var(--text-dark);
     background: #fff;
@@ -1215,8 +1220,6 @@ body.auth-view #view-tos { display: inline-block !important; }
     color: var(--text-light);
     font-weight: bold;
     transition: color 0.2s ease;
-    color: var(--green);
-    font-weight: 600;
 }
 
 .form-section .requirements-list li.met::before {
@@ -1240,6 +1243,9 @@ body.auth-view #view-tos { display: inline-block !important; }
     border-radius: 0.9rem;
     margin-top: 1rem;
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-section .consent-label:hover {
     background: linear-gradient(135deg, rgba(91, 160, 138, 0.12) 0%, rgba(91, 160, 138, 0.08) 100%);
     border-color: rgba(91, 160, 138, 0.25);
     transform: translateY(-2px);
@@ -1254,6 +1260,9 @@ body.auth-view #view-tos { display: inline-block !important; }
     margin-top: 0.15rem;
     cursor: pointer;
     transition: transform 0.2s ease;
+}
+
+.form-section .consent-label input[type="checkbox"]:checked {
     transform: scale(1.08);
 }
 
