@@ -6,14 +6,13 @@ import { authorizeUserIdentity } from '../middleware/privacy_guard.mjs';
 
 const router = express.Router();
 
+// Authentication endpoints
 router.post('/login', userController.login);
+router.delete('/sessions', authorizeUserIdentity, userController.logout);
 
-router.post('/logout', authorizeUserIdentity, userController.logout);
-
+// User management endpoints
 router.post('/', userController.register);
-
 router.get('/', authorizeUserIdentity, userController.listUsers);
-
 router.put('/:id', authorizeUserIdentity, userController.updateUser);
 
 router.delete('/:id', authorizeUserIdentity, userController.deleteAccount);

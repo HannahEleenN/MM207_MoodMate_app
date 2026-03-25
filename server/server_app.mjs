@@ -6,6 +6,7 @@ import moodRoutes from './routes/mood_routes.mjs';
 import parentRoutes from './routes/parent_routes.mjs';
 import demoRoutes from './routes/demo_routes.mjs';
 import childRoutes from './routes/child_routes.mjs';
+import exportRoutes from './routes/export_routes.mjs';
 import { cors } from './middleware/cors.mjs';
 import logger from './middleware/logger.mjs';
 import errorHandler from './middleware/error_handler.mjs';
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, '../client'),
 app.use('/api/moods', moodRoutes);
 app.use('/api/users', parentRoutes);
 app.use('/api/demo', demoRoutes);
+app.use('/api/exports', exportRoutes);
 app.use('/api', childRoutes);
 
 app.use((err, req, res, next) => errorHandler(err, req, res, next));

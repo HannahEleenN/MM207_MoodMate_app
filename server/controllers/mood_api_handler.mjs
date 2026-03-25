@@ -100,7 +100,7 @@ export const saveDraft = async (req, res, next) =>
     {
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-        const profileId = req.query.profileId || (req.body && req.body.profileId) || null;
+        const profileId = req.params.profileId || (req.body && req.body.profileId) || null;
         const draft = req.body || {};
 
         try {
@@ -125,7 +125,7 @@ export const getDraft = async (req, res, next) =>
     {
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-        const profileId = req.query.profileId || null;
+        const profileId = req.params.profileId || null;
 
         try {
             const row = await Draft.get(userId, profileId);
@@ -152,7 +152,7 @@ export const deleteDraft = async (req, res, next) =>
     {
         const userId = req.user && (req.user.userId || req.user.id);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-        const profileId = req.query.profileId || null;
+        const profileId = req.params.profileId || null;
 
         try {
             await Draft.delete(userId, profileId);

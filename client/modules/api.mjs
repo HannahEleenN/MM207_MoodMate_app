@@ -60,7 +60,7 @@ export const ApiService =
 
     async logout()
     {
-        try { await universalFetch(`${BASE}/users/logout`, withAuthHeaders({ method: 'POST' })); } catch (e) { console.debug('logout request failed', e); }
+        try { await universalFetch(`${BASE}/users/sessions`, withAuthHeaders({ method: 'DELETE' })); } catch (e) { console.debug('logout request failed', e); }
         try { window.localStorage.removeItem('moodmate_session'); } catch (_) {}
         if (store)
         {
@@ -110,10 +110,11 @@ export const ApiService =
         return await universalFetch(`${BASE}/moods`, withAuthHeaders({ method: 'GET' }));
     },
 
-    async saveDraft(draftData)
+    async saveDraft(draftData, profileId)
     {
         try {
-            return await universalFetch(`${BASE}/moods/draft`, withAuthHeaders({ method: 'PUT', body: JSON.stringify(draftData), suppressErrorLogging: true }));
+            const endpoint = profileId ? `${BASE}/moods/drafts/${encodeURIComponent(profileId)}` : `${BASE}/moods/drafts`;
+            return await universalFetch(endpoint, withAuthHeaders({ method: 'POST', body: JSON.stringify(draftData), suppressErrorLogging: true }));
         } catch (e) {
             console.debug('saveDraft failed (server may not support drafts):', e);
             return null;
@@ -123,8 +124,8 @@ export const ApiService =
     async getDraft(profileId)
     {
         try {
-            const path = profileId ? `${BASE}/moods/draft?profileId=${encodeURIComponent(profileId)}` : `${BASE}/moods/draft`;
-            return await universalFetch(path, withAuthHeaders({ method: 'GET', suppressErrorLogging: true }));
+            const endpoint = profileId ? `${BASE}/moods/drafts/${encodeURIComponent(profileId)}` : `${BASE}/moods/drafts`;
+            return await universalFetch(endpoint, withAuthHeaders({ method: 'GET', suppressErrorLogging: true }));
         } catch (e) {
             console.debug('getDraft failed (server may not support drafts):', e);
             return null;
@@ -134,8 +135,8 @@ export const ApiService =
     async deleteDraft(profileId)
     {
         try {
-            const path = profileId ? `${BASE}/moods/draft?profileId=${encodeURIComponent(profileId)}` : `${BASE}/moods/draft`;
-            return await universalFetch(path, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
+            const endpoint = profileId ? `${BASE}/moods/drafts/${encodeURIComponent(profileId)}` : `${BASE}/moods/drafts`;
+            return await universalFetch(endpoint, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
         } catch (e) {
             console.debug('deleteDraft failed (server may not support drafts):', e);
             return null;
@@ -143,7 +144,7 @@ export const ApiService =
     },
 
     async exportData(format = 'csv') {
-        return await universalFetch(`${BASE}/export?format=${encodeURIComponent(format)}`, withAuthHeaders({ method: 'GET' }));
+        return await universalFetch(`${BASE}/exports/${encodeURIComponent(format)}`, withAuthHeaders({ method: 'GET' }));
     }
 };
 

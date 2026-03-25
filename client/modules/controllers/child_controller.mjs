@@ -173,10 +173,9 @@ export const childController =
             {
                 const li = e.target.closest('.reason-item');
                 if (!li) return;
-                this.model.temporaryContext = li.textContent;
                 reasonsList.querySelectorAll('.reason-item').forEach(n => n.classList.remove('selected'));
                 li.classList.add('selected');
-                this._persistDraft();
+                this.handleContextSelection(li.textContent);
             });
 
             reasonsList.addEventListener('keydown', (e) =>
@@ -488,7 +487,7 @@ export const childController =
                 this._draftSyncTimer = setTimeout(async () =>
                 {
                     try {
-                        await ApiService.saveDraft(draft);
+                        await ApiService.saveDraft(draft, draft.profileId);
                     } catch (e) { console.debug('Server draft sync failed', e); }
                 }, 800);
             }
