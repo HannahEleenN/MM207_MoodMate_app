@@ -8,8 +8,7 @@ const URLS_TO_CACHE = [
     '/app.mjs',
     '/manifest.json',
     '/offline.html',
-    '/assets/icons/MoodMate_Favicon.svg',
-    '/assets/icons/Favicon_Smileys.png'
+    '/assets/icons/MoodMate_Favicon.svg'
 ];
 
 // ---------------------------------------------------------------------------------------------------------------------

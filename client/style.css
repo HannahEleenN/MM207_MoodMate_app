@@ -15,7 +15,7 @@
 :root {
     --cream:      #f5ede0;
     --cream-card: #fffaf3;
-    --teal:       #5ba08a;
+    --teal:       #3d8b74;
     --teal-light: #8ecfc0;
     --yellow:     #f4b942;
     --coral:      #e8724a;
@@ -28,8 +28,8 @@
     --text-mid:   #6b5540;
     --text-light: #a08060;
 
-    --teal-dark:   #4d917d;
-    --teal-shadow: var(--teal-shadow);
+    --teal-dark:   #2d6d58;
+    --teal-shadow: #2d6d58;
     --yellow-shadow: #c8920a;
     --danger:        #e05050;
     --danger-tint:   #fff0f0;
