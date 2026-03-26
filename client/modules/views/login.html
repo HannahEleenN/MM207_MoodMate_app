@@ -6,10 +6,12 @@
 
   <form id="loginForm">
     <h2 data-i18n="login.title"></h2>
+    <br>
     <div class="input-group">
       <label for="email-input" data-i18n="login.emailLabel"></label>
       <input type="email" id="email-input" required data-i18n-placeholder="login.emailPlaceholder" placeholder="">
     </div>
+    <br>
     <div class="input-group">
       <label for="password-input" data-i18n="login.passwordLabel"></label>
       <input type="password" id="password-input" required data-i18n-placeholder="login.passwordPlaceholder" placeholder="">
@@ -21,12 +23,13 @@
   <div class="login-footer">
     <p>
       <span data-i18n="login.legalPrefix"></span>
-      <a href="#" id="view-tos" data-i18n="legal.terms" aria-label="View Terms of Service"></a>
+      <button id="view-tos" class="link-btn" data-i18n="legal.terms" aria-label="View Terms of Service"></button>
       <span data-i18n="register.consentAnd"></span>
-      <a href="#" id="view-privacy" data-i18n="legal.privacy" aria-label="View Privacy Policy"></a>
+      <button id="view-privacy" class="link-btn" data-i18n="legal.privacy" aria-label="View Privacy Policy"></button>
     </p>
   </div>
 
+  <br>
   <div class="login-footer">
     <p><span data-i18n="login.newUser"></span> <button id="go-to-reg" class="link-btn" data-i18n="login.createAccount" aria-label="Create a parent account"></button></p>
   </div>
