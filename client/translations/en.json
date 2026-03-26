@@ -48,6 +48,7 @@
     "child.hello":  "Hello there! 🌟",
     "child.askMood":  "How are you feeling right now?",
     "child.whyTitle":  "Why do you feel",
+    "child.nextActionTitle":  "What would help you feel better?",
     "child.none":  "None",
 
     "mood.saved":  "Mood saved!",

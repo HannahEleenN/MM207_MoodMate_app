@@ -48,6 +48,7 @@
     "child.hello":  "Hei på deg! 🌟",
     "child.askMood":  "Hvordan føler du deg akkurat nå?",
     "child.whyTitle":  "Hvorfor føler du deg",
+    "child.nextActionTitle":  "Hva kan hjelpe deg å føle deg bedre?",
     "child.none":  "Ingen",
 
     "mood.saved":  "Humøret er lagret!",

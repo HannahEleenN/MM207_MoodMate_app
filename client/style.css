@@ -153,6 +153,13 @@ fieldset {
     margin: 0;
 }
 
+.form-fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
 /* ── Typography ────────────────────────────────────────────────────────────── */
 h1, h2, h3 {
     font-family: var(--font-display), sans-serif;
@@ -484,6 +491,64 @@ textarea {
     color: #fff;
     border-color: var(--teal);
     font-weight: 700;
+}
+
+/* ── Reasons section styling ──────────────────────────────────────────────── */
+.reasons-section {
+    margin-bottom: 2rem;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, rgba(91, 160, 138, 0.08) 0%, rgba(91, 160, 138, 0.03) 100%);
+    border: 2px solid rgba(91, 160, 138, 0.15);
+    border-left: 4px solid var(--teal);
+    border-radius: 1rem;
+}
+
+.reasons-section .section-label {
+    display: block;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    letter-spacing: .02em;
+}
+
+.reasons-container {
+    width: 100%;
+}
+
+.reasons-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+}
+
+.reason-item {
+    padding: 1rem;
+    list-style: none;
+    background: #fff;
+    border: 2px solid transparent;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    line-height: 1.4;
+}
+
+.reason-item:hover {
+    background: rgba(91, 160, 138, 0.08);
+    border-color: var(--teal);
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(91, 160, 138, 0.15);
+}
+
+.reason-item:focus-visible {
+    outline: 3px solid var(--teal);
+    outline-offset: 2px;
+    border-radius: 0.8rem;
 }
 
 /* ── Progress bar ──────────────────────────────────────────────────────────── */

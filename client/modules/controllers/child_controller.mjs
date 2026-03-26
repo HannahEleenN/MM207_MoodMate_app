@@ -289,45 +289,20 @@ export const childController =
         {
             reasonsContainer.innerHTML = '';
 
-            const intro = document.createElement('p');
-            intro.className = 'reasons-intro';
-
-            const strong = document.createElement('strong');
-            strong.textContent = (store && store.t) ? store.t('checkin.instructions') : 'Look at the pictures or use words:';
-            intro.appendChild(strong);
-            reasonsContainer.appendChild(intro);
-
             const ul = document.createElement('ul');
             ul.className = 'reasons-list';
 
-            const textual = (this.moodTextual && this.moodTextual[mood]) ? this.moodTextual[mood] : null;
-
-            if (textual && Array.isArray(textual) && textual.length > 0)
+            map.reasons.forEach(r =>
             {
-                textual.forEach((text) =>
-                {
-                    const li = document.createElement('li');
-                    li.tabIndex = 0;
-                    li.className = 'reason-item';
-                    const displayed = (store && store.t) ? store.t(text) : text;
-                    li.dataset.context = displayed;
-                    li.textContent = displayed;
-                    ul.appendChild(li);
-                });
-            } else
-            {
-                map.reasons.forEach(r =>
-                {
-                    const li = document.createElement('li');
-                    li.tabIndex = 0;
-                    li.className = 'reason-item';
-                    const labelKey = r.labelKey || (r.id ? `reason.${r.id}` : null);
-                    const displayed = (store && store.t && labelKey) ? store.t(labelKey) : (r.label || r.id || r);
-                    li.dataset.context = displayed;
-                    li.textContent = displayed;
-                    ul.appendChild(li);
-                });
-            }
+                const li = document.createElement('li');
+                li.tabIndex = 0;
+                li.className = 'reason-item';
+                const labelKey = r.labelKey || (r.id ? `reason.${r.id}` : null);
+                const displayed = (store && store.t && labelKey) ? store.t(labelKey) : (r.label || r.id || r);
+                li.dataset.context = displayed;
+                li.textContent = displayed;
+                ul.appendChild(li);
+            });
 
             reasonsContainer.appendChild(ul);
         }
