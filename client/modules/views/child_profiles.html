@@ -4,32 +4,58 @@
     <h2 data-i18n="profiles.title"></h2>
   </div>
 
-  <form id="create-child-form">
-    <label for="childName-input" class="sr-only">Child name</label>
-    <input type="text" id="childName-input" name="childName" placeholder="Child name" data-i18n-placeholder="profiles.childNamePlaceholder" required>
-    <label for="age-select" class="sr-only">Child age</label>
-    <select id="age-select" name="age" data-i18n-placeholder="profiles.childAgePlaceholder" required>
-      <option value="">-- Select age --</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-      <option value="13">13</option>
-      <option value="14">14</option>
-      <option value="15">15</option>
-      <option value="16">16</option>
-      <option value="17">17</option>
-      <option value="18">18</option>
-    </select>
-    <button type="submit" class="primary-btn" data-i18n="profiles.addChild">Add Child</button>
+  <form id="create-child-form" aria-label="Create child profile form">
+    <fieldset class="form-fieldset">
+      <legend class="form-section-legend" data-i18n="profiles.title"></legend>
+
+      <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+      <div class="input-group">
+        <label for="childName-input">
+          <span data-i18n="profiles.childNamePlaceholder"></span>
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+        <input type="text" id="childName-input" name="childName" placeholder="Child name" data-i18n-placeholder="profiles.childNamePlaceholder" required
+               aria-describedby="childName-error"
+               aria-required="true">
+        <span id="childName-error" class="field-error" role="alert"></span>
+      </div>
+
+      <div class="input-group">
+        <label for="age-select">
+          <span data-i18n="profiles.childAgePlaceholder"></span>
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+        <select id="age-select" name="age" data-i18n-placeholder="profiles.childAgePlaceholder" required
+                aria-describedby="age-error"
+                aria-required="true">
+          <option value="">-- Select age --</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+        </select>
+        <span id="age-error" class="field-error" role="alert"></span>
+      </div>
+
+      <div class="form-submit-group">
+        <button type="submit" class="primary-btn" data-i18n="profiles.addChild">Add Child</button>
+      </div>
+    </fieldset>
   </form>
 
   <ul id="child-list"></ul>
@@ -59,12 +85,23 @@
         <button class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;">Remove PIN</button>
       </div>
       <div class="pin-input-section" style="display: none;">
-        <label class="sr-only" data-i18n="profiles.pinLabel"></label>
-        <input type="password" class="pin-input" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required>
-        <div class="pin-button-group">
-          <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm">Confirm</button>
-          <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel">Cancel</button>
-        </div>
+        <fieldset class="form-fieldset">
+          <legend class="sr-only" data-i18n="profiles.pinLabel"></legend>
+          <div class="input-group">
+            <label for="pin-input-field" class="sr-only">
+              <span data-i18n="profiles.pinLabel"></span>
+              <span class="required-indicator" aria-label="required">*</span>
+            </label>
+            <input type="password" class="pin-input" id="pin-input-field" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required
+                   aria-describedby="pin-input-error"
+                   aria-required="true">
+            <span id="pin-input-error" class="field-error" role="alert"></span>
+          </div>
+          <div class="pin-button-group">
+            <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm">Confirm</button>
+            <button type="button" class="cancel-pin-btn" data-i18n="profiles.cancel">Cancel</button>
+          </div>
+        </fieldset>
       </div>
     </div>
   </li>

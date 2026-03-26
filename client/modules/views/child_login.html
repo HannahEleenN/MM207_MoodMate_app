@@ -4,12 +4,27 @@
     <p data-i18n="child.loginPrompt"></p>
   </div>
 
-  <form id="childLoginForm">
-    <div class="input-group">
-      <label for="child-pin-input" data-i18n="child.pinLabel"></label>
-      <input type="password" id="child-pin-input" required data-i18n-placeholder="child.pinPlaceholder" placeholder="" maxlength="6">
-    </div>
-    <button type="submit" class="primary-btn" data-i18n="child.continue">Continue</button>
+  <form id="childLoginForm" aria-label="Child PIN login form">
+    <fieldset class="form-fieldset">
+      <legend class="form-section-legend" data-i18n="child.pinLabel"></legend>
+
+      <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+      <div class="input-group">
+        <label for="child-pin-input">
+          <span data-i18n="child.pinLabel"></span>
+          <span class="required-indicator" aria-label="required">*</span>
+        </label>
+        <input type="password" id="child-pin-input" required data-i18n-placeholder="child.pinPlaceholder" placeholder="" maxlength="6"
+               aria-describedby="pin-error"
+               aria-required="true">
+        <span id="pin-error" class="field-error" role="alert"></span>
+      </div>
+
+      <div class="form-submit-group">
+        <button type="submit" class="primary-btn" data-i18n="child.continue">Continue</button>
+      </div>
+    </fieldset>
   </form>
 
   <div class="login-footer">

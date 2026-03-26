@@ -1,85 +1,131 @@
-<section class="user-manager">
+<section class="user-manager" role="main">
     <div class="user-manager-header">
-        <h2 data-i18n="userManager.title" aria-label="Profile administration"></h2>
+        <h1 data-i18n="userManager.title">Profile administration</h1>
     </div>
 
     <div class="registration-card">
-        <form id="regForm" class="registration-form">
-            <div class="form-section">
-                <h3 data-i18n="userManager.createTitle" aria-label="Create a parent account"></h3>
-            </div>
+        <form id="regForm" name="registration" class="registration-form" aria-label="User registration form">
 
-            <div class="input-group">
-                <label for="reg-nick" data-i18n="userManager.nicknameLabel" aria-label="Nickname"></label>
-                <input type="text" id="reg-nick" name="nick"
-                       data-i18n-placeholder="register.nickPlaceholder"
-                       placeholder="Nickname" required aria-describedby="nick-helper">
-                <span class="helper-text" id="nick-helper" data-i18n="register.nickHelper"></span>
-            </div>
+            <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-            <div class="input-group">
-                <label for="reg-email" data-i18n="userManager.emailLabel" aria-label="Email"></label>
-                <input type="email" id="reg-email" name="email"
-                       data-i18n-placeholder="login.emailPlaceholder"
-                       placeholder="Email" required aria-describedby="email-error">
-                <span id="email-error" class="field-error" role="alert"></span>
-            </div>
+            <fieldset class="form-fieldset">
+                <legend class="form-section-legend" data-i18n="userManager.createTitle">Create a parent account</legend>
 
-            <div class="input-group">
-                <label for="reg-password" data-i18n="login.passwordLabel" aria-label="Password"></label>
-                <input type="password" id="reg-password" name="secret"
-                       data-i18n-placeholder="login.passwordPlaceholder"
-                       placeholder="Password" required aria-describedby="password-error password-requirements">
-                <span id="password-error" class="field-error" role="alert"></span>
-                <div id="password-requirements" class="password-requirements">
-                    <p class="requirements-label" data-i18n="register.passwordRequirements" aria-label="Password requirements"></p>
-                    <ul class="requirements-list" aria-label="Password requirements list">
-                        <li class="req-length" data-i18n="register.reqLength"></li>
-                        <li class="req-number" data-i18n="register.reqNumber"></li>
-                    </ul>
+                <div class="input-group">
+                    <label for="reg-nick">
+                        <span data-i18n="userManager.nicknameLabel">Nickname</span>
+                        <span class="required-indicator" aria-label="required">*</span>
+                    </label>
+                    <input type="text" id="reg-nick" name="nick"
+                           data-i18n-placeholder="register.nickPlaceholder"
+                           placeholder="Nickname" required autocomplete="username"
+                           aria-describedby="nick-helper nick-error"
+                           aria-required="true">
+                    <span class="helper-text" id="nick-helper" data-i18n="register.nickHelper"></span>
+                    <span id="nick-error" class="field-error" role="alert"></span>
                 </div>
-            </div>
 
-            <div class="form-section consent-section">
-                <label class="consent-label">
-                    <input type="checkbox" name="hasConsented" id="consent-check" required aria-label="I agree to terms and privacy policy">
-                    <span class="consent-text">
-                        <span data-i18n="register.consentPrefix"></span>
-                        <button type="button" id="view-tos" data-i18n="legal.terms" class="consent-link" aria-label="View Terms of Service"></button>
-                        <span data-i18n="register.consentAnd"></span>
-                        <button type="button" id="view-privacy" data-i18n="legal.privacy" class="consent-link" aria-label="View Privacy Policy"></button>
-                    </span>
-                </label>
-                <span id="consent-error" class="field-error" role="alert"></span>
-            </div>
+                <div class="input-group">
+                    <label for="reg-email">
+                        <span data-i18n="userManager.emailLabel">Email</span>
+                        <span class="required-indicator" aria-label="required">*</span>
+                    </label>
+                    <input type="email" id="reg-email" name="email"
+                           data-i18n-placeholder="login.emailPlaceholder"
+                           placeholder="Email" required autocomplete="email"
+                           aria-describedby="email-error email-helper"
+                           aria-required="true">
+                    <span id="email-error" class="field-error" role="alert"></span>
+                    <span class="helper-text" id="email-helper" data-i18n="register.emailHelper"></span>
+                </div>
+            </fieldset>
 
-            <div style="position: relative;">
+            <fieldset class="form-fieldset">
+                <legend class="form-section-legend" data-i18n="register.passwordSection">Password</legend>
+
+                <div class="input-group">
+                    <label for="reg-password">
+                        <span data-i18n="login.passwordLabel">Password</span>
+                        <span class="required-indicator" aria-label="required">*</span>
+                    </label>
+                    <input type="password" id="reg-password" name="secret"
+                           data-i18n-placeholder="login.passwordPlaceholder"
+                           placeholder="Password" required autocomplete="new-password"
+                           aria-describedby="password-error password-requirements"
+                           aria-required="true">
+                    <span id="password-error" class="field-error" role="alert"></span>
+                    <div id="password-requirements" class="password-requirements" role="region" aria-label="Password requirements">
+                        <p class="requirements-label" data-i18n="register.passwordRequirements">Password requirements:</p>
+                        <ul class="requirements-list">
+                            <li class="req-length" data-i18n="register.reqLength"></li>
+                            <li class="req-number" data-i18n="register.reqNumber"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-password-confirm">
+                        <span data-i18n="register.passwordConfirmLabel">Confirm Password</span>
+                        <span class="required-indicator" aria-label="required">*</span>
+                    </label>
+                    <input type="password" id="reg-password-confirm" name="passwordConfirm"
+                           data-i18n-placeholder="register.passwordConfirmPlaceholder"
+                           placeholder="Confirm Password" required autocomplete="new-password"
+                           aria-describedby="password-confirm-error"
+                           aria-required="true">
+                    <span id="password-confirm-error" class="field-error" role="alert"></span>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset consent-fieldset">
+                <legend class="sr-only" data-i18n="register.consentLabel">Legal agreements</legend>
+                <div class="input-group consent-group">
+                    <label class="consent-label" for="consent-check">
+                        <input type="checkbox" name="hasConsented" id="consent-check" required
+                               aria-describedby="consent-error consent-description"
+                               aria-required="true">
+                        <span class="consent-text">
+                            <span data-i18n="register.consentPrefix">I agree to the</span>
+                            <a href="#view-tos" id="view-tos" data-i18n="legal.terms" class="consent-link" role="button">Terms of Service</a>
+                            <span data-i18n="register.consentAnd">and</span>
+                            <a href="#view-privacy" id="view-privacy" data-i18n="legal.privacy" class="consent-link" role="button">Privacy Policy</a>
+                        </span>
+                    </label>
+                    <span id="consent-error" class="field-error" role="alert"></span>
+                    <span id="consent-description" class="helper-text" data-i18n="register.consentHelper"></span>
+                </div>
+            </fieldset>
+
+            <div class="form-submit-group">
                 <div id="reg-spinner" class="loading-spinner" aria-hidden="true"></div>
-                <button type="submit" class="primary-btn btn-reg" data-i18n="register.submit" aria-label="Create account"></button>
+                <button type="submit" class="primary-btn btn-reg" data-i18n="register.submit" aria-label="Create account">Create Account</button>
             </div>
         </form>
     </div>
 
-    <div class="existing-users-section">
-        <h2 data-i18n="userManager.existingTitle" aria-label="Existing profiles"></h2>
-        <ul id="user-list"></ul>
-    </div>
+    <section class="existing-users-section" aria-label="Existing user profiles">
+        <h2 data-i18n="userManager.existingTitle">Existing profiles</h2>
+        <ul id="user-list" class="user-list" role="list"></ul>
+        <div id="no-users-message" class="empty-state" role="status" data-i18n="userManager.noUsers">No user profiles created yet</div>
+    </section>
 
     <template id="user-item-template">
-        <li>
-            <span class="user-email-display"></span>
-            <div class="user-actions">
-                <button class="btn-edit" data-i18n="profiles.edit" aria-label="Edit profile"></button>
-                <button class="btn-del" data-i18n="profiles.delete" aria-label="Delete profile"></button>
+        <li role="listitem" class="user-item">
+            <div class="user-info">
+                <span class="user-email-display" aria-label="User email"></span>
+            </div>
+            <div class="user-actions" role="region" aria-label="User actions">
+                <button type="button" class="btn-edit secondary-btn" data-i18n="profiles.edit" aria-label="Edit this user profile">Edit</button>
+                <button type="button" class="btn-del danger-btn" data-i18n="profiles.delete" aria-label="Delete this user profile">Delete</button>
             </div>
         </li>
     </template>
 
     <template id="user-edit-template">
-        <div class="edit-inline">
-            <input type="text" class="edit-input" aria-label="Edit profile name">
-            <button class="save-edit" data-i18n="profiles.save" aria-label="Save changes"></button>
-            <button class="cancel-edit" data-i18n="profiles.cancel" aria-label="Cancel editing"></button>
+        <div class="edit-inline" role="region" aria-label="Edit user profile inline form">
+            <input type="text" class="edit-input" required aria-label="Edit profile name" autocomplete="off">
+            <button type="button" class="save-edit primary-btn" data-i18n="profiles.save" aria-label="Save profile changes">Save</button>
+            <button type="button" class="cancel-edit secondary-btn" data-i18n="profiles.cancel" aria-label="Cancel editing">Cancel</button>
         </div>
     </template>
 

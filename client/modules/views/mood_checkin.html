@@ -19,9 +19,15 @@
     <div id="step-2" class="step-container" style="display: none;">
         <h2 data-i18n="checkin.reasonTitle"><span id="selected-mood-text">...</span>?</h2>
         <p data-i18n="checkin.instructions"></p>
-        <div id="reasons-text"></div>
-        <label id="mood-context-label" for="mood-context-text" class="sr-only" data-i18n="checkin.contextLabel"></label>
-        <textarea id="mood-context-text" aria-labelledby="mood-context-label" data-i18n-placeholder="checkin.contextPlaceholder" placeholder=""></textarea>
+        <fieldset class="form-fieldset">
+          <legend class="sr-only" data-i18n="checkin.contextLabel"></legend>
+          <div class="input-group">
+            <label id="mood-context-label" for="mood-context-text" data-i18n="checkin.contextLabel"></label>
+            <div id="reasons-text"></div>
+            <textarea id="mood-context-text" aria-labelledby="mood-context-label" aria-describedby="context-helper" data-i18n-placeholder="checkin.contextPlaceholder" placeholder=""></textarea>
+            <span id="context-helper" class="helper-text" data-i18n="checkin.contextHelper"></span>
+          </div>
+        </fieldset>
         <div class="button-group">
             <button id="btn-prev-step-2" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
             <button id="btn-next-step" class="primary-btn" data-i18n="checkin.next" aria-label="Next">Next</button>
