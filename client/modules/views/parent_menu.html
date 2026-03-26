@@ -1,12 +1,15 @@
-<section id="parent-dashboard">
-  <h2 data-i18n="parent.title"></h2>
+<main id="parent-dashboard" aria-label="Parent dashboard">
+  <h1 data-i18n="parent.title"></h1>
   <p data-i18n="parent.welcome"></p>
 
-  <div id="current-child" class="child-display" data-i18n-prefix="parent.current"> <span id="child-name" data-i18n="parent.childNone"></span></div>
-
-  <div class="parent-actions">
-     <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights">View Insights</button>
-    <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles">Manage Profiles</button>
-    <button id="delete-account-btn" class="danger-btn" data-i18n="parent.deleteAccount">Delete Account</button>
+  <div id="current-child" class="child-display" data-i18n-prefix="parent.current" role="region" aria-label="Currently selected child">
+    <span id="child-name" data-i18n="parent.childNone"></span>
   </div>
-</section>
+
+  <div class="parent-actions" role="region" aria-label="Dashboard actions">
+     <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights" aria-label="View mood insights for selected child">View Insights</button>
+    <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles" aria-label="Manage child profiles">Manage Profiles</button>
+    <button id="logout-btn" class="secondary-btn" data-i18n="parent.logout" aria-label="Sign out of your account">Logout</button>
+    <button id="delete-account-btn" class="danger-btn" data-i18n="parent.deleteAccount" aria-label="Delete your account">Delete Account</button>
+  </div>
+</main>

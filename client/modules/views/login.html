@@ -1,4 +1,4 @@
-<section id="login-container">
+<main id="login-container" aria-label="Parent login">
   <div class="brand">
     <h1 data-i18n="app.title"></h1>
     <h2 data-i18n="app.tagline"></h2>
@@ -15,7 +15,7 @@
           <span data-i18n="login.emailLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
         </label>
-        <input type="email" id="email-input" required data-i18n-placeholder="login.emailPlaceholder" placeholder=""
+        <input type="email" id="email-input" required data-i18n-placeholder="login.emailPlaceholder" placeholder="" autocomplete="email"
                aria-describedby="email-error"
                aria-required="true">
         <span id="email-error" class="field-error" role="alert"></span>
@@ -26,7 +26,7 @@
           <span data-i18n="login.passwordLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
         </label>
-        <input type="password" id="password-input" required data-i18n-placeholder="login.passwordPlaceholder" placeholder=""
+        <input type="password" id="password-input" required data-i18n-placeholder="login.passwordPlaceholder" placeholder="" autocomplete="current-password"
                aria-describedby="password-error"
                aria-required="true">
         <span id="password-error" class="field-error" role="alert"></span>
@@ -38,18 +38,16 @@
     </fieldset>
   </form>
 
-  <br>
-  <div class="login-footer">
+  <div class="login-footer login-footer--legal">
     <p>
-      <span data-i18n="login.legalPrefix"></span> <br>
+      <span data-i18n="login.legalPrefix"></span>
       <button id="view-tos" class="link-btn" data-i18n="legal.terms" aria-label="View Terms of Service"></button>
       <span data-i18n="register.consentAnd"></span>
       <button id="view-privacy" class="link-btn" data-i18n="legal.privacy" aria-label="View Privacy Policy"></button>
     </p>
   </div>
 
-  <br>
-  <div class="login-footer">
+  <div class="login-footer login-footer--signup">
     <p><span data-i18n="login.newUser"></span> <button id="go-to-reg" class="link-btn" data-i18n="login.createAccount" aria-label="Create a parent account"></button></p>
   </div>
-</section>
+</main>

@@ -60,6 +60,26 @@ export async function initParentApp(container)
             }
         };
 
+        const logoutBtn = container.querySelector('#logout-btn');
+        if (logoutBtn)
+        {
+            logoutBtn.onclick = async () =>
+            {
+                try
+                {
+                    await ApiService.logout();
+                    const successMsg = store.t('logout.success') || 'Logged out successfully';
+                    showNoticeInline(successMsg);
+                    store.currentView = 'login';
+                } catch (error)
+                {
+                    console.error("Logout failed:", error);
+                    const failMsg = store.t('logout.failed') || 'Logout failed';
+                    showNoticeInline(failMsg);
+                }
+            };
+        }
+
     } catch (error)
     {
         console.error("Failed to load parent menu:", error);

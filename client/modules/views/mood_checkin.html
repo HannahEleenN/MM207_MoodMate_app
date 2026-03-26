@@ -1,12 +1,12 @@
-<section id="mood-checkin-flow">
+<main id="mood-checkin-flow" aria-label="Mood check-in wizard">
     <div class="progress-container">
-        <progress id="checkin-progress" value="33" max="100"></progress>
+        <progress id="checkin-progress" value="33" max="100" aria-label="Progress through mood check-in"></progress>
     </div>
 
-    <div id="step-1" class="step-container">
+    <div id="step-1" class="step-container" role="region" aria-label="Step 1: Select mood">
         <h2 data-i18n="child.hello"></h2>
         <p data-i18n="child.askMood"></p>
-        <div class="mood-grid">
+        <div class="mood-grid" role="radiogroup" aria-label="Mood selection">
             <button type="button" class="mood-btn" data-mood="happy" data-i18n="mood.happy" aria-label="Happy"></button>
             <button type="button" class="mood-btn" data-mood="sad" data-i18n="mood.sad" aria-label="Sad"></button>
             <button type="button" class="mood-btn" data-mood="angry" data-i18n="mood.angry" aria-label="Angry"></button>
@@ -16,11 +16,14 @@
         </div>
     </div>
 
-    <div id="step-2" class="step-container" hidden>
+    <div id="step-2" class="step-container" role="region" aria-label="Step 2: Explain mood" hidden aria-hidden="true">
         <h2 data-i18n="checkin.reasonTitle"><span id="selected-mood-text">...</span>?</h2>
         <p data-i18n="checkin.instructions"></p>
         <fieldset class="form-fieldset">
           <legend class="sr-only" data-i18n="checkin.contextLabel"></legend>
+
+          <div id="form-status-step2" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
           <div class="input-group">
             <label id="mood-context-label" for="mood-context-text" data-i18n="checkin.contextLabel"></label>
             <div id="reasons-text"></div>
@@ -34,12 +37,12 @@
         </div>
     </div>
 
-    <div id="step-3" class="step-container" hidden>
+    <div id="step-3" class="step-container" role="region" aria-label="Step 3: Choose action" hidden aria-hidden="true">
         <h2 data-i18n="child.nextActionTitle"></h2>
-        <div class="mood-grid" id="step-3-solutions"></div>
+        <div class="mood-grid" id="step-3-solutions" role="group" aria-label="Suggested actions"></div>
         <div class="button-group">
             <button type="button" id="btn-prev-step-3" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
             <button type="button" id="btn-finish" class="primary-btn" data-i18n="checkin.finish" aria-label="Finish">Finish</button>
         </div>
     </div>
-</section>
+</main>
