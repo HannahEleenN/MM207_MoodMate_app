@@ -1375,6 +1375,38 @@ body.auth-view #view-tos { display: inline-block !important; }
     transform: scale(1.08);
 }
 
+/* ── Inline consent links inside checkbox label ─────────────────────────────── */
+/* Add this near the existing .consent-label rules in style.css */
+
+.consent-text {
+    flex: 1;
+    line-height: 1.5;
+    font-size: .95rem;
+    color: var(--text-mid);
+}
+
+.consent-link {
+    color: var(--teal);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    transition: color .2s;
+    /* Prevent checkbox toggling when the link itself is clicked */
+    position: relative;
+    z-index: 1;
+}
+
+.consent-link:hover {
+    color: var(--coral);
+    text-decoration-style: solid;
+}
+
+.consent-section {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
 /* Enhanced legal links section */
 .form-section .legal-links-section {
     margin-bottom: 1.2rem;

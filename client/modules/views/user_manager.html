@@ -22,6 +22,7 @@
                 <input type="email" id="reg-email" name="email"
                        data-i18n-placeholder="login.emailPlaceholder"
                        placeholder="yourname@email.com" required>
+                <span id="email-error" class="field-error"></span>
             </div>
 
             <div class="input-group">
@@ -29,27 +30,33 @@
                 <input type="password" id="reg-password" name="secret"
                        data-i18n-placeholder="login.passwordPlaceholder"
                        placeholder="Enter a secure password" required>
+                <span id="password-error" class="field-error"></span>
+                <div class="password-requirements">
+                    <p class="requirements-label" data-i18n="register.passwordRequirements">Password requirements:</p>
+                    <ul class="requirements-list">
+                        <li class="req-length" data-i18n="register.reqLength">At least 6 characters</li>
+                        <li class="req-number" data-i18n="register.reqNumber">At least one number</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="form-section">
-                <h4 class="section-title">📋 Privacy Policy & Terms of Service</h4>
-
-                <div class="legal-links-section">
-                    <p class="legal-intro" data-i18n="register.legalIntro"></p>
-                    <div class="legal-links">
-                        <a href="#" id="view-tos" data-i18n="legal.terms"></a>
-                        <span class="separator">•</span>
-                        <a href="#" id="view-privacy" data-i18n="legal.privacy"></a>
-                    </div>
-                </div>
-
+            <div class="form-section consent-section">
                 <label class="consent-label">
                     <input type="checkbox" name="hasConsented" id="consent-check" required>
-                    <span data-i18n="register.consentCheckbox">I agree to Terms and Privacy Policy</span>
+                    <span class="consent-text">
+                        <span data-i18n="register.consentPrefix">I agree to the</span>
+                        <a href="#" id="view-tos" data-i18n="legal.terms" class="consent-link">Terms of Service</a>
+                        <span data-i18n="register.consentAnd">and</span>
+                        <a href="#" id="view-privacy" data-i18n="legal.privacy" class="consent-link">Privacy Policy</a>
+                    </span>
                 </label>
+                <span id="consent-error" class="field-error"></span>
             </div>
 
-            <button type="submit" class="primary-btn" data-i18n="register.submit">Create Account</button>
+            <div style="position: relative;">
+                <div id="reg-spinner" class="loading-spinner" aria-hidden="true"></div>
+                <button type="submit" class="primary-btn btn-reg" data-i18n="register.submit">Create Account</button>
+            </div>
         </form>
     </div>
 
