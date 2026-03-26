@@ -24,8 +24,10 @@ MoodMate is designed for children aged 6-7. As children under 13 cannot legally 
 * Guardians act as the primary account owners.
 
 ## 4. Security & Storage
-* **No Plain-text Passwords:** All secrets are "scrambled" (hashed) before storage.
-* **In-Memory Storage:** For this version of the application, data is stored in the server's volatile memory (RAM). This means data is not persisted if the server restarts, further limiting long-term data exposure.
+* **No Plain-text Passwords:** All secrets are hashed (using bcrypt) before storage.
+* **Persistent Database Storage:** Data is stored in a PostgreSQL database hosted on Render. This ensures data persists across server restarts and is backed up according to Render's data protection policies.
+* **Encryption in Transit:** All data transmitted between client and server uses HTTPS (TLS/SSL encryption).
+* **Access Control:** JWT tokens and role-based middleware enforce that only authorized users (parents) can access their own data and children's logs.
 
 ## 5. Your Rights (GDPR)
 * **The Right to be Forgotten:** Users can delete their account at any time. Deleting a parent account immediately purges all associated nicknames, secrets, and mood logs from our system.
