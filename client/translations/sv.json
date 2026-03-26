@@ -68,10 +68,6 @@
     "checkin.restoreDraftLocal":  "Det finns en oavslutad humörregistrering på denna enhet — vill du återställa den?",
     "checkin.contextLabel":  "Beskriv mer om vad som händer",
 
-    "context.school":  "🏫 Skola",
-    "context.friends":  "Vänner",
-    "context.home":  "Hemma",
-
     "reason.school":  "🏫 Skola",
     "reason.friends":  "Vänner",
     "reason.family":  "Familj",

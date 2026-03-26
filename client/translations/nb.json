@@ -68,10 +68,6 @@
     "checkin.restoreDraftLocal":  "Det finnes en uferdig humørregistrering på denne enheten — gjenopprette?",
     "checkin.contextLabel":  "Beskriv mer om hva som skjer",
 
-    "context.school":  "🏫 Skole",
-    "context.friends":  "Venner",
-    "context.home":  "Hjemme",
-
     "reason.school":  "🏫 Skole",
     "reason.friends":  "Venner",
     "reason.family":  "Familie",

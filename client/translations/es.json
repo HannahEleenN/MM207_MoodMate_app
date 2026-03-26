@@ -68,10 +68,6 @@
     "checkin.restoreDraftLocal":  "Existe un registro de estado de ánimo incompleto en este dispositivo — ¿quieres restaurarlo?",
     "checkin.contextLabel":  "Describe más sobre lo que está pasando",
 
-    "context.school":  "🏫 Escuela",
-    "context.friends":  "Amigos",
-    "context.home":  "Hogar",
-
     "reason.school":  "🏫 Escuela",
     "reason.friends":  "Amigos",
     "reason.family":  "Familia",

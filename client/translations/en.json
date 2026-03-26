@@ -68,10 +68,6 @@
     "checkin.restoreDraftLocal":  "An unfinished mood entry exists on this device — restore it?",
     "checkin.contextLabel":  "Describe more about what\u0027s happening",
 
-    "context.school":  "🏫 School",
-    "context.friends":  "Friends",
-    "context.home":  "Home",
-
     "reason.school":  "🏫 School",
     "reason.friends":  "Friends",
     "reason.family":  "Family",
