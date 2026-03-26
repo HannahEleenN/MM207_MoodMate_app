@@ -12,26 +12,24 @@
   </div>
 </div>
 
-<main id="parent-dashboard" aria-label="Parent dashboard">
-  <h1 data-i18n="parent.title"></h1>
-  <p data-i18n="parent.welcome"></p>
+<section id="parent-dashboard" aria-label="Parent dashboard">
 
-  <div class="child-selector-container" role="region" aria-label="Child selection">
+  <div class="dashboard-header">
+    <h1 data-i18n="parent.title"></h1>
+    <p class="dashboard-subtitle" data-i18n="parent.welcome"></p>
+  </div>
+
+  <div class="child-selector-row">
     <label for="child-selector-dropdown" class="child-selector-label" data-i18n="child.selectLabel">Select child:</label>
-    <select id="child-selector-dropdown" aria-label="Child profile selector" data-i18n-placeholder="child.selectPrompt">
+    <select id="child-selector-dropdown" aria-label="Child profile selector">
       <option value="" data-i18n="child.selectPrompt">Choose a child profile</option>
     </select>
   </div>
 
-  <div id="current-child" class="child-display" role="region" aria-label="Currently selected child">
-    <span id="child-name" data-i18n="parent.childNone"></span>
-  </div>
-
-  <br>
-
   <div class="parent-actions" role="region" aria-label="Dashboard actions">
-    <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights" aria-label="View mood insights for selected child">View Insights</button>
-    <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles" aria-label="Manage child profiles">Manage Profiles</button>
-    <button id="manage-accounts" class="secondary-btn" data-i18n="userManager.title" aria-label="Manage accounts">Account Settings</button>
+    <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights">View Insights</button>
+    <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles">Manage Profiles</button>
+    <button id="manage-accounts" class="secondary-btn" data-i18n="userManager.title">Account Settings</button>
   </div>
-</main>
+
+</section>
