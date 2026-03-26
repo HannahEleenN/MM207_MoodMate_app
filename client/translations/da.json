@@ -46,7 +46,7 @@
   "login.passwordLabel": "Adgangskode",
   "login.passwordPlaceholder": "Indtast din adgangskode",
   "login.submit": "Log ind",
-  "login.legalPrefix": "Ved at logge ind accepterer du vores",
+  "login.legalPrefix": "For at læse vores privatlivspolitik og vilkår, klik her:",
   "login.newUser": "Ny bruger?",
   "login.createAccount": "Opret en forældre-konto",
   "login.incorrectPin": "Forkert kode",

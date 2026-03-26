@@ -1,27 +1,27 @@
 <section class="user-manager">
     <div class="user-manager-header">
-        <h2 data-i18n="userManager.title">User Management</h2>
+        <h2 data-i18n="userManager.title">Profile administration</h2>
     </div>
 
     <div class="registration-card">
         <form id="regForm" class="registration-form">
             <div class="form-section">
-                <h3 data-i18n="userManager.createTitle">Register Parent Account</h3>
+                <h3 data-i18n="userManager.createTitle">Create a parent account</h3>
             </div>
 
             <div class="input-group">
                 <label for="reg-nick" data-i18n="userManager.nicknameLabel">Nickname</label>
                 <input type="text" id="reg-nick" name="nick"
                        data-i18n-placeholder="register.nickPlaceholder"
-                       placeholder="e.g. MamaBear" required>
+                       placeholder="Nickname" required>
                 <span class="helper-text" data-i18n="register.nickHelper">This is your display name</span>
             </div>
 
             <div class="input-group">
-                <label for="reg-email" data-i18n="userManager.emailLabel">Email Address</label>
+                <label for="reg-email" data-i18n="userManager.emailLabel">Email</label>
                 <input type="email" id="reg-email" name="email"
                        data-i18n-placeholder="login.emailPlaceholder"
-                       placeholder="yourname@email.com" required>
+                       placeholder="Email" required>
                 <span id="email-error" class="field-error"></span>
             </div>
 
@@ -29,7 +29,7 @@
                 <label for="reg-password" data-i18n="login.passwordLabel">Password</label>
                 <input type="password" id="reg-password" name="secret"
                        data-i18n-placeholder="login.passwordPlaceholder"
-                       placeholder="Enter a secure password" required>
+                       placeholder="Password" required>
                 <span id="password-error" class="field-error"></span>
                 <div class="password-requirements">
                     <p class="requirements-label" data-i18n="register.passwordRequirements">Password requirements:</p>
@@ -42,12 +42,12 @@
 
             <div class="form-section consent-section">
                 <label class="consent-label">
-                    <input type="checkbox" name="hasConsented" id="consent-check" required>
+                    <input type="checkbox" name="hasConsented" id="consent-check" required aria-label="I agree to terms and privacy policy">
                     <span class="consent-text">
                         <span data-i18n="register.consentPrefix">I agree to the</span>
-                        <a href="#" id="view-tos" data-i18n="legal.terms" class="consent-link">Terms of Service</a>
+                        <a href="#" id="view-tos" data-i18n="legal.terms" class="consent-link" aria-label="View Terms of Service">Terms of Service</a>
                         <span data-i18n="register.consentAnd">and</span>
-                        <a href="#" id="view-privacy" data-i18n="legal.privacy" class="consent-link">Privacy Policy</a>
+                        <a href="#" id="view-privacy" data-i18n="legal.privacy" class="consent-link" aria-label="View Privacy Policy">Privacy Policy</a>
                     </span>
                 </label>
                 <span id="consent-error" class="field-error"></span>
@@ -55,13 +55,13 @@
 
             <div style="position: relative;">
                 <div id="reg-spinner" class="loading-spinner" aria-hidden="true"></div>
-                <button type="submit" class="primary-btn btn-reg" data-i18n="register.submit">Create Account</button>
+                <button type="submit" class="primary-btn btn-reg" data-i18n="register.submit" aria-label="Create account">Create Account</button>
             </div>
         </form>
     </div>
 
     <div class="existing-users-section">
-        <h2 data-i18n="userManager.existingTitle">Registered Users</h2>
+        <h2 data-i18n="userManager.existingTitle">Existing profiles</h2>
         <ul id="user-list"></ul>
     </div>
 
@@ -69,19 +69,19 @@
         <li>
             <span class="user-email-display"></span>
             <div class="user-actions">
-                <button class="btn-edit" data-i18n="profiles.edit">Edit</button>
-                <button class="btn-del" data-i18n="profiles.delete">Delete</button>
+                <button class="btn-edit" data-i18n="profiles.edit" aria-label="Edit profile">Edit</button>
+                <button class="btn-del" data-i18n="profiles.delete" aria-label="Delete profile">Delete</button>
             </div>
         </li>
     </template>
 
     <template id="user-edit-template">
         <div class="edit-inline">
-            <input type="text" class="edit-input" aria-label="Edit user">
-            <button class="save-edit" data-i18n="profiles.save" aria-label="Save">Save</button>
-            <button class="cancel-edit" data-i18n="profiles.cancel" aria-label="Cancel">Cancel</button>
+            <input type="text" class="edit-input" aria-label="Edit profile name">
+            <button class="save-edit" data-i18n="profiles.save" aria-label="Save changes">Save</button>
+            <button class="cancel-edit" data-i18n="profiles.cancel" aria-label="Cancel editing">Cancel</button>
         </div>
     </template>
 
-    <button id="go-to-login" class="link-btn hidden" data-i18n="userManager.goToLogin">Go to login</button>
+    <button id="go-to-login" class="link-btn hidden" data-i18n="userManager.goToLogin" aria-label="Go to sign in">Go to sign in</button>
 </section>

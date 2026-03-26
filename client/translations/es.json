@@ -46,7 +46,7 @@
   "login.passwordLabel": "Contraseña",
   "login.passwordPlaceholder": "Introduce tu contraseña",
   "login.submit": "Iniciar sesión",
-  "login.legalPrefix": "Al iniciar sesión aceptas nuestros",
+  "login.legalPrefix": "Para leer nuestra política de privacidad y términos, haz clic aquí:",
   "login.newUser": "¿Nuevo usuario?",
   "login.createAccount": "Crear cuenta de padre",
   "login.incorrectPin": "Código incorrecto",

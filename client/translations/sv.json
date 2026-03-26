@@ -46,7 +46,7 @@
   "login.passwordLabel": "Lösenord",
   "login.passwordPlaceholder": "Ange ditt lösenord",
   "login.submit": "Logga in",
-  "login.legalPrefix": "Genom att logga in accepterar du våra",
+  "login.legalPrefix": "För att läsa vår sekretesspolicy och villkor, klicka här:",
   "login.newUser": "Ny användare?",
   "login.createAccount": "Skapa ett konto för förälder",
   "login.incorrectPin": "Fel kod",
