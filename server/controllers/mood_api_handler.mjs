@@ -15,12 +15,13 @@ export const createMood = async (req, res, next) =>
         console.log('[createMood] incoming body:', req.body);
         console.log('[createMood] req.user:', req.user);
 
-        const { mood, context, solution, note } = req.body;
+        const { mood, context, solution, note, profileId } = req.body;
         const userId = req.user && (req.user.userId || req.user.id);
 
         const newEntry =
         {
             userId,
+            profileId: profileId || null,
             mood,
             context,
             solution: solution || null,
@@ -59,7 +60,19 @@ export const getAllMoods = async (req, res, next) =>
     try
     {
         const userId = req.user && (req.user.userId || req.user.id);
-        const rows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
+        let rows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
+        
+        // Enrich mood data with child names if available
+        if (rows && Array.isArray(rows)) {
+            rows = rows.map(row => ({
+                ...row,
+                // Provide childName for display (fallback chain for different field names)
+                childName: row.child_name || row.profileName || row.childName || '—',
+                // Keep the original fields in case they're needed
+                child: row.child_name || row.profileName || row.childName || '—'
+            }));
+        }
+        
         const locale = pickLanguage(req.headers['accept-language']);
         const msg = (I18n[locale] && I18n[locale].info && I18n[locale].info.MoodsFetched) ? I18n[locale].info.MoodsFetched : `Fetched moods for user ${userId}`;
         res.status(200).json

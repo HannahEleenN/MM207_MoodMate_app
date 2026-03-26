@@ -33,10 +33,10 @@ export const childController =
                 const pin = pinInput ? pinInput.value : '';
                 try
                 {
-                    const res = await ApiService.childLogin({ pin });
-                    if (res && res.child)
+                    const loginResponse = await ApiService.childLogin({ pin });
+                    if (loginResponse && loginResponse.child)
                     {
-                        store.currentChild = { id: String(res.child.id), name: res.child.name };
+                        store.currentChild = { id: String(loginResponse.child.id), name: loginResponse.child.name };
                         store.currentView = 'childMenu';
                     } else {
                         alert((store && store.t) ? store.t('login.incorrectPin') : 'Login failed');
@@ -178,97 +178,87 @@ export const childController =
 
     moodTextual:
     {
-        happy: [
-            'text.happy.0','text.happy.1','text.happy.2','text.happy.3','text.happy.4','text.happy.5','text.happy.6','text.happy.7'
-        ],
-        sad: [
-            'text.sad.0','text.sad.1','text.sad.2','text.sad.3','text.sad.4','text.sad.5','text.sad.6'
-        ],
-        angry: [
-            'text.angry.0','text.angry.1','text.angry.2','text.angry.3','text.angry.4'
-        ],
-        surprised: [
-            'text.surprised.0','text.surprised.1','text.surprised.2','text.surprised.3','text.surprised.4','text.surprised.5'
-        ],
-        scared: [
-            'text.scared.0','text.scared.1','text.scared.2','text.scared.3','text.scared.4','text.scared.5','text.scared.6'
-        ]
+        happy: ['text.happy.0','text.happy.1','text.happy.2','text.happy.3','text.happy.4','text.happy.5','text.happy.6','text.happy.7'],
+        sad: ['text.sad.0','text.sad.1','text.sad.2','text.sad.3','text.sad.4','text.sad.5','text.sad.6'],
+        angry: ['text.angry.0','text.angry.1','text.angry.2','text.angry.3','text.angry.4'],
+        surprised: ['text.surprised.0','text.surprised.1','text.surprised.2','text.surprised.3','text.surprised.4','text.surprised.5'],
+        scared: ['text.scared.0','text.scared.1','text.scared.2','text.scared.3','text.scared.4','text.scared.5','text.scared.6']
     },
 
     setupEventListeners()
     {
-        const c = this.container;
+        const container = this.container;
 
-        c.querySelectorAll('.mood-btn').forEach(btn => {
+        container.querySelectorAll('.mood-btn').forEach(btn => {
             btn.onclick = () => this.handleMoodSelection(btn.dataset.mood);
         });
 
-        const reasonsList = c.querySelector('#reasons-text');
+        const reasonsList = container.querySelector('#reasons-text');
         if (reasonsList)
         {
-            reasonsList.addEventListener('click', (e) =>
+            reasonsList.addEventListener('click', (event) =>
             {
-                const li = e.target.closest('.reason-item');
-                if (!li) return;
+                const reasonItem = event.target.closest('.reason-item');
+                if (!reasonItem) return;
                 reasonsList.querySelectorAll('.reason-item').forEach(n => n.classList.remove('selected'));
-                li.classList.add('selected');
-                this.handleContextSelection(li.textContent);
+                reasonItem.classList.add('selected');
+                this.handleContextSelection(reasonItem.textContent);
             });
 
-            reasonsList.addEventListener('keydown', (e) =>
+            reasonsList.addEventListener('keydown', (event) =>
             {
-                if (e.key === 'Enter')
+                if (event.key === 'Enter')
                 {
-                    const li = e.target.closest('.reason-item');
-                    if (!li) return;
-                    li.click();
+                    const reasonItem = event.target.closest('.reason-item');
+                    if (!reasonItem) return;
+                    reasonItem.click();
                 }
             });
         }
 
-        const solutionGrid = c.querySelector('#step-3-solutions');
+        const solutionGrid = container.querySelector('#step-3-solutions');
         if (solutionGrid)
         {
-            solutionGrid.addEventListener('click', (e) =>
+            solutionGrid.addEventListener('click', (event) =>
             {
-                const btn = e.target.closest('button');
-                if (!btn) return;
-                const solution = btn.dataset.solution;
+                const solutionBtn = event.target.closest('button');
+                if (!solutionBtn) return;
+                const solution = solutionBtn.dataset.solution;
                 if (solution)
                 {
-                    solutionGrid.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
+                    solutionGrid.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+                    solutionBtn.classList.add('selected');
                     this.handleSolutionSelection(solution);
                 }
             });
         }
 
-        const nextBtn = c.querySelector('#btn-next-step');
-        if (nextBtn) nextBtn.onclick = () => this.goToStep(3);
+        const nextBtn = container.querySelector('#btn-next-step');
+        if (nextBtn) nextBtn.onclick = () => this.navigateToStep(3);
         
-        const prevBtn2 = c.querySelector('#btn-prev-step-2');
-        if (prevBtn2) prevBtn2.onclick = () => this.goToStep(1);
+        const prevBtn2 = container.querySelector('#btn-prev-step-2');
+        if (prevBtn2) prevBtn2.onclick = () => this.navigateToStep(1);
         
-        const prevBtn3 = c.querySelector('#btn-prev-step-3');
-        if (prevBtn3) prevBtn3.onclick = () => this.goToStep(2);
+        const prevBtn3 = container.querySelector('#btn-prev-step-3');
+        if (prevBtn3) prevBtn3.onclick = () => this.navigateToStep(2);
 
-        const finishBtn = c.querySelector('#btn-finish');
+        const finishBtn = container.querySelector('#btn-finish');
         if (finishBtn) finishBtn.onclick = () => this.saveFinalMood();
 
-        const commentEl = c.querySelector('#mood-context-text');
-        if (commentEl)
+        const contextInput = container.querySelector('#mood-context-text');
+        if (contextInput)
         {
-            commentEl.addEventListener('input', () => {
+            contextInput.addEventListener('input', () => {
                 this._persistDraft();
             });
         }
 
-        c.querySelectorAll('.back-btn').forEach(btn =>
+        container.querySelectorAll('.back-btn').forEach(btn =>
         {
             btn.onclick = () =>
             {
                 const prevStep = Number(btn.dataset.toStep);
-                this.goToStep(prevStep);
+                this.navigateToStep(prevStep);
             };
         });
     },
@@ -279,51 +269,52 @@ export const childController =
         this.model.temporaryMoodSelection = mood;
         this._persistDraft();
 
-        const display = this.container.querySelector('#selected-mood-text');
-        if (display) display.textContent = (store && store.t) ? (store.t(`mood.${mood}`) || mood) : mood;
+        const moodDisplay = this.container.querySelector('#selected-mood-text');
+        if (moodDisplay) {
+            const moodLabel = (store && store.t) ? (store.t(`mood.${mood}`) || mood) : mood;
+            moodDisplay.textContent = moodLabel.replace(/^[^a-zA-Z0-9]+\s*/, '').trim();
+        }
 
         const reasonsContainer = this.container.querySelector('#reasons-text');
-        const map = this.moodMap[mood] || { reasons: [], solutions: [] };
+        const moodData = this.moodMap[mood] || { reasons: [], solutions: [] };
 
         if (reasonsContainer)
         {
             reasonsContainer.innerHTML = '';
+            const reasonsList = document.createElement('ul');
+            reasonsList.className = 'reasons-list';
 
-            const ul = document.createElement('ul');
-            ul.className = 'reasons-list';
-
-            map.reasons.forEach(r =>
+            moodData.reasons.forEach(reason =>
             {
-                const li = document.createElement('li');
-                li.tabIndex = 0;
-                li.className = 'reason-item';
-                const labelKey = r.labelKey || (r.id ? `reason.${r.id}` : null);
-                const displayed = (store && store.t && labelKey) ? store.t(labelKey) : (r.label || r.id || r);
-                li.dataset.context = displayed;
-                li.textContent = displayed;
-                ul.appendChild(li);
+                const reasonItem = document.createElement('li');
+                reasonItem.tabIndex = 0;
+                reasonItem.className = 'reason-item';
+                const labelKey = reason.labelKey || (reason.id ? `reason.${reason.id}` : null);
+                const displayText = (store && store.t && labelKey) ? store.t(labelKey) : (reason.label || reason.id || reason);
+                reasonItem.dataset.context = displayText;
+                reasonItem.textContent = displayText;
+                reasonsList.appendChild(reasonItem);
             });
 
-            reasonsContainer.appendChild(ul);
+            reasonsContainer.appendChild(reasonsList);
         }
 
         const solutionsGrid = this.container.querySelector('#step-3-solutions');
         if (solutionsGrid)
         {
             solutionsGrid.innerHTML = '';
-            map.solutions.forEach(s =>
+            moodData.solutions.forEach(solution =>
             {
-                const b = document.createElement('button');
-                b.className = 'solution-btn';
-                b.dataset.solution = s.id;
-                const solLabelKey = s.labelKey || (s.id ? `solution.${s.id}` : null);
-                b.textContent = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (s.label || s.id || '');
-                solutionsGrid.appendChild(b);
+                const solutionBtn = document.createElement('button');
+                solutionBtn.className = 'solution-btn';
+                solutionBtn.dataset.solution = solution.id;
+                const solLabelKey = solution.labelKey || (solution.id ? `solution.${solution.id}` : null);
+                solutionBtn.textContent = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (solution.label || solution.id || '');
+                solutionsGrid.appendChild(solutionBtn);
             });
         }
 
-
-        this.goToStep(2);
+        this.navigateToStep(2);
     },
 
     handleContextSelection(context)
@@ -333,12 +324,12 @@ export const childController =
         this._persistDraft();
 
         const mood = this.model.temporaryMoodSelection;
-        const map = this.moodMap[mood] || { solutions: [] };
+        const moodData = this.moodMap[mood] || { solutions: [] };
 
-        if (map.solutions && map.solutions.length === 1) {
-            this.model.temporarySolutionSelection = map.solutions[0].id;
+        if (moodData.solutions && moodData.solutions.length === 1) {
+            this.model.temporarySolutionSelection = moodData.solutions[0].id;
         }
-        this.goToStep(3);
+        this.navigateToStep(3);
     },
 
     handleSolutionSelection(solution)
@@ -348,22 +339,22 @@ export const childController =
         this._persistDraft();
     },
 
-    goToStep(stepNumber)
+    navigateToStep(stepNumber)
     {
-        this.container.querySelectorAll('.step-container').forEach(el => {
-            el.hidden = true;
+        this.container.querySelectorAll('.step-container').forEach(step => {
+            step.hidden = true;
         });
 
-        const currentStepEl = this.container.querySelector(`#step-${stepNumber}`);
-        if (currentStepEl) {
-            currentStepEl.hidden = false;
+        const currentStep = this.container.querySelector(`#step-${stepNumber}`);
+        if (currentStep) {
+            currentStep.hidden = false;
         }
 
         const progressValues = { 1: 33, 2: 66, 3: 100 };
-        const progressEl = this.container.querySelector('#checkin-progress');
-        if (progressEl)
+        const progressBar = this.container.querySelector('#checkin-progress');
+        if (progressBar)
         {
-            progressEl.value = progressValues[stepNumber] || 33;
+            progressBar.value = progressValues[stepNumber] || 33;
         }
     },
 
@@ -371,20 +362,20 @@ export const childController =
     {
         this.model.temporaryMoodSelection = null;
         this.model.temporaryContext = null;
-        this.goToStep(1);
+        this.navigateToStep(1);
     },
 
     async saveFinalMood()
     {
-        const commentEl = this.container.querySelector('#mood-context-text');
+        const contextInput = this.container.querySelector('#mood-context-text');
 
-        const data =
+        const moodData =
         {
             mood: this.model.temporaryMoodSelection,
             context: this.model.temporaryContext,
             solution: this.model.temporarySolutionSelection || null,
             solutionLabel: null,
-            note: commentEl ? commentEl.value : "",
+            note: contextInput ? contextInput.value : "",
             timestamp: new Date().toISOString(),
             profileId: store.currentChild ? store.currentChild.id : null
         };
@@ -392,17 +383,17 @@ export const childController =
         try
         {
             const mood = this.model.temporaryMoodSelection;
-            const map = this.moodMap[mood] || { solutions: [] };
-            const found = map.solutions.find(s => s.id === this.model.temporarySolutionSelection);
-            if (found) {
-                const solLabelKey = found.labelKey || (found.id ? `solution.${found.id}` : null);
-                data.solutionLabel = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (found.label || found.id || null);
+            const moodInfo = this.moodMap[mood] || { solutions: [] };
+            const foundSolution = moodInfo.solutions.find(s => s.id === this.model.temporarySolutionSelection);
+            if (foundSolution) {
+                const solLabelKey = foundSolution.labelKey || (foundSolution.id ? `solution.${foundSolution.id}` : null);
+                moodData.solutionLabel = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (foundSolution.label || foundSolution.id || null);
             }
         } catch (e) {
             console.error('Error finding solution label:', e);
         }
 
-        if (!data.profileId)
+        if (!moodData.profileId)
         {
             this.showNotice('child.selectPrompt');
             store.currentView = 'parentMenu';
@@ -411,18 +402,18 @@ export const childController =
 
         try
         {
-            await moodUIController.saveMood(data);
+            await moodUIController.saveMood(moodData);
 
             try { await this._clearDraft(); } catch (e) { console.debug('Failed to clear draft after save', e); }
 
-            if (data.solutionLabel)
+            if (moodData.solutionLabel)
             {
-                const el = document.getElementById('global-notice');
-                if (el)
+                const noticeElement = document.getElementById('global-notice');
+                if (noticeElement)
                 {
-                    el.textContent = `${store.t('mood.saved')} — ${data.solutionLabel}`;
-                    el.classList.remove('hidden');
-                    setTimeout(() => el.classList.add('hidden'), 4000);
+                    noticeElement.textContent = `${store.t('mood.saved')} — ${moodData.solutionLabel}`;
+                    noticeElement.classList.remove('hidden');
+                    setTimeout(() => noticeElement.classList.add('hidden'), 4000);
                 } else {
                     this.showNotice('mood.saved');
                 }
@@ -439,13 +430,13 @@ export const childController =
         }
     },
 
-    showNotice(key)
+    showNotice(translationKey)
     {
-        const el = document.getElementById('global-notice');
-        if (!el) return;
-        el.textContent = store.t(key);
-        el.classList.remove('hidden');
-        setTimeout(() => el.classList.add('hidden'), 3000);
+        const noticeElement = document.getElementById('global-notice');
+        if (!noticeElement) return;
+        noticeElement.textContent = store.t(translationKey);
+        noticeElement.classList.remove('hidden');
+        setTimeout(() => noticeElement.classList.add('hidden'), 3000);
     },
 
     // ------------------------------------------------------------------
@@ -459,9 +450,9 @@ export const childController =
     {
         try
         {
-            const raw = localStorage.getItem(this._getLocalDraftKey());
-            if (!raw) return null;
-            return JSON.parse(raw);
+            const draftJson = localStorage.getItem(this._getLocalDraftKey());
+            if (!draftJson) return null;
+            return JSON.parse(draftJson);
         } catch (e) { return null; }
     },
 
@@ -495,8 +486,8 @@ export const childController =
 
             if (draft.profileId && navigator.onLine)
             {
-                if (this._draftSyncTimer) clearTimeout(this._draftSyncTimer);
-                this._draftSyncTimer = setTimeout(async () =>
+                if (this._draftServerSyncTimer) clearTimeout(this._draftServerSyncTimer);
+                this._draftServerSyncTimer = setTimeout(async () =>
                 {
                     try {
                         await ApiService.saveDraft(draft, draft.profileId);
@@ -516,20 +507,20 @@ export const childController =
                 const serverDraft = await ApiService.getDraft(profileId);
                 if (serverDraft && serverDraft.mood)
                 {
-                    const msg = (store && store.t) ? (store.t('checkin.restoreDraft') || 'Restore unfinished mood entry?') : 'Restore unfinished mood entry?';
-                    if (confirm(msg)) {
+                    const restoreMsg = (store && store.t) ? (store.t('checkin.restoreDraft') || 'Restore unfinished mood entry?') : 'Restore unfinished mood entry?';
+                    if (confirm(restoreMsg)) {
                         this._applyMoodDraftToModel(serverDraft);
                         return;
                     }
                 }
             }
 
-            const local = this._loadLocalDraft();
-            if (local && (local.mood || local.context || local.solution || local.note))
+            const localDraft = this._loadLocalDraft();
+            if (localDraft && (localDraft.mood || localDraft.context || localDraft.solution || localDraft.note))
             {
-                const msg = (store && store.t) ? (store.t('checkin.restoreDraftLocal') || 'Restore unfinished mood entry from this device?') : 'Restore unfinished mood entry from this device?';
-                if (confirm(msg)) {
-                    this._applyMoodDraftToModel(local);
+                const restoreMsg = (store && store.t) ? (store.t('checkin.restoreDraftLocal') || 'Restore unfinished mood entry from this device?') : 'Restore unfinished mood entry from this device?';
+                if (confirm(restoreMsg)) {
+                    this._applyMoodDraftToModel(localDraft);
                 }
             }
         } catch (e) { console.debug('maybeRestoreDraft failed', e); }
@@ -543,17 +534,17 @@ export const childController =
             this.model.temporaryMoodSelection = draft.mood || null;
             this.model.temporaryContext = draft.context || null;
             this.model.temporarySolutionSelection = draft.solution || null;
-            try { const el = this.container.querySelector('#mood-context-text'); if (el) el.value = draft.note || ''; } catch (_) {}
+            try { const contextInput = this.container.querySelector('#mood-context-text'); if (contextInput) contextInput.value = draft.note || ''; } catch (_) {}
             store.draftMood = draft;
 
             if (draft.solution) {
-                this.goToStep(3);
+                this.navigateToStep(3);
             } else if (draft.context) {
-                this.goToStep(2);
+                this.navigateToStep(2);
             } else if (draft.mood) {
-                this.goToStep(2);
+                this.navigateToStep(2);
             } else {
-                this.goToStep(1);
+                this.navigateToStep(1);
             }
         } catch (e) { console.debug('applyDraft failed', e); }
     },

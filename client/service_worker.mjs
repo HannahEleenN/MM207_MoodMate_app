@@ -1,4 +1,4 @@
-const VERSION = 'v1.6';
+const VERSION = 'v2.0';
 const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
 console.info('Service worker starting, version:', VERSION);
 
@@ -107,11 +107,31 @@ function isNavigationRequest(request)
     return request.mode === 'navigate' || (request.method === 'GET' && request.headers.get('accept') && request.headers.get('accept').includes('text/html'));
 }
 
+function isTranslationRequest(request)
+{
+    return request.url.includes('/translations/');
+}
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 self.addEventListener("fetch", (event) =>
 {
     const req = event.request;
+    
+    if (isTranslationRequest(req))
+    {
+        event.respondWith((async () =>
+        {
+            try
+            {
+                return await fetch(req);
+            } catch (err)
+            {
+                return new Response(JSON.stringify({}), { status: 503, headers: { 'Content-Type': 'application/json' } });
+            }
+        })());
+        return;
+    }
 
     if (req.url.includes('/assets/flags/'))
     {

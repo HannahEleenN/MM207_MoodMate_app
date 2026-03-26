@@ -47,7 +47,15 @@ export const Mood =
 
     findByUser: async (userId) =>
     {
-        const sql = `SELECT * FROM mood_logs WHERE user_id = $1 ORDER BY timestamp DESC`;
+        const sql = `
+            SELECT 
+                ml.*, 
+                cp.name as child_name
+            FROM mood_logs ml
+            LEFT JOIN child_profiles cp ON ml.child_id = cp.id
+            WHERE ml.user_id = $1 
+            ORDER BY ml.timestamp DESC
+        `;
         const res = await pool.query(sql, [userId]);
         return res.rows;
     }
