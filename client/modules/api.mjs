@@ -37,7 +37,8 @@ export const ApiService =
 {
     async loadView(viewName)
     {
-        let url = `./modules/views/${viewName}.html`;
+        const fileName = viewName.replace(/([A-Z])/g, '_$1').toLowerCase();
+        let url = `./modules/views/${fileName}.html`;
         try {
             if (typeof location !== 'undefined' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
                 url += `?cb=${Date.now()}`;
