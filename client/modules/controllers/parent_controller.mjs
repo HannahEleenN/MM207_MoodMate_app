@@ -25,16 +25,16 @@ export async function initParentApp(container)
             };
         }
 
-        const childNameEl = container.querySelector('#child-name');
-        if (childNameEl)
+        const childNameDisplay = container.querySelector('#child-name');
+        if (childNameDisplay)
         {
-            const noneText = store.t('child.none');
+            const noneLabel = store.t('child.none');
             if (store.currentChild) {
-                childNameEl.textContent = store.currentChild.name;
+                childNameDisplay.textContent = store.currentChild.name;
             } else if (store.currentUser && store.currentUser.email) {
-                childNameEl.textContent = store.currentUser.email;
+                childNameDisplay.textContent = store.currentUser.email;
             } else {
-                childNameEl.textContent = noneText;
+                childNameDisplay.textContent = noneLabel;
             }
         }
 
@@ -95,16 +95,16 @@ export async function initParentApp(container)
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-function showNoticeInline(message)
+function showNoticeInline(noticeMessage)
 {
-    const el = document.getElementById('global-notice');
-    if (!el) {
-        console.warn('NOTICE:', message);
+    const noticeElement = document.getElementById('global-notice');
+    if (!noticeElement) {
+        console.warn('NOTICE:', noticeMessage);
         return;
     }
-    el.textContent = message;
-    el.classList.remove('hidden');
-    setTimeout(() => el.classList.add('hidden'), 3000);
+    noticeElement.textContent = noticeMessage;
+    noticeElement.classList.remove('hidden');
+    setTimeout(() => noticeElement.classList.add('hidden'), 3000);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

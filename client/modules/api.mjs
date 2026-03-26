@@ -2,13 +2,13 @@ import { universalFetch, store } from './singleton.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-const DEFAULT_BASE = '/api';
+const DEFAULT_API_BASE = '/api';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 function resolveApiBase()
 {
-    let base = (typeof window !== 'undefined' && window.__API_BASE__) ? window.__API_BASE__ : DEFAULT_BASE;
+    let base = (typeof window !== 'undefined' && window.__API_BASE__) ? window.__API_BASE__ : DEFAULT_API_BASE;
     try {
         base = String(base).replace(/\/+$|\/$/, '');
         if (!base.endsWith('/api')) base = base.replace(/\/+$/, '') + '/api';

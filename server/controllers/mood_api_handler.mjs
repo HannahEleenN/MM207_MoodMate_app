@@ -4,7 +4,7 @@ import { pickLanguage, I18n } from '../utils/i18n.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-const _draftStore = new Map();
+const _memoryDraftStore = new Map();
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -60,16 +60,14 @@ export const getAllMoods = async (req, res, next) =>
     try
     {
         const userId = req.user && (req.user.userId || req.user.id);
-        let rows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
+        let enrichedMoodRows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
         
-        // Enrich mood data with child names if available
-        if (rows && Array.isArray(rows)) {
-            rows = rows.map(row => ({
-                ...row,
-                // Provide childName for display (fallback chain for different field names)
-                childName: row.child_name || row.profileName || row.childName || '—',
-                // Keep the original fields in case they're needed
-                child: row.child_name || row.profileName || row.childName || '—'
+        if (enrichedMoodRows && Array.isArray(enrichedMoodRows))
+        {
+            enrichedMoodRows = enrichedMoodRows.map(moodRecord => ({
+                ...moodRecord,
+                childName: moodRecord.child_name || moodRecord.profileName || moodRecord.childName || '—',
+                child: moodRecord.child_name || moodRecord.profileName || moodRecord.childName || '—'
             }));
         }
         
@@ -78,7 +76,7 @@ export const getAllMoods = async (req, res, next) =>
         res.status(200).json
         ({
             message: msg,
-            data: rows
+            data: enrichedMoodRows
         });
     } catch (error)
     {
@@ -121,7 +119,7 @@ export const saveDraft = async (req, res, next) =>
             return res.status(200).json(draft);
         } catch (dbErr) {
             console.warn('Draft DB upsert failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
-            _draftStore.set(profileId ? `${userId}:${profileId}` : `${userId}`, { draft, savedAt: new Date().toISOString() });
+            _memoryDraftStore.set(profileId ? `${userId}:${profileId}` : `${userId}`, { draft, savedAt: new Date().toISOString() });
             return res.status(200).json(draft);
         }
     } catch (err) {
@@ -147,9 +145,9 @@ export const getDraft = async (req, res, next) =>
             return res.status(200).json(draftObj);
         } catch (dbErr) {
             console.warn('Draft DB read failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
-            const item = _draftStore.get(profileId ? `${userId}:${profileId}` : `${userId}`) || null;
-            if (!item) return res.status(404).json({ message: 'No draft found' });
-            return res.status(200).json(item.draft);
+            const draftItem = _memoryDraftStore.get(profileId ? `${userId}:${profileId}` : `${userId}`) || null;
+            if (!draftItem) return res.status(404).json({ message: 'No draft found' });
+            return res.status(200).json(draftItem.draft);
         }
     } catch (err) {
         console.error('getDraft error:', err);
@@ -172,7 +170,7 @@ export const deleteDraft = async (req, res, next) =>
             return res.status(204).send();
         } catch (dbErr) {
             console.warn('Draft DB delete failed, falling back to in-memory store', dbErr && dbErr.message ? dbErr.message : dbErr);
-            _draftStore.delete(profileId ? `${userId}:${profileId}` : `${userId}`);
+            _memoryDraftStore.delete(profileId ? `${userId}:${profileId}` : `${userId}`);
             return res.status(204).send();
         }
     } catch (err) {

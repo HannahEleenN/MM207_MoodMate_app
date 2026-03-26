@@ -68,24 +68,24 @@ export const authController =
 
     showNotice(messageKey)
     {
-        const el = document.getElementById('global-notice');
-        if (!el) return;
-        el.textContent = store.t(messageKey);
-        el.classList.remove('hidden');
-        setTimeout(() => el.classList.add('hidden'), 3000);
+        const noticeElement = document.getElementById('global-notice');
+        if (!noticeElement) return;
+        noticeElement.textContent = store.t(messageKey);
+        noticeElement.classList.remove('hidden');
+        setTimeout(() => noticeElement.classList.add('hidden'), 3000);
     },
 
-    showErrorMessage(message)
+    showErrorMessage(errorMessage)
     {
-        const el = document.getElementById('global-notice');
-        if (el)
+        const noticeElement = document.getElementById('global-notice');
+        if (noticeElement)
         {
-            el.textContent = message;
-            el.classList.remove('hidden');
-            el.setAttribute('role', 'alert');
-            setTimeout(() => el.classList.add('hidden'), 4000);
+            noticeElement.textContent = errorMessage;
+            noticeElement.classList.remove('hidden');
+            noticeElement.setAttribute('role', 'alert');
+            setTimeout(() => noticeElement.classList.add('hidden'), 4000);
         } else {
-            alert(message);
+            alert(errorMessage);
         }
     },
 
@@ -402,8 +402,7 @@ export const userUIController =
     {
         const errorEl = this.container.querySelector(`#${errorElementId}`);
         if (errorEl) {
-            const message = store.t ? store.t(messageKey) : messageKey;
-            errorEl.textContent = message;
+            errorEl.textContent = store.t ? store.t(messageKey) : messageKey;
             errorEl.classList.add('show');
         }
     },
