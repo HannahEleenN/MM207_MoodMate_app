@@ -66,7 +66,7 @@
     <div class="profile-header">
       <div>
         <span class="child-name"></span>
-        <span class="child-age" style="font-size: 0.9rem; color: var(--text-mid); margin-left: 0.5rem;"></span>
+        <span class="child-age"></span>
       </div>
       <div class="child-actions">
         <button type="button" class="select-child" data-i18n="profiles.select">Select</button>
@@ -81,10 +81,10 @@
       </div>
       <div class="pin-button-group">
         <button type="button" class="create-pin-btn" data-i18n="profiles.createPin">Create PIN</button>
-        <button type="button" class="change-pin-btn" data-i18n="profiles.changePin" style="display: none;">Change PIN</button>
-        <button type="button" class="remove-pin-btn" data-i18n="profiles.removePin" style="display: none;">Remove PIN</button>
+        <button type="button" class="change-pin-btn hidden-element" data-i18n="profiles.changePin">Change PIN</button>
+        <button type="button" class="remove-pin-btn hidden-element" data-i18n="profiles.removePin">Remove PIN</button>
       </div>
-      <div class="pin-input-section" style="display: none;">
+      <div class="pin-input-section hidden-element">
         <fieldset class="form-fieldset">
           <legend class="sr-only" data-i18n="profiles.pinLabel"></legend>
           <div class="input-group">

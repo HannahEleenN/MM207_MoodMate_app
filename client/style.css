@@ -1349,6 +1349,7 @@ body.auth-view #view-tos { display: inline-block !important; }
     padding: 1rem 1.2rem;
     background: linear-gradient(135deg, rgba(91, 160, 138, 0.08) 0%, rgba(91, 160, 138, 0.04) 100%);
     border: 2px solid rgba(91, 160, 138, 0.15);
+    border-left: 4px solid var(--teal);
     border-radius: 0.8rem;
     margin-top: 0.8rem;
     transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -1805,3 +1806,50 @@ input[type="password"]:focus {
         justify-content: flex-end;
     }
 }
+
+/* ── Migrated inline styles to external CSS classes ────────────────────── */
+
+/* Child age span styling */
+.child-age {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    margin-left: 0.5rem;
+}
+
+/* Hidden button/section utility class */
+.hidden-element {
+    display: none;
+}
+
+/* Display mood color styling */
+.display-mood {
+    color: var(--teal);
+}
+
+/* Modal header layout */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+/* Modal title styling */
+.modal-title {
+    margin: 0;
+    flex: 1;
+}
+
+/* Modal content area */
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Modal footer button spacing */
+.modal-footer-btn {
+    margin-top: 1.5rem;
+}
+
