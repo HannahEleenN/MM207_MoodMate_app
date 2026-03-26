@@ -65,13 +65,18 @@ export const childController =
             reasons: [
                 { id: 'friends', labelKey: 'reason.friends' },
                 { id: 'family', labelKey: 'reason.family' },
-                { id: 'sunny', labelKey: 'reason.sunny' }
+                { id: 'sunny', labelKey: 'reason.sunny' },
+                { id: 'play', labelKey: 'reason.play' },
+                { id: 'achievement', labelKey: 'reason.achievement' },
+                { id: 'gift', labelKey: 'reason.gift' }
             ],
             solutions: [
                 { id: 'dance', labelKey: 'solution.dance' },
                 { id: 'sing', labelKey: 'solution.sing' },
                 { id: 'draw', labelKey: 'solution.draw' },
-                { id: 'play', labelKey: 'solution.play' }
+                { id: 'play', labelKey: 'solution.play' },
+                { id: 'share', labelKey: 'solution.share' },
+                { id: 'celebrate', labelKey: 'solution.celebrate' }
             ]
         },
         scared:
@@ -79,12 +84,18 @@ export const childController =
             reasons: [
                 { id: 'dark', labelKey: 'reason.dark' },
                 { id: 'dentist', labelKey: 'reason.dentist' },
-                { id: 'scary', labelKey: 'reason.scary' }
+                { id: 'scary', labelKey: 'reason.scary' },
+                { id: 'alone', labelKey: 'reason.alone' },
+                { id: 'loud', labelKey: 'reason.loud' },
+                { id: 'newplace', labelKey: 'reason.newplace' }
             ],
             solutions: [
                 { id: 'talk', labelKey: 'solution.talk' },
                 { id: 'lap', labelKey: 'solution.lap' },
-                { id: 'thinkNice', labelKey: 'solution.thinkNice' }
+                { id: 'thinkNice', labelKey: 'solution.thinkNice' },
+                { id: 'light', labelKey: 'solution.light' },
+                { id: 'music', labelKey: 'solution.music' },
+                { id: 'breathe', labelKey: 'solution.breathe' }
             ]
         },
         angry:
@@ -92,11 +103,18 @@ export const childController =
             reasons: [
                 { id: 'unfair', labelKey: 'reason.unfair' },
                 { id: 'lost', labelKey: 'reason.lost' },
-                { id: 'argue', labelKey: 'reason.argue' }
+                { id: 'argue', labelKey: 'reason.argue' },
+                { id: 'notlistened', labelKey: 'reason.notlistened' },
+                { id: 'tired', labelKey: 'reason.tired' },
+                { id: 'interrupted', labelKey: 'reason.interrupted' }
             ],
             solutions: [
                 { id: 'pillow', labelKey: 'solution.pillow' },
-                { id: 'draw', labelKey: 'solution.draw' }
+                { id: 'draw', labelKey: 'solution.draw' },
+                { id: 'walk', labelKey: 'solution.walk' },
+                { id: 'breathe', labelKey: 'solution.breathe' },
+                { id: 'talk', labelKey: 'solution.talk' },
+                { id: 'water', labelKey: 'solution.water' }
             ]
         },
         sad:
@@ -104,12 +122,18 @@ export const childController =
             reasons: [
                 { id: 'missing', labelKey: 'reason.missing' },
                 { id: 'school', labelKey: 'reason.school' },
-                { id: 'friends', labelKey: 'reason.friends' }
+                { id: 'friends', labelKey: 'reason.friends' },
+                { id: 'lonely', labelKey: 'reason.lonely' },
+                { id: 'failed', labelKey: 'reason.failed' },
+                { id: 'sickness', labelKey: 'reason.sickness' }
             ],
             solutions: [
                 { id: 'talk', labelKey: 'solution.talk' },
                 { id: 'hug', labelKey: 'solution.hug' },
-                { id: 'draw', labelKey: 'solution.draw' }
+                { id: 'draw', labelKey: 'solution.draw' },
+                { id: 'nature', labelKey: 'solution.nature' },
+                { id: 'comfort', labelKey: 'solution.comfort' },
+                { id: 'music', labelKey: 'solution.music' }
             ]
         },
         calm:
@@ -117,12 +141,18 @@ export const childController =
             reasons: [
                 { id: 'read', labelKey: 'reason.read' },
                 { id: 'nature', labelKey: 'reason.nature' },
-                { id: 'family', labelKey: 'reason.family' }
+                { id: 'family', labelKey: 'reason.family' },
+                { id: 'music', labelKey: 'reason.music' },
+                { id: 'rest', labelKey: 'reason.rest' },
+                { id: 'pettime', labelKey: 'reason.pettime' }
             ],
             solutions: [
                 { id: 'music', labelKey: 'solution.music' },
                 { id: 'breathe', labelKey: 'solution.breathe' },
-                { id: 'draw', labelKey: 'solution.draw' }
+                { id: 'draw', labelKey: 'solution.draw' },
+                { id: 'read', labelKey: 'solution.read' },
+                { id: 'stretch', labelKey: 'solution.stretch' },
+                { id: 'tea', labelKey: 'solution.tea' }
             ]
         },
         surprised:
@@ -130,11 +160,18 @@ export const childController =
             reasons: [
                 { id: 'gift', labelKey: 'reason.gift' },
                 { id: 'news', labelKey: 'reason.news' },
-                { id: 'school', labelKey: 'reason.school' }
+                { id: 'school', labelKey: 'reason.school' },
+                { id: 'unexpected', labelKey: 'reason.unexpected' },
+                { id: 'visitor', labelKey: 'reason.visitor' },
+                { id: 'achievement', labelKey: 'reason.achievement' }
             ],
             solutions: [
                 { id: 'share', labelKey: 'solution.share' },
-                { id: 'celebrate', labelKey: 'solution.celebrate' }
+                { id: 'celebrate', labelKey: 'solution.celebrate' },
+                { id: 'dance', labelKey: 'solution.dance' },
+                { id: 'talk', labelKey: 'solution.talk' },
+                { id: 'hug', labelKey: 'solution.hug' },
+                { id: 'draw', labelKey: 'solution.draw' }
             ]
         }
     },

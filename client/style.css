@@ -1153,6 +1153,68 @@ section#parent-insights header {
     #global-logout .logout-icon { width: 20px; height: 20px; }
 }
 
+/* ── Language switcher (fixed to top-left corner) ──────────────────────────── */
+#lang-switcher {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9998;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    max-width: 200px;
+}
+
+.lang-btn {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 0.6rem;
+    padding: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 2px 8px rgba(20,20,20,.06);
+}
+
+.lang-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(20,20,20,.12);
+    background: rgba(255,255,255,0.95);
+}
+
+.lang-btn[aria-pressed="true"] {
+    background: rgba(61, 139, 116, 0.15);
+    border-color: var(--teal);
+    box-shadow: 0 2px 8px rgba(61, 139, 116, 0.2);
+}
+
+.flag-img {
+    max-width: 32px;
+    max-height: 21px;
+    object-fit: contain;
+}
+
+@media (max-width: 480px) {
+    #lang-switcher {
+        top: 0.6rem;
+        left: 0.6rem;
+        gap: 0.35rem;
+        max-width: 150px;
+    }
+
+    .lang-btn {
+        padding: 0.3rem;
+        border-radius: 0.4rem;
+    }
+
+    .flag-img {
+        max-width: 28px;
+        max-height: 18px;
+    }
+}
+
 /* ── Modal (legal) center overlay ───────────────────────────────────────────── */
 #legal-modal {
     position: fixed;
