@@ -98,7 +98,8 @@ export async function initParentApp(container)
 function showNoticeInline(noticeMessage)
 {
     const noticeElement = document.getElementById('global-notice');
-    if (!noticeElement) {
+    if (!noticeElement)
+    {
         console.warn('NOTICE:', noticeMessage);
         return;
     }

@@ -62,13 +62,13 @@ export const ProfileModel =
       await ApiService.updateChild(id, data);
 
       if (store.currentUser) {
-        const profiles = (store.currentUser.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
+        const profiles = (store.currentUser.profiles || []).map(profile => profile.id === id ? { ...profile, ...data } : profile);
         store.currentUser = { ...store.currentUser, profiles };
-        return profiles.find(p => p.id === id);
+        return profiles.find(profile => profile.id === id);
       }
-      const profiles = (store.profiles || []).map(p => p.id === id ? { ...p, ...data } : p);
+      const profiles = (store.profiles || []).map(profile => profile.id === id ? { ...profile, ...data } : profile);
       store.profiles = profiles;
-      return profiles.find(p => p.id === id);
+      return profiles.find(profile => profile.id === id);
     } catch (err) {
       console.error('Failed to update child profile:', err);
       throw err;

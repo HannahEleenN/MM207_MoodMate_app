@@ -179,6 +179,7 @@ section, main {
     width: 100%;
     max-width: 540px;
     position: relative;
+    margin: 0 auto;
 }
 
 /* Wide sections (insights only) */
@@ -996,6 +997,20 @@ section#parent-insights header {
 }
 .login-footer a:hover { text-decoration: underline; }
 
+/* Link buttons in login footer */
+.login-footer .link-btn {
+    color: var(--teal);
+    font-weight: 700;
+    text-decoration: underline;
+    padding: 0.25rem;
+    display: inline;
+    min-height: auto;
+    font-size: 0.9rem;
+}
+.login-footer .link-btn:hover {
+    color: var(--coral);
+}
+
 /* ── User-manager ──────────────────────────────────────────────────────────── */
 .user-manager {
     display: flex;
@@ -1237,6 +1252,31 @@ section#parent-insights header {
 
 #go-to-login.hidden {
     display: none;
+}
+
+/* Success registration section */
+.success-registration {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(125, 170, 107, 0.1) 0%, rgba(61, 139, 116, 0.1) 100%);
+    border: 2px solid var(--teal);
+    border-radius: var(--radius-card);
+    text-align: center;
+}
+
+.success-registration.hidden {
+    display: none;
+}
+
+.success-registration .success-message {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+}
+
+.success-registration .primary-btn {
+    width: 100%;
 }
 
 /* ── Global fixed logout button */

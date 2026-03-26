@@ -61,9 +61,9 @@ self.addEventListener("install", (event) =>
                 const flagEntries = Array.isArray(flags) ? flags : [];
                 if (flagEntries.length)
                 {
-                    for (const f of flagEntries)
+                    for (const flagEntry of flagEntries)
                     {
-                        const fileName = f && (f['flagImage'] || f['file'] || f['flag']) ? (f['flagImage'] || f['file'] || f['flag']) : null;
+                        const fileName = flagEntry && (flagEntry['flagImage'] || flagEntry['file'] || flagEntry['flag']) ? (flagEntry['flagImage'] || flagEntry['file'] || flagEntry['flag']) : null;
                         const path = fileName ? ('/' + String(fileName).replace(/^\/+/, '')) : null;
                         if (path)
                         {
@@ -92,9 +92,9 @@ self.addEventListener('activate', (event) =>
     event.waitUntil((async () =>
     {
         const keys = await caches.keys();
-        await Promise.all(keys.map(k =>
+        await Promise.all(keys.map(cacheKey =>
         {
-            if (k !== CACHE_NAME) return caches.delete(k);
+            if (cacheKey !== CACHE_NAME) return caches.delete(cacheKey);
             return Promise.resolve(true);
         }));
         await self.clients.claim();
@@ -117,15 +117,15 @@ function isTranslationRequest(request)
 
 self.addEventListener("fetch", (event) =>
 {
-    const req = event.request;
+    const request = event.request;
     
-    if (isTranslationRequest(req))
+    if (isTranslationRequest(request))
     {
         event.respondWith((async () =>
         {
             try
             {
-                return await fetch(req);
+                return await fetch(request);
             } catch (err)
             {
                 return new Response(JSON.stringify({}), { status: 503, headers: { 'Content-Type': 'application/json' } });
@@ -134,19 +134,19 @@ self.addEventListener("fetch", (event) =>
         return;
     }
 
-    if (req.url.includes('/assets/flags/'))
+    if (request.url.includes('/assets/flags/'))
     {
         event.respondWith((async () =>
         {
             const cache = await caches.open(CACHE_NAME);
-            const cached = await cache.match(req);
+            const cached = await cache.match(request);
             if (cached) return cached;
             try
             {
-                const resp = await fetch(req);
+                const resp = await fetch(request);
                 if (resp && resp.ok)
                 {
-                    try { await cache.put(req, resp.clone()); } catch (e) { }
+                    try { await cache.put(request, resp.clone()); } catch (e) { }
                     return resp;
                 }
             } catch (e) {
@@ -156,41 +156,41 @@ self.addEventListener("fetch", (event) =>
         return;
     }
 
-    if (req.url.includes('/api/'))
+    if (request.url.includes('/api/'))
     {
         event.respondWith((async () =>
         {
             try
             {
-                const networkResp = await fetch(req);
-                if (req.method === 'GET')
+                const networkResp = await fetch(request);
+                if (request.method === 'GET')
                 {
                     const cache = await caches.open(CACHE_NAME);
-                    await cache.put(req, networkResp.clone());
+                    await cache.put(request, networkResp.clone());
                 }
                 return networkResp;
             } catch (err)
             {
-                const cached = await caches.match(req);
+                const cached = await caches.match(request);
                 return cached || new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
             }
         })());
         return;
     }
 
-    if (isNavigationRequest(req))
+    if (isNavigationRequest(request))
     {
         event.respondWith((async () =>
         {
             try
             {
-                const networkResp = await fetch(req);
+                const networkResp = await fetch(request);
                 const cache = await caches.open(CACHE_NAME);
-                await cache.put(req, networkResp.clone());
+                await cache.put(request, networkResp.clone());
                 return networkResp;
             } catch (err)
             {
-                const cached = await caches.match(req);
+                const cached = await caches.match(request);
                 if (cached) return cached;
                 const offline = await caches.match('/offline.html');
                 return offline || new Response('<h1>Offline</h1><p>You are offline.</p>', { headers: { 'Content-Type': 'text/html' } });
@@ -198,7 +198,7 @@ self.addEventListener("fetch", (event) =>
         })());
         return;
     }
-    event.respondWith(caches.match(req).then(response => response || fetch(req).catch(() => caches.match('/offline.html'))));
+    event.respondWith(caches.match(request).then(response => response || fetch(request).catch(() => caches.match('/offline.html'))));
 });
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -209,9 +209,9 @@ self.addEventListener('message', (event) =>
     {
         if (!event || !event.data) return;
         
-        const data = event.data;
+        const messageData = event.data;
         
-        if (data && data.type === 'PING' && event.source && typeof event.source.postMessage === 'function')
+        if (messageData && messageData.type === 'PING' && event.source && typeof event.source.postMessage === 'function')
         {
             try { 
                 event.source.postMessage({ type: 'PONG', version: VERSION }); 

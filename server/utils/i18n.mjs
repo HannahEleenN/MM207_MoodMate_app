@@ -134,8 +134,8 @@ function resolveClientKeyForServerPath(serverPath, json)
 function readClientJson(code)
 {
     try {
-        const p = path.join(translationsDir, `${code}.json`);
-        const raw = fs.readFileSync(p, 'utf8');
+        const translationFilePath = path.join(translationsDir, `${code}.json`);
+        const raw = fs.readFileSync(translationFilePath, 'utf8');
         return JSON.parse(raw);
     } catch (e) {
         return null;
@@ -144,25 +144,25 @@ function readClientJson(code)
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-function lookupClientKey(json, clientKey)
+function lookupClientKey(jsonData, clientKey)
 {
-    if (!json || !clientKey) return null;
+    if (!jsonData || !clientKey) return null;
 
-    if (Object.prototype.hasOwnProperty.call(json, clientKey)) return json[clientKey];
+    if (Object.prototype.hasOwnProperty.call(jsonData, clientKey)) return jsonData[clientKey];
 
-    const parts = clientKey.split('.');
-    let cur = json;
-    for (const p of parts)
+    const keyParts = clientKey.split('.');
+    let currentObject = jsonData;
+    for (const keyPart of keyParts)
     {
-        if (cur && typeof cur === 'object' && Object.prototype.hasOwnProperty.call(cur, p))
+        if (currentObject && typeof currentObject === 'object' && Object.prototype.hasOwnProperty.call(currentObject, keyPart))
         {
-            cur = cur[p];
+            currentObject = currentObject[keyPart];
         } else {
-            cur = null;
+            currentObject = null;
             break;
         }
     }
-    return cur;
+    return currentObject;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ const knownCodes = (() =>
 {
     try {
         const files = fs.readdirSync(translationsDir);
-        return files.filter(f => f.endsWith('.json')).map(f => path.basename(f, '.json'));
+        return files.filter(fileName => fileName.endsWith('.json')).map(fileName => path.basename(fileName, '.json'));
     } catch (e) {
         return ['en', 'nb', 'sv'];
     }
@@ -180,24 +180,24 @@ const knownCodes = (() =>
 // ---------------------------------------------------------------------------------------------------------------------
 
 export const I18n = {};
-for (const code of knownCodes)
+for (const languageCode of knownCodes)
 {
-    const json = readClientJson(code);
-    const base = FALLBACK[code] || FALLBACK['en'];
-    const localeObj = { errorCodes: {}, info: {} };
+    const clientJsonData = readClientJson(languageCode);
+    const fallbackLanguageData = FALLBACK[languageCode] || FALLBACK['en'];
+    const translationObject = { errorCodes: {}, info: {} };
 
     for (const serverPath of Object.keys(SERVER_TO_CLIENT_KEY))
     {
-        const clientKey = resolveClientKeyForServerPath(serverPath, json);
-        const parts = serverPath.split('.');
-        const namespace = parts[0];
-        const name = parts[1];
+        const clientKey = resolveClientKeyForServerPath(serverPath, clientJsonData);
+        const pathParts = serverPath.split('.');
+        const namespace = pathParts[0];
+        const name = pathParts[1];
 
         let value = null;
         let usedClient = false;
         if (clientKey)
         {
-            const found = lookupClientKey(json, clientKey);
+            const found = lookupClientKey(clientJsonData, clientKey);
             if (found !== null && typeof found !== 'undefined')
             {
                 value = found;
@@ -205,21 +205,21 @@ for (const code of knownCodes)
             }
         }
 
-        if (!value) value = (base && base[namespace] && base[namespace][name]) ? base[namespace][name] : null;
+        if (!value) value = (fallbackLanguageData && fallbackLanguageData[namespace] && fallbackLanguageData[namespace][name]) ? fallbackLanguageData[namespace][name] : null;
         if (!value && FALLBACK['en'] && FALLBACK['en'][namespace]) value = FALLBACK['en'][namespace][name] || null;
 
         try
         {
             const warn = process && process.env && process.env.I18N_WARN === '1';
             if (warn && !usedClient) {
-                console.warn(`[i18n] fallback used for ${code}/${serverPath} (no client translation found)`);
+                console.warn(`[i18n] fallback used for ${languageCode}/${serverPath} (no client translation found)`);
             }
-        } catch (_) {}
+        } catch (error) {}
 
-        localeObj[namespace][name] = value;
+        translationObject[namespace][name] = value;
     }
 
-    I18n[code] = localeObj;
+    I18n[languageCode] = translationObject;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ export function pickLanguage(acceptLanguageHeader)
 {
     if (!acceptLanguageHeader || typeof acceptLanguageHeader !== 'string') return 'en';
 
-    const parts = acceptLanguageHeader.split(',').map(p => p.trim());
+    const parts = acceptLanguageHeader.split(',').map(languagePart => languagePart.trim());
     for (const part of parts)
     {
         const lang = part.split(';')[0].toLowerCase();

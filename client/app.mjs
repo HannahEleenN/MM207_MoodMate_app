@@ -310,7 +310,7 @@ async function buildLanguageSwitcher()
         if (!container || !Array.isArray(flags)) return;
 
         container.innerHTML = '';
-        for (const f of flags)
+        for (const flagEntry of flags)
         {
             const
             {
@@ -318,21 +318,21 @@ async function buildLanguageSwitcher()
                 languageName = '',
                 flagImage = '',
                 code = '',
-                title: entryTitle = '',
+                entryTitle = '',
                 file = '',
                 flag = ''
-            } = f || {};
+            } = flagEntry || {};
 
             const langCode = languageCode || code || '';
             const title = languageName || entryTitle || '';
             const filePath = flagImage || file || flag || '';
 
-            const btn = document.createElement('button');
-            btn.className = 'lang-btn';
-            btn.setAttribute('data-lang', langCode || '');
-            btn.setAttribute('title', title || '');
-            btn.setAttribute('aria-label', title || '');
-            btn.setAttribute('aria-pressed', 'false');
+            const languageButton = document.createElement('button');
+            languageButton.className = 'lang-btn';
+            languageButton.setAttribute('data-lang', langCode || '');
+            languageButton.setAttribute('title', title || '');
+            languageButton.setAttribute('aria-label', title || '');
+            languageButton.setAttribute('aria-pressed', 'false');
 
             const img = document.createElement('img');
             img.src = filePath || '';
@@ -343,8 +343,8 @@ async function buildLanguageSwitcher()
             img.style.objectFit = 'contain';
             img.style.display = 'block';
 
-            btn.appendChild(img);
-            container.appendChild(btn);
+            languageButton.appendChild(img);
+            container.appendChild(languageButton);
         }
 
         const detectedLang = (() =>
@@ -361,19 +361,19 @@ async function buildLanguageSwitcher()
 
         function setActiveButton(code)
         {
-            languageButtons.forEach(b =>
+            languageButtons.forEach(languageButton =>
             {
-                const isActive = b.getAttribute('data-lang') === code;
-                b.classList.toggle('active', isActive);
-                b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                const isActive = languageButton.getAttribute('data-lang') === code;
+                languageButton.classList.toggle('active', isActive);
+                languageButton.setAttribute('aria-pressed', isActive ? 'true' : 'false');
             });
         }
 
         if (detectedLang) setActiveButton(detectedLang);
 
-        languageButtons.forEach(btn => btn.addEventListener('click', async () =>
+        languageButtons.forEach(languageButton => languageButton.addEventListener('click', async () =>
         {
-            const lang = btn.getAttribute('data-lang');
+            const lang = languageButton.getAttribute('data-lang');
             console.log('[app.lang] button clicked for', lang);
             try
             {
@@ -406,9 +406,9 @@ const setupEventListeners = () =>
         try
         {
             if (!globalLogoutBtn) return;
-            const v = store.currentView;
+            const currentView = store.currentView;
             const hideOn = ['login', 'userManager', 'childLogin'];
-            if (hideOn.includes(v)) {
+            if (hideOn.includes(currentView)) {
                 globalLogoutBtn.classList.add('hidden');
             } else {
                 globalLogoutBtn.classList.remove('hidden');
@@ -523,8 +523,8 @@ const setupEventListeners = () =>
                 try { updateLogoutVisibility(); } catch (_) {}
 
                 try {
-                    const v = store.currentView;
-                    if (v === 'login' || v === 'userManager') {
+                    const currentView = store.currentView;
+                    if (currentView === 'login' || currentView === 'userManager') {
                         document.body.classList.add('auth-view');
                     } else {
                         document.body.classList.remove('auth-view');
@@ -590,11 +590,11 @@ const setupEventListeners = () =>
     {
         store.onChange('currentView', () =>
         {
-            const v = store.currentView;
+            const currentView = store.currentView;
             if (globalLogoutBtn)
             {
                 const hideOn = ['login', 'userManager', 'childLogin'];
-                if (hideOn.includes(v)) {
+                if (hideOn.includes(currentView)) {
                     globalLogoutBtn.classList.add('hidden');
                 } else {
                     globalLogoutBtn.classList.remove('hidden');

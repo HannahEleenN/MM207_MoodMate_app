@@ -21,12 +21,12 @@ export const childController =
         this.container = container;
         this.container.innerHTML = await ApiService.loadView('child_login');
 
-        const form = this.container.querySelector('#childLoginForm');
+        const childLoginForm = this.container.querySelector('#childLoginForm');
         const backBtn = this.container.querySelector('#back-to-parent');
 
-        if (form)
+        if (childLoginForm)
         {
-            form.onsubmit = async (e) =>
+            childLoginForm.onsubmit = async (e) =>
             {
                 e.preventDefault();
                 const pinInput = this.container.querySelector('#child-pin-input');
@@ -192,7 +192,7 @@ export const childController =
             {
                 const reasonItem = event.target.closest('.reason-item');
                 if (!reasonItem) return;
-                reasonsList.querySelectorAll('.reason-item').forEach(n => n.classList.remove('selected'));
+                reasonsList.querySelectorAll('.reason-item').forEach(reasonElement => reasonElement.classList.remove('selected'));
                 reasonItem.classList.add('selected');
                 this.handleContextSelection(reasonItem.textContent);
             });

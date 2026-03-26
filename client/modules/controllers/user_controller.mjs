@@ -18,7 +18,7 @@ export const authController =
 
             this.container.innerHTML = await ApiService.loadView('login');
 
-            const form = this.container.querySelector('#loginForm');
+            const loginForm = this.container.querySelector('#loginForm');
             const registerBtn = this.container.querySelector('#go-to-reg');
 
             if (store.prefillSecret)
@@ -31,9 +31,9 @@ export const authController =
             const emailInput = this.container.querySelector('#email-input');
             if (emailInput) try { emailInput.focus(); } catch (_) {}
 
-            if (form)
+            if (loginForm)
             {
-                form.onsubmit = async (e) =>
+                loginForm.onsubmit = async (e) =>
                 {
                     e.preventDefault();
 
@@ -91,12 +91,12 @@ export const authController =
 
     async handleLogin(credentials)
     {
-        const form = this.container ? this.container.querySelector('#loginForm') : null;
-        const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+        const loginForm = this.container ? this.container.querySelector('#loginForm') : null;
+        const submitButton = loginForm ? loginForm.querySelector('button[type="submit"]') : null;
 
         try
         {
-            if (submitBtn) submitBtn.disabled = true;
+            if (submitButton) submitButton.disabled = true;
 
             const email = (credentials && (credentials.email || credentials.username || credentials.user)) ? (credentials.email || credentials.username || credentials.user) : '';
             const secret = (credentials && (credentials.secret || credentials.password || credentials.pin)) ? (credentials.secret || credentials.password || credentials.pin) : '';
@@ -104,8 +104,8 @@ export const authController =
             const emailIsValid = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             if (!emailIsValid)
             {
-                const el = document.getElementById('global-notice');
-                if (el) { el.textContent = store.t ? (store.t('login.invalidEmail') || 'Please enter a valid email address.') : 'Please enter a valid email address.'; el.classList.remove('hidden'); setTimeout(() => el.classList.add('hidden'), 3500); }
+                const noticeElement = document.getElementById('global-notice');
+                if (noticeElement) { noticeElement.textContent = store.t ? (store.t('login.invalidEmail') || 'Please enter a valid email address.') : 'Please enter a valid email address.'; noticeElement.classList.remove('hidden'); setTimeout(() => noticeElement.classList.add('hidden'), 3500); }
                 return false;
             }
 
@@ -200,7 +200,7 @@ export const authController =
             this.showNotice('login.networkError');
             return false;
         } finally {
-            if (submitBtn) submitBtn.disabled = false;
+            if (submitButton) submitButton.disabled = false;
         }
 
     },
@@ -220,39 +220,40 @@ export const userUIController =
 
         this.container.innerHTML = await ApiService.loadView('user_manager');
 
-        const form = this.container.querySelector("#regForm");
-        const list = this.container.querySelector("#user-list");
+        const registrationForm = this.container.querySelector("#regForm");
+        const userListElement = this.container.querySelector("#user-list");
         const goToLoginBtn = this.container.querySelector('#go-to-login');
 
-        if (form)
+        if (registrationForm)
         {
-            form.onsubmit = async (e) =>
+            registrationForm.onsubmit = async (e) =>
             {
                 e.preventDefault();
-                const formData = Object.fromEntries(new FormData(form));
+                const formData = Object.fromEntries(new FormData(registrationForm));
                 await this.handleRegister(formData);
             };
-
-            // Add real-time password validation listeners
+            
             const passwordInput = this.container.querySelector('#reg-password');
-            if (passwordInput) {
+            if (passwordInput) 
+            {
                 passwordInput.addEventListener('input', (e) => this.updatePasswordRequirements(e.target.value));
                 passwordInput.addEventListener('focus', () => this.showPasswordRequirements());
                 passwordInput.addEventListener('blur', () => this.hidePasswordRequirements());
             }
-
-            // Add email validation listener
+            
             const emailInput = this.container.querySelector('#reg-email');
             if (emailInput) {
                 emailInput.addEventListener('blur', () => this.validateEmail());
             }
-
-            // Add consent checkbox listener for real-time error clearing
+            
             const consentCheckbox = this.container.querySelector('#consent-check');
-            if (consentCheckbox) {
-                consentCheckbox.addEventListener('change', () => {
+            if (consentCheckbox) 
+            {
+                consentCheckbox.addEventListener('change', () => 
+                {
                     const consentError = this.container.querySelector('#consent-error');
-                    if (consentError && consentCheckbox.checked) {
+                    if (consentError && consentCheckbox.checked) 
+                    {
                         consentError.textContent = '';
                         consentError.classList.remove('show');
                     }
@@ -269,22 +270,32 @@ export const userUIController =
             };
         }
 
-        this.loadUserList(list);
+        const goToLoginBtnInSuccess = this.container.querySelector('#success-registration-section #go-to-login');
+        if (goToLoginBtnInSuccess)
+        {
+            goToLoginBtnInSuccess.onclick = (e) =>
+            {
+                e.preventDefault();
+                store.currentView = 'login';
+            };
+        }
+
+        this.loadUserList(userListElement);
     },
 
     showNotice(messageKey)
     {
-        const el = document.getElementById('global-notice');
-        if (!el) return;
-        el.textContent = store.t(messageKey);
-        el.classList.remove('hidden');
-        setTimeout(() => el.classList.add('hidden'), 3500);
+        const noticeElement = document.getElementById('global-notice');
+        if (!noticeElement) return;
+        noticeElement.textContent = store.t(messageKey);
+        noticeElement.classList.remove('hidden');
+        setTimeout(() => noticeElement.classList.add('hidden'), 3500);
     },
 
     async handleRegister(formData)
     {
-        const form = this.container.querySelector("#regForm");
-        const btn = this.container.querySelector(".btn-reg");
+        const registrationForm = this.container.querySelector("#regForm");
+        const registerButton = this.container.querySelector(".btn-reg");
         const spinner = this.container.querySelector("#reg-spinner");
         
         try
@@ -292,22 +303,25 @@ export const userUIController =
             this.clearFormErrors();
 
             const validationErrors = this.validateRegistrationForm(formData);
-            if (Object.keys(validationErrors).length > 0) {
+            if (Object.keys(validationErrors).length > 0) 
+            {
                 this.displayFormErrors(validationErrors);
                 return;
             }
 
             const consentCheckbox = this.container.querySelector('#consent-check');
-            if (!(consentCheckbox && consentCheckbox.checked)) {
+            if (!(consentCheckbox && consentCheckbox.checked)) 
+            {
                 this.displayFormError('consent-error', 'register.requireConsent');
                 return;
             }
 
-            if (form) form.classList.add('loading');
-            if (btn) btn.disabled = true;
+            if (registrationForm) registrationForm.classList.add('loading');
+            if (registerButton) registerButton.disabled = true;
             if (spinner) spinner.setAttribute('aria-hidden', 'false');
 
-            const payload = {
+            const payload = 
+            {
                 nick: formData.nick || null,
                 email: formData.email.trim().toLowerCase(),
                 secret: formData.secret,
@@ -320,38 +334,42 @@ export const userUIController =
             {
                 store.users = [...store.users, result.user];
                 this.loadUserList(this.container.querySelector("#user-list"));
-
-                const goBtn = this.container.querySelector('#go-to-login');
-                if (goBtn) goBtn.classList.remove('hidden');
+                
+                const successSection = this.container.querySelector('#success-registration-section');
+                if (successSection) successSection.classList.remove('hidden');
 
                 if (formData && formData.secret) {
                     store.prefillSecret = formData.secret;
                 }
-
-                // Reset form
-                if (form) form.reset();
+                
+                if (registrationForm) registrationForm.reset();
                 this.clearFormErrors();
 
                 this.showNotice('register.success');
             }
-        } catch (error) {
+        } catch (error) 
+        {
             console.error("Registration failed:", error);
 
-            if (error && error.body && error.body.errorKey) {
+            if (error && error.body && error.body.errorKey) 
+            {
                 this.showNotice(error.body.errorKey);
-            } else if (error && error.body && error.body.error) {
-                const el = document.getElementById('global-notice');
-                if (el) {
-                    el.textContent = error.body.error;
-                    el.classList.remove('hidden');
-                    setTimeout(() => el.classList.add('hidden'), 4000);
+            } else if (error && error.body && error.body.error) 
+            {
+                const noticeElement = document.getElementById('global-notice');
+                if (noticeElement) 
+                {
+                    noticeElement.textContent = error.body.error;
+                    noticeElement.classList.remove('hidden');
+                    setTimeout(() => noticeElement.classList.add('hidden'), 4000);
                 }
             } else {
                 this.showNotice('register.failed');
             }
-        } finally {
-            if (form) form.classList.remove('loading');
-            if (btn) btn.disabled = false;
+        } finally 
+        {
+            if (registrationForm) registrationForm.classList.remove('loading');
+            if (registerButton) registerButton.disabled = false;
             if (spinner) spinner.setAttribute('aria-hidden', 'true');
         }
     },
@@ -372,8 +390,8 @@ export const userUIController =
         if (!formData.secret || !formData.secret.trim()) {
             errors.password = 'login.passwordPlaceholder';
         } else {
-            const pwd = formData.secret;
-            if (pwd.length < 6) {
+            const password = formData.secret;
+            if (password.length < 6) {
                 errors.password = 'register.passwordTooShort';
             }
         }
@@ -389,61 +407,61 @@ export const userUIController =
             const inputGroup = this.container.querySelector(`#reg-${field}`);
             if (inputGroup)
             {
-                const group = inputGroup.closest('.input-group');
-                if (group) group.classList.add('error');
+                const inputFieldGroup = inputGroup.closest('.input-group');
+                if (inputFieldGroup) inputFieldGroup.classList.add('error');
             }
         });
     },
 
     displayFormError(errorElementId, messageKey)
     {
-        const errorEl = this.container.querySelector(`#${errorElementId}`);
-        if (errorEl)
+        const errorElement = this.container.querySelector(`#${errorElementId}`);
+        if (errorElement)
         {
-            errorEl.textContent = store.t ? store.t(messageKey) : messageKey;
-            errorEl.classList.add('show');
+            errorElement.textContent = store.t ? store.t(messageKey) : messageKey;
+            errorElement.classList.add('show');
         }
     },
 
     clearFormErrors()
     {
-        const errorEls = this.container.querySelectorAll('.field-error');
-        errorEls.forEach(el =>
+        const errorElements = this.container.querySelectorAll('.field-error');
+        errorElements.forEach(errorElement =>
         {
-            el.textContent = '';
-            el.classList.remove('show');
+            errorElement.textContent = '';
+            errorElement.classList.remove('show');
         });
 
         const errorInputs = this.container.querySelectorAll('.input-group.error');
-        errorInputs.forEach(el => el.classList.remove('error'));
+        errorInputs.forEach(errorInput => errorInput.classList.remove('error'));
     },
 
     async handleEdit(id, oldEmail)
     {
-        const list = this.container.querySelector('#user-list');
-        const item = Array.from(list.children).find(li => li.dataset.id === String(id));
-        if (!item) return;
+        const userListElement = this.container.querySelector('#user-list');
+        const userItem = Array.from(userListElement.children).find(li => li.dataset.id === String(id));
+        if (!userItem) return;
 
         const editTemplate = this.container.querySelector('#user-edit-template');
         if (!editTemplate) return;
 
-        if (item.querySelector('.edit-inline'))
+        if (userItem.querySelector('.edit-inline'))
         {
-            const existingInput = item.querySelector('.edit-input');
+            const existingInput = userItem.querySelector('.edit-input');
             if (existingInput) existingInput.focus();
             return;
         }
 
-        const clone = editTemplate.content.cloneNode(true);
-        const editDiv = clone.querySelector('.edit-inline');
-        const input = editDiv.querySelector('.edit-input');
-        input.value = oldEmail || '';
-        input.setAttribute('aria-label', store.t ? store.t('edit.emailLabel') : 'Edit email');
+        const editFormClone = editTemplate.content.cloneNode(true);
+        const editFormSection = editFormClone.querySelector('.edit-inline');
+        const emailInputField = editFormSection.querySelector('.edit-input');
+        emailInputField.value = oldEmail || '';
+        emailInputField.setAttribute('aria-label', store.t ? store.t('edit.emailLabel') : 'Edit email');
 
-        editDiv.querySelector('.save-edit').onclick = async () =>
+        editFormSection.querySelector('.save-edit').onclick = async () =>
         {
-            const newEmail = input.value.trim();
-            if (!newEmail || newEmail === oldEmail) { editDiv.remove(); return; }
+            const newEmail = emailInputField.value.trim();
+            if (!newEmail || newEmail === oldEmail) { editFormSection.remove(); return; }
             try
             {
                 const result = await ApiService.updateUser(id, { email: newEmail });
@@ -461,11 +479,11 @@ export const userUIController =
             }
         };
 
-        editDiv.querySelector('.cancel-edit').onclick = () => { editDiv.remove(); };
+        editFormSection.querySelector('.cancel-edit').onclick = () => { editFormSection.remove(); };
 
-        item.appendChild(clone);
+        userItem.appendChild(editFormClone);
 
-        const addedInput = item.querySelector('.edit-input');
+        const addedInput = userItem.querySelector('.edit-input');
         if (addedInput) addedInput.focus();
     },
 
@@ -496,60 +514,62 @@ export const userUIController =
 
         store.users.forEach(user =>
         {
-            const clone = template.content.cloneNode(true);
-            const li = clone.querySelector('li');
+            const userItemElement = template.content.cloneNode(true);
+            const userItem = userItemElement.querySelector('li');
 
-            li.dataset.id = user.id;
+            userItem.dataset.id = user.id;
 
-            const emailEl = li.querySelector('.user-email-display') || li.querySelector('.user-nick-display');
+            const emailEl = userItem.querySelector('.user-email-display') || userItem.querySelector('.user-nick-display');
             if (emailEl) emailEl.textContent = user.nick ? `${user.nick} (${user.email || ''})` : (user.email || '');
 
-            const editBtn = li.querySelector('.btn-edit');
+            const editBtn = userItem.querySelector('.btn-edit');
             if (editBtn) editBtn.onclick = () => this.handleEdit(user.id, user.email || user.nick);
-            const delBtn = li.querySelector('.btn-del');
+            const delBtn = userItem.querySelector('.btn-del');
             if (delBtn) delBtn.onclick = () => this.handleDelete(user.id);
 
-            listElement.appendChild(clone);
+            listElement.appendChild(userItemElement);
         });
     },
 
     updatePasswordRequirements(password)
     {
-        const reqLength = this.container.querySelector('.req-length');
-        const reqNumber = this.container.querySelector('.req-number');
+        const passwordLengthRequirement = this.container.querySelector('.req-length');
+        const passwordNumberRequirement = this.container.querySelector('.req-number');
 
-        if (reqLength) {
+        if (passwordLengthRequirement) 
+        {
             const hasLength = password && password.length >= 6;
             if (hasLength) {
-                reqLength.classList.add('met');
+                passwordLengthRequirement.classList.add('met');
             } else {
-                reqLength.classList.remove('met');
+                passwordLengthRequirement.classList.remove('met');
             }
         }
 
-        if (reqNumber) {
+        if (passwordNumberRequirement) 
+        {
             const hasNumber = password && /\d/.test(password);
             if (hasNumber) {
-                reqNumber.classList.add('met');
+                passwordNumberRequirement.classList.add('met');
             } else {
-                reqNumber.classList.remove('met');
+                passwordNumberRequirement.classList.remove('met');
             }
         }
     },
 
     showPasswordRequirements()
     {
-        const reqContainer = this.container.querySelector('.password-requirements');
-        if (reqContainer) {
-            reqContainer.classList.add('show');
+        const passwordRequirementsContainer = this.container.querySelector('.password-requirements');
+        if (passwordRequirementsContainer) {
+            passwordRequirementsContainer.classList.add('show');
         }
     },
 
     hidePasswordRequirements()
     {
-        const reqContainer = this.container.querySelector('.password-requirements');
-        if (reqContainer) {
-            reqContainer.classList.remove('show');
+        const passwordRequirementsContainer = this.container.querySelector('.password-requirements');
+        if (passwordRequirementsContainer) {
+            passwordRequirementsContainer.classList.remove('show');
         }
     },
 

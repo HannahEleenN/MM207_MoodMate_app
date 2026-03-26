@@ -29,12 +29,12 @@ export const moodUIController =
             if (historyList)
             {
                 historyList.innerHTML = '';
-                for (const e of entries)
+                for (const entry of entries)
                 {
                     const tr = document.createElement('tr');
-                    const dateStr = new Date(e.date || e.createdAt || e.timestamp || Date.now()).toLocaleDateString();
+                    const dateStr = new Date(entry.date || entry.createdAt || entry.timestamp || Date.now()).toLocaleDateString();
 
-                    const { child: childProp, childName, profileName, mood: moodProp, feeling, feelingLabel, context: contextProp, reason, customContext, customSolution, solution } = e || {};
+                    const { child: childProp, childName, profileName, mood: moodProp, feeling, feelingLabel, context: contextProp, reason, customContext, customSolution, solution } = entry || {};
 
                     const childDisplayName = childProp || childName || profileName || '—';
 

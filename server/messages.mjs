@@ -12,11 +12,11 @@ const enPathCandidates = [
 // ---------------------------------------------------------------------------------------------------------------------
 
 let en = {};
-for (const p of enPathCandidates)
+for (const pathCandidate of enPathCandidates)
 {
     try {
-        if (fs.existsSync(p)) {
-            en = JSON.parse(fs.readFileSync(p, 'utf8'));
+        if (fs.existsSync(pathCandidate)) {
+            en = JSON.parse(fs.readFileSync(pathCandidate, 'utf8'));
             break;
         }
     } catch (err) {

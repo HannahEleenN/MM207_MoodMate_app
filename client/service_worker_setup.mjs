@@ -7,7 +7,7 @@ if ('serviceWorker' in navigator)
     {
         navigator.serviceWorker.getRegistrations?.().then(regs =>
         {
-            return Promise.all(regs.map(r => r.unregister()));
+            return Promise.all(regs.map(registration => registration.unregister()));
         }).then(() => {
             console.info('Service workers unregistered via __DISABLE_SW__ flag');
         }).catch(err => console.warn('Failed to unregister service workers:', err));
@@ -46,10 +46,10 @@ if ('serviceWorker' in navigator)
     } else {
         navigator.serviceWorker.getRegistrations?.().then(regs =>
         {
-            return Promise.all(regs.map(r =>
+            return Promise.all(regs.map(registration =>
             {
-                console.info('Unregistering service worker (dev):', r.scope);
-                return r.unregister();
+                console.info('Unregistering service worker (dev):', registration.scope);
+                return registration.unregister();
             }));
         }).catch(err => console.warn('Could not enumerate/unregister service workers:', err));
     }

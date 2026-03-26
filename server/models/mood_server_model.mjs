@@ -6,7 +6,7 @@ async function loadMoodLogColumns()
 {
     if (_moodLogColumns) return _moodLogColumns;
     const res = await pool.query("SELECT column_name FROM information_schema.columns WHERE table_name = 'mood_logs'");
-    _moodLogColumns = new Set(res.rows.map(r => r['column_name']));
+    _moodLogColumns = new Set(res.rows.map(column => column['column_name']));
     return _moodLogColumns;
 }
 

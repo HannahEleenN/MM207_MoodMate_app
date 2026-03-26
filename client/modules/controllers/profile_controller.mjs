@@ -44,12 +44,13 @@ export const childProfilesUI =
 
   attachEventListeners()
   {
-    if (this.form) {
+    if (this.form)
+    {
       this.form.onsubmit = async (e) =>
       {
         e.preventDefault();
-        const data = Object.fromEntries(new FormData(this.form));
-        await this.createProfile(data);
+        const profileFormData = Object.fromEntries(new FormData(this.form));
+        await this.createProfile(profileFormData);
       };
     }
 
@@ -66,10 +67,12 @@ export const childProfilesUI =
 
   async loadProfiles()
   {
-    try {
+    try
+    {
       const profiles = await ProfileModel.loadProfiles();
       this.updateList(profiles);
-    } catch (err) {
+    } catch (err)
+    {
       console.error('Failed to load profiles:', err);
       const profiles = ProfileModel.getAll();
       this.updateList(profiles);
@@ -89,45 +92,46 @@ export const childProfilesUI =
     }
 
     this.listEl.innerHTML = '';
-    profiles.forEach(p =>
+    profiles.forEach(profile =>
     {
-      const clone = this.template.content.cloneNode(true);
-      const li = clone.querySelector('li');
-      li.dataset.id = p.id;
-      li.querySelector('.child-name').textContent = p.name;
+      const profileItemClone = this.template.content.cloneNode(true);
+      const profileItem = profileItemClone.querySelector('li');
+      profileItem.dataset.id = profile.id;
+      profileItem.querySelector('.child-name').textContent = profile.name;
 
-      const ageEl = li.querySelector('.child-age');
-      if (ageEl && p.age) {
-        ageEl.textContent = `(${p.age} ${p.age === '1' ? 'year' : 'years'})`;
+      const ageEl = profileItem.querySelector('.child-age');
+      if (ageEl && profile.age) {
+        ageEl.textContent = `(${profile.age} ${profile.age === '1' ? 'year' : 'years'})`;
       }
 
-      li.querySelector('.select-child').onclick = () => this.selectProfile(p.id);
-      li.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
-      li.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
+      profileItem.querySelector('.select-child').onclick = () => this.selectProfile(p.id);
+      profileItem.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
+      profileItem.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
 
-      const createPinBtn = li.querySelector('.create-pin-btn');
-      const changePinBtn = li.querySelector('.change-pin-btn');
-      const removePinBtn = li.querySelector('.remove-pin-btn');
-      const pinStatusText = li.querySelector('.pin-status-text');
+      const createPinBtn = profileItem.querySelector('.create-pin-btn');
+      const changePinBtn = profileItem.querySelector('.change-pin-btn');
+      const removePinBtn = profileItem.querySelector('.remove-pin-btn');
+      const pinStatusText = profileItem.querySelector('.pin-status-text');
 
-      if (p.hasPin)
+      if (profile.hasPin)
       {
         pinStatusText.textContent = '🔒 PIN enabled';
         createPinBtn.style.display = 'none';
         changePinBtn.style.display = 'block';
         removePinBtn.style.display = 'block';
-      } else {
+      } else
+      {
         pinStatusText.textContent = '🔓 No PIN';
         createPinBtn.style.display = 'block';
         changePinBtn.style.display = 'none';
         removePinBtn.style.display = 'none';
       }
 
-      createPinBtn.onclick = () => this.showPinInput(li, p.id, 'create');
-      changePinBtn.onclick = () => this.showPinInput(li, p.id, 'change');
-      removePinBtn.onclick = () => this.removePin(li, p.id);
+      createPinBtn.onclick = () => this.showPinInput(profileItem, profile.id, 'create');
+      changePinBtn.onclick = () => this.showPinInput(profileItem, profile.id, 'change');
+      removePinBtn.onclick = () => this.removePin(profileItem, profile.id);
 
-      this.listEl.appendChild(clone);
+      this.listEl.appendChild(profileItemClone);
     });
   },
 
@@ -185,11 +189,12 @@ export const childProfilesUI =
   {
     try
     {
-      // Validate PIN if provided
-      if (data.pin && (data.pin.length !== 6 || !/^\d+$/.test(data.pin))) {
+      if (data.pin && (data.pin.length !== 6 || !/^\d+$/.test(data.pin)))
+      {
         const errorMsg = store.t ? store.t('profiles.pinMustBe6Digits') : 'PIN must be 6 digits';
         const errorEl = this.form.querySelector('#pin-error');
-        if (errorEl) {
+        if (errorEl)
+        {
           errorEl.textContent = errorMsg;
           errorEl.classList.add('show');
         }
@@ -240,23 +245,23 @@ export const childProfilesUI =
       }
     }
 
-    const clone = this.editTemplate.content.cloneNode(true);
-    const editDiv = clone.querySelector('.edit-inline');
-    const input = editDiv.querySelector('.edit-input');
-    const ageSelect = editDiv.querySelector('.edit-age');
+    const editFormClone = this.editTemplate.content.cloneNode(true);
+    const editFormSection = editFormClone.querySelector('.edit-inline');
+    const nameInputField = editFormSection.querySelector('.edit-input');
+    const ageSelect = editFormSection.querySelector('.edit-age');
     
-    input.value = found.name || '';
+    nameInputField.value = found.name || '';
     if (ageSelect && found.age) {
       ageSelect.value = found.age;
     }
 
-    editDiv.querySelector('.save-edit').onclick = async () =>
+    editFormSection.querySelector('.save-edit').onclick = async () =>
     {
-      const newName = input.value.trim();
+      const newName = nameInputField.value.trim();
       const newAge = ageSelect ? ageSelect.value : found.age;
       
       if (!newName || (newName === found.name && newAge === found.age)) { 
-        editDiv.remove(); 
+        editFormSection.remove(); 
         return; 
       }
       
@@ -265,9 +270,9 @@ export const childProfilesUI =
       this.showNotice('edit.success');
     };
 
-    editDiv.querySelector('.cancel-edit').onclick = () => { editDiv.remove(); };
+    editFormSection.querySelector('.cancel-edit').onclick = () => { editFormSection.remove(); };
 
-    listItem.appendChild(clone);
+    listItem.appendChild(editFormClone);
   },
 
   async deleteProfile(id)
@@ -279,10 +284,10 @@ export const childProfilesUI =
 
   showNotice(key)
   {
-    const el = document.getElementById('global-notice');
-    if (!el) return;
-    el.textContent = store.t(key);
-    el.classList.remove('hidden');
-    setTimeout(() => el.classList.add('hidden'), 3000);
+    const noticeElement = document.getElementById('global-notice');
+    if (!noticeElement) return;
+    noticeElement.textContent = store.t(key);
+    noticeElement.classList.remove('hidden');
+    setTimeout(() => noticeElement.classList.add('hidden'), 3000);
   }
 };

@@ -90,7 +90,7 @@ export async function syncStoredMoods(serverUrl = '/api/moods/bulk', options = {
                 method: 'POST',
                 headers: Object.assign({ 'Content-Type': 'application/json' }, options.headers || {}),
                 credentials: options.credentials || 'same-origin',
-                body: JSON.stringify(stored.map(r => r.payload))
+                body: JSON.stringify(stored.map(storedMood => storedMood.payload))
             });
 
         if (!res.ok) {

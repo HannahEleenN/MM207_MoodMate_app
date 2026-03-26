@@ -38,7 +38,7 @@ function escape_XML_special_characters(str)
 function convert_mood_data_to_CSV(moods)
 {
     const headers = ['Mood', 'Context', 'Solution', 'Note', 'Timestamp'];
-    const rows = [headers.map(h => escape_CSV_fields(h)).join(',')];
+    const rows = [headers.map(header => escape_CSV_fields(header)).join(',')];
 
     moods.forEach(mood => 
     {
