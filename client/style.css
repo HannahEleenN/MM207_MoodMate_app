@@ -325,7 +325,7 @@ textarea {
     width: 100%;
     padding: .9rem 1.5rem;
     background: var(--teal);
-    color: var(--text-dark);
+    color: #fff;
     border: none;
     border-radius: var(--radius-btn);
     font-family: var(--font-display), sans-serif;
@@ -523,7 +523,7 @@ textarea {
 }
 .parent-actions button:hover { transform: translateY(-2px); opacity: .9; }
 
-#view-insights     { background: var(--yellow); color: var(--text-dark); font-weight: 800; }
+#view-insights     { background: var(--yellow); color: #1a1410; font-weight: 800; }
 #manage-profiles   { background: var(--teal);   color: #fff; }
 #delete-account-btn {
     background: transparent;
@@ -813,7 +813,7 @@ section#parent-insights header {
     margin: 1.5rem auto 0;
     padding: .75rem 2rem;
     background: var(--yellow);
-    color: var(--text-dark);
+    color: #1a1410;
     border: none;
     border-radius: var(--radius-btn);
     font-family: var(--font-display), sans-serif;
