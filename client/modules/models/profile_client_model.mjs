@@ -14,9 +14,14 @@ export const ProfileModel =
   {
     try
     {
-      const pin = Math.floor(100000 + Math.random() * 900000).toString();
+      // Use provided PIN if available, otherwise don't set one (optional)
+      const pin = profile.pin || (profile.hasPin ? Math.floor(100000 + Math.random() * 900000).toString() : undefined);
+      const createData = {
+        name: profile.name,
+        ...(pin && { pin })
+      };
 
-      const response = await ApiService.createChild({ name: profile.name, pin });
+      const response = await ApiService.createChild(createData);
       const created = response && (response.child || response);
 
       if (store.currentUser) {

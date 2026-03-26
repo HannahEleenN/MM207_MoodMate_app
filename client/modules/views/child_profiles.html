@@ -4,59 +4,85 @@
     <h1 data-i18n="profiles.title"></h1>
   </div>
 
-  <form id="create-child-form" aria-label="Create child profile form">
-    <fieldset class="form-fieldset">
-      <legend class="form-section-legend" data-i18n="profiles.title"></legend>
+  <div class="profiles-container">
+    <div class="profile-card">
+      <form id="create-child-form" aria-label="Create child profile form">
+        <fieldset class="form-fieldset">
+          <legend class="form-section-legend" data-i18n="profiles.createNewChild"></legend>
 
-      <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+          <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-      <div class="input-group">
-        <label for="childName-input">
-          <span data-i18n="profiles.childNamePlaceholder"></span>
-          <span class="required-indicator" aria-label="required">*</span>
-        </label>
-        <input type="text" id="childName-input" name="childName" placeholder="Child name" data-i18n-placeholder="profiles.childNamePlaceholder" required
-               aria-describedby="childName-error"
-               aria-required="true">
-        <span id="childName-error" class="field-error" role="alert"></span>
-      </div>
+          <div class="input-group">
+            <label for="childName-input">
+              <span data-i18n="profiles.childNamePlaceholder"></span>
+              <span class="required-indicator" aria-label="required">*</span>
+              <span class="field-requirement" data-i18n="profiles.required"></span>
+            </label>
+            <input type="text" id="childName-input" name="childName" placeholder="Child name" data-i18n-placeholder="profiles.childNamePlaceholder" required
+                   aria-describedby="childName-error childName-hint"
+                   aria-required="true">
+            <span id="childName-hint" class="helper-text" data-i18n="profiles.nameHelp"></span>
+            <span id="childName-error" class="field-error" role="alert"></span>
+          </div>
 
-      <div class="input-group">
-        <label for="age-select">
-          <span data-i18n="profiles.childAgePlaceholder"></span>
-          <span class="required-indicator" aria-label="required">*</span>
-        </label>
-        <select id="age-select" name="age" data-i18n-placeholder="profiles.childAgePlaceholder" required
-                aria-describedby="age-error"
-                aria-required="true">
-          <option value="">-- Select age --</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="17">17</option>
-          <option value="18">18</option>
-        </select>
-        <span id="age-error" class="field-error" role="alert"></span>
-      </div>
+          <div class="input-group">
+            <label for="age-select">
+              <span data-i18n="profiles.childAgePlaceholder"></span>
+              <span class="optional-indicator" data-i18n="profiles.optional"></span>
+            </label>
+            <select id="age-select" name="age" data-i18n-placeholder="profiles.childAgePlaceholder"
+                    aria-describedby="age-error age-hint"
+                    aria-required="false">
+              <option value="">-- Select age --</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+            </select>
+            <span id="age-hint" class="helper-text" data-i18n="profiles.ageHelp"></span>
+            <span id="age-error" class="field-error" role="alert"></span>
+          </div>
 
-      <div class="form-submit-group">
-        <button type="submit" class="primary-btn" data-i18n="profiles.addChild" aria-label="Add child profile">Add Child</button>
-      </div>
-    </fieldset>
-  </form>
+          <div class="pin-creation-section">
+            <div class="pin-section-header">
+              <h3 data-i18n="profiles.pinLabel"></h3>
+              <span class="optional-indicator" data-i18n="profiles.optional"></span>
+            </div>
+            <p class="pin-section-info" data-i18n="profiles.pinCreationHelp"></p>
+
+            <div class="input-group">
+              <label for="pin-input">
+                <span data-i18n="profiles.pinLabel"></span>
+              </label>
+              <input type="password" id="pin-input" name="pin" placeholder="6-digit PIN" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+                     aria-describedby="pin-error pin-hint"
+                     aria-required="false">
+              <span id="pin-hint" class="helper-text">Enter 6 digits (0-9)</span>
+              <span id="pin-error" class="field-error" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-submit-group">
+            <button type="submit" class="primary-btn" data-i18n="profiles.addChild" aria-label="Add child profile">Add Child</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
 
   <ul id="child-list" role="list"></ul>
 </main>
@@ -64,7 +90,7 @@
 <template id="child-item-template">
   <li role="listitem">
     <div class="profile-header">
-      <div>
+      <div class="child-info">
         <span class="child-name"></span>
         <span class="child-age"></span>
       </div>

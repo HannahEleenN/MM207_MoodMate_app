@@ -184,10 +184,25 @@ export const childProfilesUI =
   {
     try
     {
-      await ProfileModel.create({ 
-        name: data.childName || data.name, 
-        age: data.age || null 
-      });
+      // Validate PIN if provided
+      if (data.pin && (data.pin.length !== 6 || !/^\d+$/.test(data.pin))) {
+        const errorMsg = store.t ? store.t('profiles.pinMustBe6Digits') : 'PIN must be 6 digits';
+        const errorEl = this.form.querySelector('#pin-error');
+        if (errorEl) {
+          errorEl.textContent = errorMsg;
+          errorEl.classList.add('show');
+        }
+        return;
+      }
+
+      // Create profile with optional PIN
+      const profileData = {
+        name: data.childName || data.name,
+        age: data.age || null,
+        ...(data.pin && { pin: data.pin, hasPin: true })
+      };
+
+      await ProfileModel.create(profileData);
       this.form.reset();
       await this.loadProfiles();
       this.showNotice('child.createSuccess');

@@ -1,4 +1,4 @@
-const VERSION = 'v2.0';
+const VERSION = 'v2.1';
 const CACHE_NAME = `mood-tracker-cache-${VERSION}`;
 console.info('Service worker starting, version:', VERSION);
 

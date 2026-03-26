@@ -23,16 +23,63 @@ export const moodUIController =
                     const tr = document.createElement('tr');
                     const dateStr = new Date(e.date || e.createdAt || e.timestamp || Date.now()).toLocaleDateString();
 
-                    const { child: childProp, childName, profileName, mood: moodProp, feeling, feelingLabel, context: contextProp, reason } = e || {};
-                    const child = childProp || childName || profileName || '—';
+                    const { child: childProp, childName, profileName, mood: moodProp, feeling, feelingLabel, context: contextProp, reason, customContext, customSolution, solution } = e || {};
 
-                    const mood = moodProp || feeling || feelingLabel || '—';
-                    const context = contextProp || reason || '—';
+                    const childDisplayName = childProp || childName || profileName || '—';
 
-                    const tdDate = document.createElement('td'); tdDate.textContent = dateStr; tr.appendChild(tdDate);
-                    const tdChild = document.createElement('td'); tdChild.textContent = child; tr.appendChild(tdChild);
-                    const tdMood = document.createElement('td'); tdMood.textContent = mood; tr.appendChild(tdMood);
-                    const tdContext = document.createElement('td'); tdContext.textContent = context; tr.appendChild(tdContext);
+                    const moodValue = moodProp || feeling || feelingLabel || '—';
+                    const translatedMood = store && store.t ? store.t(`mood.${moodValue}`) || moodValue : moodValue;
+
+                    let reasonDisplay = '—';
+                    if (customContext && customContext.trim()) {
+                        reasonDisplay = customContext;
+                    } else if (contextProp)
+                    {
+                        if (typeof contextProp === 'string' && contextProp.includes('.')) {
+                            reasonDisplay = store && store.t ? store.t(contextProp) || contextProp : contextProp;
+                        } else {
+                            reasonDisplay = contextProp;
+                        }
+                    } else if (reason)
+                    {
+                        if (typeof reason === 'string' && reason.includes('.')) {
+                            reasonDisplay = store && store.t ? store.t(reason) || reason : reason;
+                        } else {
+                            reasonDisplay = reason;
+                        }
+                    }
+
+                    let solutionDisplay = '—';
+                    if (customSolution && customSolution.trim()) {
+                        solutionDisplay = customSolution;
+                    } else if (solution)
+                    {
+                        if (typeof solution === 'string' && solution.includes('.')) {
+                            solutionDisplay = store && store.t ? store.t(solution) || solution : solution;
+                        } else {
+                            solutionDisplay = solution;
+                        }
+                    }
+
+                    const tdDate = document.createElement('td');
+                    tdDate.textContent = dateStr;
+                    tr.appendChild(tdDate);
+
+                    const tdChild = document.createElement('td');
+                    tdChild.textContent = childDisplayName;
+                    tr.appendChild(tdChild);
+
+                    const tdMood = document.createElement('td');
+                    tdMood.textContent = translatedMood;
+                    tr.appendChild(tdMood);
+
+                    const tdReason = document.createElement('td');
+                    tdReason.textContent = reasonDisplay;
+                    tr.appendChild(tdReason);
+
+                    const tdSolution = document.createElement('td');
+                    tdSolution.textContent = solutionDisplay;
+                    tr.appendChild(tdSolution);
 
                     historyList.appendChild(tr);
                 }

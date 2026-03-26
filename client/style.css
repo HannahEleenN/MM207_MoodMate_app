@@ -146,6 +146,11 @@ section.user-manager {
     max-width: 620px;
 }
 
+/* Child profiles view needs wider container for list layout */
+main#child-profiles {
+    max-width: 720px;
+}
+
 /* ── Fieldset styling (remove default browser border) ────────────────────── */
 fieldset {
     border: none;
@@ -1538,7 +1543,7 @@ body.auth-view #view-tos { display: inline-block !important; }
 
 .consent-link:hover {
     color: var(--coral);
-    text-decoration-style: solid;
+    text-decoration: solid;
 }
 
 .consent-section {
@@ -1931,13 +1936,33 @@ input[type="password"]:focus {
     }
 
     #user-list li {
-        flex-direction: column;
-        align-items: flex-start;
+        padding: 1.2rem;
     }
 
-    .user-actions {
-        width: 100%;
-        justify-content: flex-end;
+    .child-name {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .profiles-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .profiles-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .child-actions button {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.8rem;
+    }
+
+    .pin-button-group button {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -1948,6 +1973,34 @@ input[type="password"]:focus {
     font-size: 0.9rem;
     color: var(--text-mid);
     margin-left: 0.5rem;
+}
+
+/* Profile header layout */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+/* Child info section with name and age */
+.child-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.child-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+}
+
+/* Child actions button group */
+.child-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
 }
 
 /* Hidden button/section utility class */

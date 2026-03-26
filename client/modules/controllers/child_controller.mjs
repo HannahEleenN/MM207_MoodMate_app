@@ -176,14 +176,6 @@ export const childController =
         }
     },
 
-    moodTextual:
-    {
-        happy: ['text.happy.0','text.happy.1','text.happy.2','text.happy.3','text.happy.4','text.happy.5','text.happy.6','text.happy.7'],
-        sad: ['text.sad.0','text.sad.1','text.sad.2','text.sad.3','text.sad.4','text.sad.5','text.sad.6'],
-        angry: ['text.angry.0','text.angry.1','text.angry.2','text.angry.3','text.angry.4'],
-        surprised: ['text.surprised.0','text.surprised.1','text.surprised.2','text.surprised.3','text.surprised.4','text.surprised.5'],
-        scared: ['text.scared.0','text.scared.1','text.scared.2','text.scared.3','text.scared.4','text.scared.5','text.scared.6']
-    },
 
     setupEventListeners()
     {
@@ -272,7 +264,9 @@ export const childController =
         const moodDisplay = this.container.querySelector('#selected-mood-text');
         if (moodDisplay) {
             const moodLabel = (store && store.t) ? (store.t(`mood.${mood}`) || mood) : mood;
-            moodDisplay.textContent = moodLabel.replace(/^[^a-zA-Z0-9]+\s*/, '').trim();
+            // Remove emoji and trim, then convert first letter to lowercase
+            const cleanLabel = moodLabel.replace(/^[^a-zA-Z0-9]+\s*/, '').trim();
+            moodDisplay.textContent = cleanLabel.charAt(0).toLowerCase() + cleanLabel.slice(1);
         }
 
         const reasonsContainer = this.container.querySelector('#reasons-text');
