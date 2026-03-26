@@ -126,7 +126,7 @@ body::before {
 }
 
 /* ── Card / View container ─────────────────────────────────────────────────── */
-section {
+section, main {
     background: var(--cream-card);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
@@ -144,6 +144,13 @@ section#parent-insights {
 /* User manager (registration) gets a wider form */
 section.user-manager {
     max-width: 620px;
+}
+
+/* ── Fieldset styling (remove default browser border) ────────────────────── */
+fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 /* ── Typography ────────────────────────────────────────────────────────────── */
