@@ -63,14 +63,17 @@ export const getAllMoods = async (req, res, next) =>
     {
         const userId = req.user && (req.user.userId || req.user.id);
         let enrichedMoodRows = Mood && Mood.findByUser ? await Mood.findByUser(userId) : [];
-        
+
         if (enrichedMoodRows && Array.isArray(enrichedMoodRows))
         {
-            enrichedMoodRows = enrichedMoodRows.map(moodRecord => ({
-                ...moodRecord,
-                childName: moodRecord.child_name || moodRecord.profileName || moodRecord.childName || '—',
-                child: moodRecord.child_name || moodRecord.profileName || moodRecord.childName || '—'
-            }));
+            enrichedMoodRows = enrichedMoodRows.map(
+                /** @param {{ child_name?: string, profileName?: string, childName?: string }} moodRecord */
+                moodRecord => ({
+                    ...moodRecord,
+                    childName: moodRecord?.child_name || moodRecord?.profileName || moodRecord?.childName || '—',
+                    child: moodRecord?.child_name || moodRecord?.profileName || moodRecord?.childName || '—'
+                })
+            );
         }
         
         const locale = pickLanguage(req.headers['accept-language']);
