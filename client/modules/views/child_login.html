@@ -15,7 +15,7 @@
           <span data-i18n="child.pinLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
         </label>
-        <input type="password" id="child-pin-input" required data-i18n-placeholder="child.pinPlaceholder" placeholder="" maxlength="6"
+        <input type="password" id="child-pin-input" required data-i18n-placeholder="child.pinPlaceholder" placeholder="" maxlength="6" inputmode="numeric"
                aria-describedby="pin-error"
                aria-required="true">
         <span id="pin-error" class="field-error" role="alert"></span>
@@ -28,6 +28,6 @@
   </form>
 
   <div class="login-footer">
-    <p><button id="back-to-parent" class="link-btn" data-i18n="child.backToParent">Back to Parent Login</button></p>
+    <p><button type="button" id="back-to-parent" class="link-btn" data-i18n="child.backToParent">Back to Parent Login</button></p>
   </div>
 </section>

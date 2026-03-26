@@ -1,22 +1,22 @@
 <section id="mood-checkin-flow">
     <div class="progress-container">
-        <div class="progress-bar" id="checkin-progress" style="width: 33%"></div>
+        <progress id="checkin-progress" value="33" max="100"></progress>
     </div>
 
     <div id="step-1" class="step-container">
         <h2 data-i18n="child.hello"></h2>
         <p data-i18n="child.askMood"></p>
         <div class="mood-grid">
-            <button class="mood-btn" data-mood="happy" data-i18n="mood.happy" aria-label="Happy"></button>
-            <button class="mood-btn" data-mood="sad" data-i18n="mood.sad" aria-label="Sad"></button>
-            <button class="mood-btn" data-mood="angry" data-i18n="mood.angry" aria-label="Angry"></button>
-            <button class="mood-btn" data-mood="scared" data-i18n="mood.scared" aria-label="Scared"></button>
-            <button class="mood-btn" data-mood="calm" data-i18n="mood.calm" aria-label="Calm"></button>
-            <button class="mood-btn" data-mood="surprised" data-i18n="mood.surprised" aria-label="Surprised"></button>
+            <button type="button" class="mood-btn" data-mood="happy" data-i18n="mood.happy" aria-label="Happy"></button>
+            <button type="button" class="mood-btn" data-mood="sad" data-i18n="mood.sad" aria-label="Sad"></button>
+            <button type="button" class="mood-btn" data-mood="angry" data-i18n="mood.angry" aria-label="Angry"></button>
+            <button type="button" class="mood-btn" data-mood="scared" data-i18n="mood.scared" aria-label="Scared"></button>
+            <button type="button" class="mood-btn" data-mood="calm" data-i18n="mood.calm" aria-label="Calm"></button>
+            <button type="button" class="mood-btn" data-mood="surprised" data-i18n="mood.surprised" aria-label="Surprised"></button>
         </div>
     </div>
 
-    <div id="step-2" class="step-container" style="display: none;">
+    <div id="step-2" class="step-container" hidden>
         <h2 data-i18n="checkin.reasonTitle"><span id="selected-mood-text">...</span>?</h2>
         <p data-i18n="checkin.instructions"></p>
         <fieldset class="form-fieldset">
@@ -29,17 +29,17 @@
           </div>
         </fieldset>
         <div class="button-group">
-            <button id="btn-prev-step-2" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
-            <button id="btn-next-step" class="primary-btn" data-i18n="checkin.next" aria-label="Next">Next</button>
+            <button type="button" id="btn-prev-step-2" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
+            <button type="button" id="btn-next-step" class="primary-btn" data-i18n="checkin.next" aria-label="Next">Next</button>
         </div>
     </div>
 
-    <div id="step-3" class="step-container" style="display: none;">
+    <div id="step-3" class="step-container" hidden>
         <h2 data-i18n="child.nextActionTitle"></h2>
         <div class="mood-grid" id="step-3-solutions"></div>
         <div class="button-group">
-            <button id="btn-prev-step-3" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
-            <button id="btn-finish" class="primary-btn" data-i18n="checkin.finish" aria-label="Finish">Finish</button>
+            <button type="button" id="btn-prev-step-3" class="secondary-btn" data-i18n="checkin.previous" aria-label="Previous">Previous</button>
+            <button type="button" id="btn-finish" class="primary-btn" data-i18n="checkin.finish" aria-label="Finish">Finish</button>
         </div>
     </div>
 </section>

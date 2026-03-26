@@ -339,19 +339,19 @@ export const childController =
     goToStep(stepNumber)
     {
         this.container.querySelectorAll('.step-container').forEach(el => {
-            el.style.display = 'none';
+            el.hidden = true;
         });
 
         const currentStepEl = this.container.querySelector(`#step-${stepNumber}`);
         if (currentStepEl) {
-            currentStepEl.style.display = 'block';
+            currentStepEl.hidden = false;
         }
 
-        const progressPercentages = { 1: 33, 2: 66, 3: 100 };
-        const bar = this.container.querySelector('#checkin-progress');
-        if (bar)
+        const progressValues = { 1: 33, 2: 66, 3: 100 };
+        const progressEl = this.container.querySelector('#checkin-progress');
+        if (progressEl)
         {
-            bar.style.width = (progressPercentages[stepNumber] || 33) + '%';
+            progressEl.value = progressValues[stepNumber] || 33;
         }
     },
 

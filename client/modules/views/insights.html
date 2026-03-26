@@ -1,6 +1,6 @@
 <section id="parent-insights">
     <header>
-        <button id="back-to-parent-menu" class="back-link" data-i18n="insights.back" aria-label="Back">Back</button>
+        <button type="button" id="back-to-parent-menu" class="back-link" data-i18n="insights.back" aria-label="Back">Back</button>
         <h2 data-i18n="insights.title"></h2>
     </header>
 
@@ -21,10 +21,10 @@
             <table id="mood-history-table">
                 <thead>
                 <tr>
-                    <th data-i18n="insights.date"></th>
-                    <th data-i18n="insights.child"></th>
-                    <th data-i18n="insights.feeling"></th>
-                    <th data-i18n="insights.context"></th>
+                    <th scope="col" data-i18n="insights.date"></th>
+                    <th scope="col" data-i18n="insights.child"></th>
+                    <th scope="col" data-i18n="insights.feeling"></th>
+                    <th scope="col" data-i18n="insights.context"></th>
                 </tr>
                 </thead>
                 <tbody id="history-list">
@@ -33,5 +33,5 @@
         </article>
     </div>
 
-    <button id="export-data-btn" data-i18n="insights.export" aria-label="Export data">Export Data</button>
+    <button type="button" id="export-data-btn" data-i18n="insights.export" aria-label="Export data">Export Data</button>
 </section>
