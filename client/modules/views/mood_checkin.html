@@ -1,3 +1,19 @@
+<nav class="breadcrumb-nav" aria-label="Page navigation">
+  <span data-i18n="breadcrumb.home">Home</span>
+  <span class="breadcrumb-separator">/</span>
+  <span class="active" data-i18n="breadcrumb.childMenu">Mood Check-in</span>
+  <span class="breadcrumb-separator" id="breadcrumb-step-sep" style="display:none;">/</span>
+  <span class="active" id="breadcrumb-step-text" style="display:none;"></span>
+</nav>
+
+<div class="user-indicator" role="status">
+  <div class="user-info">
+    <span data-i18n="user.loggedInAs">Logged in as:</span>
+    <strong id="child-user-display"></strong>
+    <span class="user-mode-badge child-mode" data-i18n="user.childMode">Child Mode</span>
+  </div>
+</div>
+
 <main id="mood-checkin-flow" aria-label="Mood check-in wizard">
     <div class="progress-container">
         <progress id="checkin-progress" value="33" max="100" aria-label="Progress through mood check-in"></progress>
@@ -64,3 +80,27 @@
         </div>
     </div>
 </main>
+
+<div class="mood-success-screen" id="mood-success-screen" role="region" aria-label="Mood entry success">
+    <div class="mood-success-content">
+        <div class="mood-success-emoji" aria-hidden="true" id="success-emoji">✨</div>
+        <h2 data-i18n="mood.success.title">Great job!</h2>
+        <p id="success-subtitle" data-i18n="mood.success.subtitle">Your mood has been saved</p>
+
+        <div class="mood-summary">
+            <div class="mood-summary-item">
+                <span class="mood-summary-label" data-i18n="mood.success.selectedMood">Your mood:</span>
+                <span class="mood-summary-value" id="success-mood">Happy</span>
+            </div>
+            <div class="mood-summary-item">
+                <span class="mood-summary-label" data-i18n="mood.success.selectedSolution">Try this:</span>
+                <span class="mood-summary-value" id="success-solution">Dance</span>
+            </div>
+        </div>
+
+        <div class="mood-success-actions">
+            <button type="button" id="success-back-btn" class="primary-btn" data-i18n="mood.success.backToParent">Back to parent menu</button>
+            <button type="button" id="success-logout-btn" class="secondary-btn" data-i18n="mood.success.logoutChild">Sign out (child)</button>
+        </div>
+    </div>
+</div>

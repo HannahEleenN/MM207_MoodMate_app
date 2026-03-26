@@ -1,3 +1,24 @@
+<nav class="breadcrumb-nav" aria-label="Page navigation">
+  <span data-i18n="breadcrumb.home">Home</span>
+  <span class="breadcrumb-separator">/</span>
+  <a href="#" data-action="back-to-parent-menu" data-i18n="breadcrumb.parentMenu">Parent Menu</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="active" data-i18n="breadcrumb.insights">Insights</span>
+</nav>
+
+<div class="user-indicator" role="status">
+  <div class="user-info">
+    <span data-i18n="user.loggedInAs">Logged in as:</span>
+    <strong id="insights-user-email"></strong>
+    <span class="user-mode-badge" data-i18n="user.parentMode">Parent Mode</span>
+  </div>
+</div>
+
+<div class="progress-indicator" role="region" aria-label="Progress">
+  <div class="progress-step completed">1</div>
+  <span class="progress-label" data-i18n="progress.insights">Viewing insights</span>
+</div>
+
 <main id="parent-insights" aria-label="Parent insights and mood history">
     <header>
         <button type="button" id="back-to-parent-menu" class="back-link" data-i18n="insights.back" aria-label="Back">Back</button>

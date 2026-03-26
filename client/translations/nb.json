@@ -225,5 +225,33 @@
     "userManager.nicknameLabel":  "Kallenavn",
     "userManager.emailLabel":  "E-post",
     "userManager.goToLogin":  "Gå til innlogging",
-    "userManager.existingTitle":  "Eksisterende profiler"
+    "userManager.existingTitle":  "Eksisterende profiler",
+
+    "breadcrumb.home":  "Hjem",
+    "breadcrumb.parentMenu":  "Foreldremeny",
+    "breadcrumb.insights":  "Innsikter",
+    "breadcrumb.profiles":  "Profiler",
+    "breadcrumb.childMenu":  "Følelsesjekk",
+    "breadcrumb.moodStep":  "Følelse (Steg {step}/3)",
+
+    "user.loggedInAs":  "Logget inn som:",
+    "user.parentMode":  "Foreldremodus",
+    "user.childMode":  "Barnmodus",
+
+    "child.selectLabel":  "Velg barn:",
+    "child.selectPrompt":  "Velg en barneprofil",
+
+    "progress.step":  "Steg {step} av {total}",
+    "progress.insights":  "Viser innsikter",
+    "progress.profiles":  "Håndterer profiler",
+
+    "mood.success.title":  "Bra jobbet!",
+    "mood.success.subtitle":  "Din følelse har blitt lagret",
+    "mood.success.selectedMood":  "Din følelse:",
+    "mood.success.selectedSolution":  "Prøv dette:",
+    "mood.success.backToParent":  "Tilbake til foreldremeny",
+    "mood.success.logoutChild":  "Logg ut (barn)",
+
+    "global.logoutConfirm":  "Er du sikker på at du vil logge ut?",
+    "global.logoutUnsavedWarning":  "Du har en ufullstendig følelseregistrering som vil gå tapt hvis du logger ut. Logg ut likevel?"
 }

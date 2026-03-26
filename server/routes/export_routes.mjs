@@ -35,6 +35,8 @@ function escape_XML_special_characters(str)
         .replace(/'/g, '&apos;');
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 function convert_mood_data_to_CSV(moods)
 {
     const headers = ['Mood', 'Context', 'Solution', 'Note', 'Timestamp'];
@@ -55,6 +57,8 @@ function convert_mood_data_to_CSV(moods)
     return rows.join('\n');
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 function convert_mood_data_to_JSON(moods)
 {
     return JSON.stringify({
@@ -71,6 +75,8 @@ function convert_mood_data_to_JSON(moods)
     }, null, 2);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 function convert_mood_data_to_XML(moods)
 {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -79,7 +85,8 @@ function convert_mood_data_to_XML(moods)
     xml += `  <moodCount>${moods.length}</moodCount>\n`;
     xml += '  <moods>\n';
 
-    moods.forEach((mood, index) => {
+    moods.forEach((mood, index) =>
+    {
         xml += `    <mood id="${index + 1}">\n`;
         xml += `      <emotion>${escape_XML_special_characters(mood.mood)}</emotion>\n`;
         xml += `      <context>${escape_XML_special_characters(mood.context)}</context>\n`;

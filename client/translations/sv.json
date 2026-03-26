@@ -225,5 +225,33 @@
     "userManager.nicknameLabel":  "Smeknamn",
     "userManager.emailLabel":  "E-post",
     "userManager.goToLogin":  "Gå till inloggning",
-    "userManager.existingTitle":  "Befintliga profiler"
+    "userManager.existingTitle":  "Befintliga profiler",
+
+    "breadcrumb.home":  "Hem",
+    "breadcrumb.parentMenu":  "Föräldrammeny",
+    "breadcrumb.insights":  "Insikter",
+    "breadcrumb.profiles":  "Profiler",
+    "breadcrumb.childMenu":  "Kontroll av humör",
+    "breadcrumb.moodStep":  "Känsla (Steg {step}/3)",
+
+    "user.loggedInAs":  "Inloggad som:",
+    "user.parentMode":  "Föräldraläge",
+    "user.childMode":  "Barnläge",
+
+    "child.selectLabel":  "Välj barn:",
+    "child.selectPrompt":  "Välj en barnprofil",
+
+    "progress.step":  "Steg {step} av {total}",
+    "progress.insights":  "Visar insikter",
+    "progress.profiles":  "Hanterar profiler",
+
+    "mood.success.title":  "Bra jobbat!",
+    "mood.success.subtitle":  "Ditt humör har sparats",
+    "mood.success.selectedMood":  "Din känsla:",
+    "mood.success.selectedSolution":  "Prova detta:",
+    "mood.success.backToParent":  "Tillbaka till föräldrammeny",
+    "mood.success.logoutChild":  "Logga ut (barn)",
+
+    "global.logoutConfirm":  "Är du säker på att du vill logga ut?",
+    "global.logoutUnsavedWarning":  "Du har en ofullständig humörpost som kommer att gå förlorad om du loggar ut. Logga ut ändå?"
 }

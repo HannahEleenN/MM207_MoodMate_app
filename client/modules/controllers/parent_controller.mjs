@@ -9,6 +9,47 @@ export async function initParentApp(container)
     {
         container.innerHTML = await ApiService.loadView('parent_menu');
 
+        try {
+            const updateUserIndicators = window.updateUserIndicators || (() => {});
+            updateUserIndicators();
+        } catch (error) {
+            console.debug('updateUserIndicators not available', error);
+        }
+
+        const childSelectorElement = container.querySelector('#child-selector-dropdown');
+        if (childSelectorElement && store.currentUser && store.currentUser.profiles)
+        {
+            const childProfiles = store.currentUser.profiles;
+
+            while (childSelectorElement.options.length > 1) {
+                childSelectorElement.remove(1);
+            }
+
+            childProfiles.forEach(profile =>
+            {
+                const optionElement = document.createElement('option');
+                optionElement.value = profile.id;
+                optionElement.textContent = profile.name;
+                childSelectorElement.appendChild(optionElement);
+            });
+
+            if (store.currentChild && store.currentChild.id) {
+                childSelectorElement.value = store.currentChild.id;
+            }
+
+            childSelectorElement.addEventListener('change', (event) =>
+            {
+                const selectedChildId = event.target.value;
+                if (selectedChildId)
+                {
+                    const selectedProfile = childProfiles.find(p => p.id == selectedChildId);
+                    if (selectedProfile) {
+                        store.currentChild = selectedProfile;
+                    }
+                }
+            });
+        }
+
         container.querySelector('#view-insights').onclick = () => {
             store.currentView = 'insights';
         };
@@ -17,10 +58,10 @@ export async function initParentApp(container)
             store.currentView = 'childProfiles';
         };
 
-        const manageAccountsBtn = container.querySelector('#manage-accounts');
-        if (manageAccountsBtn)
+        const manageAccountsButton = container.querySelector('#manage-accounts');
+        if (manageAccountsButton)
         {
-            manageAccountsBtn.onclick = () => {
+            manageAccountsButton.onclick = () => {
                 store.currentView = 'userManager';
             };
         }
@@ -38,44 +79,27 @@ export async function initParentApp(container)
             }
         }
 
-        const deleteBtn = container.querySelector('#delete-account-btn');
-        deleteBtn.onclick = async () =>
+        const deleteAccountButton = container.querySelector('#delete-account-btn');
+        if (deleteAccountButton)
         {
-            const confirmMsg = store.t('delete.confirm');
-            if (confirm(confirmMsg))
+            deleteAccountButton.onclick = async () =>
             {
-                try
+                const confirmMessage = store.t('delete.confirm');
+                if (confirm(confirmMessage))
                 {
-                    await ApiService.deleteUser(store.currentUser.id);
-                    const successMsg = store.t('delete.success');
-                    showNoticeInline(successMsg);
-                    store.currentUser = null;
-                    store.currentView = 'login';
-                } catch (error)
-                {
-                    console.error("Deletion failed:", error);
-                    const failMsg = store.t('delete.failed');
-                    showNoticeInline(failMsg);
-                }
-            }
-        };
-
-        const logoutBtn = container.querySelector('#logout-btn');
-        if (logoutBtn)
-        {
-            logoutBtn.onclick = async () =>
-            {
-                try
-                {
-                    await ApiService.logout();
-                    const successMsg = store.t('logout.success') || 'Logged out successfully';
-                    showNoticeInline(successMsg);
-                    store.currentView = 'login';
-                } catch (error)
-                {
-                    console.error("Logout failed:", error);
-                    const failMsg = store.t('logout.failed') || 'Logout failed';
-                    showNoticeInline(failMsg);
+                    try
+                    {
+                        await ApiService.deleteUser(store.currentUser.id);
+                        const successMessage = store.t('delete.success');
+                        showNoticeInline(successMessage);
+                        store.currentUser = null;
+                        store.currentView = 'login';
+                    } catch (error)
+                    {
+                        console.error("Deletion failed:", error);
+                        const failureMessage = store.t('delete.failed');
+                        showNoticeInline(failureMessage);
+                    }
                 }
             };
         }
@@ -83,13 +107,13 @@ export async function initParentApp(container)
     } catch (error)
     {
         console.error("Failed to load parent menu:", error);
-        const errMsg = store.t('parent.loadError');
+        const errorMessage = store.t('parent.loadError');
 
-        const p = document.createElement('p');
-        p.textContent = errMsg;
+        const errorElement = document.createElement('p');
+        errorElement.textContent = errorMessage;
 
         while (container.firstChild) container.removeChild(container.firstChild);
-        container.appendChild(p);
+        container.appendChild(errorElement);
     }
 }
 

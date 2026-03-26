@@ -5,7 +5,8 @@ import { ApiService } from '../api.mjs';
 
 export const ProfileModel =
 {
-  getAll() {
+  getAll()
+  {
     if (store.currentUser) return store.currentUser.profiles || [];
     return store.profiles || [];
   },
@@ -38,8 +39,8 @@ export const ProfileModel =
 
   async loadProfiles()
   {
-    try {
-      // Fetch profiles from database
+    try
+    {
       const response = await ApiService.getChildren();
       const profiles = response && (response.data || response.children || []);
       
@@ -61,7 +62,8 @@ export const ProfileModel =
     {
       await ApiService.updateChild(id, data);
 
-      if (store.currentUser) {
+      if (store.currentUser)
+      {
         const profiles = (store.currentUser.profiles || []).map(profile => profile.id === id ? { ...profile, ...data } : profile);
         store.currentUser = { ...store.currentUser, profiles };
         return profiles.find(profile => profile.id === id);

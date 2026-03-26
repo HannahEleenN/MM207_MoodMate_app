@@ -225,5 +225,33 @@
     "userManager.nicknameLabel":  "Apodo",
     "userManager.emailLabel":  "Correo",
     "userManager.goToLogin":  "Ir a iniciar sesión",
-    "userManager.existingTitle":  "Perfiles existentes"
+    "userManager.existingTitle":  "Perfiles existentes",
+
+    "breadcrumb.home":  "Inicio",
+    "breadcrumb.parentMenu":  "Menú padre",
+    "breadcrumb.insights":  "Perspectivas",
+    "breadcrumb.profiles":  "Perfiles",
+    "breadcrumb.childMenu":  "Revisar estado de ánimo",
+    "breadcrumb.moodStep":  "Emoción (Paso {step}/3)",
+
+    "user.loggedInAs":  "Conectado como:",
+    "user.parentMode":  "Modo padre",
+    "user.childMode":  "Modo niño",
+
+    "child.selectLabel":  "Seleccionar niño:",
+    "child.selectPrompt":  "Elige un perfil de niño",
+
+    "progress.step":  "Paso {step} de {total}",
+    "progress.insights":  "Viendo perspectivas",
+    "progress.profiles":  "Gestionando perfiles",
+
+    "mood.success.title":  "¡Buen trabajo!",
+    "mood.success.subtitle":  "Tu estado de ánimo ha sido guardado",
+    "mood.success.selectedMood":  "Tu emoción:",
+    "mood.success.selectedSolution":  "Intenta esto:",
+    "mood.success.backToParent":  "Volver al menú padre",
+    "mood.success.logoutChild":  "Cerrar sesión (niño)",
+
+    "global.logoutConfirm":  "¿Estás seguro de que quieres cerrar sesión?",
+    "global.logoutUnsavedWarning":  "Tienes una entrada de estado de ánimo incompleta que se perderá si cierras sesión. ¿Cerrar sesión de todas formas?"
 }

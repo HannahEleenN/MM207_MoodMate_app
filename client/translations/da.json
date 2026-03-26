@@ -225,5 +225,33 @@
     "userManager.nicknameLabel":  "Kælenavn",
     "userManager.emailLabel":  "E-mail",
     "userManager.goToLogin":  "Gå til log ind",
-    "userManager.existingTitle":  "Eksisterende profiler"
+    "userManager.existingTitle":  "Eksisterende profiler",
+
+    "breadcrumb.home":  "Hjem",
+    "breadcrumb.parentMenu":  "Forældremenu",
+    "breadcrumb.insights":  "Indsigter",
+    "breadcrumb.profiles":  "Profiler",
+    "breadcrumb.childMenu":  "Humørkontrol",
+    "breadcrumb.moodStep":  "Følelse (Trin {step}/3)",
+
+    "user.loggedInAs":  "Logget ind som:",
+    "user.parentMode":  "Forældreway",
+    "user.childMode":  "Barneway",
+
+    "child.selectLabel":  "Vælg barn:",
+    "child.selectPrompt":  "Vælg en barneprofil",
+
+    "progress.step":  "Trin {step} af {total}",
+    "progress.insights":  "Viser indsigter",
+    "progress.profiles":  "Håndterer profiler",
+
+    "mood.success.title":  "Godt arbejde!",
+    "mood.success.subtitle":  "Dit humør er blevet gemt",
+    "mood.success.selectedMood":  "Din følelse:",
+    "mood.success.selectedSolution":  "Prøv dette:",
+    "mood.success.backToParent":  "Tilbage til forældremenuen",
+    "mood.success.logoutChild":  "Log ud (barn)",
+
+    "global.logoutConfirm":  "Er du sikker på, at du vil logge ud?",
+    "global.logoutUnsavedWarning":  "Du har en ufuldstændig humørindtastning, der går tabt, hvis du logger ud. Log ud alligevel?"
 }

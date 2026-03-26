@@ -225,5 +225,33 @@
     "userManager.nicknameLabel":  "Nickname",
     "userManager.emailLabel":  "Email",
     "userManager.goToLogin":  "Go to sign in",
-    "userManager.existingTitle":  "Existing profiles"
+    "userManager.existingTitle":  "Existing profiles",
+
+    "breadcrumb.home":  "Home",
+    "breadcrumb.parentMenu":  "Parent Menu",
+    "breadcrumb.insights":  "Insights",
+    "breadcrumb.profiles":  "Profiles",
+    "breadcrumb.childMenu":  "Mood Check-in",
+    "breadcrumb.moodStep":  "Mood (Step {step}/3)",
+
+    "user.loggedInAs":  "Logged in as:",
+    "user.parentMode":  "Parent Mode",
+    "user.childMode":  "Child Mode",
+
+    "child.selectLabel":  "Select child:",
+    "child.selectPrompt":  "Choose a child profile",
+
+    "progress.step":  "Step {step} of {total}",
+    "progress.insights":  "Viewing insights",
+    "progress.profiles":  "Managing profiles",
+
+    "mood.success.title":  "Great job!",
+    "mood.success.subtitle":  "Your mood has been saved",
+    "mood.success.selectedMood":  "Your mood:",
+    "mood.success.selectedSolution":  "Try this:",
+    "mood.success.backToParent":  "Back to parent menu",
+    "mood.success.logoutChild":  "Sign out (child)",
+
+    "global.logoutConfirm":  "Are you sure you want to log out?",
+    "global.logoutUnsavedWarning":  "You have an unfinished mood entry that will be lost if you log out. Log out anyway?"
 }

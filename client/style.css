@@ -1720,344 +1720,496 @@ body.auth-view #view-tos { display: inline-block !important; }
     box-shadow: 0 2px 0 var(--teal-dark), 0 4px 12px rgba(91, 160, 138, 0.2);
 }
 
-/* Existing users section */
-.existing-users-section {
-    margin-top: 2.5rem;
-    padding-top: 2rem;
-    border-top: var(--border-width) solid var(--border-color);
-}
+/* ── BREADCRUMB NAVIGATION ───────────────────────────────────────────────── */
 
-.existing-users-section h3 {
-    color: var(--teal);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-/* User list items styling */
-#user-list {
-    list-style: none;
+.breadcrumb-nav {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--cream-card);
+    border-bottom: 2px solid var(--border-subtle);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-nav a,
+.breadcrumb-nav span {
+    color: var(--text-mid);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.breadcrumb-nav a:hover {
+    color: var(--teal);
+    text-decoration: underline;
+}
+
+.breadcrumb-nav a.active {
+    color: var(--teal);
+    font-weight: 700;
+    cursor: default;
+}
+
+.breadcrumb-separator {
+    margin: 0 0.25rem;
+    color: var(--text-light);
+}
+
+/* ── USER INDICATOR / STATUS BAR ────────────────────────────────────────── */
+
+.user-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background-color: var(--cream-card);
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.85rem;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
-#user-list li {
+.user-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 1.2rem 1.4rem;
-    background: linear-gradient(135deg, #fffaf3 0%, #fff 100%);
-    border: var(--border-width) solid var(--border-color);
-    border-radius: 1rem;
-    font-weight: 600;
+    gap: 0.5rem;
+    color: var(--text-mid);
+}
+
+.user-info strong {
     color: var(--text-dark);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-    flex-wrap: wrap;
-}
-
-#user-list li:hover {
-    border-color: var(--teal);
-    box-shadow: 0 6px 16px rgba(91, 160, 138, 0.12);
-    transform: translateY(-2px);
-}
-
-.user-email-display {
     font-weight: 700;
-    color: var(--teal);
-    flex: 1;
 }
 
-/* ── User Manager Section ─────────────────────────────────────────────────── */
-
-.user-manager {
-    max-width: 550px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+.user-mode-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--teal);
+    color: white;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-.user-manager-header {
-    margin-bottom: 2rem;
-    text-align: center;
+.user-mode-badge.child-mode {
+    background-color: var(--pink);
 }
 
-.user-manager-header h2 {
-    font-size: 1.8rem;
-    color: var(--text-dark);
-    font-family: var(--font-display), sans-serif;
-    font-weight: 800;
-}
+/* ── CHILD SELECTOR DROPDOWN ────────────────────────────────────────────── */
 
-.registration-card {
-    background-color: var(--cream-card);
-    border: 2px solid var(--border-color);
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    box-shadow: var(--shadow-card);
-    width: 100%;
-}
-
-.registration-form {
+.child-selector-container {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-/* Form sections */
-.form-section {
-    margin-bottom: 0;
-}
-
-.form-section h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-    font-family: var(--font-display), sans-serif;
-}
-
-.form-section h4.section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-dark);
+    align-items: center;
+    gap: 0.75rem;
     margin-bottom: 1rem;
 }
 
-.input-group {
-    margin-bottom: 0;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-}
-
-input::placeholder {
-    color: var(--text-light);
-    opacity: 0.8;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 0.8rem 1rem;
+#child-selector-dropdown {
+    flex: 1;
+    max-width: 300px;
+    padding: 0.75rem;
     border: 2px solid var(--border-color);
-    border-radius: 0.8rem;
-    background: white;
-    color: var(--text-dark);
+    border-radius: var(--radius-btn);
+    background-color: white;
+    font-family: var(--font-body);
     font-size: 1rem;
-    font-family: var(--font-body), sans-serif;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
+#child-selector-dropdown:hover {
     border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(91, 160, 138, 0.1);
 }
 
-.helper-text {
-    font-size: 0.85rem;
-    color: var(--text-mid);
-    margin-top: 0.2rem;
-    display: block;
+#child-selector-dropdown:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(61, 139, 116, 0.1);
 }
 
-/* Legal section styling */
-.legal-links-section {
-    margin-bottom: 1rem;
+.child-selector-label {
+    font-weight: 700;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+
+/* ── PROGRESS INDICATORS FOR WORKFLOWS ────────────────────────────────── */
+
+.progress-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 1rem;
-    background-color: rgba(91, 160, 138, 0.05);
-    border-radius: 0.8rem;
-    border-left: 4px solid var(--teal);
+    background-color: var(--cream-card);
+    border-radius: var(--radius-card);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
 }
 
-.legal-intro {
-    font-size: 0.85rem;
-    color: var(--text-mid);
-    margin-bottom: 0.8rem;
-}
-
-.legal-links {
+.progress-step {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.legal-links a {
-    color: var(--teal);
-    text-decoration: underline;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: color 0.2s ease;
-}
-
-.legal-links a:hover {
-    color: var(--teal-dark);
-}
-
-.legal-links .separator {
-    color: var(--border-color);
-    font-weight: 300;
-}
-
-/* Consent checkbox styling */
-.consent-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    cursor: pointer;
-    font-size: 0.95rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--border-color);
     color: var(--text-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
 }
 
-.consent-label input[type="checkbox"] {
-    width: auto;
-    min-width: 20px;
-    height: 20px;
-    margin-top: 0.2rem;
-    cursor: pointer;
-    accent-color: var(--teal);
+.progress-step.active {
+    background-color: var(--teal);
+    color: white;
 }
 
-.consent-label span {
+.progress-step.completed {
+    background-color: var(--green);
+    color: white;
+}
+
+.progress-label {
     flex: 1;
-    line-height: 1.4;
+    color: var(--text-mid);
+    font-weight: 600;
 }
 
-/* Existing users section */
-.existing-users-section {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 2px solid var(--border-color);
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1rem 0;
 }
 
-.existing-users-section h3 {
-    font-size: 1.1rem;
+.progress-bar-container progress {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    white-space: nowrap;
+}
+
+/* ── MOBILE-RESPONSIVE NAVIGATION ───────────────────────────────────────── */
+
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--cream-card);
+    border-top: 2px solid var(--border-subtle);
+    padding: 0.5rem;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.mobile-nav.active {
+    display: flex;
+}
+
+.nav-btn {
+    flex: 1;
+    padding: 0.75rem;
+    background-color: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-btn);
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 1rem;
-}
-
-#user-list {
-    list-style: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
 }
 
-#user-list li {
+.nav-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+}
+
+.nav-btn.active {
+    background-color: var(--teal);
+    color: white;
+    border-color: var(--teal);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+}
+
+.nav-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* ── IMPROVED LOGOUT BUTTON ─────────────────────────────────────────────── */
+
+#global-logout {
+    padding: 0.65rem 1.25rem !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    min-width: 140px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+#global-logout:not(.hidden) {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.logout-label {
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    #global-logout {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.95rem !important;
+        min-width: 120px !important;
+    }
+}
+
+/* ── MOOD SUCCESS SCREEN ────────────────────────────────────────────────── */
+
+.mood-success-screen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--yellow) 0%, var(--pink) 100%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+}
+
+.mood-success-screen.active {
+    display: flex;
+}
+
+.mood-success-content {
+    background-color: white;
+    border-radius: var(--radius-card);
+    padding: 2rem;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mood-success-emoji {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.mood-success-screen h2 {
+    color: var(--teal);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+}
+
+.mood-success-screen p {
+    color: var(--text-mid);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.mood-summary {
+    background-color: var(--cream);
+    border-radius: var(--radius-card);
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid var(--teal);
+}
+
+.mood-summary-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1rem;
-    background-color: rgba(91, 160, 138, 0.08);
-    border-radius: 0.8rem;
-    border: 1px solid var(--border-subtle);
-}
-
-.user-email-display {
+    padding: 0.5rem 0;
     color: var(--text-dark);
-    font-weight: 500;
+    font-weight: 600;
 }
 
-.user-actions {
+.mood-summary-label {
+    color: var(--text-mid);
+    font-weight: 600;
+}
+
+.mood-summary-value {
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.mood-success-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.user-actions button {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: var(--teal);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+.mood-success-actions button {
+    flex: 1;
+    min-width: 150px;
 }
 
-.user-actions button:hover {
-    background-color: var(--teal-dark);
-}
-
-.user-actions .btn-del {
-    background-color: var(--danger);
-}
-
-.user-actions .btn-del:hover {
-    background-color: #c84040;
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .registration-card {
-        padding: 1.5rem 1rem;
-        border-radius: 1.2rem;
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
     }
-
-    .form-section {
-        margin-bottom: 1.8rem;
-        padding-bottom: 1.2rem;
-    }
-
-    .section-title {
-        font-size: 0.95rem;
-    }
-
-    .form-section input[type="text"],
-    .form-section input[type="email"],
-    .form-section input[type="password"] {
-        padding: 0.85rem 1rem;
-        font-size: 1rem;
-    }
-
-    .form-section .consent-label {
-        padding: 0.9rem 1rem;
-    }
-
-    .registration-form .btn-reg {
-        padding: 0.9rem 1.5rem;
-        font-size: 1rem;
-    }
-
-    #user-list li {
-        padding: 1.2rem;
-    }
-
-    .child-name {
-        font-size: 1.1rem;
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 }
 
-@media (max-width: 480px) {
-    .profiles-header {
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* ── RESPONSIVE LAYOUT ADJUSTMENTS ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .breadcrumb-nav {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        gap: 0.25rem;
+    }
+
+    .user-indicator {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
     }
 
-    .profiles-header h1 {
-        font-size: 1.6rem;
+    .child-selector-container {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    .child-actions button {
-        padding: 0.6rem 0.9rem;
-        font-size: 0.8rem;
+    #child-selector-dropdown {
+        max-width: 100%;
     }
 
-    .pin-button-group button {
-        padding: 0.6rem 0.9rem;
-        font-size: 0.8rem;
+    .child-selector-label {
+        font-size: 0.95rem;
+    }
+
+    .progress-indicator {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .progress-step {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .mood-success-content {
+        padding: 1.5rem;
+    }
+
+    .mood-success-emoji {
+        font-size: 3.5rem;
+    }
+
+    .mood-success-screen h2 {
+        font-size: 1.5rem;
+    }
+
+    .mood-success-screen p {
+        font-size: 1rem;
+    }
+
+    .mood-success-actions {
+        flex-direction: column;
+    }
+
+    .mood-success-actions button {
+        min-width: auto;
+    }
+
+    /* Show mobile nav on small screens */
+    .mobile-nav.active {
+        display: flex;
+    }
+
+    main {
+        padding-bottom: 90px;
+    }
+}
+
+@media (max-width: 480px) {
+    .breadcrumb-nav {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .mood-success-content {
+        padding: 1.25rem;
+    }
+
+    .mood-success-emoji {
+        font-size: 2.5rem;
+    }
+
+    .mood-success-screen h2 {
+        font-size: 1.25rem;
+    }
+
+    .nav-label {
+        display: none;
+    }
+
+    .nav-btn {
+        padding: 0.5rem 0.25rem;
     }
 }
 

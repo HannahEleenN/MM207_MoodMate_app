@@ -584,17 +584,20 @@ export const userUIController =
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const inputGroup = emailInput.closest('.input-group');
 
-        if (!email) {
+        if (!email)
+        {
             emailError.textContent = store.t ? store.t('login.emailPlaceholder') : 'Email is required';
             emailError.classList.add('show');
             if (inputGroup) inputGroup.classList.add('error');
             return false;
-        } else if (!emailRegex.test(email)) {
+        } else if (!emailRegex.test(email))
+        {
             emailError.textContent = store.t ? store.t('login.invalidEmail') : 'Please enter a valid email';
             emailError.classList.add('show');
             if (inputGroup) inputGroup.classList.add('error');
             return false;
-        } else {
+        } else
+        {
             emailError.textContent = '';
             emailError.classList.remove('show');
             if (inputGroup) inputGroup.classList.remove('error');

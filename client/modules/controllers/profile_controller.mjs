@@ -16,6 +16,17 @@ export const childProfilesUI =
 
     this.container.innerHTML = await ApiService.loadView('child_profiles');
 
+    try
+    {
+      const currentUserEmail = store.currentUser?.email || '';
+      const parentEmailElements = this.container.querySelectorAll('#parent-email-display, #profiles-user-email, #insights-user-email');
+      parentEmailElements.forEach(element => {
+        if (element) element.textContent = currentUserEmail || '—';
+      });
+    } catch (error) {
+      console.debug('Failed to update user email displays', error);
+    }
+
     this.cacheElements();
     this.attachEventListeners();
     await this.loadProfiles();

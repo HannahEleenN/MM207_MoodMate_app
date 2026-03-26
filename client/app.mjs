@@ -289,6 +289,12 @@ async function router()
     } catch (e) {
         console.warn('applyTranslations after router failed', e);
     }
+    
+    try {
+        updateUserIndicators();
+    } catch (e) {
+        console.debug('updateUserIndicators after router failed', e);
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -428,10 +434,11 @@ const setupEventListeners = () =>
             globalLogoutBtn.setAttribute('aria-label', label);
         } catch (e) {  }
 
-        // Use addEventListener to avoid ambiguity and ensure clear closure of the handler
-        globalLogoutBtn.addEventListener('click', async (e) => {
+        globalLogoutBtn.addEventListener('click', async (e) =>
+        {
             e.preventDefault();
-            try {
+            try
+            {
                 const hasTempSelections = !!(store && (store.temporaryMoodSelection || store.temporaryContext || store.temporarySolutionSelection));
                 const hasDraft = !!(store && store.draftMood && (store.draftMood.mood || store.draftMood.context || store.draftMood.solution || store.draftMood.note));
                 const hasUnsavedMood = hasTempSelections || hasDraft;
@@ -458,7 +465,6 @@ const setupEventListeners = () =>
                         localStorage.removeItem('moodmate_lang');
                     }
                 } catch (_) {
-                    // ignore localStorage errors
                 }
 
                 try {
@@ -478,7 +484,6 @@ const setupEventListeners = () =>
                         localStorage.removeItem('moodmate_lang');
                     }
                 } catch (innerErr) {
-                    // ignore
                 }
 
                 try {
@@ -693,3 +698,104 @@ if (!customElements.get('child-profiles'))
 
     try { await router(); } catch (e) { console.error('Initial router failed', e); }
 })();
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function updateUserIndicators()
+{
+    try
+    {
+        const currentUserEmail = store.currentUser?.email || '';
+        const currentChildName = store.currentChild?.name || '';
+        
+        const parentEmailElements = document.querySelectorAll('#parent-email-display, #insights-user-email');
+        parentEmailElements.forEach(element => {
+            if (element) element.textContent = currentUserEmail || '—';
+        });
+        
+        const childDisplayElement = document.getElementById('child-user-display');
+        if (childDisplayElement) {
+            childDisplayElement.textContent = currentChildName || '—';
+        }
+    } catch (error) {
+        console.debug('updateUserIndicators failed', error);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function updateMoodBreadcrumb(stepNumber)
+{
+    try
+    {
+        const breadcrumbStepElement = document.getElementById('breadcrumb-step-text');
+        const breadcrumbSeparator = document.getElementById('breadcrumb-step-sep');
+        
+        if (breadcrumbStepElement && breadcrumbSeparator)
+        {
+            if (stepNumber > 0)
+            {
+                breadcrumbSeparator.style.display = 'inline';
+                breadcrumbStepElement.style.display = 'inline';
+                const stepLabelKey = store.t ? store.t('breadcrumb.moodStep') : 'Mood (Step {step}/3)';
+                breadcrumbStepElement.textContent = stepLabelKey.replace('{step}', stepNumber);
+            } else {
+                breadcrumbSeparator.style.display = 'none';
+                breadcrumbStepElement.style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.debug('updateMoodBreadcrumb failed', error);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function showMoodSuccessScreen(selectedMood, selectedSolution, solutionLabelText)
+{
+    try
+    {
+        const successScreenElement = document.getElementById('mood-success-screen');
+        if (!successScreenElement) return;
+        
+        const moodToEmojiMap =
+        {
+            happy: '😊',
+            sad: '😢',
+            angry: '😡',
+            scared: '😨',
+            calm: '😌',
+            surprised: '😲'
+        };
+        
+        const moodEmojiElement = document.getElementById('success-emoji');
+        const successMoodElement = document.getElementById('success-mood');
+        const successSolutionElement = document.getElementById('success-solution');
+        
+        if (moodEmojiElement) moodEmojiElement.textContent = moodToEmojiMap[selectedMood] || '✨';
+        if (successMoodElement)
+        {
+            const moodLabelText = store.t ? store.t(`mood.${selectedMood}`) || selectedMood : selectedMood;
+            successMoodElement.textContent = moodLabelText.replace(/^[^a-zA-Z0-9]+\s*/, '').trim();
+        }
+        if (successSolutionElement) {
+            successSolutionElement.textContent = solutionLabelText || selectedSolution || '—';
+        }
+        
+        successScreenElement.classList.add('active');
+    } catch (error) {
+        console.error('showMoodSuccessScreen failed', error);
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function hideMoodSuccessScreen()
+{
+    try {
+        const successScreenElement = document.getElementById('mood-success-screen');
+        if (successScreenElement) successScreenElement.classList.remove('active');
+    } catch (error) {
+        console.debug('hideMoodSuccessScreen failed', error);
+    }
+}

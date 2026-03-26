@@ -1,17 +1,37 @@
+<nav class="breadcrumb-nav" aria-label="Page navigation">
+  <span data-i18n="breadcrumb.home">Home</span>
+  <span class="breadcrumb-separator">/</span>
+  <span class="active" data-i18n="breadcrumb.parentMenu">Parent Menu</span>
+</nav>
+
+<div class="user-indicator" role="status">
+  <div class="user-info">
+    <span data-i18n="user.loggedInAs">Logged in as:</span>
+    <strong id="parent-email-display"></strong>
+    <span class="user-mode-badge" data-i18n="user.parentMode">Parent Mode</span>
+  </div>
+</div>
+
 <main id="parent-dashboard" aria-label="Parent dashboard">
   <h1 data-i18n="parent.title"></h1>
   <p data-i18n="parent.welcome"></p>
 
-  <div id="current-child" class="child-display" data-i18n-prefix="parent.current" role="region" aria-label="Currently selected child">
+  <div class="child-selector-container" role="region" aria-label="Child selection">
+    <label for="child-selector-dropdown" class="child-selector-label" data-i18n="child.selectLabel">Select child:</label>
+    <select id="child-selector-dropdown" aria-label="Child profile selector" data-i18n-placeholder="child.selectPrompt">
+      <option value="" data-i18n="child.selectPrompt">Choose a child profile</option>
+    </select>
+  </div>
+
+  <div id="current-child" class="child-display" role="region" aria-label="Currently selected child">
     <span id="child-name" data-i18n="parent.childNone"></span>
   </div>
 
   <br>
 
   <div class="parent-actions" role="region" aria-label="Dashboard actions">
-     <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights" aria-label="View mood insights for selected child">View Insights</button>
+    <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights" aria-label="View mood insights for selected child">View Insights</button>
     <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles" aria-label="Manage child profiles">Manage Profiles</button>
-    <button id="logout-btn" class="secondary-btn" data-i18n="parent.logout" aria-label="Sign out of your account">Logout</button>
-    <button id="delete-account-btn" class="danger-btn" data-i18n="parent.deleteAccount" aria-label="Delete your account">Delete Account</button>
+    <button id="manage-accounts" class="secondary-btn" data-i18n="userManager.title" aria-label="Manage accounts">Account Settings</button>
   </div>
 </main>

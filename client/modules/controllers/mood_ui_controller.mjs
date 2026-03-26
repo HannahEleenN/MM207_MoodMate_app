@@ -21,6 +21,26 @@ export const moodUIController =
         try
         {
             container.innerHTML = await ApiService.loadView('insights');
+            
+            try 
+            {
+                const currentUserEmail = store.currentUser?.email || '';
+                const insightsUserEmailElement = container.querySelector('#insights-user-email');
+                if (insightsUserEmailElement) {
+                    insightsUserEmailElement.textContent = currentUserEmail || '—';
+                }
+            } catch (error) {
+                console.debug('Failed to update insights user email', error);
+            }
+            
+            const backButtonElement = container.querySelector('#back-to-parent-menu');
+            if (backButtonElement)
+            {
+                backButtonElement.onclick = (event) => {
+                    event.preventDefault();
+                    store.currentView = 'parentMenu';
+                };
+            }
 
             const resp = await ApiService.getAllMoods();
             const entries = (resp && (Array.isArray(resp.data) ? resp.data : (resp.moods || (Array.isArray(resp) ? resp : [])))) || [];

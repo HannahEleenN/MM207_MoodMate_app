@@ -36,7 +36,7 @@ if (typeof window !== 'undefined')
         } catch (e) {
             console.error('Error in unhandledrejection suppression handler', e);
         }
-    }, true); // use capture phase
+    }, true);
 
     window.addEventListener('error', (event) =>
     {
@@ -52,6 +52,5 @@ if (typeof window !== 'undefined')
         } catch (e) {
             console.error('Error in error-event suppression handler', e);
         }
-    }, true); // use capture phase
+    }, true);
 }
-

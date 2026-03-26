@@ -11,8 +11,16 @@ export const childController =
         this.container = container;
         this.model = model;
         this.container.innerHTML = await ApiService.loadView('mood_checkin');
+        
+        try {
+            const updateUserIndicators = window.updateUserIndicators || (() => {});
+            updateUserIndicators();
+        } catch (error) {
+            console.debug('updateUserIndicators not available', error);
+        }
+        
         this.resetFlow();
-        try { await this._maybeRestoreDraft(); } catch (e) { console.debug('Draft restore check failed', e); }
+        try { await this._maybeRestoreDraft(); } catch (error) { console.debug('Draft restore check failed', error); }
         this.setupEventListeners();
     },
 
@@ -339,16 +347,23 @@ export const childController =
             step.hidden = true;
         });
 
-        const currentStep = this.container.querySelector(`#step-${stepNumber}`);
-        if (currentStep) {
-            currentStep.hidden = false;
+        const currentStepElement = this.container.querySelector(`#step-${stepNumber}`);
+        if (currentStepElement) {
+            currentStepElement.hidden = false;
         }
 
-        const progressValues = { 1: 33, 2: 66, 3: 100 };
-        const progressBar = this.container.querySelector('#checkin-progress');
-        if (progressBar)
+        const progressValueMap = { 1: 33, 2: 66, 3: 100 };
+        const progressBarElement = this.container.querySelector('#checkin-progress');
+        if (progressBarElement)
         {
-            progressBar.value = progressValues[stepNumber] || 33;
+            progressBarElement.value = progressValueMap[stepNumber] || 33;
+        }
+        
+        try {
+            const updateMoodBreadcrumb = window.updateMoodBreadcrumb || (() => {});
+            updateMoodBreadcrumb(stepNumber);
+        } catch (error) {
+            console.debug('updateMoodBreadcrumb not available', error);
         }
     },
 
@@ -361,32 +376,32 @@ export const childController =
 
     async saveFinalMood()
     {
-        const contextInput = this.container.querySelector('#mood-context-text');
-        const solutionInput = this.container.querySelector('#solution-context-text');
+        const contextInputElement = this.container.querySelector('#mood-context-text');
+        const solutionInputElement = this.container.querySelector('#solution-context-text');
 
         const moodData =
         {
             mood: this.model.temporaryMoodSelection,
             context: this.model.temporaryContext,
-            customContext: contextInput && contextInput.value ? contextInput.value.trim() : null,
+            customContext: contextInputElement && contextInputElement.value ? contextInputElement.value.trim() : null,
             solution: this.model.temporarySolutionSelection || null,
-            customSolution: solutionInput && solutionInput.value ? solutionInput.value.trim() : null,
-            note: contextInput ? contextInput.value : "",
+            customSolution: solutionInputElement && solutionInputElement.value ? solutionInputElement.value.trim() : null,
+            note: contextInputElement ? contextInputElement.value : "",
             timestamp: new Date().toISOString(),
             profileId: store.currentChild ? store.currentChild.id : null
         };
 
         try
         {
-            const mood = this.model.temporaryMoodSelection;
-            const moodInfo = this.moodMap[mood] || { solutions: [] };
-            const foundSolution = moodInfo.solutions.find(s => s.id === this.model.temporarySolutionSelection);
-            if (foundSolution) {
-                const solLabelKey = foundSolution.labelKey || (foundSolution.id ? `solution.${foundSolution.id}` : null);
-                moodData.solutionLabel = (store && store.t && solLabelKey) ? store.t(solLabelKey) : (foundSolution.label || foundSolution.id || null);
+            const selectedMood = this.model.temporaryMoodSelection;
+            const moodConfig = this.moodMap[selectedMood] || { solutions: [] };
+            const foundSolutionConfig = moodConfig.solutions.find(s => s.id === this.model.temporarySolutionSelection);
+            if (foundSolutionConfig) {
+                const solutionLabelKey = foundSolutionConfig.labelKey || (foundSolutionConfig.id ? `solution.${foundSolutionConfig.id}` : null);
+                moodData.solutionLabel = (store && store.t && solutionLabelKey) ? store.t(solutionLabelKey) : (foundSolutionConfig.label || foundSolutionConfig.id || null);
             }
-        } catch (e) {
-            console.error('Error finding solution label:', e);
+        } catch (error) {
+            console.error('Error finding solution label:', error);
         }
 
         if (!moodData.profileId)
@@ -400,26 +415,44 @@ export const childController =
         {
             await moodUIController.saveMood(moodData);
 
-            try { await this._clearDraft(); } catch (e) { console.debug('Failed to clear draft after save', e); }
+            try { await this._clearDraft(); } catch (error) { console.debug('Failed to clear draft after save', error); }
 
-            if (moodData.solutionLabel)
-            {
-                const noticeElement = document.getElementById('global-notice');
-                if (noticeElement)
-                {
-                    noticeElement.textContent = `${store.t('mood.saved')} — ${moodData.solutionLabel}`;
-                    noticeElement.classList.remove('hidden');
-                    setTimeout(() => noticeElement.classList.add('hidden'), 4000);
-                } else {
-                    this.showNotice('mood.saved');
+            try {
+                const showMoodSuccessScreen = window.showMoodSuccessScreen || (() => {});
+                const hideMoodSuccessScreen = window.hideMoodSuccessScreen || (() => {});
+                
+                hideMoodSuccessScreen();
+                
+                const successBackButton = document.getElementById('success-back-btn');
+                const successLogoutButton = document.getElementById('success-logout-btn');
+                
+                if (successBackButton) {
+                    successBackButton.onclick = () => {
+                        hideMoodSuccessScreen();
+                        this.resetFlow();
+                        store.currentView = 'parentMenu';
+                    };
                 }
-            } else {
-                this.showNotice('mood.saved');
+                
+                if (successLogoutButton) {
+                    successLogoutButton.onclick = () => {
+                        hideMoodSuccessScreen();
+                        this.resetFlow();
+                        store.currentView = 'login';
+                    };
+                }
+                
+                showMoodSuccessScreen(
+                    this.model.temporaryMoodSelection,
+                    this.model.temporarySolutionSelection,
+                    moodData.solutionLabel
+                );
+            } catch (error) {
+                console.debug('Failed to show success screen, falling back to parent menu:', error);
+                this.resetFlow();
+                store.currentView = 'parentMenu';
             }
 
-            this.resetFlow();
-
-            store.currentView = 'parentMenu';
         } catch (error) {
             console.error('Save failed:', error);
             this.showNotice('mood.saveFailed');

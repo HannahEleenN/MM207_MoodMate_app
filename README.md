@@ -429,5 +429,3 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 4. **Permissions:** Properly handle microphone/camera permissions (if needed in future)
 
 ---
-
-

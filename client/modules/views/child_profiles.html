@@ -1,3 +1,27 @@
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav" aria-label="Page navigation">
+  <span data-i18n="breadcrumb.home">Home</span>
+  <span class="breadcrumb-separator">/</span>
+  <a href="#" data-action="back-to-parent-menu" data-i18n="breadcrumb.parentMenu">Parent Menu</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="active" data-i18n="breadcrumb.profiles">Profiles</span>
+</nav>
+
+<!-- User Indicator -->
+<div class="user-indicator" role="status">
+  <div class="user-info">
+    <span data-i18n="user.loggedInAs">Logged in as:</span>
+    <strong id="profiles-user-email"></strong>
+    <span class="user-mode-badge" data-i18n="user.parentMode">Parent Mode</span>
+  </div>
+</div>
+
+<!-- Progress Indicator -->
+<div class="progress-indicator" role="region" aria-label="Progress">
+  <div class="progress-step active">1</div>
+  <span class="progress-label" data-i18n="progress.profiles">Managing profiles</span>
+</div>
+
 <main id="child-profiles" aria-label="Child profile management">
   <div class="profiles-header">
     <button type="button" id="back-to-parent" class="back-link" data-i18n="profiles.back" aria-label="Back">Back</button>
