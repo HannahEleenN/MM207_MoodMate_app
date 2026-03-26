@@ -87,7 +87,7 @@ export const childController =
                 { id: 'scary', labelKey: 'reason.scary' },
                 { id: 'alone', labelKey: 'reason.alone' },
                 { id: 'loud', labelKey: 'reason.loud' },
-                { id: 'newplace', labelKey: 'reason.newplace' }
+                { id: 'newPlace', labelKey: 'reason.newPlace' }
             ],
             solutions: [
                 { id: 'talk', labelKey: 'solution.talk' },
@@ -104,7 +104,7 @@ export const childController =
                 { id: 'unfair', labelKey: 'reason.unfair' },
                 { id: 'lost', labelKey: 'reason.lost' },
                 { id: 'argue', labelKey: 'reason.argue' },
-                { id: 'notlistened', labelKey: 'reason.notlistened' },
+                { id: 'notListened', labelKey: 'reason.notListened' },
                 { id: 'tired', labelKey: 'reason.tired' },
                 { id: 'interrupted', labelKey: 'reason.interrupted' }
             ],
@@ -144,7 +144,7 @@ export const childController =
                 { id: 'family', labelKey: 'reason.family' },
                 { id: 'music', labelKey: 'reason.music' },
                 { id: 'rest', labelKey: 'reason.rest' },
-                { id: 'pettime', labelKey: 'reason.pettime' }
+                { id: 'petTime', labelKey: 'reason.petTime' }
             ],
             solutions: [
                 { id: 'music', labelKey: 'solution.music' },

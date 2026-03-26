@@ -45,11 +45,11 @@ export const childProfilesUI =
   attachEventListeners()
   {
     if (this.form) {
-      this.form.onsubmit = (e) =>
+      this.form.onsubmit = async (e) =>
       {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(this.form));
-        this.createProfile(data);
+        await this.createProfile(data);
       };
     }
 
@@ -78,10 +78,11 @@ export const childProfilesUI =
 
   updateList(profiles)
   {
-    // Ensure template is still available
-    if (!this.template) {
+    if (!this.template)
+    {
       this.template = this.container.querySelector('#child-item-template');
-      if (!this.template) {
+      if (!this.template)
+      {
         console.error('Template not found in updateList');
         return;
       }
@@ -154,7 +155,7 @@ export const childProfilesUI =
       {
         profile.hasPin = true;
         profile.pin = pin;
-        ProfileModel.update(profileId, { hasPin: true });
+        await ProfileModel.update(profileId, { hasPin: true });
         await this.loadProfiles();
         this.showNotice(mode === 'create' ? 'profiles.pinCreated' : 'profiles.pinChanged');
       }
@@ -174,7 +175,7 @@ export const childProfilesUI =
     {
       profile.hasPin = false;
       profile.pin = null;
-      ProfileModel.update(profileId, { hasPin: false, pin: null });
+      await ProfileModel.update(profileId, { hasPin: false, pin: null });
       await this.loadProfiles();
       this.showNotice('profiles.pinRemoved');
     }
@@ -195,8 +196,8 @@ export const childProfilesUI =
         return;
       }
 
-      // Create profile with optional PIN
-      const profileData = {
+      const profileData =
+      {
         name: data.childName || data.name,
         age: data.age || null,
         ...(data.pin && { pin: data.pin, hasPin: true })
@@ -229,10 +230,11 @@ export const childProfilesUI =
     if (!listItem) return;
     if (listItem.querySelector('.edit-inline')) return;
 
-    // Ensure template is still available
-    if (!this.editTemplate) {
+    if (!this.editTemplate)
+    {
       this.editTemplate = this.container.querySelector('#child-edit-template');
-      if (!this.editTemplate) {
+      if (!this.editTemplate)
+      {
         console.error('Edit template not found');
         return;
       }
@@ -258,7 +260,7 @@ export const childProfilesUI =
         return; 
       }
       
-      ProfileModel.update(id, { name: newName, age: newAge || null });
+      await ProfileModel.update(id, { name: newName, age: newAge || null });
       await this.loadProfiles();
       this.showNotice('edit.success');
     };
@@ -271,7 +273,7 @@ export const childProfilesUI =
   async deleteProfile(id)
   {
     if (!confirm(store.t('delete.confirm'))) return;
-    ProfileModel.delete(id);
+    await ProfileModel.delete(id);
     await this.loadProfiles();
   },
 

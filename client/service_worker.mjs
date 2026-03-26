@@ -34,10 +34,11 @@ self.addEventListener("install", (event) =>
             if (manifestResponse && manifestResponse.ok)
             {
                 const manifest = await manifestResponse.json();
-                const manifestIcons = (manifest && manifest.icons && Array.isArray(manifest.icons)) ? manifest.icons : [];
-                if (manifestIcons.length)
+                // icons is the array from manifest.json icons property
+                const icons = (manifest && manifest.icons && Array.isArray(manifest.icons)) ? manifest.icons : [];
+                if (icons.length)
                 {
-                    for (const icon of manifestIcons)
+                    for (const icon of icons)
                     {
                         if (icon && icon.src)
                         {

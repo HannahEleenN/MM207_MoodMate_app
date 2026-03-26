@@ -1,6 +1,30 @@
 import * as Child from '../models/child_server_model.mjs';
 import { HTTP } from '../utils/http_constants.mjs';
 
+const verifyChildOwnership = async (childId, parentId) =>
+{
+    const child = await Child.getById(childId);
+    if (!child) {
+        return { valid: false, error: 'Child not found', statusCode: HTTP.NOT_FOUND };
+    }
+    
+    if (child.parentId !== parentId && child['parent_id'] !== parentId) {
+        return { valid: false, error: 'Unauthorized', statusCode: HTTP.UNAUTHORIZED };
+    }
+    
+    return { valid: true, child };
+};
+
+const validateAndVerifyChild = async (childId, req) =>
+{
+    if (!childId) {
+        return { valid: false, error: 'Child ID is required', statusCode: HTTP.BAD_REQUEST };
+    }
+    
+    const parentId = req.user ? (req.user.id || req.user.userId) : null;
+    return await verifyChildOwnership(childId, parentId);
+};
+
 // ---------------------------------------------------------------------------------------------------------------------
 
 export const createChild = async (req, res, next) =>
@@ -72,18 +96,9 @@ export const updateChild = async (req, res, next) =>
         const childId = req.params.childId;
         const payload = req.body || {};
         
-        if (!childId) {
-            return res.status(HTTP.BAD_REQUEST).json({ error: 'Child ID is required' });
-        }
-
-        const child = await Child.getById(childId);
-        if (!child) {
-            return res.status(HTTP.NOT_FOUND).json({ error: 'Child not found' });
-        }
-        
-        const parentId = req.user ? (req.user.id || req.user.userId) : null;
-        if (child.parentId !== parentId && child['parent_id'] !== parentId) {
-            return res.status(HTTP.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        const verification = await validateAndVerifyChild(childId, req);
+        if (!verification.valid) {
+            return res.status(verification.statusCode).json({ error: verification.error });
         }
         
         const updated = await Child.update(childId, payload);
@@ -99,19 +114,9 @@ export const deleteChild = async (req, res, next) =>
     {
         const childId = req.params.childId;
         
-        if (!childId) {
-            return res.status(HTTP.BAD_REQUEST).json({ error: 'Child ID is required' });
-        }
-        
-        // Verify the child belongs to the authenticated user
-        const child = await Child.getById(childId);
-        if (!child) {
-            return res.status(HTTP.NOT_FOUND).json({ error: 'Child not found' });
-        }
-        
-        const parentId = req.user ? (req.user.id || req.user.userId) : null;
-        if (child.parentId !== parentId && child['parent_id'] !== parentId) {
-            return res.status(HTTP.UNAUTHORIZED).json({ error: 'Unauthorized' });
+        const verification = await validateAndVerifyChild(childId, req);
+        if (!verification.valid) {
+            return res.status(verification.statusCode).json({ error: verification.error });
         }
         
         await Child.deleteChild(childId);

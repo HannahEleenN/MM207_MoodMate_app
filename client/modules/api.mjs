@@ -47,9 +47,7 @@ export const ApiService =
         return await universalFetch(url);
     },
 
-    async loadTranslations(lang = 'nb') {
-        return await universalFetch(`./translations/${lang}.json?cb=${Date.now()}`);
-    },
+    // Note: loadTranslations is handled by store.loadI18n() in singleton.mjs
 
     async register(userData) {
         return await universalFetch(`${BASE}/users`, { method: 'POST', body: JSON.stringify(userData) });
@@ -69,10 +67,6 @@ export const ApiService =
             store.currentUser = null;
             store.currentChild = null;
         }
-    },
-
-    async listUsers() {
-        return await universalFetch(`${BASE}/users`, withAuthHeaders({ method: 'GET' }));
     },
 
     async updateUser(id, userData) {
@@ -135,18 +129,14 @@ export const ApiService =
 
     async deleteDraft(profileId)
     {
-        try {
+        try
+        {
             const endpoint = profileId ? `${BASE}/moods/drafts/${encodeURIComponent(profileId)}` : `${BASE}/moods/drafts`;
             const result = await universalFetch(endpoint, withAuthHeaders({ method: 'DELETE', suppressErrorLogging: true }));
-            // 204 No Content returns null, which is fine - just return success
             return result === null ? { success: true } : result;
         } catch (e) {
             console.debug('deleteDraft failed (server may not support drafts):', e);
             return null;
         }
-    },
-
-    async exportData(format = 'csv') {
-        return await universalFetch(`${BASE}/exports/${encodeURIComponent(format)}`, withAuthHeaders({ method: 'GET' }));
     }
 };

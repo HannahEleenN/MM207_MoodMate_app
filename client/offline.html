@@ -3,15 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#3d8b74">
     <title data-i18n="app.title">MoodMate</title>
     <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <main>
-      <h1 data-i18n="offline.title"></h1>
-      <p data-i18n="offline.message"></p>
-      <button onclick="location.reload()" data-i18n="offline.retry" aria-label="Retry"></button>
-      <p><a href="index.html" data-i18n="offline.backHome"></a></p>
+    <main role="main" aria-label="Offline notification">
+      <div class="offline-container">
+        <h1 data-i18n="offline.title"></h1>
+        <p data-i18n="offline.message"></p>
+        <button type="button" onclick="location.reload()" class="primary-btn" data-i18n="offline.retry" aria-label="Retry connection"></button>
+        <p><a href="index.html" data-i18n="offline.backHome"></a></p>
+      </div>
     </main>
   </body>
 </html>

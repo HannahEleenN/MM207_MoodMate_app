@@ -109,7 +109,8 @@ export const authController =
                 return false;
             }
 
-            if (!email || !secret) {
+            if (!email || !secret)
+            {
                 this.showNotice('login.incorrectPin');
                 return false;
             }
@@ -288,24 +289,20 @@ export const userUIController =
         
         try
         {
-            // Clear previous errors
             this.clearFormErrors();
 
-            // Validate inputs
             const validationErrors = this.validateRegistrationForm(formData);
             if (Object.keys(validationErrors).length > 0) {
                 this.displayFormErrors(validationErrors);
                 return;
             }
 
-            // Check consent
             const consentCheckbox = this.container.querySelector('#consent-check');
             if (!(consentCheckbox && consentCheckbox.checked)) {
                 this.displayFormError('consent-error', 'register.requireConsent');
                 return;
             }
 
-            // Show loading state
             if (form) form.classList.add('loading');
             if (btn) btn.disabled = true;
             if (spinner) spinner.setAttribute('aria-hidden', 'false');
@@ -339,8 +336,7 @@ export const userUIController =
             }
         } catch (error) {
             console.error("Registration failed:", error);
-            
-            // Handle specific error responses
+
             if (error && error.body && error.body.errorKey) {
                 this.showNotice(error.body.errorKey);
             } else if (error && error.body && error.body.error) {
@@ -373,7 +369,6 @@ export const userUIController =
             }
         }
 
-        // Password validation
         if (!formData.secret || !formData.secret.trim()) {
             errors.password = 'login.passwordPlaceholder';
         } else {
@@ -388,10 +383,12 @@ export const userUIController =
 
     displayFormErrors(errors)
     {
-        Object.keys(errors).forEach(field => {
+        Object.keys(errors).forEach(field =>
+        {
             this.displayFormError(`${field}-error`, errors[field]);
             const inputGroup = this.container.querySelector(`#reg-${field}`);
-            if (inputGroup) {
+            if (inputGroup)
+            {
                 const group = inputGroup.closest('.input-group');
                 if (group) group.classList.add('error');
             }
@@ -401,7 +398,8 @@ export const userUIController =
     displayFormError(errorElementId, messageKey)
     {
         const errorEl = this.container.querySelector(`#${errorElementId}`);
-        if (errorEl) {
+        if (errorEl)
+        {
             errorEl.textContent = store.t ? store.t(messageKey) : messageKey;
             errorEl.classList.add('show');
         }
@@ -410,7 +408,8 @@ export const userUIController =
     clearFormErrors()
     {
         const errorEls = this.container.querySelectorAll('.field-error');
-        errorEls.forEach(el => {
+        errorEls.forEach(el =>
+        {
             el.textContent = '';
             el.classList.remove('show');
         });

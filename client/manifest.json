@@ -3,15 +3,48 @@
   "name": "MoodMate - Learn about feelings",
   "description": "An interactive diary that helps children understand and log their feelings.",
   "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "theme_color": "#3d8b74",
+  "background_color": "#f5ede0",
+  "screenshots": [
+    {
+      "src": "assets/icons/MoodMate_Favicon.svg",
+      "sizes": "192x192",
+      "form_factor": "narrow",
+      "type": "image/svg+xml"
+    }
+  ],
   "icons": [
     {
       "src": "assets/icons/MoodMate_Favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "any"
+      "sizes": "any",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/MoodMate_Favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "utilities"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Log Mood",
+      "short_name": "Mood",
+      "description": "Quick access to log a mood",
+      "url": "/index.html?view=mood",
+      "icons": [
+        {
+          "src": "assets/icons/MoodMate_Favicon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     }
   ]
 }

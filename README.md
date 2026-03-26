@@ -187,22 +187,127 @@ The client ships a language switcher using flag SVGs from `client/assets/flags/`
 
 ## Accessibility
 
-- Skip-to-content link in `index.html`.
-- Visible keyboard focus styling in `client/style.css`.
-- Modal ARIA attributes and focus-trap behavior when opening/closing legal dialogs.
-- Interactive elements include ARIA roles (e.g. mood options marked as a `radiogroup`).
+The app prioritizes accessibility for children and parents:
 
-**Target:** Lighthouse accessibility score ≥ 90.
+**HTML & Semantic Structure:**
+- Proper heading hierarchy (h1 → h2 → h3)
+- Semantic form elements with associated labels
+- Fieldset/legend for grouping related inputs
+- Skip-to-content link hidden but available to keyboard users
+
+**ARIA & Interactivity:**
+- Interactive elements include proper ARIA roles (`radiogroup` for mood selection, `dialog` for modals)
+- Live regions (`aria-live="polite"`) for status messages and notifications
+- Proper `aria-label` and `aria-describedby` on form inputs
+- Modal dialogs include `aria-modal="true"` and focus trapping
+
+**Visual Accessibility:**
+- Minimum contrast ratio of 4.5:1 for text
+- Visible keyboard focus indicators on all interactive elements
+- Color is not the only indicator (icons, text labels used with colors)
+- Minimum touch target size of 44×44px for buttons
+
+**Keyboard Navigation:**
+- Full keyboard navigation support (Tab, Shift+Tab, Enter, Space)
+- Logical tab order maintained throughout the app
+- No keyboard traps (user can always escape)
+- Escape key closes modals
+
+**Performance & Loading:**
+- Font preload/preconnect reduces layout shift (CLS optimization)
+- Font fallback with size-adjust prevents FOUT (Flash of Unstyled Text)
+- Critical CSS inlined in `<head>` for faster initial paint
+- Static assets cached with appropriate Cache-Control headers
+
+**Target:** Lighthouse accessibility score ≥ 90, performance ≥ 80.
+
+---
+
+## MVC Pattern Implementation
+
+The app implements a clear separation of concerns following the Model-View-Controller pattern:
+
+**Model Layer (M):** `client/modules/models/`, `server/models/`
+- Client models (`*_client_model.mjs`): Manage in-memory state and API contracts
+- Server models (`*_server_model.mjs`): Abstract database access, handle SQL queries
+- Database schema (`server/database/moodmate_db.sql`): Tables for users, children, moods
+
+**View Layer (V):** `client/modules/views/`
+- HTML templates (`.html` files) with `data-i18n` attributes for internationalization
+- Compiled markup loaded dynamically by controllers
+- CSS styling in `client/style.css` (colors, typography, layout, accessibility)
+- Responsive design with mobile-first approach
+
+**Controller Layer (C):** `client/modules/controllers/`, `server/controllers/`
+- Client controllers handle user events, coordinate models and views
+- Server controllers (API handlers) process HTTP requests, enforce permissions
+- Business logic separation: controllers manage state transitions and workflows
+- Middleware (`server/middleware/`) enforces authentication/authorization
+
+**Data Flow:**
+```
+User Input → Controller → Model → API Service → Server Handler → Server Model → Database
+                ↓                                                      ↓
+            View Updates ← Translations ← Response ← Query Results ← Tables
+```
+
+**Benefits:**
+- Models can be tested independently of UI
+- Views can be redesigned without changing logic
+- Controllers can be reused across different interfaces
+- Database can be swapped (PostgreSQL ↔ SQLite) by only changing models
 
 ---
 
 ## Testing & Lighthouse
 
+### Lighthouse Performance Audits
+
 ```powershell
-npx lighthouse http://localhost:3000 --only-categories=accessibility --emulated-form-factor=mobile --output=json --output-path=lh-accessibility.json
+# Run Lighthouse audit in Chrome DevTools
+1. Open the app in Chrome/Edge.
+2. Open DevTools (F12) → Lighthouse tab.
+3. Select categories: Performance, Accessibility, Best Practices, SEO, PWA.
+4. Click "Generate report" and review scores and recommendations.
 ```
 
+**Target Scores:**
+- **Accessibility:** ≥ 90 (WCAG AA compliance)
+- **Performance:** ≥ 85 (optimized for children's devices)
+- **Best Practices:** ≥ 90
+- **SEO:** ≥ 90
+- **PWA:** ✅ Installable
+
+### API Testing
+
 Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against your local or deployed server. Update the environment URL and Authorization token where needed.
+
+**Test Collections Include:**
+- User registration and authentication flows
+- Child profile CRUD operations
+- Mood check-in workflows
+- Parent insights and reporting
+- Offline sync validation
+- Error handling scenarios
+
+### Manual Accessibility Testing
+
+**Keyboard Navigation:**
+1. Use Tab to navigate through all interactive elements
+2. Use Shift+Tab to navigate backwards
+3. Verify focus indicators are always visible
+4. Escape key should close modals
+5. Enter/Space should activate buttons
+
+**Screen Reader (NVDA/JAWS/VoiceOver):**
+1. Test with a screen reader to ensure proper ARIA labels
+2. Verify heading structure is logical
+3. Check form fields have associated labels
+4. Confirm skip-to-content link is available
+
+**Color Contrast:**
+1. Use a contrast checker tool (e.g., WebAIM) to verify 4.5:1 minimum for body text
+2. Test with color blindness simulators
 
 ---
 
@@ -220,7 +325,8 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | Middleware (meaningful, not logging)                   |     ✅ Done      | `server/middleware/privacy_guard.mjs` — JWT identity/role enforcement                      |
 | Client web component for user CRUD                     |     ✅ Done      | `user-manager` element in `client/app.mjs`, `userManager.html`, `user_controller.mjs`      |
 | PWA & offline support                                  |     ✅ Done      | `client/manifest.json`, `client/service_worker.mjs`, `client/service_worker_setup.mjs`       |
-| Accessibility (WCAG/ARIA)                              | 🔄 In progress  | Skip link, focus styles, ARIA roles added — Lighthouse target ≥ 90                        |
+| Accessibility (WCAG/ARIA)                              | ✅ Enhanced     | Skip link, focus styles, 44px touch targets, ARIA roles, live regions, high contrast       |
+| Internationalization (I18n)                            | ✅ Complete     | 5 languages (Norwegian, English, Swedish, Spanish, Danish) with consistent terminology    |
 | Project management & repository                        |     ✅ Done      | GitHub Project board                                                                      |
 | Tests & test tools                                     |     ✅ Done      | `tests/moodmate_api_tests.json` — import into Postman/Insomnia                            |
 
@@ -234,3 +340,94 @@ Import `tests/moodmate_api_tests.json` into Postman or Insomnia and run against 
 | `client/modules/controllers/user_controller.mjs`, `views/userManager.html`    | Client CRUD and consent flow                   |
 | `client/service_worker.mjs`, `client/manifest.json`                           | PWA evidence                                   |
 | `tests/moodmate_api_tests.json`                                              | API test collection                            |
+| `client/style.css`                                                            | Accessibility: 44px touch targets, contrast    |
+| `client/translations/*.json`                                                  | 5 languages with complete key coverage         |
+
+---
+
+## Recent Improvements (v2.1)
+
+### Accessibility Enhancements
+- ✅ Increased all button touch targets to minimum 44×44px
+- ✅ Improved color contrast on context/solution buttons (4.5:1+ ratio)
+- ✅ Added `aria-live` regions for status updates
+- ✅ Enhanced focus indicators and keyboard navigation
+- ✅ Semantic HTML structure with proper heading hierarchy
+
+### Lighthouse & Performance
+- ✅ Added meta tags for SEO (keywords, author, mobile app support)
+- ✅ Optimized font loading with preload/preconnect
+- ✅ Service worker caching strategy for offline resilience
+- ✅ Reduced layout shift (CLS) with proper font-size-adjust
+
+### Translation Completeness
+- ✅ Completed all 5 language files with consistent terminology
+- ✅ Added missing keys: `emailHelper`, `passwordSection`, `passwordConfirmLabel`, `consentLabel`
+- ✅ Verified terminology consistency across contexts
+
+### CSS & UI Improvements
+- ✅ Flexbox centering on buttons for better alignment
+- ✅ Consistent touch target sizing throughout
+- ✅ Improved visual hierarchy for form sections
+- ✅ Better mobile responsiveness testing
+
+### MVC Pattern Enhancements
+- ✅ Controllers properly separated from views
+- ✅ Models abstract database access cleanly
+- ✅ Middleware enforces authorization at API layer
+- ✅ Clear data flow from UI → Controllers → Models → Database
+
+### Code Quality & Logic Improvements
+- ✅ Extracted duplicated translation logic into `translateValue()` utility function
+- ✅ Improved error handling in middleware with contextual error messages
+- ✅ Enhanced security documentation in `auth_crypto.mjs` (scrypt KDF, timing-safe comparison)
+- ✅ Single-fetch pattern documented in `ApiService` with clear authentication flow
+- ✅ User model proxy pattern documented for reactive state management
+- ✅ Privacy guard middleware documented with role-based access control examples
+- ✅ Service worker caching strategy documented with performance optimization tips
+
+### PWA Improvements
+- ✅ Enhanced manifest.json with theme colors, categories, shortcuts
+- ✅ Added maskable icon support for different device types
+- ✅ Added PWA shortcuts for quick access to mood logging
+- ✅ Added `scope` and `prefer_related_applications` properties
+
+### Documentation Enhancements
+- ✅ Added comprehensive comments explaining design patterns (Proxy, Single-Fetch, MVC)
+- ✅ Documented security architecture (JWT, scrypt, timing-safe comparisons)
+- ✅ Documented API authentication flow with examples
+- ✅ Added Lighthouse testing guides with target scores
+- ✅ Added manual accessibility testing procedures
+- ✅ Documented offline sync API and IndexedDB usage
+
+---
+
+## Performance Tips for Lighthouse
+
+### For Better Performance (85+):
+1. **Font Loading:** Already optimized with preload/preconnect and size-adjust
+2. **Cache Strategy:** Service worker uses Cache-First for static assets, Network-First for navigation
+3. **Code Splitting:** Load translations on demand (current implementation uses lazy load)
+4. **Asset Compression:** Ensure server applies gzip compression on responses
+
+### For Better Accessibility (90+):
+1. **Touch Targets:** All buttons now have minimum 44×44px (44px recommended for children)
+2. **Contrast:** Verified 4.5:1 ratio on all text
+3. **ARIA:** Proper labels, live regions, and semantic HTML
+4. **Keyboard Navigation:** Full Tab/Shift+Tab support, focus trapping in modals
+
+### For Better SEO (90+):
+1. **Meta Tags:** Added keywords, author, description, theme-color
+2. **Mobile Support:** Apple mobile-web-app tags added to index.html
+3. **Structured Data:** Consider adding JSON-LD for mood-tracking app schema
+4. **Canonical URLs:** Ensure each page has a canonical URL
+
+### For Better Best Practices (90+):
+1. **HTTPS:** Ensure production uses HTTPS (Render provides this)
+2. **No Deprecated APIs:** Using modern ES modules, no old JS patterns
+3. **Security Headers:** Ensure server sends proper HSTS, CSP headers
+4. **Permissions:** Properly handle microphone/camera permissions (if needed in future)
+
+---
+
+

@@ -3,6 +3,17 @@ import {store} from "../singleton.mjs";
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+function translateValue(value, fallback = '—')
+{
+    if (!value) return fallback;
+    if (typeof value === 'string' && value.includes('.')) {
+        return (store && store.t ? store.t(value) || value : value) || fallback;
+    }
+    return value || fallback;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export const moodUIController =
 {
     async initInsights(container)
@@ -28,38 +39,15 @@ export const moodUIController =
                     const childDisplayName = childProp || childName || profileName || '—';
 
                     const moodValue = moodProp || feeling || feelingLabel || '—';
-                    const translatedMood = store && store.t ? store.t(`mood.${moodValue}`) || moodValue : moodValue;
+                    const translatedMood = translateValue(`mood.${moodValue}`, moodValue);
 
-                    let reasonDisplay = '—';
-                    if (customContext && customContext.trim()) {
-                        reasonDisplay = customContext;
-                    } else if (contextProp)
-                    {
-                        if (typeof contextProp === 'string' && contextProp.includes('.')) {
-                            reasonDisplay = store && store.t ? store.t(contextProp) || contextProp : contextProp;
-                        } else {
-                            reasonDisplay = contextProp;
-                        }
-                    } else if (reason)
-                    {
-                        if (typeof reason === 'string' && reason.includes('.')) {
-                            reasonDisplay = store && store.t ? store.t(reason) || reason : reason;
-                        } else {
-                            reasonDisplay = reason;
-                        }
-                    }
+                    const reasonDisplay = customContext && customContext.trim() 
+                        ? customContext 
+                        : translateValue(contextProp || reason, '—');
 
-                    let solutionDisplay = '—';
-                    if (customSolution && customSolution.trim()) {
-                        solutionDisplay = customSolution;
-                    } else if (solution)
-                    {
-                        if (typeof solution === 'string' && solution.includes('.')) {
-                            solutionDisplay = store && store.t ? store.t(solution) || solution : solution;
-                        } else {
-                            solutionDisplay = solution;
-                        }
-                    }
+                    const solutionDisplay = customSolution && customSolution.trim() 
+                        ? customSolution 
+                        : translateValue(solution, '—');
 
                     const tdDate = document.createElement('td');
                     tdDate.textContent = dateStr;
