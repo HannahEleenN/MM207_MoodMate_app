@@ -362,13 +362,15 @@ export const childController =
     async saveFinalMood()
     {
         const contextInput = this.container.querySelector('#mood-context-text');
+        const solutionInput = this.container.querySelector('#solution-context-text');
 
         const moodData =
         {
             mood: this.model.temporaryMoodSelection,
             context: this.model.temporaryContext,
+            customContext: contextInput && contextInput.value ? contextInput.value.trim() : null,
             solution: this.model.temporarySolutionSelection || null,
-            solutionLabel: null,
+            customSolution: solutionInput && solutionInput.value ? solutionInput.value.trim() : null,
             note: contextInput ? contextInput.value : "",
             timestamp: new Date().toISOString(),
             profileId: store.currentChild ? store.currentChild.id : null
@@ -470,6 +472,7 @@ export const childController =
                 context: this.model.temporaryContext || null,
                 solution: this.model.temporarySolutionSelection || null,
                 note: (this.container && this.container.querySelector('#mood-context-text')) ? (this.container.querySelector('#mood-context-text').value || '') : '',
+                solutionNote: (this.container && this.container.querySelector('#solution-context-text')) ? (this.container.querySelector('#solution-context-text').value || '') : '',
                 timestamp: new Date().toISOString(),
                 profileId: store.currentChild ? store.currentChild.id : null
             };
@@ -528,7 +531,14 @@ export const childController =
             this.model.temporaryMoodSelection = draft.mood || null;
             this.model.temporaryContext = draft.context || null;
             this.model.temporarySolutionSelection = draft.solution || null;
-            try { const contextInput = this.container.querySelector('#mood-context-text'); if (contextInput) contextInput.value = draft.note || ''; } catch (_) {}
+            try { 
+                const contextInput = this.container.querySelector('#mood-context-text'); 
+                if (contextInput) contextInput.value = draft.note || ''; 
+            } catch (_) {}
+            try { 
+                const solutionInput = this.container.querySelector('#solution-context-text'); 
+                if (solutionInput) solutionInput.value = draft.solutionNote || ''; 
+            } catch (_) {}
             store.draftMood = draft;
 
             if (draft.solution) {

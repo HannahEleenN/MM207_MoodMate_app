@@ -15,7 +15,7 @@ export const createMood = async (req, res, next) =>
         console.log('[createMood] incoming body:', req.body);
         console.log('[createMood] req.user:', req.user);
 
-        const { mood, context, solution, note, profileId } = req.body;
+        const { mood, context, solution, customContext, customSolution, note, profileId } = req.body;
         const userId = req.user && (req.user.userId || req.user.id);
 
         const newEntry =
@@ -24,7 +24,9 @@ export const createMood = async (req, res, next) =>
             profileId: profileId || null,
             mood,
             context,
+            customContext: customContext || null,
             solution: solution || null,
+            customSolution: customSolution || null,
             note: note || '',
             timestamp: new Date()
         };
@@ -83,24 +85,6 @@ export const getAllMoods = async (req, res, next) =>
         console.error('getAllMoods error:', error);
         return next(error);
     }
-};
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-export const getMoodById = async (req, res) => {
-    res.status(200).json({ message: `Details for mood ${req.params.id}` });
-};
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-export const updateMood = async (req, res) => {
-    res.status(200).json({ message: "Mood updated" });
-};
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-export const deleteMood = async (req, res) => {
-    res.status(204).send();
 };
 
 // ---------------------------------------------------------------------------------------------------------------------

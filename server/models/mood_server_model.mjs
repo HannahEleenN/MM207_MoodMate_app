@@ -19,8 +19,10 @@ export const Mood =
         const userId = data.userId;
         const mood = data.mood || null;
         const context = data.context || null;
-        const note = data.note || null;
+        const customContext = data.customContext || null;
         const solution = data.solution || null;
+        const customSolution = data.customSolution || null;
+        const note = data.note || null;
         const profileId = data.profileId || null;
         const timestamp = data.timestamp ? new Date(data.timestamp) : new Date();
 
@@ -35,8 +37,14 @@ export const Mood =
         }
 
         let mergedNote = note || '';
+        if (customContext && customContext.trim()) {
+            mergedNote = mergedNote ? `${mergedNote}\n\n${customContext}` : customContext;
+        }
         if (solution) {
             mergedNote = mergedNote ? `${mergedNote}\nSOLUTION: ${solution}` : `SOLUTION: ${solution}`;
+        }
+        if (customSolution && customSolution.trim()) {
+            mergedNote = mergedNote ? `${mergedNote}\n\n${customSolution}` : customSolution;
         }
 
         const fallbackSql = `INSERT INTO mood_logs (user_id, mood, context, note, timestamp) VALUES ($1,$2,$3,$4,$5)`;

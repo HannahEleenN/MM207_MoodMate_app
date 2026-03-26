@@ -150,15 +150,3 @@ export const ApiService =
         return await universalFetch(`${BASE}/exports/${encodeURIComponent(format)}`, withAuthHeaders({ method: 'GET' }));
     }
 };
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-if (typeof ApiService !== 'undefined')
-{
-    void ApiService.loadTranslations;
-    void ApiService.logout;
-    void ApiService.listUsers;
-    void ApiService.getChildren;
-    void ApiService.createChild;
-    void ApiService.exportData;
-}
