@@ -132,7 +132,7 @@ export async function update(childId, { name, age, hasPin, pin })
         UPDATE child_profiles
         SET ${updates.join(', ')}
         WHERE id = $${paramCount}
-            RETURNING id, parent_id AS "parentId", name, age, has_pin AS "hasPin"
+        RETURNING id, parent_id AS "parentId", name, age, has_pin AS "hasPin"
     `;
 
     const res = await pool.query(sql, values);
