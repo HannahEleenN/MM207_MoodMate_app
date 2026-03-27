@@ -8,6 +8,7 @@ export async function initParentApp(container)
     try
     {
         container.innerHTML = await ApiService.loadView('parent_menu');
+        await store.applyTranslations(container);
 
         try {
             const updateUserIndicators = window.updateUserIndicators || (() => {});

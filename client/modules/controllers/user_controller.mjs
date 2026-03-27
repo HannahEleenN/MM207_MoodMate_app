@@ -17,6 +17,7 @@ export const authController =
             }
 
             this.container.innerHTML = await ApiService.loadView('login');
+            await store.applyTranslations(this.container);
 
             const loginForm = this.container.querySelector('#loginForm');
             const registerBtn = this.container.querySelector('#go-to-reg');
@@ -240,6 +241,7 @@ export const userUIController =
         }
 
         this.container.innerHTML = await ApiService.loadView('user_manager');
+        await store.applyTranslations(this.container);
 
         const registrationForm = this.container.querySelector("#regForm");
         const userListElement = this.container.querySelector("#user-list");

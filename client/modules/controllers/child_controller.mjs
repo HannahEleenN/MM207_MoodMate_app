@@ -11,6 +11,7 @@ export const childController =
         this.container = container;
         this.model = model;
         this.container.innerHTML = await ApiService.loadView('mood_checkin');
+        await store.applyTranslations(this.container);
         
         try {
             const updateUserIndicators = window.updateUserIndicators || (() => {});
@@ -29,6 +30,7 @@ export const childController =
     {
         this.container = container;
         this.container.innerHTML = await ApiService.loadView('child_login');
+        await store.applyTranslations(this.container);
 
         const childLoginForm = this.container.querySelector('#childLoginForm');
         const backBtn = this.container.querySelector('#back-to-parent');

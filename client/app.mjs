@@ -278,6 +278,7 @@ async function router()
         default:
             try {
                 root.innerHTML = await ApiService.loadView('not_found');
+                await store.applyTranslations(root);
             } catch (fallbackError) {
                 console.error('[router] Failed to load not_found view:', fallbackError);
                 root.innerHTML = '<section><h2>Page Not Found</h2><p>The requested view is not available.</p><button onclick="location.reload()">Reload</button></section>';

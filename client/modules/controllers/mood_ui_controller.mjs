@@ -21,6 +21,7 @@ export const moodUIController =
         try
         {
             container.innerHTML = await ApiService.loadView('insights');
+            await store.applyTranslations(container);
             
             try 
             {

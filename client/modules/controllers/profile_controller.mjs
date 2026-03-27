@@ -15,6 +15,7 @@ export const childProfilesUI =
     }
 
     this.container.innerHTML = await ApiService.loadView('child_profiles');
+    await store.applyTranslations(this.container);
 
     try
     {
