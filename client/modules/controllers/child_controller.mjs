@@ -22,6 +22,7 @@ export const childController =
         this.resetFlow();
         try { await this._maybeRestoreDraft(); } catch (error) { console.debug('Draft restore check failed', error); }
         this.setupEventListeners();
+        this.showMoodStep(1);
     },
 
     async initLogin(container)
@@ -234,13 +235,20 @@ export const childController =
         }
 
         const nextBtn = container.querySelector('#btn-next-step');
-        if (nextBtn) nextBtn.onclick = () => this.navigateToStep(3);
-        
+        if (nextBtn) nextBtn.onclick = () => {
+            this.model.temporaryContext = null;
+            store.currentView = 'moodCheckinReason';
+        };
+
         const prevBtn2 = container.querySelector('#btn-prev-step-2');
-        if (prevBtn2) prevBtn2.onclick = () => this.navigateToStep(1);
-        
+        if (prevBtn2) prevBtn2.onclick = () => {
+            store.currentView = 'moodCheckinSelect';
+        };
+
         const prevBtn3 = container.querySelector('#btn-prev-step-3');
-        if (prevBtn3) prevBtn3.onclick = () => this.navigateToStep(2);
+        if (prevBtn3) prevBtn3.onclick = () => {
+            store.currentView = 'moodCheckinReason';
+        };
 
         const finishBtn = container.querySelector('#btn-finish');
         if (finishBtn) finishBtn.onclick = () => this.saveFinalMood();
@@ -258,7 +266,7 @@ export const childController =
             btn.onclick = () =>
             {
                 const prevStep = Number(btn.dataset.toStep);
-                this.navigateToStep(prevStep);
+                this.showMoodStep(prevStep);
             };
         });
     },
@@ -316,7 +324,7 @@ export const childController =
             });
         }
 
-        this.navigateToStep(2);
+        this.showMoodStep(2);
     },
 
     handleContextSelection(context)
@@ -331,7 +339,7 @@ export const childController =
         if (moodData.solutions && moodData.solutions.length === 1) {
             this.model.temporarySolutionSelection = moodData.solutions[0].id;
         }
-        this.navigateToStep(3);
+        this.showMoodStep(3);
     },
 
     handleSolutionSelection(solution)
@@ -341,7 +349,7 @@ export const childController =
         this._persistDraft();
     },
 
-    navigateToStep(stepNumber)
+    showMoodStep(stepNumber)
     {
         this.container.querySelectorAll('.step-container').forEach(step => {
             step.hidden = true;
@@ -371,7 +379,7 @@ export const childController =
     {
         this.model.temporaryMoodSelection = null;
         this.model.temporaryContext = null;
-        this.navigateToStep(1);
+        this.showMoodStep(1);
     },
 
     async saveFinalMood()

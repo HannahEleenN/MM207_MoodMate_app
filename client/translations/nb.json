@@ -7,8 +7,8 @@
 
     "legal.modalTitle":  "Vilkår og personvern",
     "legal.close":  "Lukk",
-    "legal.terms":  "Vilkår",
-    "legal.privacy":  "Personvern",
+    "legal.terms":  "Vilkår for bruk",
+    "legal.privacy":  "Personvernerklæring",
 
     "offline.title":  "Offline",
     "offline.message":  "Det ser ut som du er uten nettverk. Noen funksjoner kan være utilgjengelige.",
@@ -239,7 +239,7 @@
 
     "user.loggedInAs":  "Logget inn som:",
     "user.parentMode":  "Foreldremodus",
-    "user.childMode":  "Barnmodus",
+    "user.childMode":  "Barnemodus",
 
     "child.selectLabel":  "Velg barn:",
     "child.selectPrompt":  "Velg en barneprofil",

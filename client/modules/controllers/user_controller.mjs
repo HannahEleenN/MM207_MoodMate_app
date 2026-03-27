@@ -56,7 +56,7 @@ export const authController =
                     store.currentView = 'userManager';
                 };
             }
-            
+
             const tosBtn = this.container.querySelector('#view-tos');
             const privacyBtn = this.container.querySelector('#view-privacy');
 

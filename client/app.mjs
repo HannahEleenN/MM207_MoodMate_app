@@ -799,3 +799,8 @@ function hideMoodSuccessScreen()
         console.debug('hideMoodSuccessScreen failed', error);
     }
 }
+
+window.showMoodSuccessScreen = showMoodSuccessScreen;
+window.hideMoodSuccessScreen = hideMoodSuccessScreen;
+window.updateUserIndicators = updateUserIndicators;
+window.updateMoodBreadcrumb = updateMoodBreadcrumb;
