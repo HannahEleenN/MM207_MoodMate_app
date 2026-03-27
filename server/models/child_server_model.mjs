@@ -55,6 +55,40 @@ export async function getById(childId)
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+export async function findByPinWithParent(parentId, pin)
+{
+    if (!parentId || !pin) {
+        throw new Error('parentId and pin are required');
+    }
+
+    const res = await pool.query(
+        'SELECT id, parent_id AS "parentId", name, age, pin, has_pin AS "hasPin" FROM child_profiles WHERE parent_id = $1 AND has_pin = true',
+        [parentId]
+    );
+
+    for (const child of res.rows)
+    {
+        if (child.pin)
+        {
+            const matches = await verifySecret(pin, child.pin);
+            if (matches)
+            {
+                return {
+                    id: child.id,
+                    parentId: child.parentId,
+                    name: child.name,
+                    age: child.age,
+                    hasPin: child.hasPin
+                };
+            }
+        }
+    }
+
+    return null;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export async function findByPin(pin)
 {
     if (!pin) throw new Error('PIN is required');
@@ -160,3 +194,17 @@ export async function deleteChild(childId)
 
     return true;
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export default
+{
+    create,
+    findByPin,
+    findByPinWithParent,
+    getByParent,
+    getById,
+    update,
+    deleteChild
+};
+

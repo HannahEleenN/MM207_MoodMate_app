@@ -38,8 +38,8 @@ export const createChild = async (req, res, next) =>
         
         const payload = req.body || {};
         payload.parentId = parentId;
-        if (!payload.name || !payload.pin) {
-            return res.status(HTTP.BAD_REQUEST).json({ error: 'Name and PIN are required' });
+        if (!payload.name) {
+            return res.status(HTTP.BAD_REQUEST).json({ error: 'Name is required' });
         }
         const created = await Child.create(payload);
         return res.status(HTTP.CREATED).json({ child: created });
@@ -73,10 +73,21 @@ export const loginByPin = async (req, res, next) =>
         if (!pin) {
             return res.status(HTTP.BAD_REQUEST).json({ error: 'PIN is required' });
         }
-        const child = await Child.findByPin(pin);
+        
+        let child = null;
+        const parentId = req.user ? (req.user.id || req.user.userId) : null;
+
+        if (parentId)
+        {
+            child = await Child.findByPinWithParent(parentId, pin);
+        } else {
+            child = await Child.findByPin(pin);
+        }
+        
         if (!child) {
             return res.status(HTTP.UNAUTHORIZED).json({ error: 'Invalid PIN' });
         }
+        
         const result =
         {
             id: child.id,
