@@ -123,14 +123,6 @@ export const authController =
             const email = (credentials && (credentials.email || credentials.username || credentials.user)) ? (credentials.email || credentials.username || credentials.user) : '';
             const secret = (credentials && (credentials.secret || credentials.password || credentials.pin)) ? (credentials.secret || credentials.password || credentials.pin) : '';
 
-            const emailIsValid = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-            if (!emailIsValid)
-            {
-                const noticeElement = document.getElementById('global-notice');
-                if (noticeElement) { noticeElement.textContent = store.t ? (store.t('login.invalidEmail') || 'Please enter a valid email address.') : 'Please enter a valid email address.'; noticeElement.classList.remove('hidden'); setTimeout(() => noticeElement.classList.add('hidden'), 3500); }
-                return false;
-            }
-
             if (!email || !secret)
             {
                 this.showNotice('login.incorrectPin');
@@ -403,11 +395,8 @@ export const userUIController =
 
         if (!formData.email || !formData.email.trim()) {
             errors.email = 'login.emailPlaceholder';
-        } else {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formData.email.trim())) {
-                errors.email = 'login.invalidEmail';
-            }
+        } else if (!formData.email.includes('@')) {
+            errors.email = 'login.invalidEmail';
         }
 
         if (!formData.secret || !formData.secret.trim()) {
@@ -613,7 +602,7 @@ export const userUIController =
             emailError.classList.add('show');
             if (inputGroup) inputGroup.classList.add('error');
             return false;
-        } else if (!emailRegex.test(email))
+        } else if (!email.includes('@'))
         {
             emailError.textContent = store.t ? store.t('login.invalidEmail') : 'Please enter a valid email';
             emailError.classList.add('show');
