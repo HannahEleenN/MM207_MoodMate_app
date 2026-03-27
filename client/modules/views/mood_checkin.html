@@ -14,12 +14,12 @@
   </div>
 </div>
 
-<main id="mood-checkin-flow" aria-label="Mood check-in wizard">
+<main id="mood-checkin-flow" class="flex-column stack-m" aria-label="Mood check-in wizard">
     <div class="progress-container">
         <progress id="checkin-progress" value="33" max="100" aria-label="Progress through mood check-in"></progress>
     </div>
 
-    <div id="step-1" class="step-container" role="region" aria-label="Step 1: Select mood">
+    <div id="step-1" class="step-container stack-m align-center" role="region" aria-label="Step 1: Select mood">
         <h2 data-i18n="child.hello"></h2>
         <p data-i18n="child.askMood"></p>
         <div class="mood-grid" role="radiogroup" aria-label="Mood selection">
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div id="step-2" class="step-container" role="region" aria-label="Step 2: Explain mood" hidden aria-hidden="true">
+    <div id="step-2" class="step-container stack-m align-center" role="region" aria-label="Step 2: Explain mood" hidden aria-hidden="true">
         <h2><span data-i18n="checkin.reasonTitle"></span> <span id="selected-mood-text"></span>?</h2>
 
         <fieldset class="form-fieldset">

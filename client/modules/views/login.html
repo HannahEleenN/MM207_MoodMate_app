@@ -1,17 +1,15 @@
-<main id="login-container" aria-label="Parent login">
-  <div class="brand">
+<main id="login-container" class="stack-m align-center" aria-label="Parent login">
+  <div class="brand stack-s">
     <h1 data-i18n="app.title"></h1>
     <h2 data-i18n="app.tagline"></h2>
   </div>
 
-  <form id="loginForm" aria-label="Parent login form">
-    <fieldset class="form-fieldset">
+  <form id="loginForm" class="flex-column stack-s" aria-label="Parent login form">
+    <fieldset class="form-fieldset flex-column stack-s">
       <legend class="form-section-legend" data-i18n="login.title"></legend>
-      <br>
-
       <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-      <div class="input-group">
+      <div class="input-group flex-column stack-s align-start">
         <label for="email-input">
           <span data-i18n="login.emailLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
@@ -22,7 +20,7 @@
         <span id="email-error" class="field-error" role="alert"></span>
       </div>
 
-      <div class="input-group">
+      <div class="input-group flex-column stack-s align-start">
         <label for="password-input">
           <span data-i18n="login.passwordLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
@@ -33,31 +31,29 @@
         <span id="password-error" class="field-error" role="alert"></span>
       </div>
 
-
-      <div class="form-submit-group">
+      <div class="form-submit-group justify-center">
         <button type="submit" class="primary-btn" data-i18n="login.submit" aria-label="Sign in"></button>
       </div>
     </fieldset>
   </form>
 
-  <div class="login-footer login-footer--legal">
+  <div class="login-footer login-footer--legal align-center stack-s">
     <p>
       <span data-i18n="login.legalPrefix"></span>
-      <br>
-      <br>
-      <button id="view-tos" class="link-btn" data-i18n="legal.terms" aria-label="View Terms of Service"></button>
-      <span data-i18n="register.consentAnd"></span>
-      <button id="view-privacy" class="link-btn" data-i18n="legal.privacy" aria-label="View Privacy Policy"></button>
     </p>
+    <div class="button-row flex-row justify-center stack-s">
+        <button id="view-tos" class="link-btn" data-i18n="legal.terms" aria-label="View Terms of Service"></button>
+        <span data-i18n="register.consentAnd"></span>
+        <button id="view-privacy" class="link-btn" data-i18n="legal.privacy" aria-label="View Privacy Policy"></button>
+    </div>
   </div>
 
-  <br>
-
-  <div class="login-footer login-footer--signup">
+  <div class="login-footer login-footer--signup align-center stack-s">
     <p>
       <span data-i18n="login.newUser"></span>
-      <br>
-      <button id="go-to-reg" class="link-btn" data-i18n="login.createAccount" aria-label="Create a parent account"></button>
     </p>
+    <div class="justify-center">
+      <button id="go-to-reg" class="link-btn" data-i18n="login.createAccount" aria-label="Create a parent account"></button>
+    </div>
   </div>
 </main>

@@ -172,6 +172,98 @@ body::before {
     gap: 0;
 }
 
+/* ── Flexbox Utility Classes ───────────────────────────────────────────────── */
+/* These utilities provide consistent, predictable layout patterns */
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.align-center {
+    align-items: center;
+    text-align: center;
+}
+
+.align-start {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+/* ── Stack Utility for Predictable Vertical Spacing ────────────────────────── */
+/* The 'stack' utility class ensures identical gaps between ALL direct children */
+/* This replaces ad-hoc <br> tags with consistent, maintainable spacing */
+
+/* Small gap (0.75rem) - for tightly grouped elements */
+[class*="stack-s"] {
+    display: flex;
+    flex-direction: column;
+}
+
+[class*="stack-s"] > * {
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+[class*="stack-s"] > *:first-child {
+    margin-top: 0;
+}
+
+[class*="stack-s"] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Medium gap (1.5rem) - default for most content sections */
+[class*="stack-m"] {
+    display: flex;
+    flex-direction: column;
+}
+
+[class*="stack-m"] > * {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+[class*="stack-m"] > *:first-child {
+    margin-top: 0;
+}
+
+[class*="stack-m"] > *:last-child {
+    margin-bottom: 0;
+}
+
+/* Large gap (2rem) - for major section separation */
+[class*="stack-l"] {
+    display: flex;
+    flex-direction: column;
+}
+
+[class*="stack-l"] > * {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+[class*="stack-l"] > *:first-child {
+    margin-top: 0;
+}
+
+[class*="stack-l"] > *:last-child {
+    margin-bottom: 0;
+}
+
 /* ── Card / View container ─────────────────────────────────────────────────── */
 section, main {
     background: var(--cream-card);
@@ -446,8 +538,15 @@ textarea {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 .secondary-btn:hover { background: var(--teal); color: #fff; }
+
+/* Full-width utility for buttons and controls */
+.full-width {
+    width: 100%;
+    display: block;
+}
 
 /* Button group (e.g. Previous/Next buttons) */
 .button-group {
@@ -670,6 +769,41 @@ textarea {
     color: var(--danger);
 }
 #delete-account-btn:hover { background: var(--danger-tint); }
+
+/* ── Danger zone (destructive actions) ──────────────────────────────────── */
+.danger-zone {
+    width: 100%;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.danger-btn {
+    background: transparent;
+    color: var(--danger);
+    border: var(--border-width) solid var(--danger);
+    padding: 0.8rem 1.4rem;
+    min-height: 44px;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-display), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.danger-btn:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.danger-btn.full-width {
+    width: 100%;
+    max-width: 350px;
+}
 
 /* Current-child display pill */
 .child-display {

@@ -19,8 +19,8 @@
   <span class="progress-label" data-i18n="progress.insights">Viewing insights</span>
 </div>
 
-<main id="parent-insights" aria-label="Parent insights and mood history">
-    <header>
+<main id="parent-insights" class="flex-column stack-m" aria-label="Parent insights and mood history">
+    <header class="flex-row align-center stack-s">
         <button type="button" id="back-to-parent-menu" class="back-link" data-i18n="insights.back" aria-label="Back">Back</button>
         <h2 data-i18n="insights.title"></h2>
     </header>
@@ -29,7 +29,7 @@
     <div id="insights-empty" class="insight-state hidden" role="status" aria-live="polite" data-i18n="insights.empty"></div>
     <div id="insights-error" class="insight-state hidden" role="alert" aria-live="assertive" data-i18n="insights.error"></div>
 
-    <div class="insight-cards">
+    <div class="insight-cards stack-m">
         <article class="stat-card" role="region" aria-label="Mood statistics for last 7 days">
             <h3 data-i18n="insights.last7"></h3>
             <div id="mood-chart-placeholder">

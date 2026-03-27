@@ -12,24 +12,28 @@
   </div>
 </div>
 
-<section id="parent-dashboard" aria-label="Parent dashboard">
+<section id="parent-dashboard" class="flex-column stack-m align-center" aria-label="Parent dashboard">
 
-  <div class="dashboard-header">
+  <div class="dashboard-header align-center stack-s">
     <h1 data-i18n="parent.title"></h1>
     <p class="dashboard-subtitle" data-i18n="parent.welcome"></p>
   </div>
 
-  <div class="child-selector-row">
+  <div class="child-selector-row align-center stack-s">
     <label for="child-selector-dropdown" class="child-selector-label" data-i18n="child.selectLabel">Select child:</label>
     <select id="child-selector-dropdown" aria-label="Child profile selector">
       <option value="" data-i18n="child.selectPrompt">Choose a child profile</option>
     </select>
   </div>
 
-  <div class="parent-actions" role="region" aria-label="Dashboard actions">
-    <button id="view-insights" class="primary-btn" data-i18n="parent.viewInsights">View Insights</button>
-    <button id="manage-profiles" class="primary-btn" data-i18n="parent.manageProfiles">Manage Profiles</button>
-    <button id="manage-accounts" class="secondary-btn" data-i18n="userManager.title">Account Settings</button>
+  <div class="parent-actions flex-column stack-m align-center" role="region" aria-label="Dashboard actions">
+    <button id="view-insights" class="primary-btn full-width" data-i18n="parent.viewInsights">View Insights</button>
+    <button id="manage-profiles" class="primary-btn full-width" data-i18n="parent.manageProfiles">Manage Profiles</button>
+    <button id="manage-accounts" class="secondary-btn full-width" data-i18n="userManager.title">Account Settings</button>
+  </div>
+
+  <div class="danger-zone stack-s">
+    <button id="delete-account-btn" class="danger-btn full-width" data-i18n="parent.deleteAccount">Delete Account</button>
   </div>
 
 </section>

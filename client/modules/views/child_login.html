@@ -1,16 +1,16 @@
-<main id="child-login-container" aria-label="Child PIN login">
-  <div class="brand">
+<main id="child-login-container" class="stack-m align-center" aria-label="Child PIN login">
+  <div class="brand stack-s">
     <h1 data-i18n="app.title"></h1>
     <p data-i18n="child.loginPrompt"></p>
   </div>
 
-  <form id="childLoginForm" aria-label="Child PIN login form">
-    <fieldset class="form-fieldset">
+  <form id="childLoginForm" class="flex-column stack-s" aria-label="Child PIN login form">
+    <fieldset class="form-fieldset flex-column stack-s">
       <legend class="form-section-legend" data-i18n="child.pinLabel"></legend>
 
       <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-      <div class="input-group">
+      <div class="input-group flex-column stack-s align-start">
         <label for="child-pin-input">
           <span data-i18n="child.pinLabel"></span>
           <span class="required-indicator" aria-label="required">*</span>
@@ -21,15 +21,13 @@
         <span id="pin-error" class="field-error" role="alert"></span>
       </div>
 
-      <div class="form-submit-group">
+      <div class="form-submit-group justify-center">
         <button type="submit" class="primary-btn" data-i18n="child.continue" aria-label="Continue">Continue</button>
       </div>
     </fieldset>
   </form>
 
-  <br>
-
-  <div class="login-footer">
+  <div class="login-footer align-center stack-s">
     <p>
       <button type="button" id="back-to-parent" class="link-btn" data-i18n="child.backToParent" aria-label="Back to parent login">Back to Parent Login</button>
     </p>

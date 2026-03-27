@@ -1,11 +1,10 @@
-<main id="child-menu" aria-label="Child mood tracking wizard">
+<main id="child-menu" class="flex-column stack-m" aria-label="Child mood tracking wizard">
 
   <div class="progress-container">
     <progress id="mood-progress" value="33" max="100" aria-label="Progress through mood tracking"></progress>
   </div>
 
-
-  <div id="step-1" class="step-container" role="region" aria-label="Step 1: Select mood">
+  <div id="step-1" class="step-container stack-m align-center" role="region" aria-label="Step 1: Select mood">
     <h2 data-i18n="child.hello"></h2>
     <p data-i18n="child.askMood"></p>
 
@@ -19,7 +18,7 @@
     </div>
   </div>
 
-  <div id="step-2" class="step-container" role="region" aria-label="Step 2: Select context" hidden aria-hidden="true">
+  <div id="step-2" class="step-container stack-m align-center" role="region" aria-label="Step 2: Select context" hidden aria-hidden="true">
     <h2 data-i18n="child.whyTitle"><span id="display-mood" class="display-mood">…</span>?</h2>
 
     <div class="context-options" role="group" aria-label="Context options">
@@ -29,7 +28,7 @@
     </div>
   </div>
 
-  <div id="step-3" class="step-container" role="region" aria-label="Step 3: Choose action" hidden aria-hidden="true">
+  <div id="step-3" class="step-container stack-m align-center" role="region" aria-label="Step 3: Choose action" hidden aria-hidden="true">
     <h2 data-i18n="child.nextActionTitle"></h2>
 
     <div class="solution-options" role="group" aria-label="Suggested actions">

@@ -23,7 +23,7 @@
 </div>
 
 <main id="child-profiles" aria-label="Child profile management">
-  <div class="profiles-header">
+  <div class="profiles-header flex-row align-center stack-s">
     <button type="button" id="back-to-parent" class="back-link" data-i18n="profiles.back" aria-label="Back">Back</button>
     <h1 data-i18n="profiles.title"></h1>
   </div>
@@ -31,12 +31,12 @@
   <div class="profiles-container">
     <div class="profile-card">
       <form id="create-child-form" aria-label="Create child profile form">
-        <fieldset class="form-fieldset">
+        <fieldset class="form-fieldset flex-column stack-s">
           <legend class="form-section-legend" data-i18n="profiles.createNewChild"></legend>
 
           <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-          <div class="input-group">
+          <div class="input-group flex-column stack-s align-start">
             <label for="childName-input">
               <span data-i18n="profiles.childNamePlaceholder"></span>
               <span class="required-indicator" aria-label="required">*</span>
@@ -49,7 +49,7 @@
             <span id="childName-error" class="field-error" role="alert"></span>
           </div>
 
-          <div class="input-group">
+          <div class="input-group flex-column stack-s align-start">
             <label for="age-select">
               <span data-i18n="profiles.childAgePlaceholder"></span>
               <span class="optional-indicator" data-i18n="profiles.optional"></span>
@@ -81,14 +81,14 @@
             <span id="age-error" class="field-error" role="alert"></span>
           </div>
 
-          <div class="pin-creation-section">
+          <div class="pin-creation-section stack-s">
             <div class="pin-section-header">
               <h3 data-i18n="profiles.pinLabel"></h3>
               <span class="optional-indicator" data-i18n="profiles.optional"></span>
             </div>
             <p class="pin-section-info" data-i18n="profiles.pinCreationHelp"></p>
 
-            <div class="input-group">
+            <div class="input-group flex-column stack-s align-start">
               <label for="pin-input">
                 <span data-i18n="profiles.pinLabel"></span>
               </label>
@@ -100,7 +100,7 @@
             </div>
           </div>
 
-          <div class="form-submit-group">
+          <div class="form-submit-group justify-center">
             <button type="submit" class="primary-btn" data-i18n="profiles.addChild" aria-label="Add child profile">Add Child</button>
           </div>
         </fieldset>

@@ -1,17 +1,17 @@
-<section class="user-manager" role="main">
-    <div class="user-manager-header">
+<section class="user-manager flex-column stack-m" role="main">
+    <div class="user-manager-header align-center stack-s">
         <h1 data-i18n="userManager.title">Profile administration</h1>
     </div>
 
     <div class="registration-card">
-        <form id="regForm" name="registration" class="registration-form" aria-label="User registration form">
+        <form id="regForm" name="registration" class="registration-form flex-column stack-s" aria-label="User registration form">
 
             <div id="form-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-            <fieldset class="form-fieldset">
+            <fieldset class="form-fieldset flex-column stack-s">
                 <legend class="form-section-legend" data-i18n="userManager.createTitle">Create a parent account</legend>
 
-                <div class="input-group">
+                <div class="input-group flex-column stack-s align-start">
                     <label for="reg-nick">
                         <span data-i18n="userManager.nicknameLabel">Nickname</span>
                         <span class="required-indicator" aria-label="required">*</span>
@@ -25,7 +25,7 @@
                     <span id="nick-error" class="field-error" role="alert"></span>
                 </div>
 
-                <div class="input-group">
+                <div class="input-group flex-column stack-s align-start">
                     <label for="reg-email">
                         <span data-i18n="userManager.emailLabel">Email</span>
                         <span class="required-indicator" aria-label="required">*</span>
@@ -40,10 +40,10 @@
                 </div>
             </fieldset>
 
-            <fieldset class="form-fieldset">
+            <fieldset class="form-fieldset flex-column stack-s">
                 <legend class="form-section-legend" data-i18n="register.passwordSection">Password</legend>
 
-                <div class="input-group">
+                <div class="input-group flex-column stack-s align-start">
                     <label for="reg-password">
                         <span data-i18n="login.passwordLabel">Password</span>
                         <span class="required-indicator" aria-label="required">*</span>
@@ -103,9 +103,7 @@
         </form>
     </div>
 
-    <br>
-
-    <section class="existing-users-section" aria-label="Existing user profiles">
+    <section class="existing-users-section stack-m" aria-label="Existing user profiles">
         <h2 data-i18n="userManager.existingTitle">Existing profiles</h2>
         <ul id="user-list" class="user-list" role="list"></ul>
         <div id="no-users-message" class="empty-state" role="status" data-i18n="userManager.noUsers">No user profiles created yet</div>
