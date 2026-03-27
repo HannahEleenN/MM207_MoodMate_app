@@ -544,13 +544,20 @@ export const childController =
             const profileId = store.currentChild ? store.currentChild.id : null;
             if (profileId && navigator.onLine)
             {
-                const serverDraft = await ApiService.getDraft(profileId);
-                if (serverDraft && serverDraft.mood)
-                {
-                    const restoreMsg = (store && store.t) ? (store.t('checkin.restoreDraft') || 'Restore unfinished mood entry?') : 'Restore unfinished mood entry?';
-                    if (confirm(restoreMsg)) {
-                        this._applyMoodDraftToModel(serverDraft);
-                        return;
+                try {
+                    const serverDraft = await ApiService.getDraft(profileId);
+                    if (serverDraft && serverDraft.mood)
+                    {
+                        const restoreMsg = (store && store.t) ? (store.t('checkin.restoreDraft') || 'Restore unfinished mood entry?') : 'Restore unfinished mood entry?';
+                        if (confirm(restoreMsg)) {
+                            this._applyMoodDraftToModel(serverDraft);
+                            return;
+                        }
+                    }
+                } catch (draftError) {
+                    // 404 is expected if no draft exists - just continue silently
+                    if (draftError && draftError.status !== 404) {
+                        console.debug('Error fetching server draft:', draftError);
                     }
                 }
             }

@@ -1809,10 +1809,7 @@ section#parent-insights header {
     pointer-events: auto;
 }
 
-/* Only show legal links (view-privacy, view-tos) when on auth views (login/register) */
-#view-privacy, #view-tos { display: none !important; }
-body.auth-view #view-privacy,
-body.auth-view #view-tos { display: inline-block !important; }
+#view-privacy, #view-tos { display: inline-block; }
 
 /* Ensure modal is not visible on non-auth views unless opened programmatically */
 #legal-modal[aria-hidden="true"] { display: none; }
@@ -2432,3 +2429,25 @@ body.auth-view #view-tos { display: inline-block !important; }
     width: 100%;
     justify-content: center;
 }
+
+/* ── Hidden attribute styling ─────────────────────────────────────────────── */
+[hidden] {
+    display: none !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ── Mood check-in steps - prevent overflow scrolling ──────────────────────── */
+#mood-checkin-flow {
+    overflow: hidden;
+}
+
+.step-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+}
+
