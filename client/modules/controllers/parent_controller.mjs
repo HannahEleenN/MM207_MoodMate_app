@@ -43,7 +43,7 @@ export async function initParentApp(container)
                 const selectedChildId = event.target.value;
                 if (selectedChildId)
                 {
-                    const selectedProfile = childProfiles.find(p => p.id == selectedChildId);
+                    const selectedProfile = childProfiles.find(p => p.id === selectedChildId);
                     if (selectedProfile) {
                         store.currentChild = selectedProfile;
                     }

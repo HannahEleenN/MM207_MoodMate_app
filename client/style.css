@@ -2268,7 +2268,7 @@ section#parent-insights header {
     align-items: center;
     gap: 0.6rem;
     background: rgba(91, 160, 138, 0.10);
-    border: 1.5px solid rgba(91, 160, 138, 0.25);
+    border: 2px solid rgba(91, 160, 138, 0.25);
     border-radius: var(--radius-pill);
     padding: 0.35rem 0.9rem;
     margin-bottom: 1.6rem;

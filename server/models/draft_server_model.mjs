@@ -2,29 +2,38 @@ import pool from '../database/db.mjs';
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+function validateIds(userId, childId)
+{
+    const uid = Number(userId);
+    if (!Number.isInteger(uid) || uid <= 0)
+    {
+        const err = new Error('Invalid userId: must be a positive integer');
+        err.status = 400;
+        throw err;
+    }
+
+    let cid = null;
+    if (childId)
+    {
+        cid = Number(childId);
+        if (!Number.isInteger(cid) || cid <= 0)
+        {
+            const err = new Error('Invalid childId: must be a positive integer or null');
+            err.status = 400;
+            throw err;
+        }
+    }
+
+    return { uid, cid };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 export const Draft =
 {
     async upsert(userId, childId, draftObj)
     {
-        const uid = Number(userId);
-        if (!Number.isInteger(uid) || uid <= 0)
-        {
-            const err = new Error('Invalid userId: must be a positive integer');
-            err.status = 400;
-            throw err;
-        }
-
-        let cid = null;
-        if (childId)
-        {
-            cid = Number(childId);
-            if (!Number.isInteger(cid) || cid <= 0)
-            {
-                const err = new Error('Invalid childId: must be a positive integer or null');
-                err.status = 400;
-                throw err;
-            }
-        }
+        const { uid, cid } = validateIds(userId, childId);
 
         if (!draftObj || typeof draftObj !== 'object')
         {
@@ -33,6 +42,7 @@ export const Draft =
             throw err;
         }
 
+        let res;
         try
         {
             const sql = `
@@ -43,45 +53,34 @@ export const Draft =
             RETURNING id, user_id, child_id, draft, saved_at
         `;
 
-            const res = await pool.query(sql, [uid, cid, JSON.stringify(draftObj)]);
-
-            if (!res.rows[0]) {
-                throw new Error('Failed to upsert draft');
-            }
-
-            return {
-                success: true,
-                id: res.rows[0].id,
-                savedAt: res.rows[0].saved_at
-            };
+            res = await pool.query(sql, [uid, cid, JSON.stringify(draftObj)]);
         } catch (err) {
             console.error('[Draft.upsert] Database error:', err);
             err.status = err.status || 500;
             throw err;
         }
+
+        if (!res.rows || !res.rows[0])
+        {
+            const dbErr = new Error('Failed to upsert draft');
+            dbErr.status = 500;
+            console.error('[Draft.upsert] Database error:', dbErr);
+            throw dbErr;
+        }
+
+        /** @type {{id: number, user_id: number, child_id: number|null, draft: string, saved_at: string}} */
+        const row = res.rows[0];
+        const savedAt = row.saved_at ?? null;
+        return {
+            success: true,
+            id: row.id,
+            savedAt: savedAt
+        };
     },
 
     async get(userId, childId)
     {
-        const uid = Number(userId);
-        if (!Number.isInteger(uid) || uid <= 0)
-        {
-            const err = new Error('Invalid userId');
-            err.status = 400;
-            throw err;
-        }
-
-        let cid = null;
-        if (childId)
-        {
-            cid = Number(childId);
-            if (!Number.isInteger(cid) || cid <= 0)
-            {
-                const err = new Error('Invalid childId');
-                err.status = 400;
-                throw err;
-            }
-        }
+        const { uid, cid } = validateIds(userId, childId);
 
         try
         {
@@ -98,6 +97,7 @@ export const Draft =
                 return null;
             }
 
+            /** @type {{draft: string, saved_at: string}} */
             const row = res.rows[0];
 
             let draft = row.draft;
@@ -111,9 +111,10 @@ export const Draft =
                 }
             }
 
+            const savedAt = row.saved_at ?? null;
             return {
                 draft,
-                savedAt: row.saved_at
+                savedAt: savedAt
             };
         } catch (err) {
             console.error('[Draft.get] Database error:', err);
@@ -124,25 +125,7 @@ export const Draft =
 
     async delete(userId, childId)
     {
-        const uid = Number(userId);
-        if (!Number.isInteger(uid) || uid <= 0)
-        {
-            const err = new Error('Invalid userId');
-            err.status = 400;
-            throw err;
-        }
-
-        let cid = null;
-        if (childId)
-        {
-            cid = Number(childId);
-            if (!Number.isInteger(cid) || cid <= 0)
-            {
-                const err = new Error('Invalid childId');
-                err.status = 400;
-                throw err;
-            }
-        }
+        const { uid, cid } = validateIds(userId, childId);
 
         try
         {

@@ -61,6 +61,10 @@
 
 <div id="global-notice" class="notice hidden" role="status" aria-live="polite"></div>
 
+<script>
+    // Initialize global API base - can be overridden by server
+    window.__API_BASE__ = window.__API_BASE__ || '/api';
+</script>
 <script type="module" defer src="modules/bootstrap.mjs"></script>
 <script type="module" defer src="app.mjs"></script>
 </body>

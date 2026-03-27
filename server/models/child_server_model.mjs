@@ -28,35 +28,6 @@ export async function create({ parentId, name, age, pin })
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-export async function findByPinWithParent(parentId, pin)
-{
-    if (!parentId || !pin) {
-        throw new Error('parentId and pin are required');
-    }
-
-    const res = await pool.query(
-        'SELECT * FROM child_profiles WHERE parent_id = $1 AND has_pin = true',
-        [parentId]
-    );
-
-    for (const row of res.rows)
-    {
-        if (await verifySecret(pin, row.pin))
-        {
-            return
-            {
-                id: row.id,
-                    parentId: row.parent_id,
-                name: row.name,
-                age: row.age,
-                hasPin: row.has_pin
-            };
-        }
-    }
-    return null;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 
 export async function getByParent(parentId)
 {
@@ -80,6 +51,38 @@ export async function getById(childId)
         [childId]
     );
     return res.rows[0] || null;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+export async function findByPin(pin)
+{
+    if (!pin) throw new Error('PIN is required');
+
+    const res = await pool.query(
+        'SELECT id, parent_id AS "parentId", name, age, pin, has_pin AS "hasPin" FROM child_profiles WHERE has_pin = true',
+        []
+    );
+
+    for (const child of res.rows)
+    {
+        if (child.pin)
+        {
+            const matches = await verifySecret(pin, child.pin);
+            if (matches)
+            {
+                return {
+                    id: child.id,
+                    parentId: child.parentId,
+                    name: child.name,
+                    age: child.age,
+                    hasPin: child.hasPin
+                };
+            }
+        }
+    }
+
+    return null;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -157,15 +160,3 @@ export async function deleteChild(childId)
 
     return true;
 }
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-export default
-{
-    create,
-    findByPinWithParent,
-    getByParent,
-    getById,
-    update,
-    deleteChild
-};

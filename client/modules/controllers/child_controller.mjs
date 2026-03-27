@@ -592,13 +592,13 @@ export const childController =
             store.draftMood = draft;
 
             if (draft.solution) {
-                this.navigateToStep(3);
+                this.showMoodStep(3);
             } else if (draft.context) {
-                this.navigateToStep(2);
+                this.showMoodStep(2);
             } else if (draft.mood) {
-                this.navigateToStep(2);
+                this.showMoodStep(2);
             } else {
-                this.navigateToStep(1);
+                this.showMoodStep(1);
             }
         } catch (e) { console.debug('applyDraft failed', e); }
     },

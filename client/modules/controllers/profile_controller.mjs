@@ -116,9 +116,9 @@ export const childProfilesUI =
         ageEl.textContent = `(${profile.age} ${profile.age === '1' ? 'year' : 'years'})`;
       }
 
-      profileItem.querySelector('.select-child').onclick = () => this.selectProfile(p.id);
-      profileItem.querySelector('.edit-child').onclick = () => this.editProfile(p.id);
-      profileItem.querySelector('.delete-child').onclick = () => this.deleteProfile(p.id);
+      profileItem.querySelector('.select-child').onclick = () => this.selectProfile(profile.id);
+      profileItem.querySelector('.edit-child').onclick = () => this.editProfile(profile.id);
+      profileItem.querySelector('.delete-child').onclick = () => this.deleteProfile(profile.id);
 
       const createPinBtn = profileItem.querySelector('.create-pin-btn');
       const changePinBtn = profileItem.querySelector('.change-pin-btn');
