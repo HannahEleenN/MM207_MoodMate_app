@@ -39,13 +39,14 @@
 
     "login.title":  "Logga in",
     "login.emailLabel":  "E-post",
-    "login.emailPlaceholder":  "parent@example.com",
+    "login.emailPlaceholder":  "foraldrar@exempel.se",
     "login.passwordLabel":  "Lösenord",
     "login.passwordPlaceholder":  "Ange ditt lösenord",
+    "login.invalidEmail":  "Vänligen ange en giltig e-postadress.",
     "login.submit":  "Logga in",
-    "login.legalPrefix":  "För att läsa vår sekretesspolicy och villkor, klicka här:",
+    "login.legalPrefix":  "För att läsa vår integritetspolicy och villkor, klicka här:",
     "login.newUser":  "Ny användare?",
-    "login.createAccount":  "Skapa ett konto för förälder",
+    "login.createAccount":  "Skapa ett föräldrakonto",
 
     "global.logout":  "Logga ut",
 

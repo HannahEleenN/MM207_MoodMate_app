@@ -42,6 +42,7 @@
     "login.emailPlaceholder":  "parent@example.com",
     "login.passwordLabel":  "Password",
     "login.passwordPlaceholder":  "Enter your password",
+    "login.invalidEmail":  "Please enter a valid email address.",
     "login.submit":  "Sign in",
     "login.legalPrefix":  "To read our privacy policy and terms, click here:",
     "login.newUser":  "New user?",

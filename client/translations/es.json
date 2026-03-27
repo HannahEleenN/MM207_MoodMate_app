@@ -38,14 +38,15 @@
     "auth.loadError":  "Error al cargar la página de inicio de sesión.",
 
     "login.title":  "Iniciar sesión",
-    "login.emailLabel":  "Correo electrónico",
+    "login.emailLabel":  "Correo",
     "login.emailPlaceholder":  "padre@ejemplo.com",
     "login.passwordLabel":  "Contraseña",
-    "login.passwordPlaceholder":  "Introduce tu contraseña",
+    "login.passwordPlaceholder":  "Ingresa tu contraseña",
+    "login.invalidEmail":  "Por favor, ingresa una dirección de correo electrónico válida.",
     "login.submit":  "Iniciar sesión",
     "login.legalPrefix":  "Para leer nuestra política de privacidad y términos, haz clic aquí:",
     "login.newUser":  "¿Nuevo usuario?",
-    "login.createAccount":  "Crear cuenta de padre",
+    "login.createAccount":  "Crear una cuenta de padre",
 
     "global.logout":  "Cerrar sesión",
 

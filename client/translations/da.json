@@ -42,6 +42,7 @@
     "login.emailPlaceholder":  "forælder@eksempel.dk",
     "login.passwordLabel":  "Adgangskode",
     "login.passwordPlaceholder":  "Indtast din adgangskode",
+    "login.invalidEmail":  "Indtast venligst en gyldig e-mail-adresse.",
     "login.submit":  "Log ind",
     "login.legalPrefix":  "For at læse vores privatlivspolitik og vilkår, klik her:",
     "login.newUser":  "Ny bruger?",

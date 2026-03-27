@@ -42,8 +42,9 @@
     "login.emailPlaceholder":  "forelder@eksempel.no",
     "login.passwordLabel":  "Passord",
     "login.passwordPlaceholder":  "Skriv inn passordet ditt",
+    "login.invalidEmail":  "Vennligst skriv inn en gyldig e-postadresse.",
     "login.submit":  "Logg inn",
-    "login.legalPrefix":  "For å lese personvernerklæring og vilkår, trykk her:",
+    "login.legalPrefix":  "For å lese vår personvernerklæring og vilkår, klikk her:",
     "login.newUser":  "Ny bruker?",
     "login.createAccount":  "Opprett en foreldrekonto",
 
