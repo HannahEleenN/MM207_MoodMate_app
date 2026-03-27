@@ -275,6 +275,12 @@ async function router()
                 }
             }
             break;
+        case 'termsOfService':
+            await showLegal('termsOfService');
+            break;
+        case 'privacyPolicy':
+            await showLegal('privacyPolicy');
+            break;
         default:
             try {
                 root.innerHTML = await ApiService.loadView('not_found');
