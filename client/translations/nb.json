@@ -204,9 +204,11 @@
     "privacy.section1.title":  "1. Hvilke data lagrer vi?",
     "privacy.fields.nickname":  "Kallenavn: Vi bruker kallenavn i stedet for ekte navn for å beskytte identiteten din.",
     "privacy.fields.scrambledSecret":  "Hemmelig kode: Din PIN-kode lagres kryptert slik at ingen andre kan se den.",
+    "privacy.fields.childrenProfiles":  "Barneprofiler: Informasjon om barneprofiler opprettet under foreldrekontoen.",
     "privacy.section3.title":  "2. Foreldresamtykke",
     "privacy.section3.body":  "Siden MoodMate er laget for barn, krever vi at en voksen oppretter kontoen og gir samtykke til at vi lagrer informasjonen.",
     "privacy.section5.title":  "3. Dine rettigheter (GDPR)",
+    "privacy.section5.body":  "Under GDPR har du rett til å få tilgang til, rette, slette eller overføre dataene dine. Du kan når som helst trekke tilbake samtykket ditt ved å kontakte oss eller slette kontoen din.",
     "privacy.section4.title":  "4. Kontakt oss",
     "privacy.section4.body":  "Har du spørsmål om personvern? Snakk med en voksen, eller send oss en e-post på support@moodmate.no.",
 

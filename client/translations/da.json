@@ -204,9 +204,11 @@
     "privacy.section1.title":  "1. Dataindsamling og minimering",
     "privacy.fields.nickname":  "Kaldenavn: Et visningsnavn for forælder/værge (intet fuldt juridisk navn kræves).",
     "privacy.fields.scrambledSecret":  "Skjult hemmelighed: En mock-hash af brugerens hemmelige kode for at sikre sikkerhed uden at gemme adgangskoder i klartekst.",
+    "privacy.fields.childrenProfiles":  "Børneprofiler: Oplysninger om børneprofiler oprettet under forældrenes konto.",
     "privacy.section3.title":  "3. Forældres samtykke og børns privatliv",
     "privacy.section3.body":  "MoodMate er designet til børn i alderen 6-7 år. Da børn under 13 ikke kan give gyldigt samtykke, kræves aktivt forældresamtykke for at oprette en konto.",
     "privacy.section5.title":  "5. Dine rettigheder (GDPR)",
+    "privacy.section5.body":  "Under GDPR har du ret til at få adgang til, rette, slette eller overføre dine data. Du kan til enhver tid tilbagekalde dit samtykke ved at kontakte os eller slette din konto.",
     "privacy.section4.title":  "4. Sikkerhed og opbevaring",
     "privacy.section4.body":  "Ingen adgangskoder i klartekst: Alle hemmeligheder bliver hashet inden opbevaring. Data gemmes i hukommelsen i denne versjon.",
 

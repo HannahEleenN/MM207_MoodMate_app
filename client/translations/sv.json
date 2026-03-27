@@ -204,9 +204,11 @@
     "privacy.section1.title":  "1. Insamling och minimering av data",
     "privacy.fields.nickname":  "Smeknamn: Ett visningsnamn för föräldern/vårdnadshavaren (ej fullständigt juridiskt namn).",
     "privacy.fields.scrambledSecret":  "Förvrängt lösenord: En mock-hashad version av användarens hemliga kod för att säkerställa säkerhet utan att lagra lösenord i klartext.",
+    "privacy.fields.childrenProfiles":  "Barnprofiler: Information om barnprofiler som skapats under föräldrakontot.",
     "privacy.section3.title":  "3. Förälders samtycke och barns integritet",
     "privacy.section3.body":  "MoodMate är avsedd för barn i åldern 6–7 år. Eftersom barn under 13 inte kan ge giltigt samtycke krävs aktivt föräldersamtycke för att skapa konto.",
     "privacy.section5.title":  "5. Dina rättigheter (GDPR)",
+    "privacy.section5.body":  "Enligt GDPR har du rätt att få tillgång till, korrigera, radera eller exportera dina data. Du kan dra tillbaka ditt samtycke när som helst genom att kontakta oss eller radera ditt konto.",
     "privacy.section4.title":  "4. Säkerhet och lagring",
     "privacy.section4.body":  "Inga lösenord i klartext: Alla hemligheter förvrängs (hashas) innan lagring. I denna version lagras data i minnet (RAM) och bevaras inte över serveromstarter.",
 

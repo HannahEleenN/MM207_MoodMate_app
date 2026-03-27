@@ -124,16 +124,19 @@ export const childProfilesUI =
       const changePinBtn = profileItem.querySelector('.change-pin-btn');
       const removePinBtn = profileItem.querySelector('.remove-pin-btn');
       const pinStatusText = profileItem.querySelector('.pin-status-text');
+      const pinButtonGroups = profileItem.querySelectorAll('.pin-button-group');
+      const pinActionButtonGroup = pinButtonGroups[0];
 
       if (profile.hasPin)
       {
         pinStatusText.textContent = '🔒 PIN enabled';
-        createPinBtn.style.display = 'none';
+        pinActionButtonGroup.style.display = 'none';
         changePinBtn.style.display = 'block';
         removePinBtn.style.display = 'block';
       } else
       {
         pinStatusText.textContent = '🔓 No PIN';
+        pinActionButtonGroup.style.display = 'block';
         createPinBtn.style.display = 'block';
         changePinBtn.style.display = 'none';
         removePinBtn.style.display = 'none';

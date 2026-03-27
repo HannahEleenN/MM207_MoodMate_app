@@ -188,42 +188,63 @@ async function router()
     console.log('[app.router] start - currentView=', view, 'root?', !!root);
 
     if (!root) return;
-
-    root.innerHTML = '';
-
+    
     switch (view)
     {
         case 'login':
             try
             {
                 console.log('[app.router] rendering login view');
-                await authController.init(root);
+                const loginContainer = document.createElement('div');
+                await authController.init(loginContainer);
+                root.innerHTML = '';
+                root.appendChild(loginContainer.firstElementChild || loginContainer);
                 console.log('[app.router] rendered login view');
             } catch (e) {
                 console.error('[router] authController.init failed:', e);
-                root.textContent = store?.t ? store.t('auth.loadError') : 'Could not load the login view.';
+                root.innerHTML = store?.t ? store.t('auth.loadError') : 'Could not load the login view.';
             }
             break;
         case 'userManager':
         {
             const userManagerEl = document.createElement('user-manager');
+            root.innerHTML = '';
             root.appendChild(userManagerEl);
         }
             break;
         case 'parentMenu':
-            console.log('[app.router] rendering parentMenu');
-            await initParentApp(root, store);
+            try {
+                console.log('[app.router] rendering parentMenu');
+                const parentContainer = document.createElement('div');
+                await initParentApp(parentContainer, store);
+                root.innerHTML = '';
+                root.appendChild(parentContainer.firstElementChild || parentContainer);
+            } catch (e) {
+                console.error('[router] parentMenu init failed:', e);
+                root.innerHTML = '<section><h2>Error</h2><p>Failed to load parent menu.</p></section>';
+            }
             break;
         case 'childMenu':
-            console.log('[app.router] rendering childMenu');
-            await initChildApp(root, store);
+            try {
+                console.log('[app.router] rendering childMenu');
+                const childContainer = document.createElement('div');
+                await initChildApp(childContainer, store);
+                root.innerHTML = '';
+                root.appendChild(childContainer.firstElementChild || childContainer);
+            } catch (e) {
+                console.error('[router] childMenu init failed:', e);
+                root.innerHTML = '<section><h2>Error</h2><p>Failed to load child menu.</p></section>';
+            }
             break;
         case 'childProfiles':
             try
             {
                 console.log('[app.router] rendering childProfiles');
+                const profileContainer = document.createElement('div');
                 const { childProfilesUI } = await import('./modules/controllers/profile_controller.mjs');
-                await childProfilesUI.init(root);
+                await childProfilesUI.init(profileContainer);
+                root.innerHTML = '';
+                root.appendChild(profileContainer.firstElementChild || profileContainer);
                 console.log('[app.router] childProfiles rendered');
             } catch (e) {
                 console.error('[router] childProfiles init failed:', e);
@@ -239,16 +260,21 @@ async function router()
             try
             {
                 console.log('[app.router] rendering childLogin');
+                const childLoginContainer = document.createElement('div');
                 const { childController } = await import('./modules/controllers/child_controller.mjs');
                 if (typeof childController.init === 'function')
                 {
                     console.log('[app.router] calling childController.init');
-                    await childController.init(root);
+                    await childController.init(childLoginContainer);
+                    root.innerHTML = '';
+                    root.appendChild(childLoginContainer.firstElementChild || childLoginContainer);
                     console.log('[app.router] childController.init finished');
                 } else if (typeof childController['initLogin'] === 'function')
                 {
                     console.log('[app.router] calling childController.initLogin fallback');
-                    await childController['initLogin'](root);
+                    await childController['initLogin'](childLoginContainer);
+                    root.innerHTML = '';
+                    root.appendChild(childLoginContainer.firstElementChild || childLoginContainer);
                     console.log('[app.router] childController.initLogin finished');
                 } else {
                     console.error('childController has no init method; rendering fallback view');
@@ -260,11 +286,15 @@ async function router()
                 }
             } catch (e) {
                 console.error('child login init failed', e);
+                root.innerHTML = '<section><h2>Error</h2><p>Failed to load child login.</p></section>';
             }
             break;
         case 'insights':
             try {
-                await moodUIController.initInsights(root);
+                const insightsContainer = document.createElement('div');
+                await moodUIController.initInsights(insightsContainer);
+                root.innerHTML = '';
+                root.appendChild(insightsContainer.firstElementChild || insightsContainer);
             } catch (e) {
                 console.error('insights init failed', e);
                 try {
@@ -758,6 +788,73 @@ function updateMoodBreadcrumb(stepNumber)
 
 // ---------------------------------------------------------------------------------------------------------------------
 
+export function closeLegal()
+{
+    console.log('[app] closeLegal called');
+    
+    const modal = document.getElementById('legal-modal');
+    if (!modal) return;
+    
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    currentLegalView = null;
+    
+    if (previouslyFocusedElement && typeof previouslyFocusedElement.focus === 'function')
+    {
+        try { previouslyFocusedElement.focus(); } catch (_) {}
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+function setupModalCloseListeners()
+{
+    const closeX = document.getElementById('close-x');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const modal = document.getElementById('legal-modal');
+    
+    if (closeX)
+    {
+        closeX.addEventListener('click', closeLegal);
+        closeX.addEventListener('keydown', (e) =>
+        {
+            if (e.key === 'Enter' || e.key === ' ')
+            {
+                e.preventDefault();
+                closeLegal();
+            }
+        });
+    }
+    
+    if (closeBtn)
+    {
+        closeBtn.addEventListener('click', closeLegal);
+    }
+    
+    // Close modal when clicking outside the content (on the backdrop)
+    if (modal)
+    {
+        modal.addEventListener('click', (e) =>
+        {
+            if (e.target === modal)
+            {
+                closeLegal();
+            }
+        });
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+if (document.readyState === 'loading')
+{
+    document.addEventListener('DOMContentLoaded', setupModalCloseListeners);
+} else {
+    setupModalCloseListeners();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
 function showMoodSuccessScreen(selectedMood, selectedSolution, solutionLabelText)
 {
     try
@@ -809,5 +906,6 @@ function hideMoodSuccessScreen()
 
 window.showMoodSuccessScreen = showMoodSuccessScreen;
 window.hideMoodSuccessScreen = hideMoodSuccessScreen;
+window.closeLegal = closeLegal;
 window.updateUserIndicators = updateUserIndicators;
 window.updateMoodBreadcrumb = updateMoodBreadcrumb;

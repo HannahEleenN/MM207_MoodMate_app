@@ -204,9 +204,11 @@
     "privacy.section1.title":  "1. Recopilación y minimización de datos",
     "privacy.fields.nickname":  "Apodo: Un nombre para mostrar para el padre/tutor (no se requiere nombre legal completo).",
     "privacy.fields.scrambledSecret":  "Secreto codificado: Una versión hash simulada del código secreto del usuario para garantizar seguridad sin almacenar contraseñas en texto plano.",
+    "privacy.fields.childrenProfiles":  "Perfiles de niños: Información sobre los perfiles de niños creados bajo la cuenta principal.",
     "privacy.section3.title":  "3. Consentimiento parental y privacidad infantil",
     "privacy.section3.body":  "MoodMate está diseñado para niños de 6-7 años. Como los niños menores de 13 no pueden proporcionar su propio consentimiento, el consentimiento parental activo es un requisito para crear una cuenta.",
     "privacy.section5.title":  "5. Sus derechos (GDPR)",
+    "privacy.section5.body":  "Bajo GDPR, tiene derecho a acceder, corregir, eliminar o exportar sus datos. Puede retirar su consentimiento en cualquier momento contactándose con nosotros o eliminando su cuenta.",
     "privacy.section4.title":  "4. Seguridad y almacenamiento",
     "privacy.section4.body":  "No contraseñas en texto plano: Todos los secretos se codifican (hash) antes del almacenamiento. En esta versión los datos se almacenan en memoria (RAM) y no se persisten entre reinicios del servidor.",
 
