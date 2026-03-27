@@ -73,6 +73,7 @@
     "checkin.restoreDraft":  "An unfinished mood entry exists on the server for this profile — restore it?",
     "checkin.restoreDraftLocal":  "An unfinished mood entry exists on this device — restore it?",
     "checkin.contextLabel":  "Describe more about what\u0027s happening",
+    "checkin.contextHelper":  "Tell me more about what\u0027s going on",
 
     "reason.school":  "🏫 I had fun at school",
     "reason.friends":  "👫 I played with my friends",
@@ -152,6 +153,8 @@
     "profiles.pinCreationHelp":  "PIN code is optional and provides more privacy from siblings",
     "profiles.pinMessage":  "Protect your mood logs from siblings; create a PIN code for privacy",
     "profiles.pinMustBe6Digits":  "PIN must be exactly 6 digits",
+    "profiles.pinPlaceholder":  "6-digit PIN",
+    "profiles.pinHelper":  "Enter 6 digits (0-9)",
     "profiles.createPin":  "Add PIN",
     "profiles.changePin":  "Change PIN",
     "profiles.removePin":  "Remove PIN",

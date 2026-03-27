@@ -73,6 +73,7 @@
     "checkin.restoreDraft":  "Det finns en oavslutad humörregistrering på servern för denna profil — vill du återställa den?",
     "checkin.restoreDraftLocal":  "Det finns en oavslutad humörregistrering på denna enhet — vill du återställa den?",
     "checkin.contextLabel":  "Beskriv mer om vad som händer",
+    "checkin.contextHelper":  "Berätta mer om vad som händer",
 
     "reason.school":  "🏫 Jag hade roligt i skolan",
     "reason.friends":  "👫 Jag lekte med mina vänner",
@@ -152,6 +153,8 @@
     "profiles.pinCreationHelp":  "PIN-kod är frivilligt och ger mer integritet från syskon",
     "profiles.pinMessage":  "Skydda dina humörloggar från syskon - skapa en PIN-kod för integritet",
     "profiles.pinMustBe6Digits":  "PIN måste vara exakt 6 siffror",
+    "profiles.pinPlaceholder":  "6-siffrig PIN",
+    "profiles.pinHelper":  "Ange 6 siffror (0-9)",
     "profiles.createPin":  "Lägg till PIN",
     "profiles.changePin":  "Ändra PIN",
     "profiles.removePin":  "Ta bort PIN",

@@ -92,10 +92,10 @@
               <label for="pin-input">
                 <span data-i18n="profiles.pinLabel"></span>
               </label>
-              <input type="password" id="pin-input" name="pin" placeholder="6-digit PIN" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+              <input type="password" id="pin-input" name="pin" data-i18n-placeholder="profiles.pinPlaceholder" placeholder="" maxlength="6" inputmode="numeric" pattern="[0-9]*"
                      aria-describedby="pin-error pin-hint"
                      aria-required="false">
-              <span id="pin-hint" class="helper-text">Enter 6 digits (0-9)</span>
+              <span id="pin-hint" class="helper-text" data-i18n="profiles.pinHelper"></span>
               <span id="pin-error" class="field-error" role="alert"></span>
             </div>
           </div>
@@ -142,11 +142,11 @@
               <span data-i18n="profiles.pinLabel"></span>
               <span class="required-indicator" aria-label="required">*</span>
             </label>
-            <input type="password" class="pin-input" id="pin-input-field" placeholder="PIN (6 digits)" maxlength="6" inputmode="numeric" pattern="[0-9]*" required
+            <input type="password" class="pin-input" id="pin-input-field" data-i18n-placeholder="profiles.pinPlaceholder" placeholder="" maxlength="6" inputmode="numeric" pattern="[0-9]*" required
                    aria-describedby="pin-input-error pin-input-helper"
                    aria-required="true">
             <span id="pin-input-error" class="field-error" role="alert"></span>
-            <span id="pin-input-helper" class="helper-text">Enter a 6-digit numeric PIN</span>
+            <span id="pin-input-helper" class="helper-text" data-i18n="profiles.pinHelper"></span>
           </div>
           <div class="pin-button-group">
             <button type="button" class="confirm-pin-btn" data-i18n="profiles.confirm" aria-label="Confirm PIN">Confirm</button>
@@ -160,9 +160,9 @@
 
 <template id="child-edit-template">
   <div class="edit-inline" role="region" aria-label="Edit child profile inline form">
-    <label for="edit-name" class="sr-only">Child name</label>
-    <input type="text" id="edit-name" class="edit-input" placeholder="Name" required aria-label="Edit child name">
-    <label for="edit-age" class="sr-only">Child age</label>
+    <label for="edit-name" class="sr-only" data-i18n="profiles.childNamePlaceholder"></label>
+    <input type="text" id="edit-name" class="edit-input" data-i18n-placeholder="profiles.childNamePlaceholder" placeholder="" required aria-label="Edit child name">
+    <label for="edit-age" class="sr-only" data-i18n="profiles.childAgePlaceholder"></label>
     <select id="edit-age" class="edit-age" aria-label="Edit child age">
       <option value="">-- Age --</option>
       <option value="1">1</option>

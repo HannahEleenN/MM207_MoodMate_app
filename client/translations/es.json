@@ -73,6 +73,7 @@
     "checkin.restoreDraft":  "Existe un registro de estado de ánimo incompleto en el servidor para este perfil — ¿quieres restaurarlo?",
     "checkin.restoreDraftLocal":  "Existe un registro de estado de ánimo incompleto en este dispositivo — ¿quieres restaurarlo?",
     "checkin.contextLabel":  "Describe más sobre lo que está pasando",
+    "checkin.contextHelper":  "Cuéntame más sobre lo que está sucediendo",
 
     "reason.school":  "🏫 Me lo pasé bien en la escuela",
     "reason.friends":  "👫 Jugué con mis amigos",
@@ -152,6 +153,8 @@
     "profiles.pinCreationHelp":  "El código PIN es opcional y proporciona más privacidad de hermanos",
     "profiles.pinMessage":  "Protege tus registros de humor de hermanos - crea un código PIN para privacidad",
     "profiles.pinMustBe6Digits":  "El PIN debe ser exactamente 6 dígitos",
+    "profiles.pinPlaceholder":  "PIN de 6 dígitos",
+    "profiles.pinHelper":  "Ingresa 6 dígitos (0-9)",
     "profiles.createPin":  "Agregar PIN",
     "profiles.changePin":  "Cambiar PIN",
     "profiles.removePin":  "Eliminar PIN",

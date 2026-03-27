@@ -73,6 +73,7 @@
     "checkin.restoreDraft":  "Der findes en ufuldstændig humørregistrering på serveren for denne profil — vil du gendanne den?",
     "checkin.restoreDraftLocal":  "Der findes en ufuldstændig humørregistrering på denne enhed — vil du gendanne den?",
     "checkin.contextLabel":  "Beskriv mere om hvad der sker",
+    "checkin.contextHelper":  "Fortæl mig mere om hvad der sker",
 
     "reason.school":  "🏫 Jeg havde det sjovt i skolen",
     "reason.friends":  "👫 Jeg legede med mine venner",
@@ -152,6 +153,8 @@
     "profiles.pinCreationHelp":  "PIN-kode er valgfrit og giver mere privatliv fra søskende",
     "profiles.pinMessage":  "Beskyt dine humørlogger fra søskende - opret en PIN-kode for privathed",
     "profiles.pinMustBe6Digits":  "PIN skal være nøjagtigt 6 cifre",
+    "profiles.pinPlaceholder":  "6-cifret PIN",
+    "profiles.pinHelper":  "Skriv 6 cifre (0-9)",
     "profiles.createPin":  "Tilføj PIN",
     "profiles.changePin":  "Ændre PIN",
     "profiles.removePin":  "Fjern PIN",
