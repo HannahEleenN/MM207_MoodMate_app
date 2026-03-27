@@ -205,23 +205,16 @@ self.addEventListener("fetch", (event) =>
 
 self.addEventListener('message', (event) =>
 {
-    try
+    if (!event || !event.data) return;
+    
+    const messageData = event.data;
+    
+    if (messageData && messageData.type === 'PING' && event.source && typeof event.source.postMessage === 'function')
     {
-        if (!event || !event.data) return;
-        
-        const messageData = event.data;
-        
-        if (messageData && messageData.type === 'PING' && event.source && typeof event.source.postMessage === 'function')
-        {
-            try { 
-                event.source.postMessage({ type: 'PONG', version: VERSION }); 
-            } catch (e) { 
-                console.warn('Failed to send PONG:', e);
-            }
+        try { 
+            event.source.postMessage({ type: 'PONG', version: VERSION }); 
+        } catch (e) { 
+            console.warn('[service-worker] Failed to send PONG:', e);
         }
-    }
-    catch (err)
-    {
-        console.warn('Service worker message handler error:', err);
     }
 }, false);
