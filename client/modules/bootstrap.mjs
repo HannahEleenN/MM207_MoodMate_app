@@ -3,21 +3,12 @@ if (typeof window !== 'undefined')
     try
     {
         const manifestLink = document.querySelector('link[rel="manifest"]');
-        if (manifestLink && window.__API_BASE__)
+        if (manifestLink)
         {
-            const hrefAttr = manifestLink.getAttribute('href') || '';
-            if (!/^(https?:)?\/\//.test(hrefAttr))
-            {
-                const base = String(window.__API_BASE__).replace(/\/$/, '');
-                manifestLink.href = `${base}/${hrefAttr.replace(/^(?:\.\/|\/) /, '')}`;
-                manifestLink.setAttribute('href', manifestLink.href);
-                console.debug('Manifest href adjusted to', manifestLink.href);
-            } else {
-                console.debug('Manifest href is absolute, skipping adjustment:', hrefAttr);
-            }
+            console.debug('Manifest href preserved as relative:', manifestLink.href);
         }
     } catch (e) {
-        console.warn('Could not adjust manifest href:', e);
+        console.warn('Could not verify manifest href:', e);
     }
 
     const noisyErrorPattern = /A listener indicated an asynchronous response/i;
