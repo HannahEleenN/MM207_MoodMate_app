@@ -56,6 +56,27 @@ export const authController =
                     store.currentView = 'userManager';
                 };
             }
+            
+            const tosBtn = this.container.querySelector('#view-tos');
+            const privacyBtn = this.container.querySelector('#view-privacy');
+
+            if (tosBtn)
+            {
+                tosBtn.onclick = (e) =>
+                {
+                    e.preventDefault();
+                    store.currentView = 'termsOfService';
+                };
+            }
+
+            if (privacyBtn)
+            {
+                privacyBtn.onclick = (e) =>
+                {
+                    e.preventDefault();
+                    store.currentView = 'privacyPolicy';
+                };
+            }
 
         } catch (error)
         {
